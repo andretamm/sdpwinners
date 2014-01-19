@@ -10,14 +10,14 @@
 	     * @param args
 	     */
 		
-		public static int GreenWhiteThreshold = 40;
+		public static int GreenWhiteThreshold = 40;   //light sensor border reading for running the pitch
 		
 	    public static void main(String[] args) {
-	    	LightSensor light = new LightSensor(SensorPort.S2);
+	    	LightSensor light = new LightSensor(SensorPort.S2);  //defining the sensor port used
 	        DifferentialPilot pilot  = new DifferentialPilot(2f, 2f, Motor.A, Motor.B, false); 
 	        LCD.drawString(Boolean.toString(light.isFloodlightOn()), 0, 0);
 	        LCD.drawString("HelloWorld", 0, 0);
-	        LCD.drawInt(light.getLightValue(), 0, 0);
+	        LCD.drawInt(light.getLightValue(), 0, 0); //print light sensor reading to screen
 	        
 	        while (true) {
 	        	
@@ -28,7 +28,7 @@
 	            	LCD.drawInt(light.getLightValue(), 0, 0);          	
 	            }
 	            
-	            while (light.getLightValue() >= 22){
+	            while (light.getLightValue() >= GreenWhiteThreshold){
 	            	pilot.rotateLeft();
 	            }
 	      } 
