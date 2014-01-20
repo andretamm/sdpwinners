@@ -22,24 +22,83 @@ public class HelloWorld3 {
         LCD.drawString("HelloWorld", 0, 0);
         LCD.drawInt(lightS2.getLightValue(), 0, 0); //print light sensor reading to screen
         
+        // Distance from wherever the robot is placed on the pitch until it hits
+        // the first white line
+        float distanceToFirstLine;
+        // The angle the robot turns after first hitting the white line
+        float firstTurnAngle;
+        
+        // The total distance the robot has traveled and how much it has turned
+        // while travelling on the white line (i.e. excluding distanceToFirstLine and
+        // firstTurnAngle)
+        float distanceTravelled = 0;
+        float anglesTurned = 0;
+        
+        boolean isRotating = false;
+        boolean onWhiteLine = false; // If we've reached the white line
+        
+        pilot.setTravelSpeed(4);
+        pilot.forward();
+        
+        pilot.setAcceleration(30);
+        
         while (true) {
-        	
-            while (lightS2.getLightValue() < GreenWhiteThreshold && lightS1.getLightValue() < GreenWhiteThreshold){
+            if (lightS2.getLightValue() < GreenWhiteThreshold && lightS1.getLightValue() < GreenWhiteThreshold){
+            	// We're on green
             	
-            	pilot.setTravelSpeed(5);
-            	pilot.forward();
+            	if (isRotating) {
+            		if (!onWhiteLine) {
+            			// First time moving on the line, remember how much we rotated
+            			onWhiteLine = true;
+            			firstTurnAngle = pilot.getAngleIncrement();
+            		} else {
+            			// We made a turn on the white line
+            			anglesTurned += pilot.getAngleIncrement();
+            		}
+            		
+            		// Stop rotating
+            		System.out.println("Rotated: " + pilot.getAngleIncrement() + " total: " + anglesTurned);
+            		pilot.stop();
+            		isRotating = false;
+            		
+            		// Move forward
+            		pilot.setTravelSpeed(3);
+	            	pilot.forward();
+            	}
+            } else {
+            	// We're on white
             	
-//            	LCD.drawInt(lightS2.getLightValue(), 0, 0);
-            	System.out.println("1: " + lightS1.getLightValue() + " | 2: " + lightS2.getLightValue());
-            }          
-            
-            while (lightS2.getLightValue() >= GreenWhiteThreshold || lightS1.getLightValue() >= GreenWhiteThreshold){
-            	pilot.rotateLeft();
+            	if (!isRotating) {
+            		if (!onWhiteLine) {
+                		// First time we rotate, remember distance from starting point
+            			distanceToFirstLine = pilot.getMovementIncrement();
+            		} else {
+            			// Travelling on the white line
+            			distanceTravelled += pilot.getMovementIncrement();
+            		}
+            		
+            		// Start rotating
+            		System.out.println("Moved: " + pilot.getMovementIncrement() + " total: " + distanceTravelled);
+            		
+            		pilot.stop();
+            		isRotating = true;
+            		pilot.rotateLeft();
+            	}
             }
             
-            pilot.stop();
-      } 
-    	
+            // Robot will run until it's rotated itself 360 degrees while moving around,
+            // then stop
+            if (anglesTurned > 360) {
+            	System.out.println("ROTATED 360 DEGREES lol");
+            	try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	break;
+            }
+        } 
     } 
 }
 
