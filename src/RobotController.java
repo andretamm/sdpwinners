@@ -1,6 +1,3 @@
-
-
-import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -29,70 +26,69 @@ public class RobotController {
         // Distance from wherever the robot is placed on the pitch until it hits
         // the first white line
         float distanceToFirstLine;
-        // The angle the robot turns after first hitting the white line
-        float firstTurnAngle;
         
         // The total distance the robot has traveled and how much it has turned
-        // while travelling on the white line (i.e. excluding distanceToFirstLine and
-        // firstTurnAngle)
+        // while travelling on the white line (i.e. excluding the distance it travels until it
+        // first meets the white line)
         float distanceTravelled = 0;
         float anglesTurned = 0;
         
-        boolean isRotating = false;
-        boolean onWhiteLine = false; // If we've reached the white line
+        boolean isRotating = false; // True if the robot is rotating, false if moving forward
+        boolean onWhiteLine = false; // If we've on/tracing the white line
         
         // If we're on the attacker or defender field
         boolean onAttackerField = true;
-        float smallEdge = 210; // Length of the goal edge
-        float attackerFieldLength = 1600; // Circumference of the attacker field 2100
+        
+        
+        float attackerFieldLength = 2100; // Circumference of the attacker field 2100
         float defenderFieldLEngth = 1600; // Circumference of the defender field 1600
         
-        pilot.setTravelSpeed(200); // used to be 4
-        
+        // Start the robot moving
+        pilot.setTravelSpeed(200);
         pilot.forward();
         
+        // Main control loop
         while (true) {
 
             if (rightLightSensor.getLightValue() < GreenWhiteThreshold && leftLightSensor.getLightValue() < GreenWhiteThreshold){
-            	// We're on green
+            	// Both sensors on green
             	
             	if (isRotating) {
+            		// The robot is rotating, but should be moving forward
+            		
             		if (!onWhiteLine) {
-            			// First time moving on the line, remember how much we rotated
+            			// We can only rotate if we're on the white line, so we HAVE to
+            			// be on the white line now
             			onWhiteLine = true;
-            			firstTurnAngle = pilot.getAngleIncrement();
             		} else {
-            			// We made a turn on the white line
+            			// We made a turn on the white line, add to total turned amount
             			anglesTurned += pilot.getAngleIncrement();
             		}
             		
-            		// Stop rotating
-            		pilot.rotate(-2); // To correct for the overturn
+            		// Stop rotating and move forward instead
+            		pilot.rotate(-1); // To correct for the overturn
             		pilot.stop();
 
             		System.out.println("Rotated: " + pilot.getAngleIncrement() + " total: " + anglesTurned);
             		isRotating = false;
             		
             		// Move forward
-            		pilot.setTravelSpeed(200); // used to be 4
+            		pilot.setTravelSpeed(200);
 	            	pilot.forward();
             	}
             } else {
-            	// We're on white
+            	// One sensor is on the white strip
             	
             	if (!isRotating) {
+            		// We're currently moving forward, should stop and start rotating
+            		
             		if (!onWhiteLine) {
-                		// First time we rotate, remember distance from starting point
+            			// This is the first time we meet the white line, so record the distance
+            			// from the starting point until the white line
             			distanceToFirstLine = pilot.getMovementIncrement();
             		} else {
-            			// Travelling on the white line
+            			// Travelling on the white line, add to total distance travelled
             			distanceTravelled += pilot.getMovementIncrement();
-            			
-            			// If this movement was a small one, then we're on the defender field
-            			if (pilot.getMovementIncrement() >= smallEdge - 50 && pilot.getMovementIncrement() <= smallEdge + 50) {
-            				System.out.println("OMG I'M ON THE DEFENDER COURT!!!!!!!");
-            				onAttackerField = false;
-            			}
             		}
             		
             		// Start rotating
@@ -105,19 +101,7 @@ public class RobotController {
             	}
             }
             
-//            // Robot will run until it's rotated itself 360 degrees while moving around,
-//            // then stop
-//            if (anglesTurned > 360) {
-//            	System.out.println("ROTATED 360 DEGREES lol");
-//            	try {
-//					Thread.sleep(5000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//            	break;
-//            }
-            
+            // Checks if we've made the full trip around the field
             if (onAttackerField) {
             	if (distanceTravelled + pilot.getMovementIncrement() >= attackerFieldLength) {
 	            	System.out.println("Reached attacker field starting point");
