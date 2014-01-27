@@ -1,0 +1,6 @@
+-Raise or lower the blob size constant?
+-Combine vision with a simulated guess - feed all motions into simulator, guess/predict where objects will be 
+next, storing momentums. Average this guess location with the vision output, giving the simulation a larger
+ weighting when vision is giving an erratic location? Sim should be given a weighting that is given a sudden boost when
+ the vision gives an erratic/conflicting location, and then falls exponentially till boosted again? Implement simulator in
+ 'WorldState' class
