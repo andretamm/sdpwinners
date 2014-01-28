@@ -3,14 +3,20 @@ public class WorldState {
 	private int direction; // 0 = right, 1 = left.
 	private int colour; // 0 = yellow, 1 = blue
 	private int pitch; // 0 = main, 1 = side room
-	private int blueX;
-	private int blueY;
-	private int yellowX;
-	private int yellowY;
+	private int blueGoalkeeperX;
+	private int blueGoalkeeperY;
+	private int blueStrikerX;
+	private int blueStrikerY;
+	private int yellowGoalkeeperX;
+	private int yellowGoalkeeperY;
+	private int yellowStrikerX;
+	private int yellowStrikerY;
 	private int ballX;
 	private int ballY;
-	private float blueOrientation;
-	private float yellowOrientation;
+	private float blueGoalkeeperOrientation;
+	private float blueStrikerOrientation;
+	private float yellowGoalkeeperOrientation;
+	private float yellowStrikerOrientation;
 	private long counter;
   
 	public WorldState() {
@@ -21,40 +27,90 @@ public class WorldState {
 		this.pitch = 0;
 		
 		/* object properties */
-		this.blueX = 0;
-		this.blueY = 0;
-		this.yellowX = 0;
-		this.yellowY = 0;
+		this.blueGoalkeeperX = 0;
+		this.blueGoalkeeperY = 0;
+		this.blueStrikerX = 0;
+		this.blueStrikerY = 0;
+		this.yellowGoalkeeperX = 0;
+		this.yellowGoalkeeperY = 0;
+		this.yellowStrikerX = 0;
+		this.yellowStrikerY = 0;
 		this.ballX = 0;
 		this.ballY = 0;
-		this.blueOrientation = 0;
-		this.yellowOrientation = 0;
+		this.blueGoalkeeperOrientation = 0;
+		this.blueStrikerOrientation = 0;
+		this.yellowGoalkeeperOrientation = 0;
+		this.yellowStrikerOrientation = 0;
 	}
 	
-	public int getBlueX() {
-		return blueX;
+	
+	public int getBlueGoalkeeperX() {
+		return blueGoalkeeperX;
 	}
-	public void setBlueX(int blueX) {
-		this.blueX = blueX;
+	
+	public int getBlueStrikerX() {
+		return this.blueStrikerX;
 	}
-	public int getBlueY() {
-		return blueY;
+	public void setBlueGoalkeeperX(int blueX) {
+		this.blueGoalkeeperX = blueX;
 	}
-	public void setBlueY(int blueY) {
-		this.blueY = blueY;
+	
+	public void setBlueStrikerX(int blueX) {
+		this.blueStrikerX = blueX;
 	}
-	public int getYellowX() {
-		return yellowX;
+	
+	
+	public int getBlueGoalkeeperY() {
+		return blueGoalkeeperY;
 	}
-	public void setYellowX(int yellowX) {
-		this.yellowX = yellowX;
+	
+	public int getBlueStrikerY() {
+		return this.blueStrikerY;
 	}
-	public int getYellowY() {
-		return yellowY;
+	
+	public void setBlueGoalkeeperY(int blueY) {
+		this.blueGoalkeeperY = blueY;
 	}
-	public void setYellowY(int yellowY) {
-		this.yellowY = yellowY;
+	
+	public void setBlueStrikerY(int blueY) {
+		this.blueStrikerY = blueY;
 	}
+	
+	
+	public int getYellowGoalkeeperX() {
+		return yellowGoalkeeperX;
+	}
+	
+	public int getYellowStrikerX() {
+		return this.yellowStrikerX;
+	}
+	public void setYellowGoalkeeperX(int blueX) {
+		this.yellowGoalkeeperX = blueX;
+	}
+	
+	public void setYellowStrikerX(int blueX) {
+		this.yellowStrikerX = blueX;
+	}
+	
+	
+	public int getYellowGoalkeeperY() {
+		return yellowGoalkeeperY;
+	}
+	
+	public int getYellowStrikerY() {
+		return this.yellowStrikerY;
+	}
+	
+	public void setYellowGoalkeeperY(int blueY) {
+		this.yellowGoalkeeperY = blueY;
+	}
+	
+	public void setYellowStrikerY(int blueY) {
+		this.yellowStrikerY = blueY;
+	}
+	
+	
+	
 	public int getBallX() {
 		return ballX;
 	}
@@ -67,22 +123,43 @@ public class WorldState {
 	public void setBallY(int ballY) {
 		this.ballY = ballY;
 	}
+	
+	
 
-	public float getBlueOrientation() {
-		return blueOrientation;
+	public float getBlueGoalkeeperOrientation() {
+		return blueGoalkeeperOrientation;
 	}
 
-	public void setBlueOrientation(float blueOrientation) {
-		this.blueOrientation = blueOrientation;
+	public void setBlueGoalkeeperOrientation(float blueOrientation) {
+		this.blueGoalkeeperOrientation = blueOrientation;
+	}
+	
+	public float getBlueStrikerOrientation() {
+		return blueStrikerOrientation;
 	}
 
-	public float getYellowOrientation() {
-		return yellowOrientation;
+	public void setBlueStrikerOrientation(float blueOrientation) {
+		this.blueStrikerOrientation = blueOrientation;
+	}
+	
+	
+
+	public float getYellowGoalkeeperOrientation() {
+		return yellowGoalkeeperOrientation;
 	}
 
-	public void setYellowOrientation(float yellowOrientation) {
-		this.yellowOrientation = yellowOrientation;
+	public void setYellowGoalkeeperOrientation(float yellowOrientation) {
+		this.yellowGoalkeeperOrientation = yellowOrientation;
 	}
+	
+	public float getYellowStrikerOrientation() {
+		return yellowStrikerOrientation;
+	}
+
+	public void setYellowStrikerOrientation(float yellowOrientation) {
+		this.yellowStrikerOrientation = yellowOrientation;
+	}
+	
 
 	public int getDirection() {
 		return direction;

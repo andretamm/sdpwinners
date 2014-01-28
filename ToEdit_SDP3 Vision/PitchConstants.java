@@ -27,33 +27,61 @@ public class PitchConstants {
 	public int ball_v_low;
 	public int ball_v_high;
 
-	/* Blue Robot */
-	public int blue_r_low;
-	public int blue_r_high;
-	public int blue_g_low;
-	public int blue_g_high;
-	public int blue_b_low;
-	public int blue_b_high;
-	public int blue_h_low;
-	public int blue_h_high;
-	public int blue_s_low;
-	public int blue_s_high;
-	public int blue_v_low;
-	public int blue_v_high;
+	/* Blue Goalkeeper Robot */
+	public int blueG_r_low;
+	public int blueG_r_high;
+	public int blueG_g_low;
+	public int blueG_g_high;
+	public int blueG_b_low;
+	public int blueG_b_high;
+	public int blueG_h_low;
+	public int blueG_h_high;
+	public int blueG_s_low;
+	public int blueG_s_high;
+	public int blueG_v_low;
+	public int blueG_v_high;
+	
+	/* Blue Striker Robot */
+	public int blueS_r_low;
+	public int blueS_r_high;
+	public int blueS_g_low;
+	public int blueS_g_high;
+	public int blueS_b_low;
+	public int blueS_b_high;
+	public int blueS_h_low;
+	public int blueS_h_high;
+	public int blueS_s_low;
+	public int blueS_s_high;
+	public int blueS_v_low;
+	public int blueS_v_high;
 
-	/* Yellow Robot */
-	public int yellow_r_low;
-	public int yellow_r_high;
-	public int yellow_g_low;
-	public int yellow_g_high;
-	public int yellow_b_low;
-	public int yellow_b_high;
-	public int yellow_h_low;
-	public int yellow_h_high;
-	public int yellow_s_low;
-	public int yellow_s_high;
-	public int yellow_v_low;
-	public int yellow_v_high;
+	/* Yellow Goalkeeper Robot */
+	public int yellowG_r_low;
+	public int yellowG_r_high;
+	public int yellowG_g_low;
+	public int yellowG_g_high;
+	public int yellowG_b_low;
+	public int yellowG_b_high;
+	public int yellowG_h_low;
+	public int yellowG_h_high;
+	public int yellowG_s_low;
+	public int yellowG_s_high;
+	public int yellowG_v_low;
+	public int yellowG_v_high;
+	
+	/* Yellow Striker Robot */
+	public int yellowS_r_low;
+	public int yellowS_r_high;
+	public int yellowS_g_low;
+	public int yellowS_g_high;
+	public int yellowS_b_low;
+	public int yellowS_b_high;
+	public int yellowS_h_low;
+	public int yellowS_h_high;
+	public int yellowS_s_low;
+	public int yellowS_s_high;
+	public int yellowS_v_low;
+	public int yellowS_v_high;
 	
 	/* Grey Circles */
 	public int grey_r_low;
@@ -156,33 +184,61 @@ public class PitchConstants {
 		this.ball_v_low = scanner.nextInt();
 		this.ball_v_high = scanner.nextInt();
 
-		/* Blue Robot */
-		this.blue_r_low = scanner.nextInt();
-		this.blue_r_high = scanner.nextInt();
-		this.blue_g_low = scanner.nextInt();
-		this.blue_g_high = scanner.nextInt();
-		this.blue_b_low = scanner.nextInt();
-		this.blue_b_high = scanner.nextInt();
-		this.blue_h_low = scanner.nextInt();
-		this.blue_h_high = scanner.nextInt();
-		this.blue_s_low = scanner.nextInt();
-		this.blue_s_high = scanner.nextInt();
-		this.blue_v_low = scanner.nextInt();
-		this.blue_v_high = scanner.nextInt();
+		/* Blue Goalkeeper Robot */
+		this.blueG_r_low = scanner.nextInt();
+		this.blueG_r_high = scanner.nextInt();
+		this.blueG_g_low = scanner.nextInt();
+		this.blueG_g_high = scanner.nextInt();
+		this.blueG_b_low = scanner.nextInt();
+		this.blueG_b_high = scanner.nextInt();
+		this.blueG_h_low = scanner.nextInt();
+		this.blueG_h_high = scanner.nextInt();
+		this.blueG_s_low = scanner.nextInt();
+		this.blueG_s_high = scanner.nextInt();
+		this.blueG_v_low = scanner.nextInt();
+		this.blueG_v_high = scanner.nextInt();
+		
+		/* Blue Striker Robot */
+		this.blueS_r_low = scanner.nextInt();
+		this.blueS_r_high = scanner.nextInt();
+		this.blueS_g_low = scanner.nextInt();
+		this.blueS_g_high = scanner.nextInt();
+		this.blueS_b_low = scanner.nextInt();
+		this.blueS_b_high = scanner.nextInt();
+		this.blueS_h_low = scanner.nextInt();
+		this.blueS_h_high = scanner.nextInt();
+		this.blueS_s_low = scanner.nextInt();
+		this.blueS_s_high = scanner.nextInt();
+		this.blueS_v_low = scanner.nextInt();
+		this.blueS_v_high = scanner.nextInt();
 
-		/* Yellow Robot */
-		this.yellow_r_low = scanner.nextInt();
-		this.yellow_r_high = scanner.nextInt();
-		this.yellow_g_low = scanner.nextInt();
-		this.yellow_g_high = scanner.nextInt();
-		this.yellow_b_low = scanner.nextInt();
-		this.yellow_b_high = scanner.nextInt();
-		this.yellow_h_low = scanner.nextInt();
-		this.yellow_h_high = scanner.nextInt();
-		this.yellow_s_low = scanner.nextInt();
-		this.yellow_s_high = scanner.nextInt();
-		this.yellow_v_low = scanner.nextInt();
-		this.yellow_v_high = scanner.nextInt();
+		/* Yellow Goalkeeper Robot */
+		this.yellowG_r_low = scanner.nextInt();
+		this.yellowG_r_high = scanner.nextInt();
+		this.yellowG_g_low = scanner.nextInt();
+		this.yellowG_g_high = scanner.nextInt();
+		this.yellowG_b_low = scanner.nextInt();
+		this.yellowG_b_high = scanner.nextInt();
+		this.yellowG_h_low = scanner.nextInt();
+		this.yellowG_h_high = scanner.nextInt();
+		this.yellowG_s_low = scanner.nextInt();
+		this.yellowG_s_high = scanner.nextInt();
+		this.yellowG_v_low = scanner.nextInt();
+		this.yellowG_v_high = scanner.nextInt();
+		
+		/* Yellow Striker Robot */
+		this.yellowS_r_low = scanner.nextInt();
+		this.yellowS_r_high = scanner.nextInt();
+		this.yellowS_g_low = scanner.nextInt();
+		this.yellowS_g_high = scanner.nextInt();
+		this.yellowS_b_low = scanner.nextInt();
+		this.yellowS_b_high = scanner.nextInt();
+		this.yellowS_h_low = scanner.nextInt();
+		this.yellowS_h_high = scanner.nextInt();
+		this.yellowS_s_low = scanner.nextInt();
+		this.yellowS_s_high = scanner.nextInt();
+		this.yellowS_v_low = scanner.nextInt();
+		this.yellowS_v_high = scanner.nextInt();
 		
 		/* Grey Circles */
 		this.grey_r_low = scanner.nextInt();
@@ -240,33 +296,61 @@ public class PitchConstants {
 		this.ball_v_low = 0;
 		this.ball_v_high = 10;
 
-		/* Blue Robot */
-		this.blue_r_low = 0;
-		this.blue_r_high = 255;
-		this.blue_g_low = 0;
-		this.blue_g_high = 255;
-		this.blue_b_low = 0;
-		this.blue_b_high = 255;
-		this.blue_h_low = 0;
-		this.blue_h_high = 10;
-		this.blue_s_low = 0;
-		this.blue_s_high = 10;
-		this.blue_v_low = 0;
-		this.blue_v_high = 10;
+		/* Blue Goalkeeper Robot */
+		this.blueG_r_low = 0;
+		this.blueG_r_high = 255;
+		this.blueG_g_low = 0;
+		this.blueG_g_high = 255;
+		this.blueG_b_low = 0;
+		this.blueG_b_high = 255;
+		this.blueG_h_low = 0;
+		this.blueG_h_high = 10;
+		this.blueG_s_low = 0;
+		this.blueG_s_high = 10;
+		this.blueG_v_low = 0;
+		this.blueG_v_high = 10;
+		
+		/* Blue Striker Robot */
+		this.blueS_r_low = 0;
+		this.blueS_r_high = 255;
+		this.blueS_g_low = 0;
+		this.blueS_g_high = 255;
+		this.blueS_b_low = 0;
+		this.blueS_b_high = 255;
+		this.blueS_h_low = 0;
+		this.blueS_h_high = 10;
+		this.blueS_s_low = 0;
+		this.blueS_s_high = 10;
+		this.blueS_v_low = 0;
+		this.blueS_v_high = 10;
 
-		/* Yellow Robot */
-		this.yellow_r_low = 0;
-		this.yellow_r_high = 255;
-		this.yellow_g_low = 0;
-		this.yellow_g_high = 255;
-		this.yellow_b_low = 0;
-		this.yellow_b_high = 255;
-		this.yellow_h_low = 0;
-		this.yellow_h_high = 10;
-		this.yellow_s_low = 0;
-		this.yellow_s_high = 10;
-		this.yellow_v_low = 0;
-		this.yellow_v_high = 10;
+		/* Yellow Goalkeeper Robot */
+		this.yellowG_r_low = 0;
+		this.yellowG_r_high = 255;
+		this.yellowG_g_low = 0;
+		this.yellowG_g_high = 255;
+		this.yellowG_b_low = 0;
+		this.yellowG_b_high = 255;
+		this.yellowG_h_low = 0;
+		this.yellowG_h_high = 10;
+		this.yellowG_s_low = 0;
+		this.yellowG_s_high = 10;
+		this.yellowG_v_low = 0;
+		this.yellowG_v_high = 10;
+		
+		/* Yellow Striker Robot */
+		this.yellowS_r_low = 0;
+		this.yellowS_r_high = 255;
+		this.yellowS_g_low = 0;
+		this.yellowS_g_high = 255;
+		this.yellowS_b_low = 0;
+		this.yellowS_b_high = 255;
+		this.yellowS_h_low = 0;
+		this.yellowS_h_high = 10;
+		this.yellowS_s_low = 0;
+		this.yellowS_s_high = 10;
+		this.yellowS_v_low = 0;
+		this.yellowS_v_high = 10;
 		
 		/* Grey Circles */
 		this.grey_r_low = 0;

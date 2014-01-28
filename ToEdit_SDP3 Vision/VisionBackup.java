@@ -22,6 +22,17 @@ import au.edu.jcu.v4l4j.exceptions.V4L4JException;
  * data. Identifies ball and robot locations, and robot orientations.
  *
  * @author s0840449
+ * 
+ * Possible improvements:
+ * -Raise or lower the blob size constant?
+ * -Combine vision with a simulated guess - feed all motions into simulator, guess/predict where objects will be 
+ * next, storing momentums. Average this guess location with the vision output, giving the simulation a larger
+ * weighting when vision is giving an erratic location? Sim should be given a weighting that is given a sudden boost when
+ * the vision gives an erratic/conflicting location, and then falls exponentially till boosted again? Implement simulator in
+ * 'WorldState' class
+ * -Could subtract the background from the image
+ * -Right now, the system ignores the green boards
+ * 
  */
 public class VisionBackup extends WindowAdapter {
     private VideoDevice videoDev;
@@ -172,47 +183,65 @@ public class VisionBackup extends WindowAdapter {
                 image.setRGB(j, i, input.getRGB(x, y));
             }
         }
-        
+        */
 
 
-        
+        /*
         for (int i = 0; i < image.getHeight(); i++) {
             for (int j = 0; j < image.getWidth(); j++) {
                 image.setRGB(j, i, input.getRGB(xDistortion[j], yDistortion[i]));
                 //image.setRGB(j, i, input.getRGB(j, i));
             }
-        }*/
-        
+        }
+        */
 
         int ballX = 0;
         int ballY = 0;
         int numBallPos = 0;
 
-        int blueX = 0;
-        int blueY = 0;
-        int numBluePos = 0;
-
-        int yellowX = 0;
-        int yellowY = 0;
-        int numYellowPos = 0;
+        int blueGoalkeeperX = 0;
+        int blueGoalkeeperY = 0;
+        int numBlueGoalkeeperPos = 0;
+        
+        /*Claudiu-Modified*/
+        int blueStrikerX = 0;
+        int blueStrikerY = 0;
+        int numBlueStrikerPos = 0;
+        /*Modified-Claudiu*/
+        
+        int yellowGoalkeeperX = 0;
+        int yellowGoalkeeperY = 0;
+        int numYellowGoalkeeperPos = 0;
+        
+        /*Claudiu-Modified*/
+        int yellowStrikerX = 0;
+        int yellowStrikerY = 0;
+        int numYellowStrikerPos = 0;
+        /*Modified-Claudiu*/
 
         ArrayList<Integer> ballXPoints = new ArrayList<Integer>();
         ArrayList<Integer> ballYPoints = new ArrayList<Integer>();
-        ArrayList<Integer> blueXPoints = new ArrayList<Integer>();
-        ArrayList<Integer> blueYPoints = new ArrayList<Integer>();
-        ArrayList<Integer> yellowXPoints = new ArrayList<Integer>();
-        ArrayList<Integer> yellowYPoints = new ArrayList<Integer>();
-
+        ArrayList<Integer> blueGoalkeeperXPoints = new ArrayList<Integer>();
+        ArrayList<Integer> blueGoalkeeperYPoints = new ArrayList<Integer>();
+        ArrayList<Integer> blueStrikerXPoints = new ArrayList<Integer>();
+        ArrayList<Integer> blueStrikerYPoints = new ArrayList<Integer>();
+        ArrayList<Integer> yellowGoalkeeperXPoints = new ArrayList<Integer>();
+        ArrayList<Integer> yellowGoalkeeperYPoints = new ArrayList<Integer>();
+        ArrayList<Integer> yellowStrikerXPoints = new ArrayList<Integer>();
+        ArrayList<Integer> yellowStrikerYPoints = new ArrayList<Integer>();
+        
+        
         int topBuffer = pitchConstants.topBuffer;
         int bottomBuffer = pitchConstants.bottomBuffer;
         int leftBuffer = pitchConstants.leftBuffer;
         int rightBuffer = pitchConstants.rightBuffer;
 
-        /* For every pixel within the pitch, test to see if it belongs to the ball,
-         * the yellow T, the blue T, either green plate or a grey circle. */
+        
+        /*Claudiu-Modified*/
+        /*Code for first half of pitch - Identify yellowT, the blueT, green palte, grey circle + a ball?*/
         for (int row = topBuffer; row < image.getHeight() - bottomBuffer; row++) {
 
-            for (int column = leftBuffer; column < image.getWidth() - rightBuffer; column++) {
+            for (int column = leftBuffer; column < (image.getWidth() - rightBuffer + leftBuffer)/2; column++) {
 
                 /* The RGB colours and hsv values for the current pixel. */
                 Color c = new Color(image.getRGB(column, row));
@@ -228,42 +257,7 @@ public class VisionBackup extends WindowAdapter {
                 if (thresholdsState.isGreen_debug() && isGreen(c, hsbvals)) {
                     image.setRGB(column, row, 0xFFFF0099);
                 }
-
-                /* Is this pixel part of the Blue T? */
-                if (isBlue(c, hsbvals) ){
-
-                    blueX += column;
-                    blueY += row;
-                    numBluePos++;
-
-                    blueXPoints.add(column);
-                    blueYPoints.add(row);
-
-                    /* If we're in the "Blue" tab, we show what pixels we're looking at,
-                     * for debugging and to help with threshold setting. */
-                    if (thresholdsState.isBlue_debug()) {
-                        image.setRGB(column, row, 0xFFFF0099);
-                    }
-
-                }
-
-                /* Is this pixel part of the Yellow T? */
-                if (isYellow(c, hsbvals)) {
-
-                    yellowX += column;
-                    yellowY += row;
-                    numYellowPos++;
-
-                    yellowXPoints.add(column);
-                    yellowYPoints.add(row);
-
-                    /* If we're in the "Yellow" tab, we show what pixels we're looking at,
-                     * for debugging and to help with threshold setting. */
-                    if (thresholdsState.isYellow_debug()) {
-                        image.setRGB(column, row, 0xFFFF0099);
-                    }
-                }
-
+                
                 /* Is this pixel part of the Ball? */
                 if (isBall(c, hsbvals)) {
 
@@ -280,13 +274,128 @@ public class VisionBackup extends WindowAdapter {
                         image.setRGB(column, row, 0xFF000000);
                     }
                 }
+
+                /* Is this pixel part of the BlueGoalkeeperT? */
+                if (isBlueGoalkeeper(c, hsbvals) ){
+
+                    blueGoalkeeperX += column;
+                    blueGoalkeeperY += row;
+                    numBlueGoalkeeperPos++;
+
+                    blueGoalkeeperXPoints.add(column);
+                    blueGoalkeeperYPoints.add(row);
+
+                    /* If we're in the "Blue" tab, we show what pixels we're looking at,
+                     * for debugging and to help with threshold setting. */
+                    if (thresholdsState.isBlue_debug()) {
+                        image.setRGB(column, row, 0xFFFF0099);
+                    }
+
+                }
+
+                /* Is this pixel part of the YellowGoalkeeperT? */
+                if (isYellowGoalkeeper(c, hsbvals)) {
+
+                    yellowGoalkeeperX += column;
+                    yellowGoalkeeperY += row;
+                    numYellowGoalkeeperPos++;
+
+                    yellowGoalkeeperXPoints.add(column);
+                    yellowGoalkeeperYPoints.add(row);
+
+                    /* If we're in the "Yellow" tab, we show what pixels we're looking at,
+                     * for debugging and to help with threshold setting. */
+                    if (thresholdsState.isYellow_debug()) {
+                        image.setRGB(column, row, 0xFFFF0099);
+                    }
+                }
             }
         }
+        /*Modified-Claudiu*/
+        
+        /*Claudiu-Modified*/
+        /*Code for second half of pitch - Identify yellow2T, the blue2T, green palte, grey circle, + a ball?*/
+        for (int row = topBuffer; row < image.getHeight() - bottomBuffer; row++) {
+
+            for (int column = (image.getWidth() - rightBuffer + leftBuffer)/2; column < (image.getWidth() - rightBuffer); column++) {
+
+                /* The RGB colours and hsv values for the current pixel. */
+                Color c2 = new Color(image.getRGB(column, row));
+                float hsbvals[] = new float[3];
+                Color.RGBtoHSB(c2.getRed(), c2.getBlue(), c2.getGreen(), hsbvals);
+
+                /* Debug graphics for the grey circles and green plates.
+                 * TODO: Move these into the actual detection. */
+                if (thresholdsState.isGrey_debug() && isGrey(c2, hsbvals)) {
+                    image.setRGB(column, row, 0xFFFF0099);
+                }
+
+                if (thresholdsState.isGreen_debug() && isGreen(c2, hsbvals)) {
+                    image.setRGB(column, row, 0xFFFF0099);
+                }
+                
+                /* Is this pixel part of the Ball? */
+                if (isBall(c2, hsbvals)) {
+
+                    ballX += column;
+                    ballY += row;
+                    numBallPos++;
+
+                    ballXPoints.add(column);
+                    ballYPoints.add(row);
+
+                    /* If we're in the "Ball" tab, we show what pixels we're looking at,
+                     * for debugging and to help with threshold setting. */
+                    if (thresholdsState.isBall_debug()) {
+                        image.setRGB(column, row, 0xFF000000);
+                    }
+                }
+
+                /* Is this pixel part of the BlueStrikerT? */
+                if (isBlueStriker(c2, hsbvals) ){
+
+                    blueStrikerX += column;
+                    blueStrikerY += row;
+                    numBlueStrikerPos++;
+
+                    blueStrikerXPoints.add(column);
+                    blueStrikerYPoints.add(row);
+
+                    /* If we're in the "Blue" tab, we show what pixels we're looking at,
+                     * for debugging and to help with threshold setting. */
+                    if (thresholdsState.isBlue_debug()) {
+                        image.setRGB(column, row, 0xFFFF0099);
+                    }
+
+                }
+
+                /* Is this pixel part of the YellowStrikerT? */
+                if (isYellowStriker(c2, hsbvals)) {
+
+                    yellowStrikerX += column;
+                    yellowStrikerY += row;
+                    numYellowStrikerPos++;
+
+                    yellowStrikerXPoints.add(column);
+                    yellowStrikerYPoints.add(row);
+
+                    /* If we're in the "Yellow" tab, we show what pixels we're looking at,
+                     * for debugging and to help with threshold setting. */
+                    if (thresholdsState.isYellow_debug()) {
+                        image.setRGB(column, row, 0xFFFF0099);
+                    }
+                }
+            }
+        }
+        /*Modified-Claudiu*/
 
         /* Position objects to hold the centre point of the ball and both robots. */
         Position ball;
-        Position blue;
-        Position yellow;
+        Position blueGoalkeeper;
+        Position blueStriker;
+        Position yellowGoalkeeper;
+        Position yellowStriker;
+        
 
         /* If we have only found a few 'Ball' pixels, chances are that the ball has not
          * actually been detected. */
@@ -301,69 +410,129 @@ public class VisionBackup extends WindowAdapter {
             ball = new Position(worldState.getBallX(), worldState.getBallY());
         }
 
-        /* If we have only found a few 'Blue' pixels, chances are that the ball has not
+        /* If we have only found a few 'Blue' pixels, chances are that a T has not
          * actually been detected. */
-        if (numBluePos > 0) {
-            blueX /= numBluePos;
-            blueY /= numBluePos;
 
-            blue = new Position(blueX, blueY);
-            blue.fixValues(worldState.getBlueX(), worldState.getBlueY());
-            blue.filterPoints(blueXPoints, blueYPoints);
+    	if (numBlueGoalkeeperPos > 0) {
+            blueGoalkeeperX /= numBlueGoalkeeperPos;
+            blueGoalkeeperY /= numBlueGoalkeeperPos;
+
+            blueGoalkeeper = new Position(blueGoalkeeperX, blueGoalkeeperY);
+            blueGoalkeeper.fixValues(worldState.getBlueGoalkeeperX(), worldState.getBlueGoalkeeperY());
+            blueGoalkeeper.filterPoints(blueGoalkeeperXPoints, blueGoalkeeperYPoints);
         } else {
-            blue = new Position(worldState.getBlueX(), worldState.getBlueY());
+            blueGoalkeeper = new Position(worldState.getBlueGoalkeeperX(), worldState.getBlueGoalkeeperY());
+        }
+        
+    	if (numBlueStrikerPos > 0) {
+            blueStrikerX /= numBlueStrikerPos;
+            blueStrikerY /= numBlueStrikerPos;
+
+            blueStriker = new Position(blueStrikerX, blueStrikerY);
+            blueStriker.fixValues(worldState.getBlueStrikerX(), worldState.getBlueStrikerY());
+            blueStriker.filterPoints(blueStrikerXPoints, blueStrikerYPoints);
+        } else {
+            blueStriker = new Position(worldState.getBlueStrikerX(), worldState.getBlueStrikerY());
+        }
+    	
+    	
+        /* If we have only found a few 'Yellow' pixels, chances are that the yellow T has not
+         * actually been detected. */
+        if (numYellowGoalkeeperPos > 0) {
+            yellowGoalkeeperX /= numYellowGoalkeeperPos;
+            yellowGoalkeeperY /= numYellowGoalkeeperPos;
+
+            yellowGoalkeeper = new Position(yellowGoalkeeperX, yellowGoalkeeperY);
+            yellowGoalkeeper.fixValues(worldState.getYellowGoalkeeperX(), worldState.getYellowGoalkeeperY());
+            yellowGoalkeeper.filterPoints(yellowGoalkeeperXPoints, yellowGoalkeeperYPoints);
+        } else {
+            yellowGoalkeeper = new Position(worldState.getYellowGoalkeeperX(), worldState.getYellowGoalkeeperY());
         }
 
-        /* If we have only found a few 'Yellow' pixels, chances are that the ball has not
-         * actually been detected. */
-        if (numYellowPos > 0) {
-            yellowX /= numYellowPos;
-            yellowY /= numYellowPos;
+        /*Claudiu-Modified*/
+        if (numYellowStrikerPos > 0) {
+            yellowStrikerX /= numYellowStrikerPos;
+            yellowStrikerY /= numYellowStrikerPos;
 
-            yellow = new Position(yellowX, yellowY);
-            yellow.fixValues(worldState.getYellowX(), worldState.getYellowY());
-            yellow.filterPoints(yellowXPoints, yellowYPoints);
+            yellowStriker = new Position(yellowStrikerX, yellowStrikerY);
+            yellowStriker.fixValues(worldState.getYellowStrikerX(), worldState.getYellowStrikerY());
+            yellowStriker.filterPoints(yellowStrikerXPoints, yellowStrikerYPoints);
         } else {
-            yellow = new Position(worldState.getYellowX(), worldState.getYellowY());
+            yellowStriker = new Position(worldState.getYellowStrikerX(), worldState.getYellowStrikerY());
         }
+        /*Modified-Claudiu*/
 
 
-
-        /* Attempt to find the blue robot's orientation. */
+        /* Attempt to find the blue Goalkeeper robot's orientation. */
         try {
-            float blueOrientation = findOrientation(blueXPoints, blueYPoints, blue.getX(), blue.getY(), image, true);
-            float diff = Math.abs(blueOrientation - worldState.getBlueOrientation());
+            float blueGoalkeeperOrientation = findOrientation(blueGoalkeeperXPoints, blueGoalkeeperYPoints, blueGoalkeeper.getX(), blueGoalkeeper.getY(), image, true);
+            float diff = Math.abs(blueGoalkeeperOrientation - worldState.getBlueGoalkeeperOrientation());
             if (diff > 0.1) {
-                float angle = (float) Math.round(((blueOrientation / Math.PI) * 180) / 5) * 5;
-                worldState.setBlueOrientation((float) (angle / 180 * Math.PI));
+                float angle = (float) Math.round(((blueGoalkeeperOrientation / Math.PI) * 180) / 5) * 5;
+                worldState.setBlueGoalkeeperOrientation((float) (angle / 180 * Math.PI));
             }
         } catch (NoAngleException e) {
-            worldState.setBlueOrientation(worldState.getBlueOrientation());
+            worldState.setBlueGoalkeeperOrientation(worldState.getBlueGoalkeeperOrientation());
             System.out.println("Blue robot: " + e.getMessage());
         }
 
-
-        /* Attempt to find the yellow robot's orientation. */
+        /*Claudiu-Modified*/
+        /* Attempt to find the blue Striker robot's orientation. */
         try {
-            float yellowOrientation = findOrientation(yellowXPoints, yellowYPoints, yellow.getX(), yellow.getY(), image, true);
-            float diff = Math.abs(yellowOrientation - worldState.getYellowOrientation());
-            if (yellowOrientation != 0 && diff > 0.1) {
-                float angle = (float) Math.round(((yellowOrientation / Math.PI) * 180) / 5) * 5;
-                worldState.setYellowOrientation((float) (angle / 180 * Math.PI));
+            float blueStrikerOrientation = findOrientation(blueStrikerXPoints, blueStrikerYPoints, blueStriker.getX(), blueStriker.getY(), image, true);
+            float diff2 = Math.abs(blueStrikerOrientation - worldState.getBlueStrikerOrientation());
+            if (diff2 > 0.1) {
+                float angle2 = (float) Math.round(((blueStrikerOrientation / Math.PI) * 180) / 5) * 5;
+                worldState.setBlueStrikerOrientation((float) (angle2 / 180 * Math.PI));
             }
         } catch (NoAngleException e) {
-            worldState.setYellowOrientation(worldState.getYellowOrientation());
+            worldState.setBlueStrikerOrientation(worldState.getBlueStrikerOrientation());
+            System.out.println("Blue2 robot: " + e.getMessage());
+        }
+        /*Modified-Claudiu*/
+
+        /* Attempt to find the yellow Goalkeeper robot's orientation. */
+        try {
+            float yellowGoalkeeperOrientation = findOrientation(yellowGoalkeeperXPoints, yellowGoalkeeperYPoints, yellowGoalkeeper.getX(), yellowGoalkeeper.getY(), image, true);
+            float diff = Math.abs(yellowGoalkeeperOrientation - worldState.getYellowGoalkeeperOrientation());
+            if (yellowGoalkeeperOrientation != 0 && diff > 0.1) {
+                float angle = (float) Math.round(((yellowGoalkeeperOrientation / Math.PI) * 180) / 5) * 5;
+                worldState.setYellowGoalkeeperOrientation((float) (angle / 180 * Math.PI));
+            }
+        } catch (NoAngleException e) {
+            worldState.setYellowGoalkeeperOrientation(worldState.getYellowGoalkeeperOrientation());
             System.out.println("Yellow robot: " + e.getMessage());
         }
 
+        /*Claudiu-Modified*/
+        /* Attempt to find the yellow2 robot's orientation. */
+        try {
+            float yellow2Orientation = findOrientation(yellowStrikerXPoints, yellowStrikerYPoints, yellowStriker.getX(), yellowStriker.getY(), image, true);
+            float diff2 = Math.abs(yellow2Orientation - worldState.getYellowGoalkeeperOrientation());
+            if (yellow2Orientation != 0 && diff2 > 0.1) {
+                float angle2 = (float) Math.round(((yellow2Orientation / Math.PI) * 180) / 5) * 5;
+                worldState.setYellowGoalkeeperOrientation((float) (angle2 / 180 * Math.PI));
+            }
+        } catch (NoAngleException e) {
+            worldState.setYellowGoalkeeperOrientation(worldState.getYellowGoalkeeperOrientation());
+            System.out.println("Yellow2 robot: " + e.getMessage());
+        }
+        /*Modified-Claudiu*/
 
         worldState.setBallX(ball.getX());
         worldState.setBallY(ball.getY());
 
-        worldState.setBlueX(blue.getX());
-        worldState.setBlueY(blue.getY());
-        worldState.setYellowX(yellow.getX());
-        worldState.setYellowY(yellow.getY());
+        worldState.setBlueGoalkeeperX(blueGoalkeeper.getX());
+        worldState.setBlueGoalkeeperY(blueGoalkeeper.getY());
+        worldState.setYellowGoalkeeperX(yellowGoalkeeper.getX());
+        worldState.setYellowGoalkeeperY(yellowGoalkeeper.getY());
+        /*Claudiu-Modified*/
+        worldState.setBlueStrikerX(blueStriker.getX());
+        worldState.setBlueStrikerY(blueStriker.getY());
+        worldState.setYellowStrikerX(yellowStriker.getX());
+        worldState.setYellowStrikerY(yellowStriker.getY());
+        worldState.updateCounter();
+        /*Modified-Claudiu*/
         worldState.updateCounter();
 
         /* Draw the image onto the vision frame. */
@@ -378,10 +547,17 @@ public class VisionBackup extends WindowAdapter {
             imageGraphics.drawLine(0, ball.getY(), 640, ball.getY());
             imageGraphics.drawLine(ball.getX(), 0, ball.getX(), 480);
             imageGraphics.setColor(Color.blue);
-            imageGraphics.drawOval(blue.getX()-15, blue.getY()-15, 30,30);
+            imageGraphics.drawOval(blueGoalkeeper.getX()-15, blueGoalkeeper.getY()-15, 30,30);
             imageGraphics.setColor(Color.yellow);
-            imageGraphics.drawOval(yellow.getX()-15, yellow.getY()-15, 30,30);
+            imageGraphics.drawOval(yellowGoalkeeper.getX()-15, yellowGoalkeeper.getY()-15, 30,30);
             imageGraphics.setColor(Color.white);
+            /*Claudiu-Modified*/
+            imageGraphics.setColor(Color.blue);
+            imageGraphics.drawOval(blueStriker.getX()-15, blueStriker.getY()-15, 30,30);
+            imageGraphics.setColor(Color.yellow);
+            imageGraphics.drawOval(yellowStriker.getX()-15, yellowStriker.getY()-15, 30,30);
+            imageGraphics.setColor(Color.white);
+            /*Modified-Claudiu*/
 
             /*
             float ax = (float) Math.cos(worldState.getBlueOrientation());
@@ -415,15 +591,27 @@ public class VisionBackup extends WindowAdapter {
      *                      thresholds (and thus the pixel is part of the blue T),
      *                      false otherwise.
      */
-    private boolean isBlue(Color color, float[] hsbvals) {
-        return hsbvals[0] <= thresholdsState.getBlue_h_high() && hsbvals[0] >= thresholdsState.getBlue_h_low() &&
-        hsbvals[1] <= thresholdsState.getBlue_s_high() && hsbvals[1] >= thresholdsState.getBlue_s_low() &&
-        hsbvals[2] <= thresholdsState.getBlue_v_high() && hsbvals[2] >= thresholdsState.getBlue_v_low() &&
-        color.getRed() <= thresholdsState.getBlue_r_high() && color.getRed() >= thresholdsState.getBlue_r_low() &&
-        color.getGreen() <= thresholdsState.getBlue_g_high() && color.getGreen() >= thresholdsState.getBlue_g_low() &&
-        color.getBlue() <= thresholdsState.getBlue_b_high() && color.getBlue() >= thresholdsState.getBlue_b_low();
+    
+    /*Code for Blue Goalkeeper*/
+    private boolean isBlueGoalkeeper(Color color, float[] hsbvals) {
+        return hsbvals[0] <= thresholdsState.getBlueGoalkeeper_h_high() && hsbvals[0] >= thresholdsState.getBlueGoalkeeper_h_low() &&
+        hsbvals[1] <= thresholdsState.getBlueGoalkeeper_s_high() && hsbvals[1] >= thresholdsState.getBlueGoalkeeper_s_low() &&
+        hsbvals[2] <= thresholdsState.getBlueGoalkeeper_v_high() && hsbvals[2] >= thresholdsState.getBlueGoalkeeper_v_low() &&
+        color.getRed() <= thresholdsState.getBlueGoalkeeper_r_high() && color.getRed() >= thresholdsState.getBlueGoalkeeper_r_low() &&
+        color.getGreen() <= thresholdsState.getBlueGoalkeeper_g_high() && color.getGreen() >= thresholdsState.getBlueGoalkeeper_g_low() &&
+        color.getBlue() <= thresholdsState.getBlueGoalkeeper_b_high() && color.getBlue() >= thresholdsState.getBlueGoalkeeper_b_low();
     }
 
+    /*Code for Blue Striker*/
+    private boolean isBlueStriker(Color color, float[] hsbvals) {
+        return hsbvals[0] <= thresholdsState.getBlueStriker_h_high() && hsbvals[0] >= thresholdsState.getBlueStriker_h_low() &&
+        hsbvals[1] <= thresholdsState.getBlueStriker_s_high() && hsbvals[1] >= thresholdsState.getBlueStriker_s_low() &&
+        hsbvals[2] <= thresholdsState.getBlueStriker_v_high() && hsbvals[2] >= thresholdsState.getBlueStriker_v_low() &&
+        color.getRed() <= thresholdsState.getBlueStriker_r_high() && color.getRed() >= thresholdsState.getBlueStriker_r_low() &&
+        color.getGreen() <= thresholdsState.getBlueStriker_g_high() && color.getGreen() >= thresholdsState.getBlueStriker_g_low() &&
+        color.getBlue() <= thresholdsState.getBlueStriker_b_high() && color.getBlue() >= thresholdsState.getBlueStriker_b_low();
+    }
+    
     /**
      * Determines if a pixel is part of the yellow T, based on input RGB colours
      * and hsv values.
@@ -435,13 +623,25 @@ public class VisionBackup extends WindowAdapter {
      *                      thresholds (and thus the pixel is part of the yellow T),
      *                      false otherwise.
      */
-    private boolean isYellow(Color colour, float[] hsbvals) {
-        return hsbvals[0] <= thresholdsState.getYellow_h_high() && hsbvals[0] >= thresholdsState.getYellow_h_low() &&
-        hsbvals[1] <= thresholdsState.getYellow_s_high() &&  hsbvals[1] >= thresholdsState.getYellow_s_low() &&
-        hsbvals[2] <= thresholdsState.getYellow_v_high() &&  hsbvals[2] >= thresholdsState.getYellow_v_low() &&
-        colour.getRed() <= thresholdsState.getYellow_r_high() &&  colour.getRed() >= thresholdsState.getYellow_r_low() &&
-        colour.getGreen() <= thresholdsState.getYellow_g_high() && colour.getGreen() >= thresholdsState.getYellow_g_low() &&
-        colour.getBlue() <= thresholdsState.getYellow_b_high() && colour.getBlue() >= thresholdsState.getYellow_b_low();
+    
+    /*Code for Yellow Goalkeeper*/
+    private boolean isYellowGoalkeeper(Color colour, float[] hsbvals) {
+        return hsbvals[0] <= thresholdsState.getYellowGoalkeeper_h_high() && hsbvals[0] >= thresholdsState.getYellowGoalkeeper_h_low() &&
+        hsbvals[1] <= thresholdsState.getYellowGoalkeeper_s_high() &&  hsbvals[1] >= thresholdsState.getYellowGoalkeeper_s_low() &&
+        hsbvals[2] <= thresholdsState.getYellowGoalkeeper_v_high() &&  hsbvals[2] >= thresholdsState.getYellowGoalkeeper_v_low() &&
+        colour.getRed() <= thresholdsState.getYellowGoalkeeper_r_high() &&  colour.getRed() >= thresholdsState.getYellowGoalkeeper_r_low() &&
+        colour.getGreen() <= thresholdsState.getYellowGoalkeeper_g_high() && colour.getGreen() >= thresholdsState.getYellowGoalkeeper_g_low() &&
+        colour.getBlue() <= thresholdsState.getYellowGoalkeeper_b_high() && colour.getBlue() >= thresholdsState.getYellowGoalkeeper_b_low();
+    }
+    
+    /*Code for Yellow Striker*/
+    private boolean isYellowStriker(Color colour, float[] hsbvals) {
+        return hsbvals[0] <= thresholdsState.getYellowStriker_h_high() && hsbvals[0] >= thresholdsState.getYellowStriker_h_low() &&
+        hsbvals[1] <= thresholdsState.getYellowStriker_s_high() &&  hsbvals[1] >= thresholdsState.getYellowStriker_s_low() &&
+        hsbvals[2] <= thresholdsState.getYellowStriker_v_high() &&  hsbvals[2] >= thresholdsState.getYellowStriker_v_low() &&
+        colour.getRed() <= thresholdsState.getYellowStriker_r_high() &&  colour.getRed() >= thresholdsState.getYellowStriker_r_low() &&
+        colour.getGreen() <= thresholdsState.getYellowStriker_g_high() && colour.getGreen() >= thresholdsState.getYellowStriker_g_low() &&
+        colour.getBlue() <= thresholdsState.getYellowStriker_b_high() && colour.getBlue() >= thresholdsState.getYellowStriker_b_low();
     }
 
     /**
@@ -476,12 +676,18 @@ public class VisionBackup extends WindowAdapter {
      *                      false otherwise.
      */
     private boolean isGrey(Color colour, float[] hsbvals) {
-        return hsbvals[0] <= thresholdsState.getGrey_h_high() && hsbvals[0] >= thresholdsState.getGrey_h_low() &&
-        hsbvals[1] <= thresholdsState.getGrey_s_high() &&  hsbvals[1] >= thresholdsState.getGrey_s_low() &&
-        hsbvals[2] <= thresholdsState.getGrey_v_high() &&  hsbvals[2] >= thresholdsState.getGrey_v_low() &&
-        colour.getRed() <= thresholdsState.getGrey_r_high() &&  colour.getRed() >= thresholdsState.getGrey_r_low() &&
-        colour.getGreen() <= thresholdsState.getGrey_g_high() && colour.getGreen() >= thresholdsState.getGrey_g_low() &&
-        colour.getBlue() <= thresholdsState.getGrey_b_high() && colour.getBlue() >= thresholdsState.getGrey_b_low();
+        return hsbvals[0] <= thresholdsState.getGrey_h_high() && 
+        hsbvals[0] >= thresholdsState.getGrey_h_low() &&
+        hsbvals[1] <= thresholdsState.getGrey_s_high() &&  
+        hsbvals[1] >= thresholdsState.getGrey_s_low() &&
+        hsbvals[2] <= thresholdsState.getGrey_v_high() &&  
+        hsbvals[2] >= thresholdsState.getGrey_v_low() &&
+        colour.getRed() <= thresholdsState.getGrey_r_high() &&  
+        colour.getRed() >= thresholdsState.getGrey_r_low() &&
+        colour.getGreen() <= thresholdsState.getGrey_g_high() && 
+        colour.getGreen() >= thresholdsState.getGrey_g_low() &&
+        colour.getBlue() <= thresholdsState.getGrey_b_high() && 
+        colour.getBlue() >= thresholdsState.getGrey_b_low();
     }
 
     /**
@@ -550,19 +756,43 @@ public class VisionBackup extends WindowAdapter {
                     frontCount++;
                     frontX += xpoints.get(i);
                     frontY += ypoints.get(i);
+                    if (!(thresholdsState.isBlue_debug()||thresholdsState.isYellow_debug())) {image.setRGB(xpoints.get(i),ypoints.get(i),0xFF9900FF);}
                 }
             } else {
                 if (Position.sqrdEuclidDist(xpoints.get(i), ypoints.get(i), meanX, meanY) > Math.pow(15, 2)) {
                     frontCount++;
                     frontX += xpoints.get(i);
                     frontY += ypoints.get(i);
+                    if (!(thresholdsState.isBlue_debug()||thresholdsState.isYellow_debug())) {image.setRGB(xpoints.get(i),ypoints.get(i),0xFF9900FF);}
                 }
             }
         }
 
         /* If no points were found, we'd better bail. */
         if (frontCount == 0) {
-            throw new NoAngleException("Front of T was not found");
+            for (int i = 0; i < xpoints.size(); i++) {
+                if (stdev > 15) {
+                    if (Math.abs(xpoints.get(i) - meanX) < stdev && Math.abs(ypoints.get(i) - meanY) < stdev &&
+                            Position.sqrdEuclidDist(xpoints.get(i), ypoints.get(i), meanX, meanY) > Math.pow(13, 2)) {
+                        frontCount++;
+                        frontX += xpoints.get(i);
+                        frontY += ypoints.get(i);
+                        if (!(thresholdsState.isBlue_debug()||thresholdsState.isYellow_debug())) {image.setRGB(xpoints.get(i),ypoints.get(i),0xFF00FFFF);}
+                    }
+                } else {
+                    if (Position.sqrdEuclidDist(xpoints.get(i), ypoints.get(i), meanX, meanY) > Math.pow(13, 2)) {
+                        frontCount++;
+                        frontX += xpoints.get(i);
+                        frontY += ypoints.get(i);
+                        if (!(thresholdsState.isBlue_debug()||thresholdsState.isYellow_debug())) {image.setRGB(xpoints.get(i),ypoints.get(i),0xFF00FFFF);}
+                    }
+                }
+            }
+
+            /* If no points were found, we'd better bail. */
+            if (frontCount == 0) {
+                throw new NoAngleException("Front of T was not found");
+            }
         }
 
         /* Otherwise, get the frontX and Y. */
@@ -587,21 +817,23 @@ public class VisionBackup extends WindowAdapter {
         ArrayList<Integer> greyXPoints = new ArrayList<Integer>();
         ArrayList<Integer> greyYPoints = new ArrayList<Integer>();
 
-        for (int a=-20; a < 21; a++) {
+        for (int a=-18; a < 18; a++) {
             ax = (float) Math.cos(angle+((a*Math.PI)/180));
             ay = (float) Math.sin(angle+((a*Math.PI)/180));
-            for (int i = 15; i < 25; i++) {
+            for (int i = 15; i < 24; i++) {
                 int greyX = meanX - (int) (ax * i);
                 int greyY = meanY - (int) (ay * i);
                 try {
                     Color c = new Color(image.getRGB(greyX, greyY));
                     float hsbvals[] = new float[3];
                     Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
-                    if (isGrey(c, hsbvals)) {
+                    if (thresholdsState.isBlue_debug()||thresholdsState.isYellow_debug()) {image.setRGB(greyX,greyY,0xFFFFFFFF);}                 
+                    if (isGrey(c, hsbvals)||(c.equals(new Color(0xFF000000)))) {
                         greyXPoints.add(greyX);
                         greyYPoints.add(greyY);
-                    }
-                } catch (Exception e) {
+                        if (thresholdsState.isBlue_debug()||thresholdsState.isYellow_debug()) {image.setRGB(greyX,greyY,0xFF000000);}
+                        }
+                    } catch (Exception e) {
                     //This happens if part of the search area goes outside the image
                     //This is okay, just ignore and continue
                 }
@@ -610,7 +842,7 @@ public class VisionBackup extends WindowAdapter {
         /* No grey circle found
          * The angle found is probably wrong, skip this value and return 0 */
 
-        if (greyXPoints.size() < 30) {
+        if (greyXPoints.size() < 3) {
             throw new NoAngleException("No grey circle found");
         }
 
@@ -721,8 +953,8 @@ public class VisionBackup extends WindowAdapter {
         }
 
 
-        if (greenSides < 3) {
-            throw new NoAngleException("Not enough green areas around the grey circle");
+        if (greenSides < 1) {
+            throw new NoAngleException(greenSides+" is Not enough green areas around the grey circle");
         }
 
 

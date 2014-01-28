@@ -838,43 +838,85 @@ public class ControlGUI implements ChangeListener {
 		thresholdsState.setBall_v_low(ball_v.getValue() / 255.0);
 		thresholdsState.setBall_v_high(ball_v.getUpperValue() / 255.0);
 		
-		/* Blue Robot. */
-		thresholdsState.setBlue_r_low(blue_r.getValue());
-		thresholdsState.setBlue_r_high(blue_r.getUpperValue());
+		/*Claudiu-Modified*/
+		
+		/* Blue Goalkeeper Robot. */
+		thresholdsState.setBlueGoalkeeper_r_low(blue_r.getValue());
+		thresholdsState.setBlueGoalkeeper_r_high(blue_r.getUpperValue());
 
-		thresholdsState.setBlue_g_low(blue_g.getValue());
-		thresholdsState.setBlue_g_high(blue_g.getUpperValue());
+		thresholdsState.setBlueGoalkeeper_g_low(blue_g.getValue());
+		thresholdsState.setBlueGoalkeeper_g_high(blue_g.getUpperValue());
 		
-		thresholdsState.setBlue_b_low(blue_b.getValue());
-		thresholdsState.setBlue_b_high(blue_b.getUpperValue());
+		thresholdsState.setBlueGoalkeeper_b_low(blue_b.getValue());
+		thresholdsState.setBlueGoalkeeper_b_high(blue_b.getUpperValue());
 		
-		thresholdsState.setBlue_h_low(blue_h.getValue() / 255.0);
-		thresholdsState.setBlue_h_high(blue_h.getUpperValue() / 255.0);
+		thresholdsState.setBlueGoalkeeper_h_low(blue_h.getValue() / 255.0);
+		thresholdsState.setBlueGoalkeeper_h_high(blue_h.getUpperValue() / 255.0);
 
-		thresholdsState.setBlue_s_low(blue_s.getValue() / 255.0);
-		thresholdsState.setBlue_s_high(blue_s.getUpperValue() / 255.0);
+		thresholdsState.setBlueGoalkeeper_s_low(blue_s.getValue() / 255.0);
+		thresholdsState.setBlueGoalkeeper_s_high(blue_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setBlue_v_low(blue_v.getValue() / 255.0);
-		thresholdsState.setBlue_v_high(blue_v.getUpperValue() / 255.0);
+		thresholdsState.setBlueGoalkeeper_v_low(blue_v.getValue() / 255.0);
+		thresholdsState.setBlueGoalkeeper_v_high(blue_v.getUpperValue() / 255.0);
 		
-		/* Yellow Robot. */
-		thresholdsState.setYellow_r_low(yellow_r.getValue());
-		thresholdsState.setYellow_r_high(yellow_r.getUpperValue());
+		/* Blue Striker Robot. */
+		thresholdsState.setBlueStriker_r_low(blue_r.getValue());
+		thresholdsState.setBlueStriker_r_high(blue_r.getUpperValue());
 
-		thresholdsState.setYellow_g_low(yellow_g.getValue());
-		thresholdsState.setYellow_g_high(yellow_g.getUpperValue());
+		thresholdsState.setBlueStriker_g_low(blue_g.getValue());
+		thresholdsState.setBlueStriker_g_high(blue_g.getUpperValue());
 		
-		thresholdsState.setYellow_b_low(yellow_b.getValue());
-		thresholdsState.setYellow_b_high(yellow_b.getUpperValue());
+		thresholdsState.setBlueStriker_b_low(blue_b.getValue());
+		thresholdsState.setBlueStriker_b_high(blue_b.getUpperValue());
 		
-		thresholdsState.setYellow_h_low(yellow_h.getValue() / 255.0);
-		thresholdsState.setYellow_h_high(yellow_h.getUpperValue() / 255.0);
+		thresholdsState.setBlueStriker_h_low(blue_h.getValue() / 255.0);
+		thresholdsState.setBlueStriker_h_high(blue_h.getUpperValue() / 255.0);
 
-		thresholdsState.setYellow_s_low(yellow_s.getValue() / 255.0);
-		thresholdsState.setYellow_s_high(yellow_s.getUpperValue() / 255.0);
+		thresholdsState.setBlueStriker_s_low(blue_s.getValue() / 255.0);
+		thresholdsState.setBlueStriker_s_high(blue_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setYellow_v_low(yellow_v.getValue() / 255.0);
-		thresholdsState.setYellow_v_high(yellow_v.getUpperValue() / 255.0);
+		thresholdsState.setBlueStriker_v_low(blue_v.getValue() / 255.0);
+		thresholdsState.setBlueStriker_v_high(blue_v.getUpperValue() / 255.0);
+		
+		/* Yellow Goalkeeper Robot. */
+		thresholdsState.setYellowGoalkeeper_r_low(yellow_r.getValue());
+		thresholdsState.setYellowGoalkeeper_r_high(yellow_r.getUpperValue());
+
+		thresholdsState.setYellowGoalkeeper_g_low(yellow_g.getValue());
+		thresholdsState.setYellowGoalkeeper_g_high(yellow_g.getUpperValue());
+		
+		thresholdsState.setYellowGoalkeeper_b_low(yellow_b.getValue());
+		thresholdsState.setYellowGoalkeeper_b_high(yellow_b.getUpperValue());
+		
+		thresholdsState.setYellowGoalkeeper_h_low(yellow_h.getValue() / 255.0);
+		thresholdsState.setYellowGoalkeeper_h_high(yellow_h.getUpperValue() / 255.0);
+
+		thresholdsState.setYellowGoalkeeper_s_low(yellow_s.getValue() / 255.0);
+		thresholdsState.setYellowGoalkeeper_s_high(yellow_s.getUpperValue() / 255.0);
+		
+		thresholdsState.setYellowGoalkeeper_v_low(yellow_v.getValue() / 255.0);
+		thresholdsState.setYellowGoalkeeper_v_high(yellow_v.getUpperValue() / 255.0);
+		
+		/* Yellow Striker Robot. */
+		thresholdsState.setYellowStriker_r_low(yellow_r.getValue());
+		thresholdsState.setYellowStriker_r_high(yellow_r.getUpperValue());
+
+		thresholdsState.setYellowStriker_g_low(yellow_g.getValue());
+		thresholdsState.setYellowStriker_g_high(yellow_g.getUpperValue());
+		
+		thresholdsState.setYellowStriker_b_low(yellow_b.getValue());
+		thresholdsState.setYellowStriker_b_high(yellow_b.getUpperValue());
+		
+		thresholdsState.setYellowStriker_h_low(yellow_h.getValue() / 255.0);
+		thresholdsState.setYellowStriker_h_high(yellow_h.getUpperValue() / 255.0);
+
+		thresholdsState.setYellowStriker_s_low(yellow_s.getValue() / 255.0);
+		thresholdsState.setYellowStriker_s_high(yellow_s.getUpperValue() / 255.0);
+		
+		thresholdsState.setYellowStriker_v_low(yellow_v.getValue() / 255.0);
+		thresholdsState.setYellowStriker_v_high(yellow_v.getUpperValue() / 255.0);
+		
+		/*Modified-Claudiu*/
 		
 		/* Grey Circles. */
 		thresholdsState.setGrey_r_low(grey_r.getValue());
