@@ -17,8 +17,8 @@ public class RobotController {
 	
     public static void main(String[] args) {
     	// Light sensors in front of the robot
-    	LightSensor leftLightSensor = new LightSensor(SensorPort.S1);
-    	LightSensor rightLightSensor = new LightSensor(SensorPort.S4);
+    	LightSensor leftLightSensor = new LightSensor(SensorPort.S4);
+    	LightSensor rightLightSensor = new LightSensor(SensorPort.S1);
     	
     	// Wheel sizes are in mm !
         DifferentialPilot pilot  = new DifferentialPilot(56, 112, Motor.A, Motor.B, false); 
@@ -37,20 +37,28 @@ public class RobotController {
         boolean onWhiteLine = false; // If we've on/tracing the white line
         
         // If we're on the attacker or defender field
-        boolean onAttackerField = true;
+        boolean onAttackerField = false;
         
-        
-        float attackerFieldLength = 2100; // Circumference of the attacker field 2100
-        float defenderFieldLEngth = 1600; // Circumference of the defender field 1600
+        float attackerFieldLength = 2200; // Circumference of the attacker field 2100
+        float defenderFieldLEngth = 1700; // Circumference of the defender field 1600
         
         // Start the robot moving
         pilot.setTravelSpeed(200);
         pilot.forward();
         
+        // Readings from the light sensors
+        int leftSensorValue;
+        int rightSensorValue;
+        
+        // Direction of rotation, false for left
+        boolean rotatingRight = true;
+        
         // Main control loop
         while (true) {
+        	leftSensorValue = leftLightSensor.getLightValue();
+        	rightSensorValue = rightLightSensor.getLightValue(); 
 
-            if (rightLightSensor.getLightValue() < GreenWhiteThreshold && leftLightSensor.getLightValue() < GreenWhiteThreshold){
+            if (rightSensorValue < GreenWhiteThreshold && leftSensorValue < GreenWhiteThreshold){
             	// Both sensors on green
             	
             	if (isRotating) {
@@ -66,15 +74,24 @@ public class RobotController {
             		}
             		
             		// Stop rotating and move forward instead
-            		pilot.rotate(-1); // To correct for the overturn
-            		pilot.stop();
+            		// First correct for the overturn
+            		if (rotatingRight) {
+            			pilot.rotate(1); 
+            		} else {
+            			pilot.rotate(-1);
+            		}
 
             		System.out.println("Rotated: " + pilot.getAngleIncrement() + " total: " + anglesTurned);
             		isRotating = false;
             		
-            		// Move forward
+            		// Move forward in a slight arc back towards the white line
             		pilot.setTravelSpeed(200);
-	            	pilot.forward();
+            		
+            		if (rotatingRight) {
+            			pilot.arcForward(13200);
+            		} else {
+            			pilot.arcForward(-13200);
+            		}
             	}
             } else {
             	// One sensor is on the white strip
@@ -86,6 +103,13 @@ public class RobotController {
             			// This is the first time we meet the white line, so record the distance
             			// from the starting point until the white line
             			distanceToFirstLine = pilot.getMovementIncrement();
+            			
+            			// Decide which way we're going to rotate
+            			if (rightSensorValue >= GreenWhiteThreshold) {
+                			rotatingRight = true;
+                		} else if (leftSensorValue >= GreenWhiteThreshold) {
+                			rotatingRight = false;
+                		}
             		} else {
             			// Travelling on the white line, add to total distance travelled
             			distanceTravelled += pilot.getMovementIncrement();
@@ -97,7 +121,13 @@ public class RobotController {
             		pilot.stop();
             		isRotating = true;
             		pilot.setTravelSpeed(60);
-            		pilot.rotateLeft();
+            		
+            		if (rotatingRight) {
+            			pilot.rotateRight();
+            		} else {
+            			pilot.rotateLeft();
+            		}
+            		
             	}
             }
             
@@ -105,12 +135,14 @@ public class RobotController {
             if (onAttackerField) {
             	if (distanceTravelled + pilot.getMovementIncrement() >= attackerFieldLength) {
 	            	System.out.println("Reached attacker field starting point");
+	            	pilot.stop();
 	            	break;
             	}
             } else {
             	// Defender field
             	if (distanceTravelled + pilot.getMovementIncrement() >= defenderFieldLEngth) {
             		System.out.println("Reached defender field starting point");
+            		pilot.stop();
             		break;
             	}
             }
