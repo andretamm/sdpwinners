@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SDP3_Vision
+Bundle-SymbolicName: SDP3_Vision
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: SDP3 Vision.jar,
+ inf.ed.ac.uk/user/s10/s1025224/workspace/SDP3 Vision/lib/Ice.jar,
+ lib/v4l4j.jar,
+ lib,
+ inf.ed.ac.uk/user/s11/s1132388/Desktop/v4l4j-0.9.1/lib/v4l4j.jar
+Export-Package: .,
+ au.edu.jcu.v4l4j,
+ au.edu.jcu.v4l4j.examples,
+ au.edu.jcu.v4l4j.examples.server,
+ au.edu.jcu.v4l4j.examples.videoViewer,
+ au.edu.jcu.v4l4j.exceptions,
+ bin,
+ bin.constants,
+ bin.lib,
+ constants,
+ resources
