@@ -13,6 +13,7 @@ public class Kicker {
 	while(true)
 	{
 		Button.ENTER.waitForPressAndRelease();
+		//Plays a little beep before it kicks the ball.
 		Thread.sleep(1000);
 		reset();
 		
