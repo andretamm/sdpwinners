@@ -25,11 +25,12 @@ public class Milestone2 implements Behavior {
 		isActive = true;
 		
 		LCD.drawString("Kicker Version 1", 0, 0);
+		
 		while(isActive)
 		{
 			Button.ENTER.waitForPressAndRelease();
-			//Plays a little beep before it kicks the ball.
 			
+			//Plays a little beep before it kicks the ball.
 			try {
 				Thread.sleep(1000);
 				reset();

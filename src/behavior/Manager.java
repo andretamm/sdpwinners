@@ -45,16 +45,25 @@ public class Manager {
 	 * When you implement a new Behavior you have to add it here
 	 * for it to work on the robot
 	 * 
-	 * @return All behaviors in descending order of priority 
+	 * @return All behaviors in ascending order of priority 
 	 */
 	private Behavior[] getAllBehaviors() {
-		List<Behavior> behaviorList = new ArrayList<Behavior>();
+		// TODO - all the commented out code here should work once we
+		// start running this on the PC. leJOS doesn't seem to like
+		// converting ArrayLists to arrays, so doing this by hand
 		
-		// Add behaviors in descending order of priority
-		behaviorList.add(new Milestone1());
-		behaviorList.add(new Milestone2());
+//		ArrayList<Behavior> behaviorList = new ArrayList<Behavior>();
 		
-		return behaviorList.toArray(new Behavior[0]);
+		int numOfBehaviors = 2;
+		Behavior[] behaviorList = new Behavior[numOfBehaviors];
+		
+		// Add behaviors in ascending order of priority
+//		behaviorList.add(new Milestone1());
+//		behaviorList.add(new Milestone2());
+		behaviorList[0] = new Milestone1();
+		behaviorList[1] = new Milestone2();
+		
+//		return behaviorList.toArray(new Behavior[0]);
+		return behaviorList;
 	}
-	
 }
