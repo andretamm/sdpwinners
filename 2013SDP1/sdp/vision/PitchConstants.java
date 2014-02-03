@@ -115,6 +115,16 @@ public class PitchConstants {
 	public int green_gb_low;
 	public int green_gb_high;
 	
+	/*Quadrant*/
+	public int q1_low;
+	public int q1_high;
+	public int q2_low;
+	public int q2_high;
+	public int q3_low;
+	public int q3_high;
+	public int q4_low;
+	public int q4_high;
+	
 	/* Pitch dimensions:
 	 * When scanning the pitch we look at pixels starting from topBuffer and 
 	 * leftBuffer, and then scan to pixels at 480-bottomBuffer and 
@@ -283,6 +293,15 @@ public class PitchConstants {
 		this.leftBuffer = scanner.nextInt();
 		this.rightBuffer = scanner.nextInt();
 		
+		/* Quadrants */
+		this.q1_low = scanner.nextInt();
+		this.q1_high = scanner.nextInt();
+		this.q2_low = scanner.nextInt();
+		this.q2_high = scanner.nextInt();
+		this.q3_low = scanner.nextInt();
+		this.q3_high = scanner.nextInt();
+		this.q4_low = scanner.nextInt();
+		this.q4_high = scanner.nextInt();
 	}
 	
 	/**

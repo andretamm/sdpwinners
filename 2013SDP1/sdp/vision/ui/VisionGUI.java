@@ -199,9 +199,7 @@ public class VisionGUI implements ChangeListener {
         setUpGreySliders();
         setUpGreenSliders();
         
-        //TODO create method to initialise Quadrant Slider panel
-        setUpQuadrantSlider();
-        
+        setUpQuadrantSliders();
         
         
         tabPane.addTab("default", defaultPanel);
@@ -968,6 +966,39 @@ public class VisionGUI implements ChangeListener {
 
 	}
 
+    //TODO create method to initialise Quadrant Slider panel; Done! :)
+
+	public void setUpQuadrantSliders(){
+		/*Quadrant1*/
+		JPanel q1_panel = new JPanel();
+        JLabel q1_label = new JLabel("q1:");
+        q1 = setUpSlider( 0, 640, pitchConstants.q1_low, pitchConstants.q1_high, 20, 100);
+        q1_panel.add(q1_label);
+		q1_panel.add(q1);
+		quadrantPanel.add(q1_panel);
+		/*Quadrant2*/
+		JPanel q2_panel = new JPanel();
+        JLabel q2_label = new JLabel("q2:");
+        q2 = setUpSlider( 0, 640, pitchConstants.q2_low, pitchConstants.q2_high, 20, 100);
+        q2_panel.add(q2_label);
+		q2_panel.add(q2);
+		quadrantPanel.add(q2_panel);
+		/*Quadrant3*/
+		JPanel q3_panel = new JPanel();
+        JLabel q3_label = new JLabel("q3:");
+        q3 = setUpSlider( 0, 640, pitchConstants.q3_low, pitchConstants.q3_high, 20, 100);
+        q3_panel.add(q3_label);
+		q3_panel.add(q3);
+		quadrantPanel.add(q3_panel);
+		/*Quadrant4*/
+		JPanel q4_panel = new JPanel();
+        JLabel q4_label = new JLabel("q4:");
+        q4 = setUpSlider( 0, 640, pitchConstants.q4_low, pitchConstants.q4_high, 20, 100);
+        q4_panel.add(q4_label);
+		q4_panel.add(q4);
+		quadrantPanel.add(q4_panel);
+	}
+	
 	/**
 	 * Creates and returns a new RangeSlider from a number of parameters.
 	 * 
@@ -1289,6 +1320,11 @@ public class VisionGUI implements ChangeListener {
 		setSliderVals(green_rb, pitchConstants.green_rb_low, pitchConstants.green_rb_high);
 		setSliderVals(green_gb, pitchConstants.green_gb_low, pitchConstants.green_gb_high);
 		
+		/* Quadrant slider */
+		setSliderVals(q1, pitchConstants.q1_low, pitchConstants.q1_high);
+		setSliderVals(q2, pitchConstants.q1_low, pitchConstants.q1_high);
+		setSliderVals(q3, pitchConstants.q1_low, pitchConstants.q1_high);
+		setSliderVals(q4, pitchConstants.q1_low, pitchConstants.q1_high);
 	}
 
 	/**
@@ -1299,7 +1335,7 @@ public class VisionGUI implements ChangeListener {
 	 * @param high				The higher end of the range.
 	 */
 	private void setSliderVals(RangeSlider rangeSlider, int low, int high) {
-		/* If try to set lower val > current higher val nothing will happen (and vice-versa),
+		/* If try to set lower val setSliderVals(q1, pitchConstants.q1_low, pitchConstants.q1_high);> current higher val nothing will happen (and vice-versa),
          * so we set the lower val twice in case of this situation. */
 		rangeSlider.setValue(low);
 		rangeSlider.setUpperValue(high);
