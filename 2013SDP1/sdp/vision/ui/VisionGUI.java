@@ -972,28 +972,31 @@ public class VisionGUI implements ChangeListener {
 		/*Quadrant1*/
 		JPanel q1_panel = new JPanel();
         JLabel q1_label = new JLabel("q1:");
-        q1 = setUpSlider( 0, 640, pitchConstants.q1_low, pitchConstants.q1_high, 20, 100);
+        q1 = setUpSlider( 0, 640, worldState.getQ1LowX(), worldState.getQ1HighX(), 20, 100);
         q1_panel.add(q1_label);
 		q1_panel.add(q1);
 		quadrantPanel.add(q1_panel);
+		
 		/*Quadrant2*/
 		JPanel q2_panel = new JPanel();
         JLabel q2_label = new JLabel("q2:");
-        q2 = setUpSlider( 0, 640, pitchConstants.q2_low, pitchConstants.q2_high, 20, 100);
+        q2 = setUpSlider( 0, 640, worldState.getQ2LowX(), worldState.getQ2HighX(), 20, 100);
         q2_panel.add(q2_label);
 		q2_panel.add(q2);
 		quadrantPanel.add(q2_panel);
+		
 		/*Quadrant3*/
 		JPanel q3_panel = new JPanel();
         JLabel q3_label = new JLabel("q3:");
-        q3 = setUpSlider( 0, 640, pitchConstants.q3_low, pitchConstants.q3_high, 20, 100);
+        q3 = setUpSlider( 0, 640, worldState.getQ3LowX(), worldState.getQ3HighX(), 20, 100);
         q3_panel.add(q3_label);
 		q3_panel.add(q3);
 		quadrantPanel.add(q3_panel);
+		
 		/*Quadrant4*/
 		JPanel q4_panel = new JPanel();
         JLabel q4_label = new JLabel("q4:");
-        q4 = setUpSlider( 0, 640, pitchConstants.q4_low, pitchConstants.q4_high, 20, 100);
+        q4 = setUpSlider( 0, 640, worldState.getQ4LowX(), worldState.getQ4HighX(), 20, 100);
         q4_panel.add(q4_label);
 		q4_panel.add(q4);
 		quadrantPanel.add(q4_panel);
@@ -1321,10 +1324,10 @@ public class VisionGUI implements ChangeListener {
 		setSliderVals(green_gb, pitchConstants.green_gb_low, pitchConstants.green_gb_high);
 		
 		/* Quadrant slider */
-		setSliderVals(q1, pitchConstants.q1_low, pitchConstants.q1_high);
-		setSliderVals(q2, pitchConstants.q1_low, pitchConstants.q1_high);
-		setSliderVals(q3, pitchConstants.q1_low, pitchConstants.q1_high);
-		setSliderVals(q4, pitchConstants.q1_low, pitchConstants.q1_high);
+		setSliderVals(q1, worldState.getQ1LowX(), worldState.getQ1HighX());
+		setSliderVals(q2, worldState.getQ2LowX(), worldState.getQ2HighX());
+		setSliderVals(q3, worldState.getQ3LowX(), worldState.getQ3HighX());
+		setSliderVals(q4, worldState.getQ4LowX(), worldState.getQ4HighX());
 	}
 
 	/**
