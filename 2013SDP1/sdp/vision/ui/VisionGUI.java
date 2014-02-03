@@ -59,6 +59,7 @@ public class VisionGUI implements ChangeListener {
 	private JPanel yellowPanel;
 	private JPanel greyPanel;
 	private JPanel greenPanel;
+	private JPanel quadrantPanel; //Added by CMurray
 	
 	/* Radio buttons */
 	JRadioButton pitch_0;
@@ -123,6 +124,13 @@ public class VisionGUI implements ChangeListener {
 	private RangeSlider green_rb;
 	private RangeSlider green_gb;
 	
+	//Added by CMurray
+	/* Quadrant Sliders. */
+	private RangeSlider q1;
+	private RangeSlider q2;
+	private RangeSlider q3;
+	private RangeSlider q4;
+	
 	/**
 	 * Default constructor. 
 	 * 
@@ -175,6 +183,11 @@ public class VisionGUI implements ChangeListener {
         
         greenPanel = new JPanel();
         greenPanel.setLayout(new BoxLayout(greenPanel, BoxLayout.Y_AXIS));
+        
+        // Added by CMurray
+        quadrantPanel = new JPanel();
+        quadrantPanel.setLayout(new BoxLayout(quadrantPanel, BoxLayout.Y_AXIS));
+        
                 
         /* The main (default) tab */
         setUpMainPanel();
@@ -186,12 +199,18 @@ public class VisionGUI implements ChangeListener {
         setUpGreySliders();
         setUpGreenSliders();
         
+        //TODO create method to initialise Quadrant Slider panel
+        setUpQuadrantSlider();
+        
+        
+        
         tabPane.addTab("default", defaultPanel);
         tabPane.addTab("Ball", ballPanel);
         tabPane.addTab("Blue Robot", bluePanel);
         tabPane.addTab("Yellow Robot", yellowPanel);
         tabPane.addTab("Grey Circles", greyPanel);
         tabPane.addTab("Green Plates", greenPanel);
+        tabPane.addTab("Quadrant Guides", quadrantPanel); //Added by CMurray
         
         tabPane.addChangeListener(this);
         
@@ -420,6 +439,16 @@ public class VisionGUI implements ChangeListener {
 					writer.write(String.valueOf(pitchConstants.bottomBuffer) + "\n");
 					writer.write(String.valueOf(pitchConstants.leftBuffer) + "\n");
 					writer.write(String.valueOf(pitchConstants.rightBuffer) + "\n");
+					
+					//TODO Add new writer methods to write quadrant positions to the pitch constants
+					writer.write(String.valueOf(q1.getValue()) + "\n");
+					writer.write(String.valueOf(q1.getUpperValue()) + "\n");
+					writer.write(String.valueOf(q2.getValue()) + "\n");
+					writer.write(String.valueOf(q2.getUpperValue()) + "\n");
+					writer.write(String.valueOf(q3.getValue()) + "\n");
+					writer.write(String.valueOf(q3.getUpperValue()) + "\n");
+					writer.write(String.valueOf(q4.getValue()) + "\n");
+					writer.write(String.valueOf(q4.getUpperValue()) + "\n");
 					
 					writer.flush();
 					writer.close();
