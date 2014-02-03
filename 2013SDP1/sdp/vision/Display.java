@@ -71,6 +71,10 @@ public class Display {
                 graphics.drawLine(0, (int) ws.getBallYVision(), 640, (int) ws.getBallYVision());
                 graphics.drawLine((int) ws.getBallXVision(), 0, (int) ws.getBallXVision(), 480);
                 
+                /* Display markers for the quadrants */
+                //TODO 
+                
+                
                 //graphics.drawOval(ball.getX() - ballRadius, ball.getY() - ballRadius, 2*ballRadius, 2*ballRadius);
                 
                 graphics.setColor(Color.red);

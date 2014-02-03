@@ -438,7 +438,7 @@ public class VisionGUI implements ChangeListener {
 					writer.write(String.valueOf(pitchConstants.leftBuffer) + "\n");
 					writer.write(String.valueOf(pitchConstants.rightBuffer) + "\n");
 					
-					//TODO Add new writer methods to write quadrant positions to the pitch constants
+					/* Write pitch quadrant X values to constants */
 					writer.write(String.valueOf(q1.getValue()) + "\n");
 					writer.write(String.valueOf(q1.getUpperValue()) + "\n");
 					writer.write(String.valueOf(q2.getValue()) + "\n");

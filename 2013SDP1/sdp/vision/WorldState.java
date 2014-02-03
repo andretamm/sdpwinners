@@ -44,6 +44,17 @@ public class WorldState {
 	//these two are already barrelcorrected
 	private Point pitchTopLeft2 = new Point(20, 68);
 	private Point pitchBottomRight2 = new Point(606,400);
+	
+	//Quadrant low/high X values
+	private int q1LowX;
+	private int q1HighX;
+	private int q2LowX;
+	private int q2HighX;
+	private int q3LowX;
+	private int q3HighX;
+	private int q4LowX;
+	private int q4HighX;
+	
 
 	public static final int ballRadius = 12;
 	public static double cmToPixels = 0.38;
@@ -61,6 +72,71 @@ public class WorldState {
 
 	private boolean removeShadows = false;
 
+	/* Getter and Setter methods for the quadrants */
+	public int getQ1LowX(){
+		return q1LowX;
+	}
+	
+	void setQ1LowX(int q1LowX) {
+		this.q1LowX = q1LowX;
+	}
+	
+	public int getQ1HighX(){
+		return q1HighX;
+	}
+	
+	void setQ1HighX(int q1HighX) {
+		this.q1HighX = q1HighX;
+	}
+	
+	public int getQ2LowX(){
+		return q2LowX;
+	}
+	
+	void setQ2LowX(int q2LowX) {
+		this.q2LowX = q2LowX;
+	}
+	
+	public int getQ2HighX(){
+		return q2HighX;
+	}
+	
+	void setQ2HighX(int q2HighX) {
+		this.q2HighX = q2HighX;
+	}
+	
+	public int getQ3LowX(){
+		return q3LowX;
+	}
+	
+	void setQ3LowX(int q3LowX) {
+		this.q3LowX = q3LowX;
+	}
+	
+	public int getQ3HighX(){
+		return q3HighX;
+	}
+	
+	void setQ3HighX(int q3HighX) {
+		this.q3HighX = q3HighX;
+	}
+	
+	public int getQ4LowX(){
+		return q4LowX;
+	}
+	
+	void setQ4LowX(int q4LowX) {
+		this.q4LowX = q4LowX;
+	}
+	
+	public int getQ4HighX(){
+		return q4HighX;
+	}
+	
+	void setQ4HighX(int q4HighX) {
+		this.q4HighX = q4HighX;
+	}
+	
 	public Point getOuterPitchTopLeft() {
 		return pitch == 0 ? outerPitchTopLeft1 : outerPitchTopLeft2;
 	}
