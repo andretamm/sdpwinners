@@ -62,19 +62,19 @@ public class SimplePathfinding implements Pathfinding{
 		int robotRadius = ROBOT_RADIUS + ROBOT_RADIUS;
 		int ballRadius = BALL_RADIUS + ROBOT_RADIUS;
 		ArrayList<Circle2D> objects = new ArrayList<Circle2D>();
-		
+		//TODO Alter for Attacker Robot
 		if (mAvoidOpponent) {
-			objects.add(new Circle2D(mWorldState.getOppositionPosition(), robotRadius));
-			drawables.add(new Circle(Color.BLUE, mWorldState.getOppositionPosition(), robotRadius));
+			objects.add(new Circle2D(mWorldState.getOppositionDefenderPosition(), robotRadius));
+			drawables.add(new Circle(Color.BLUE, mWorldState.getOppositionDefenderPosition(), robotRadius));
 		}
 		
 		if ( mAvoidBall ){
 			objects.add(new Circle2D(mWorldState.getBallPoint(), ballRadius));
 			drawables.add(new Circle(Color.BLUE, mWorldState.getBallPoint(), ballRadius));
 		}
-		
+		//TODO Alter for Attacker Robot
 		ArrayList<Point> path = mPathGenerator.getPath(objects,
-													   mWorldState.getOurPosition(),
+													   mWorldState.getOurDefenderPosition(),
 													   mTarget);
 		
 		if ( path != null ){

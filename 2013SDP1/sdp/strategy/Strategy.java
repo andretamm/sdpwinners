@@ -46,10 +46,10 @@ public class Strategy extends Thread {
 	public GameState getGameState(){
 		return gameState;
 	}
-
+	//TODO Alter for Attacker Robot
 	private void updateStates() throws IOException {
 		GameState oldState = gameState;
-		if (oldState == GameState.RESETTING && !mCommandHelper.isMoving() && !mCommandHelper.isRotating() && (!userReset || mWorldState.getOurPosition().distance(STARTING_POINT) < 10)) {
+		if (oldState == GameState.RESETTING && !mCommandHelper.isMoving() && !mCommandHelper.isRotating() && (!userReset || mWorldState.getOurDefenderPosition().distance(STARTING_POINT) < 10)) {
 			userReset = false;
 			gameState = GameState.STANDING_BY;
 		} else if (mCommandHelper.someoneScored() || userReset) {
@@ -86,8 +86,9 @@ public class Strategy extends Thread {
 	}
 
 	@Override
+	//TODO Alter for Attacker Robot
 	public void run() {
-		STARTING_POINT = mWorldState.getOurPosition();
+		STARTING_POINT = mWorldState.getOurDefenderPosition();
 		//STARTING_POINT = new Point((int) (((mWorldState.getOurGoalCentre().getX()*37)+(mWorldState.getOppositionGoalCentre().getX()*3))/40), (int) mWorldState.getOurGoalCentre().getY());
 		// this could go in a run()
 		boolean gameOver = false;
@@ -150,6 +151,7 @@ public class Strategy extends Thread {
 		}
 	}
 
+	//TODO Alter for Attacker Robot
 	private boolean isInScrum(){
 		if ( mWorldState.getBallVisible() ){
 			return false;
@@ -157,21 +159,22 @@ public class Strategy extends Thread {
 
 		final int SCRUM_DIST = 100;
 
-		if ( mWorldState.getOurPosition().distanceSq(mWorldState.getOppositionPosition()) > SCRUM_DIST*SCRUM_DIST ){
+		if ( mWorldState.getOurDefenderPosition().distanceSq(mWorldState.getOppositionDefenderPosition()) > SCRUM_DIST*SCRUM_DIST ){
 			return false;
 		}
 
-		if ( mWorldState.getBallPoint().getX() > mWorldState.getOurPosition().getX() ){
-			return mWorldState.getBallPoint().getX() < mWorldState.getOppositionPosition().getX();
+		if ( mWorldState.getBallPoint().getX() > mWorldState.getOurDefenderPosition().getX() ){
+			return mWorldState.getBallPoint().getX() < mWorldState.getOppositionDefenderPosition().getX();
 		}else{
-			return mWorldState.getBallPoint().getX() > mWorldState.getOppositionPosition().getX();
+			return mWorldState.getBallPoint().getX() > mWorldState.getOppositionDefenderPosition().getX();
 		}
 	}
 
+	//TODO Alter for Attacker Robot
 	private void scrum() {
-		Point target = mWorldState.getOppositionPosition();
+		Point target = mWorldState.getOppositionDefenderPosition();
 
-		if ( mWorldState.getOppositionGoalCentre().getX() < mWorldState.getOurPosition().getX() ){
+		if ( mWorldState.getOppositionGoalCentre().getX() < mWorldState.getOurDefenderPosition().getX() ){
 			target = new Point(target.x - 25, target.y + 50);
 		}else{
 			target = new Point(target.x + 25, target.y + 50);
@@ -277,6 +280,7 @@ public class Strategy extends Thread {
 		}
 	}
 
+	//TODO Alter for Attacker Robot
 	private void ballInTheirCorner() {
 		System.out.println("ballInTheirCorner()");
 		Point inter;
@@ -286,17 +290,17 @@ public class Strategy extends Thread {
 			//upper
 			inter = new Point(mWorldState.getBallX() + 40 * sideFactor, mWorldState.getBallY()-5);
 			goal = new Point (
-					mWorldState.getOurX(),
+					mWorldState.getOurDefenderX(),
 					(mWorldState.getOppositionGoalCentre().y + mWorldState.getOppositionGoalTop().y)/2 );
 		} else {
 			//lower
 			inter = new Point(mWorldState.getBallX() + 40 * sideFactor, mWorldState.getBallY()+5);
 			goal = new Point (
-					mWorldState.getOurX(),
+					mWorldState.getOurDefenderX(),
 					(mWorldState.getOppositionGoalCentre().y + mWorldState.getOppositionGoalBottom().y)/2 );
 		}
 		try {
-			mCommandHelper.facePoint(new Point(mWorldState.getOppositionGoalCentre().x, mWorldState.getOurPosition().y));
+			mCommandHelper.facePoint(new Point(mWorldState.getOppositionGoalCentre().x, mWorldState.getOurDefenderPosition().y));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -314,7 +318,7 @@ public class Strategy extends Thread {
 		}
 		mCommandHelper.sleep(2000);
 		try {
-			mCommandHelper.facePoint(new Point(mWorldState.getOppositionGoalCentre().x, mWorldState.getOurPosition().y));
+			mCommandHelper.facePoint(new Point(mWorldState.getOppositionGoalCentre().x, mWorldState.getOurDefenderPosition().y));
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
@@ -343,6 +347,7 @@ public class Strategy extends Thread {
 	 * We still need to ensure there is enough time for vision to update worldState
 	 * and for movement to react
 	 */
+	//TODO Alter for Attacker Robot
 	private void defendingPenalty() {
 		mCommandHelper.stopAvoidingBall();
 		Point ballStart;
@@ -353,21 +358,21 @@ public class Strategy extends Thread {
 		}
 		int startX;
 		if (mWorldState.getDirection()==0) {
-			startX = (int) (mWorldState.getOurPosition().getX())-8;
+			startX = (int) (mWorldState.getOurDefenderPosition().getX())-8;
 		} else {
-			startX = (int) (mWorldState.getOurPosition().getX())+8;
+			startX = (int) (mWorldState.getOurDefenderPosition().getX())+8;
 		}
 		boolean ballStartedMoving=false;
 		Point lastTarget=new Point(999999,99999999);
 		while (!ballStartedMoving) {
 			//keep blocking the point they are aiming at
-			double oppOrientation = mWorldState.getOppositionOrientation();
+			double oppOrientation = mWorldState.getOppositionDefenderOrientation();
 			if (oppOrientation > Math.PI) {
 				oppOrientation -= Math.PI;
 			}
 			double grad = Math.tan(oppOrientation);
-			int y = (int)((grad*(startX-mWorldState.getOppositionX()))
-					+ mWorldState.getOppositionY());
+			int y = (int)((grad*(startX-mWorldState.getOppositionDefenderX()))
+					+ mWorldState.getOppositionDefenderY());
 
 			Point inter = new Point(startX,y);
 
@@ -472,14 +477,14 @@ public class Strategy extends Thread {
 		}
 		updateStates();
 	}
-
+	//TODO Alter for Attacker Robot
 	private boolean isInFrontOfBall(){
-		if ( mWorldState.getOppositionGoalCentre().x > mWorldState.getOurPosition().x){
-			if ( mWorldState.getBallPoint().x > mWorldState.getOurPosition().x ){
+		if ( mWorldState.getOppositionGoalCentre().x > mWorldState.getOurDefenderPosition().x){
+			if ( mWorldState.getBallPoint().x > mWorldState.getOurDefenderPosition().x ){
 				return true;
 			}
-		}else if (mWorldState.getOppositionGoalCentre().x < mWorldState.getOurPosition().x){
-			if ( mWorldState.getBallPoint().x < mWorldState.getOurPosition().x ){
+		}else if (mWorldState.getOppositionGoalCentre().x < mWorldState.getOurDefenderPosition().x){
+			if ( mWorldState.getBallPoint().x < mWorldState.getOurDefenderPosition().x ){
 				return true;
 			}
 		}
@@ -487,6 +492,7 @@ public class Strategy extends Thread {
 	}
 
 	private long mLastKickTime = 0;
+	//TODO Alter for Attacker Robot
 	private void weHaveBall() throws IOException, InterruptedException, NoAngleException {
 		final double ROTATION_TOLERANCE = 0.4;
 		//		if ( mWorldState.getBallVisible() && isInFrontOfBall() ){
@@ -508,8 +514,8 @@ public class Strategy extends Thread {
 				Line2D bestGoalLine = KickFrom.getBestGoalLine(mWorldState);
 				mCommandHelper.goToPoint(goal);
 				boolean shouldKickAtGoal = mCommandHelper.isFacingLine(bestGoalLine) &&
-				(mWorldState.getOurPosition().distance(mWorldState.getBallPoint()) < 40 &&
-						Math.abs(mCommandHelper.ourAngleTo(mWorldState.getOppositionPosition())) > Math.PI / 4);
+				(mWorldState.getOurDefenderPosition().distance(mWorldState.getBallPoint()) < 40 &&
+						Math.abs(mCommandHelper.ourAngleTo(mWorldState.getOppositionDefenderPosition())) > Math.PI / 4);
 				if ( mLastKickTime+1500 < System.currentTimeMillis() && shouldKickAtGoal ){
 					mLastKickTime = System.currentTimeMillis();
 					mCommandHelper.kick();

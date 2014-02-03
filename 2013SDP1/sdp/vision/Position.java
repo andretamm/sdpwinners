@@ -49,7 +49,7 @@ public class Position {
 	 * Updates the centre point of the object, given a list of new points
 	 * to compare it to. Any points too far away from the current centre are
 	 * removed.
-	 * 
+	 * 		numGood=numGood+1;
 	 * @param ps		The set of points. These will be updated by filterPoints
 	 * @param centroid The mean of ps
 	 */

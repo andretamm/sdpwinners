@@ -377,9 +377,9 @@ public class BasicStrategy extends Thread {
 	public int getOppSide() {
 		return oppSide;
 	}
-	
+	//TODO Alter for Attacker Robot
 	public double getOurOrientation() {
-		return worldState.getOurOrientation();
+		return worldState.getOurDefenderOrientation();
 	}
 
 	/**
@@ -469,20 +469,20 @@ public class BasicStrategy extends Thread {
 		}
 		return false;
 	}
-
+	//TODO Alter for Attacker Robot
 	Point getPosition(RobotTeam robotColor) {
 		if (robotColor == RobotTeam.OPPOSITION) {
-			return worldState.getOppositionPosition();
+			return worldState.getOppositionDefenderPosition();
 		} else {
-			return worldState.getOurPosition();
+			return worldState.getOurDefenderPosition();
 		}
 	}
-
+	//TODO Alter for Attacker Robot
 	private double getAngle(RobotTeam robotColor) {
 		if (robotColor == RobotTeam.OPPOSITION) {
-			return worldState.getOppositionOrientation();
+			return worldState.getOppositionDefenderOrientation();
 		} else {
-			return worldState.getOurOrientation();
+			return worldState.getOurDefenderOrientation();
 		}
 	}
 

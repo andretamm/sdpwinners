@@ -75,6 +75,7 @@ public class KMeans {
 				}
 			}
 		}
+		/*
 		for (int i=0; (i<points.size()); i++) {
 			if ((Position.sqrdEuclidDist((int) points.get(i).getX(), (int) points.get(i).getY(), (int) oldBad.getX(), (int) oldBad.getY()))
 				< (Position.sqrdEuclidDist((int) points.get(i).getX(), (int) points.get(i).getY(), (int) oldGood.getX(),(int)  oldGood.getY()))) {
@@ -91,6 +92,7 @@ public class KMeans {
 				//img.setRGB(xPoints.get(i), yPoints.get(i), 0xFFFFFF66);
 			}
 		}
+		*/
 		
 		return oldGood;
 	}

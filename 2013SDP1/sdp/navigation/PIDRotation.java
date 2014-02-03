@@ -38,10 +38,11 @@ public class PIDRotation extends Thread implements Rotation {
 	 * @param integral A list of the past 15 error values, which will be updated by this method.
 	 * @return [error, derivative of error, integral of error]
 	 */
+	// TODO Alter for Attacker Robot
 	private double[] updateErrors(WorldState worldState, double targetAngle, double[] oldError, ArrayList<Double> integral) {
 		assert (oldError.length==3);
 		double decay=0.2;
-		double theta = worldState.getOurOrientation();
+		double theta = worldState.getOurDefenderOrientation();
 		double[] newError = new double[3];
 		newError[0] = targetAngle-theta;
 		if (newError[0]>Math.PI) {
@@ -183,9 +184,9 @@ public class PIDRotation extends Thread implements Rotation {
 			e.printStackTrace();
 		}
 	}
-    
+    //TODO Alter for Attacker Robot
     public synchronized double angleToTarget(){
-            double angleDiff = mWorldState.getOurOrientation() - mAngleToFace;
+            double angleDiff = mWorldState.getOurDefenderOrientation() - mAngleToFace;
             if ( angleDiff > Math.PI)
                     angleDiff -= 2*Math.PI;
             if ( angleDiff < -Math.PI)

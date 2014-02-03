@@ -39,7 +39,8 @@ public class MovementTest {
 	private double[] updateErrors(WorldState worldState, double targetAngle, double[] oldError, ArrayList<Double> integral) {
 		assert (oldError.length==3);
 		double decay=0.2;
-		double theta = worldState.getOurOrientation();
+		//TODO Alter for Attacker Robot
+		double theta = worldState.getOurDefenderOrientation();
 		double[] newError = new double[3];
 		newError[0] = targetAngle-theta;
 		if (newError[0]>Math.PI) {
@@ -61,6 +62,7 @@ public class MovementTest {
 		return newError;
 	}
 	
+	//TODO Alter for Attacker Robot
 	public void pidRotation() throws InterruptedException, IOException {
 		Point targetPoint;
 		Collection<Drawable> orientationGraphics = new ArrayList<Drawable>();
@@ -69,17 +71,17 @@ public class MovementTest {
 				tolerance=0.1;
 				integral = new ArrayList<Double>();
 				Thread.sleep(3000);
-				ourOrient = mWorldState.getOurOrientation();
+				ourOrient = mWorldState.getOurDefenderOrientation();
 				System.out.println("Our 4Starting Orientation:"+String.format("%.3f", ourOrient));
 				
 				targetPoint = new Point((int) (Math.random()*mWorldState.getPitchWidth()),
 										(int) (Math.random()*mWorldState.getPitchHeight()));
 				
 				orientationGraphics.clear();
-				orientationGraphics.add(new DrawableLine(Color.BLACK, mWorldState.getOurPosition(), targetPoint));
+				orientationGraphics.add(new DrawableLine(Color.BLACK, mWorldState.getOurDefenderPosition(), targetPoint));
 				MainWindow.addOrUpdateDrawable("Target Orientation", orientationGraphics);
 				
-				angleToTurnTo = Position.angleTo(mWorldState.getOurPosition(), targetPoint);
+				angleToTurnTo = Position.angleTo(mWorldState.getOurDefenderPosition(), targetPoint);
 
 				System.out.println("angleToTurnTo="+String.format("%.3f", angleToTurnTo));
 				error[0]=0;
@@ -91,7 +93,7 @@ public class MovementTest {
 				int count=5;
 				int lastcount=count;
 				while (count>0) {
-				    angleToTurn = angleToTurnTo - mWorldState.getOurOrientation();
+				    angleToTurn = angleToTurnTo - mWorldState.getOurDefenderOrientation();
 					error = updateErrors(mWorldState, angleToTurnTo, error, integral);
 					control=constants[0]*error[0] + constants[1]*error[1] + constants[2]*error[2];
 					if (count==lastcount) {
@@ -107,7 +109,7 @@ public class MovementTest {
 						System.out.println("Counterclockwise");
 						direction=RotationDirection.CLOCKWISE;
 					}
-				    System.out.println("mWorldState.getOurOrientation()="+String.format("%.3f", mWorldState.getOurOrientation()));
+				    System.out.println("mWorldState.getOurOrientation()="+String.format("%.3f", mWorldState.getOurDefenderOrientation()));
 				    System.out.println("angleToTurnTo="+String.format("%.3f", angleToTurnTo));
 				    System.out.println("control="+String.format("%.3f", control));
 					System.out.println("Error = ["+String.format("%.3f", error[0])+", "+String.format("%.3f", error[1])+", "+String.format("%.3f", error[2])+"]");
@@ -171,6 +173,7 @@ public class MovementTest {
 		} while (m.isMoving());
 	}
 	
+	//TODO Alter for Attacker Robot
 	public void rotation() throws InterruptedException, IOException{
 
 		Thread.sleep(3000);
@@ -184,18 +187,18 @@ public class MovementTest {
 								(int) (Math.random()*mWorldState.getPitchHeight()));
 		targetPoint= mWorldState.getBallPoint();
 		orientationGraphics.clear();
-		orientationGraphics.add(new DrawableLine(Color.BLACK, mWorldState.getOurPosition(), targetPoint));
+		orientationGraphics.add(new DrawableLine(Color.BLACK, mWorldState.getOurDefenderPosition(), targetPoint));
 		MainWindow.addOrUpdateDrawable("Target Orientation", orientationGraphics);
 		
 		try {
-			angleToTurnTo = Position.angleTo(mWorldState.getOurPosition(), targetPoint);
+			angleToTurnTo = Position.angleTo(mWorldState.getOurDefenderPosition(), targetPoint);
 		} catch (NoAngleException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		try {
-			r.setTargetAngle(Position.angleTo(mWorldState.getOurPosition(), mWorldState.getBallPoint()), speed, 0.2);
+			r.setTargetAngle(Position.angleTo(mWorldState.getOurDefenderPosition(), mWorldState.getBallPoint()), speed, 0.2);
 		} catch (NoAngleException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -207,7 +210,7 @@ public class MovementTest {
 		//Thread.sleep(4000);
 		//r.setRotating(false);
 		//c.stopRotating();
-		System.out.println(mWorldState.getOurOrientation());
+		System.out.println(mWorldState.getOurDefenderOrientation());
 	}
 	
 }

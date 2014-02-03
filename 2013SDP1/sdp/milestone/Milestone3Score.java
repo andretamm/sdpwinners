@@ -25,14 +25,14 @@ public class Milestone3Score extends Thread {
 		mComms = comms;
 		mCommandHelper = ch;
 	}
-	
+	//TODO Alter for Attacker Robot
 	public boolean isInFrontOfBall(){
-		if ( mWorldState.getOppositionGoalCentre().x > mWorldState.getOurPosition().x){
-			if ( mWorldState.getBallPoint().x < mWorldState.getOurPosition().x ){
+		if ( mWorldState.getOppositionGoalCentre().x > mWorldState.getOurDefenderPosition().x){
+			if ( mWorldState.getBallPoint().x < mWorldState.getOurDefenderPosition().x ){
 				return true;
 			}
-		}else if (mWorldState.getOppositionGoalCentre().x < mWorldState.getOurPosition().x){
-			if ( mWorldState.getBallPoint().x > mWorldState.getOurPosition().x ){
+		}else if (mWorldState.getOppositionGoalCentre().x < mWorldState.getOurDefenderPosition().x){
+			if ( mWorldState.getBallPoint().x > mWorldState.getOurDefenderPosition().x ){
 				return true;
 			}
 		}
@@ -80,13 +80,13 @@ public class Milestone3Score extends Thread {
 				
 				//go to the goal
 				mMovement.setTarget(mWorldState.getOppositionGoalCentre());
-
+				//TODO Alter for Attacker Robot
 				System.out.println("Go to goal!");
-				while (Math.abs(mWorldState.getOppositionGoalCentre().x-mWorldState.getOurPosition().x) > 180) {
+				while (Math.abs(mWorldState.getOppositionGoalCentre().x-mWorldState.getOurDefenderPosition().x) > 180) {
 					
 					boolean isInFrontOfBall = isInFrontOfBall();
 					
-					boolean isBallFarAway =  mWorldState.getBallPoint().distance(mWorldState.getOurPosition()) > 75;
+					boolean isBallFarAway =  mWorldState.getBallPoint().distance(mWorldState.getOurDefenderPosition()) > 75;
 					System.out.print("see ball?" + mWorldState.getBallVisible() + "        ");
 					System.out.print("front of ball?" + isInFrontOfBall + "        ");
 					System.out.println("isBallFarAway?" + isBallFarAway);

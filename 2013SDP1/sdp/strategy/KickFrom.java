@@ -85,9 +85,9 @@ public class KickFrom {
 		if ( goalLine == null ){
 			return ws.getOppositionGoalCentre();
 		}
-
+		//TODO Alter for Attacker Robot
 		if ( goalLine.ptSegDist(ws.getBallPoint()) < 35 ){
-			Line2D lineThroughBall = new Line2D.Double(ws.getOurPosition(), ws.getBallPoint());
+			Line2D lineThroughBall = new Line2D.Double(ws.getOurDefenderPosition(), ws.getBallPoint());
 			Point2D intersection = infiniteLineIntersections(goalLine, lineThroughBall);
 			
 			boolean isIntersectionOutsideGoal = intersection.getY() > ws.getOppositionGoalTop().getY() + 5 ||
@@ -109,11 +109,12 @@ public class KickFrom {
 	 * @param ws
 	 * @return
 	 */
+	//TODO Alter for Attacker Robot
 	public static List<Line2D> openGoalAreas(WorldState ws){
 		Point goalBottom = ws.getOppositionGoalBottom(); //greatest Y
 		Point goalTop = ws.getOppositionGoalTop(); //least Y
 		
-		int oppX = ws.getOppositionX();
+		int oppX = ws.getOppositionDefenderX();
 		int maxX = Math.max(ws.getBallX(), goalBottom.x);
 		int minX = Math.min(ws.getBallX(), goalBottom.x);
 		boolean oppositionBetweenBallAndTheirGoal = oppX < maxX && oppX > minX ;
@@ -121,8 +122,8 @@ public class KickFrom {
 			return Arrays.asList((Line2D)new Line2D.Double(goalBottom, goalTop));
 		}
 		
-		int bottomY = ws.getOppositionY() + 20;
-		int topY 	= ws.getOppositionY() - 20;
+		int bottomY = ws.getOppositionDefenderY() + 20;
+		int topY 	= ws.getOppositionDefenderY() - 20;
 		
 		ArrayList<Line2D> toReturn = new ArrayList<Line2D>();
 		

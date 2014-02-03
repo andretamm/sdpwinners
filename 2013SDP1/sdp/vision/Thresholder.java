@@ -12,7 +12,7 @@ import sdp.vision.WorldState;
 
 public class Thresholder {
 	
-	private final static int plateSize = 35;
+	private final static int plateSize = 35;//35
 	
 	/**
 	 * Thresholds every point in the image, for ball red, robot yellow, robot blue, plate green and spot grey. The results are stored in op.
@@ -134,8 +134,8 @@ public class Thresholder {
 		/*
 		 * For every pixel near the blue T, test to see if it belongs to either a green plate or a grey circle.
 		 */
-		for (int column= worldState.getBlueXVision()-plateSize; column< worldState.getBlueXVision()+plateSize; column++) {
-        	for (int row= worldState.getBlueYVision()-plateSize; row< worldState.getBlueYVision()+plateSize; row++) {
+		for (int column= worldState.getBlueDefenderXVision()-plateSize; column< worldState.getBlueDefenderXVision()+plateSize; column++) {
+        	for (int row= worldState.getBlueDefenderYVision()-plateSize; row< worldState.getBlueDefenderYVision()+plateSize; row++) {
 				try {
 					/* The RGB colours and hsv values for the current pixel. */
 					Color c = new Color(image.getRGB(column, row));
@@ -169,8 +169,8 @@ public class Thresholder {
 		/*
 		 * For every pixel near the yellow T, test to see if it belongs to either a green plate or a grey circle.
 		 */
-		for (int column= worldState.getYellowXVision()-plateSize; column< worldState.getYellowXVision()+plateSize; column++) {
-        	for (int row= worldState.getYellowYVision()-plateSize; row< worldState.getYellowYVision()+plateSize; row++) {
+		for (int column= worldState.getYellowDefenderXVision()-plateSize; column< worldState.getYellowDefenderXVision()+plateSize; column++) {
+        	for (int row= worldState.getYellowDefenderYVision()-plateSize; row< worldState.getYellowDefenderYVision()+plateSize; row++) {
 				try {
 					/* The RGB colours and hsv values for the current pixel. */
 					Color c = new Color(image.getRGB(column, row));

@@ -35,9 +35,9 @@ public class ImageProcessor {
                 
                 //create the background subtracter
                 bgSub = new BackgroundSubtraction();
-                
-                lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurPosition());
-                lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionPosition());
+                //TODO Alter for two robots Attacker
+                lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurDefenderPosition());
+                lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionDefenderPosition());
         }
         
         /**
@@ -128,14 +128,14 @@ public class ImageProcessor {
             ws.setBallY((int) ballP.getY());
 
             Point blueP = DistortionFix.barrelCorrected(op.getBlue());
-            ws.setBlueX((int) blueP.getX());
-            ws.setBlueY((int) blueP.getY());
-            ws.setBlueOrientation(op.getBlueOrientation());
+            ws.setBlueDefenderX((int) blueP.getX());
+            ws.setBlueDefenderY((int) blueP.getY());
+            ws.setBlueDefenderOrientation(op.getBlueOrientation());
             
             Point yellowP = DistortionFix.barrelCorrected(op.getYellow());
-            ws.setYellowX((int) yellowP.getX());
-            ws.setYellowY((int) yellowP.getY());
-            ws.setYellowOrientation(op.getYellowOrientation());
+            ws.setYellowDefenderX((int) yellowP.getX());
+            ws.setYellowDefenderY((int) yellowP.getY());
+            ws.setYellowDefenderOrientation(op.getYellowOrientation());
         }
         
         /**
@@ -151,18 +151,20 @@ public class ImageProcessor {
             Point2D.Double ballVelocity = calcVelocity(ws.getBallHistory(),ws.getBallTimes());
             ws.setBallVelocity(ballVelocity);
             
-            Point[] ourHistory = ws.getOurHistory();
-            Point ourCurrent = ws.getOurPosition();
+            //TODO Alter for Attacker Robot
+            Point[] ourHistory = ws.getOurDefenderHistory();
+            Point ourCurrent = ws.getOurDefenderPosition();
             long[] ourTimes = ws.getOurTimes();
             updateHistory(ourHistory, ourTimes, ourCurrent, "our");
-            Point2D.Double ourVelocity = calcVelocity(ws.getOurHistory(),ws.getOurTimes());
+            Point2D.Double ourVelocity = calcVelocity(ws.getOurDefenderHistory(),ws.getOurTimes());
             ws.setBallVelocity(ourVelocity);
             
+            //TODO Alter for Attacker Robot
             Point[] oppositionHistory = ws.getBallHistory();
             Point oppositionCurrent = ws.getBallPoint();
             long[] oppositionTimes = ws.getOppositionTimes();
             updateHistory(oppositionHistory, oppositionTimes, oppositionCurrent, "opp");
-            Point2D.Double oppVelocity = calcVelocity(ws.getOppositionHistory(),ws.getOppositionTimes());
+            Point2D.Double oppVelocity = calcVelocity(ws.getOppositionDefenderHistory(),ws.getOppositionTimes());
             ws.setBallVelocity(oppVelocity);
         }
 
@@ -252,7 +254,7 @@ public class ImageProcessor {
             if (plate.size()<4) {
             	throw new Exception("Plate contains less than four corners");
             }
-    		Point[] plate4Points = Plate.getCorners(plate, robot1, robot2);
+    		Point[] plate4Points = BackupPlate.getCorners(plate, robot1, robot2);
             for (int i=0; i<plate4Points.length; i++) {
                 plate4Points[i]=new Point((int) (plate4Points[i].getX()*0.88+robot1.getX()*0.12), (int) (plate4Points[i].getY()*0.88+robot1.getY()*0.12));
             }
@@ -289,10 +291,12 @@ public class ImageProcessor {
 				op.setBall(Position.findMean(op.getBallPoints()));
                 Position.ballFilterPoints(op.getBallPoints(), op.getBall());
                 try {
+                	
+                	//TODO Alter for Attacker Robot
                 	worldState.setBallVisible(true);
     				op.setBall(Position.findMean(op.getBallPoints()));
-                    lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurPosition());
-                    lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionPosition());
+                    lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurDefenderPosition());
+                    lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionDefenderPosition());
                 } catch (Exception e2) {
                 	//No points left after filtering
                 	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
@@ -300,10 +304,12 @@ public class ImageProcessor {
                 		op.setBall(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
                 	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
                 		//System.out.println("Assumming ball is moving with us 1");
-                		op.setBall(new Point( (int) (worldState.getOurXVision() + lineFromUs.getX()), (int) (worldState.getOurYVision() + lineFromUs.getY())));
+                		//TODO Alter for Attacker Robot
+                		op.setBall(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
                 	} else if (KickFrom.distanceFromOrigin(lineFromOpponent) <= LINE) {
                 		//System.out.println("Assumming ball is moving with them 1");
-                		op.setBall(new Point( (int) (worldState.getOppositionXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionYVision() + lineFromOpponent.getY())));
+                		//TODO Alter for Attacker Robot
+                		op.setBall(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
                 	}
                 	worldState.setBallVisible(false);
                 }
@@ -313,10 +319,12 @@ public class ImageProcessor {
             		op.setBall(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
             	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
             		//System.out.println("Assumming ball is moving with us 2: " + (int) (worldState.getOurXVision() + lineFromUs.getX()) + " " + (int) (worldState.getOurYVision() + lineFromUs.getY()));
-            		op.setBall(new Point( (int) (worldState.getOurXVision() + lineFromUs.getX()), (int) (worldState.getOurYVision() + lineFromUs.getY())));
+            		op.setBall(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
+            		//TODO Alter for Attacker Robot
             	} else if (KickFrom.distanceFromOrigin(lineFromOpponent) <= LINE) {
             		//System.out.println("Assumming ball is moving with them 2");
-            		op.setBall(new Point( (int) (worldState.getOppositionXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionYVision() + lineFromOpponent.getY())));
+            		//TODO Alter for Attacker Robot
+            		op.setBall(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
             	}
             	worldState.setBallVisible(false);
 			}
@@ -347,7 +355,7 @@ public class ImageProcessor {
 				
                 //Filter out any yellow points that make up the blue robot
                 try {
-                	op.setYellow(KMeans.findOne(op.getYellowPoints(), new Point(worldState.getBlueXVision(), worldState.getBlueYVision()), 
+                	op.setYellow(KMeans.findOne(op.getYellowPoints(), new Point(worldState.getBlueDefenderXVision(), worldState.getBlueDefenderYVision()), 
                                         new Point((int) op.getYellow().getX(), (int) op.getYellow().getY()), 2));
                 } catch (Exception e) {
                         //System.out.println("Kmeans to find yellow centre failed: "+e.getMessage());
@@ -376,14 +384,15 @@ public class ImageProcessor {
         	history[history.length-1] = current;
         	times[history.length-1] = System.currentTimeMillis();
         	
+        	//TODO Alter for Attacker Robot
         	if (obj.equals("ball")){
         		worldState.setBallHistory(history);
         		worldState.setBallTimes(times);
         	} else if (obj.equals("our")){
-        		worldState.setOurHistory(history);
+        		worldState.setOurDefenderHistory(history);
         		worldState.setOurTimes(times);
           	} else if (obj.equals("opp")) {
-          		worldState.setOppositionHistory(history);
+          		worldState.setOppositionDefenderHistory(history);
         		worldState.setOppositionTimes(times);
           	}
         }

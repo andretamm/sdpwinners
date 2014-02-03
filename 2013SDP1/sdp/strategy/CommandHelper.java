@@ -75,8 +75,9 @@ public class CommandHelper {
 	 * @param y
 	 * @return
 	 */
+	//TODO Alter for Attacker Robot
 	public double distanceFrom(Point point) {
-		Point2D ourPoint = mWorldState.getOurPosition();
+		Point2D ourPoint = mWorldState.getOurDefenderPosition();
 		return ourPoint.distance(point);
 	}
 
@@ -139,10 +140,11 @@ public class CommandHelper {
 	 * @param y
 	 * @return
 	 */
+	//TODO Alter for Attacker Robot
 	public double ourAngleTo(int x, int y) {
-		double o = mWorldState.getOurOrientation();
-		int ourX = mWorldState.getOurX();
-		int ourY = mWorldState.getOurY();
+		double o = mWorldState.getOurDefenderOrientation();
+		int ourX = mWorldState.getOurDefenderX();
+		int ourY = mWorldState.getOurDefenderY();
 		Line2D line1 = new Line2D.Double(ourX, ourY, ourX + Math.cos(o), ourY + Math.sin(o));
 		Line2D line2 = new Line2D.Double(ourX, ourY, x, y);
 		double angle1 = Math.atan2(line1.getY1() - line1.getY2(), line1.getX1() - line1.getX2());
@@ -163,9 +165,10 @@ public class CommandHelper {
 	 * @param point
 	 * @return a value between -PI and PI
 	 */
+	//TODO Alter for Attacker Robot
 	public double absAngleTo(Point point) {
-		int ourX = mWorldState.getOurX();
-		int ourY = mWorldState.getOurY();
+		int ourX = mWorldState.getOurDefenderX();
+		int ourY = mWorldState.getOurDefenderY();
 		Line2D line1 = new Line2D.Double(ourX, ourY, ourX + 100, ourY);
 		Line2D line2 = new Line2D.Double(ourX, ourY, point.x, point.y);
 		double angle1 = Math.atan2(line1.getY1() - line1.getY2(), line1.getX1() - line1.getX2());
@@ -441,7 +444,8 @@ public class CommandHelper {
 		}
 		do {
 			// facePoint(x,y,0.1);
-		} while (mWorldState.getOurOrientation() == angle);
+			//TODO Alter for Attacker Robot
+		} while (mWorldState.getOurDefenderOrientation() == angle);
 
 	}
 
@@ -461,7 +465,8 @@ public class CommandHelper {
 		}
 		do {
 			// facePoint(x,y,0.1);
-		} while (mWorldState.getOurOrientation() == angle);
+			//TODO Alter for Attacker Robot
+		} while (mWorldState.getOurDefenderOrientation() == angle);
 	}
 
 	/**
@@ -493,16 +498,17 @@ public class CommandHelper {
 	 * 
 	 * @param aim
 	 */
+	//TODO Alter for Attacker Robot
 	public void kickBankLeft(Point aim) {
 		int hDistance;
 		Point kickingAim;
 		// if aim is left goal
 		if (aim.x == 0) {
-			hDistance = (int) (mWorldState.getOurX() / (1 + 2 * mWorldState.getOurY() / mWorldState.getPitchWidth()));
+			hDistance = (int) (mWorldState.getOurDefenderX() / (1 + 2 * mWorldState.getOurDefenderY() / mWorldState.getPitchWidth()));
 			kickingAim = new Point((int) mWorldState.getPitchWidth(), hDistance);
 		} else {
 			// if aim is right goal
-			hDistance = (int) ((aim.x - mWorldState.getOurX()) / (1 + 2 * mWorldState.getOurY() / mWorldState.getPitchWidth()));
+			hDistance = (int) ((aim.x - mWorldState.getOurDefenderX()) / (1 + 2 * mWorldState.getOurDefenderY() / mWorldState.getPitchWidth()));
 			kickingAim = new Point((int) mWorldState.getPitchWidth(), hDistance);
 		}
 		System.out.print(kickingAim);
@@ -517,9 +523,9 @@ public class CommandHelper {
 	public void kickBankRight(Point aim) {
 
 	}
-
+	//TODO Alter for Attacker Robot
 	public int ourDistanceFrom(Point ballPoint) {
-		Point us = mWorldState.getOurPosition();
+		Point us = mWorldState.getOurDefenderPosition();
 		return (int) ballPoint.distance(us);
 	}
 	
@@ -564,8 +570,9 @@ public class CommandHelper {
         if ( img != null ){
                 draw.add(new DrawablePolygon(Color.BLUE, hasBallArea));
         }
+        //TODO Alter for Attacker Robot
         MainWindow.addOrUpdateDrawable("HaveBall", draw);
-        return hasBallArea.contains(ws.getOurPosition());
+        return hasBallArea.contains(ws.getOurDefenderPosition());
 	}
 
 	public void setAvoidBall(boolean avoidBall) {
@@ -592,9 +599,10 @@ public class CommandHelper {
 			e.printStackTrace();
 		}
 		System.out.println("Go to goal!");
-		while (Math.abs(mWorldState.getOppositionGoalCentre().x - mWorldState.getOurPosition().x) > 180) {
+		//TODO Alter for Attacker Robot
+		while (Math.abs(mWorldState.getOppositionGoalCentre().x - mWorldState.getOurDefenderPosition().x) > 180) {
 			boolean isInFrontOfBall = weHaveBall(worldState, imageProcessor, 0.2, 50);
-			boolean isBallFarAway = mWorldState.getBallPoint().distance(mWorldState.getOurPosition()) > 75;
+			boolean isBallFarAway = mWorldState.getBallPoint().distance(mWorldState.getOurDefenderPosition()) > 75;
 			System.out.print("see ball?" + mWorldState.getBallVisible() + "        ");
 			System.out.print("front of ball?" + isInFrontOfBall + "        ");
 			System.out.println("isBallFarAway?" + isBallFarAway);
@@ -607,9 +615,9 @@ public class CommandHelper {
 			kickGoal();
 		}
 	}
-
+	//TODO Alter for Attacker Robot
 	public boolean opponentHasBall() {
-		double distance = mWorldState.getBallPoint().distance(mWorldState.getOppositionPosition());
+		double distance = mWorldState.getBallPoint().distance(mWorldState.getOppositionDefenderPosition());
 		return distance < 20;
 	}
 

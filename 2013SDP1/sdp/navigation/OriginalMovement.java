@@ -139,8 +139,9 @@ public class OriginalMovement extends Thread implements Movement {
 	 * @param y
 	 * @return
 	 */
+	//TODO Alter for Attacker Robot
 	public double distanceFrom(int x, int y) {
-		final Point2D ourPoint = new Point2D.Double(mWorldState.getOurX(), mWorldState.getOurY());
+		final Point2D ourPoint = new Point2D.Double(mWorldState.getOurDefenderX(), mWorldState.getOurDefenderY());
 		final Point2D theirPoint = new Point2D.Double(x, y);
 		return ourPoint.distance(theirPoint);
 	}
@@ -154,10 +155,12 @@ public class OriginalMovement extends Thread implements Movement {
 	 * @param y
 	 * @returnBasicStrategy
 	 */
+	
+	//TODO Alter for Attacker Robot
 	public double angleTo(int x, int y) {
-		final double o = mWorldState.getOurOrientation();
-		final int ourX = mWorldState.getOurX();
-		final int ourY = mWorldState.getOurY();
+		final double o = mWorldState.getOurDefenderOrientation();
+		final int ourX = mWorldState.getOurDefenderX();
+		final int ourY = mWorldState.getOurDefenderY();
 		final Line2D line1 = new Line2D.Double(ourX, ourY, ourX + Math.cos(o), ourY + Math.sin(o));
 		final Line2D line2 = new Line2D.Double(ourX, ourY, x, y);
 
@@ -174,8 +177,9 @@ public class OriginalMovement extends Thread implements Movement {
 		return angle;
 	}
 
+	//TODO Alter for Attacker Robot
 	public void moveToPoint(int x, int y) throws IOException {
-		if (mWorldState.getOurX() == x && mWorldState.getOurY() == y) {
+		if (mWorldState.getOurDefenderX() == x && mWorldState.getOurDefenderY() == y) {
 			System.out.println("Already at point (" + x + ", " + y + ")");
 			return;
 		}
@@ -186,8 +190,9 @@ public class OriginalMovement extends Thread implements Movement {
 	public void stopMoving() throws IOException {
 		setMoving(false);
 	}
-
+	
+	//TODO Alter for Attacker Robot
 	public double distanceToTarget() {
-		return mPathfinding.getPath().get(mPathfinding.getPath().size()-1).distance(mWorldState.getOurPosition());
+		return mPathfinding.getPath().get(mPathfinding.getPath().size()-1).distance(mWorldState.getOurDefenderPosition());
 	}
 }

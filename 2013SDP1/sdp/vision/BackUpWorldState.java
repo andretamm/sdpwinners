@@ -4,25 +4,19 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 
-public class WorldState {
+public class BackUpWorldState {
 
 	private int direction; // 0 = right, 1 = left.
 	private RobotColour colour;
 	private int pitch; // 0 = main, 1 = side room
-	private int blueDefenderX;
-	private int blueDefenderY;
-	private int yellowDefenderX;
-	private int yellowDefenderY;
-	private int blueAttackerX;
-	private int blueAttackerY;
-	private int yellowAttackerX;
-	private int yellowAttackerY;
+	private int blueX;
+	private int blueY;
+	private int yellowX;
+	private int yellowY;
 	private int ballX;
 	private int ballY;
-	private double blueDefenderOrientation;
-	private double blueAttackerOrientation;
-	private double yellowDefenderOrientation;
-	private double yellowAttackerOrientation;
+	private double blueOrientation;
+	private double yellowOrientation;
 	private long counter;
 	private boolean subtractBackground;
 	private boolean findRobotsAndBall; //used when setting thresholds. Disables filtering, clustering etc so
@@ -48,15 +42,11 @@ public class WorldState {
 	public static final int ballRadius = 12;
 	public static double cmToPixels = 0.38;
 
-	//TODO Alter history and velocity for two robots
-	
 	private Point[] ballHistory;
 	private long[] ballTimeStamps;
 	private Point2D.Double ballVelocity;
-	private Point[] ourDefenderHistory;
-	private Point[] ourAttackerHistory;
-	private Point ourDefenderVelocity;
-	private Point ourAttackerVelocity;
+	private Point[] ourHistory;
+	private Point ourVelocity;
 	private long[] ourTimeStamps;
 
 	private boolean removeShadows = false;
@@ -101,10 +91,8 @@ public class WorldState {
 		return new Boolean(this.removeShadows);
 	}
 
-	private Point[] oppositionDefenderHistory;
-	private Point[] oppositionAttackerHistory;
-	private Point oppositionDefenderVelocity;
-	private Point oppositionAttackerVelocity;
+	private Point[] oppositionHistory;
+	private Point oppositionVelocity;
 	private long[] oppositionTimeStamps;
 
 	//horrible hack:
@@ -114,30 +102,22 @@ public class WorldState {
 	private boolean ballVisible;
 	private int goalHeight=70; //the full length of the goal
 
-	public WorldState() {
+	public BackUpWorldState() {
 
 		/* control properties */
 		this.direction = 0;
 		this.colour = RobotColour.YELLOW;
 		this.pitch = 1;
 
-		//TODO Alter object properties for velocities, history
-		
 		/* object properties */
-		this.blueDefenderX = 0;
-		this.blueDefenderY = 0;
-		this.blueAttackerX = 0;
-		this.blueAttackerY = 0;
-		this.yellowDefenderX = 0;
-		this.yellowDefenderY = 0;
-		this.yellowAttackerX = 0;
-		this.yellowAttackerY = 0;
+		this.blueX = 0;
+		this.blueY = 0;
+		this.yellowX = 0;
+		this.yellowY = 0;
 		this.ballX = 0;
 		this.ballY = 0;
-		this.blueDefenderOrientation = 0;
-		this.blueAttackerOrientation = 0;
-		this.yellowDefenderOrientation = 0;
-		this.yellowAttackerOrientation = 0;
+		this.blueOrientation = 0;
+		this.yellowOrientation = 0;
 		this.setBallVisible(false);
 		this.setSubtractBackground(false);
 		this.setFindRobotsAndBall(true);
@@ -148,35 +128,20 @@ public class WorldState {
 		this.ballVelocity = new Point2D.Double(1,0);
 		this.ballHistory = new Point[5];
 		this.ballTimeStamps = new long[5];
-		this.ourDefenderVelocity = new Point(0,0);
-		this.ourAttackerVelocity = new Point(0,0);
-		this.ourDefenderHistory = new Point[5];
-		this.ourAttackerHistory = new Point[5];
+		this.ourVelocity = new Point(0,0);
+		this.ourHistory = new Point[5];
 		this.ourTimeStamps = new long[5];
-		this.oppositionDefenderVelocity = new Point(0,0);
-		this.oppositionAttackerVelocity = new Point(0,0);
-		this.oppositionDefenderHistory = new Point[5];
-		this.oppositionAttackerHistory = new Point[5];
+		this.oppositionVelocity = new Point(0,0);
+		this.oppositionHistory = new Point[5];
 		this.oppositionTimeStamps = new long[5];
-		for (int i=0; (i<this.ourDefenderHistory.length); i++) {
+		for (int i=0; (i<this.ourHistory.length); i++) {
 			this.ballHistory[i] = new Point(1,1);
 			this.ballTimeStamps[i] = 1;
-			this.ourDefenderHistory[i] = new Point(1,1);
+			this.ourHistory[i] = new Point(1,1);
 			this.ourTimeStamps[i] = 1;
-			this.oppositionDefenderHistory[i] = new Point(1,1);
+			this.oppositionHistory[i] = new Point(1,1);
 			this.oppositionTimeStamps[i] = 1;
 		}
-		// TODO not sure what's going on here will need to check it out
-		/*
-		for (int i=0; (i<this.ourAttackerHistory.length); i++) {
-			this.ballHistory[i] = new Point(1,1);
-			this.ballTimeStamps[i] = 1;
-			this.ourAttackerHistory[i] = new Point(1,1);
-			this.ourTimeStamps[i] = 1;
-			this.oppositionAttackerHistory[i] = new Point(1,1);
-			this.oppositionTimeStamps[i] = 1;
-		}
-		*/
 	}
 
 	public boolean getShowDrawables() {
@@ -211,68 +176,36 @@ public class WorldState {
 		return ballY-getPitchTopLeft().y;
 	}
 
-	int getBlueDefenderXVision() {
-		return blueDefenderX;
+	int getBlueXVision() {
+		return blueX;
 	}
 
-	public void setBlueDefenderX(int blueX) {
-		this.blueDefenderX = blueX;
+	public void setBlueX(int blueX) {
+		this.blueX = blueX;
 	}
 
-	int getBlueDefenderYVision() {
-		return blueDefenderY;
+	int getBlueYVision() {
+		return blueY;
 	}
 
-	void setBlueDefenderY(int blueY) {
-		this.blueDefenderY = blueY;
-	}
-	
-	int getBlueAttackerXVision() {
-		return blueAttackerX;
+	void setBlueY(int blueY) {
+		this.blueY = blueY;
 	}
 
-	public void setBlueAttackerX(int blueX) {
-		this.blueAttackerX = blueX;
+	int getYellowXVision() {
+		return yellowX;
 	}
 
-	int getBlueAttackerYVision() {
-		return blueAttackerY;
+	public void setYellowX(int yellowX) {
+		this.yellowX = yellowX;
 	}
 
-	void setBlueAttackerY(int blueY) {
-		this.blueAttackerY = blueY;
+	int getYellowYVision() {
+		return yellowY;
 	}
 
-	int getYellowDefenderXVision() {
-		return yellowDefenderX;
-	}
-
-	public void setYellowDefenderX(int yellowX) {
-		this.yellowDefenderX = yellowX;
-	}
-
-	int getYellowDefenderYVision() {
-		return yellowDefenderY;
-	}
-
-	public void setYellowDefenderY(int yellowY) {
-		this.yellowDefenderY = yellowY;
-	}
-	
-	int getYellowAttackerXVision() {
-		return yellowAttackerX;
-	}
-
-	public void setYellowAttackerX(int yellowX) {
-		this.yellowAttackerX = yellowX;
-	}
-
-	int getYellowAttackerYVision() {
-		return yellowAttackerY;
-	}
-
-	void setYellowAttackerY(int yellowY) {
-		this.yellowAttackerY = yellowY;
+	public void setYellowY(int yellowY) {
+		this.yellowY = yellowY;
 	}
 
 	int getBallXVision() {
@@ -291,36 +224,20 @@ public class WorldState {
 		this.ballY = ballY;
 	}
 
-	public double getBlueDefenderOrientation() {
-		return blueDefenderOrientation;
+	public double getBlueOrientation() {
+		return blueOrientation;
 	}
 
-	public void setBlueDefenderOrientation(double blueOrientation) {
-		this.blueDefenderOrientation = blueOrientation;
-	}
-	
-	public double getBlueAttackerOrientation() {
-		return blueAttackerOrientation;
+	public void setBlueOrientation(double blueOrientation) {
+		this.blueOrientation = blueOrientation;
 	}
 
-	public void setBlueAttackerOrientation(double blueOrientation) {
-		this.blueAttackerOrientation = blueOrientation;
+	public double getYellowOrientation() {
+		return yellowOrientation;
 	}
 
-	public double getYellowDefenderOrientation() {
-		return yellowDefenderOrientation;
-	}
-
-	public void setYellowDefenderOrientation(double yellowOrientation) {
-		this.yellowDefenderOrientation = yellowOrientation;
-	}
-	
-	public double getYellowAttackerOrientation() {
-		return yellowAttackerOrientation;
-	}
-
-	public void setYellowAttackerOrientation(double yellowOrientation) {
-		this.yellowAttackerOrientation = yellowOrientation;
+	public void setYellowOrientation(double yellowOrientation) {
+		this.yellowOrientation = yellowOrientation;
 	}
 
 	public int getDirection() {
@@ -378,78 +295,40 @@ public class WorldState {
 	public void setShowNoDistortion(boolean showNoDistortion) {
 		this.showNoDistortion = showNoDistortion;
 	}
-	
-	//TODO fix getters for X and Y Vision for two robots
 
-	int getOurDefenderXVision(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderXVision() : getBlueDefenderXVision();
+	int getOurXVision(){
+		return colour == RobotColour.YELLOW ? getYellowXVision() : getBlueXVision();
 	}
 
-	int getOurDefenderYVision(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderYVision() : getBlueDefenderYVision();
-	}
-	
-	int getOurAttackerXVision(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerXVision() : getBlueAttackerXVision();
+	int getOurYVision(){
+		return colour == RobotColour.YELLOW ? getYellowYVision() : getBlueYVision();
 	}
 
-	int getOurAttackerYVision(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerYVision() : getBlueAttackerYVision();
-	}
-
-	public int getOurDefenderX(){
-		int x = colour == RobotColour.YELLOW ? getYellowDefenderXVision() : getBlueDefenderXVision();
-		return x - getPitchTopLeft().x;
-	}
-	
-	public int getOurAttackerX(){
-		int x = colour == RobotColour.YELLOW ? getYellowAttackerXVision() : getBlueAttackerXVision();
+	public int getOurX(){
+		int x = colour == RobotColour.YELLOW ? getYellowXVision() : getBlueXVision();
 		return x - getPitchTopLeft().x;
 	}
 
-	public int getOurDefenderY(){  
-		int y = colour == RobotColour.YELLOW ? getYellowDefenderYVision() : getBlueDefenderYVision();
-		return y - getPitchTopLeft().y;
-	}
-	
-	public int getOurAttackerY(){  
-		int y = colour == RobotColour.YELLOW ? getYellowAttackerYVision() : getBlueAttackerYVision();
+	public int getOurY(){
+		int y = colour == RobotColour.YELLOW ? getYellowYVision() : getBlueYVision();
 		return y - getPitchTopLeft().y;
 	}
 
-	public double getOurDefenderOrientation(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderOrientation() : getBlueDefenderOrientation();
-	}
-	
-	public double getOurAttackerOrientation(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerOrientation() : getBlueAttackerOrientation();
+	public double getOurOrientation(){
+		return colour == RobotColour.YELLOW ? getYellowOrientation() : getBlueOrientation();
 	}
 
-	public double getOppositionDefenderOrientation(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderOrientation() : getYellowDefenderOrientation();
-	}
-	
-	public double getOppositionAttackerOrientation(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerOrientation() : getYellowAttackerOrientation();
+	public double getOppositionOrientation(){
+		return colour == RobotColour.YELLOW ? getBlueOrientation() : getYellowOrientation();
 	}
 
-	public int getOppositionDefenderX() {
-		int x = colour == RobotColour.YELLOW ? getBlueDefenderXVision() : getYellowDefenderXVision();
+	public int getOppositionX() {
+		int x = colour == RobotColour.YELLOW ? getBlueXVision() : getYellowXVision();
 		return x - getPitchTopLeft().x;
 	}
 
-	public int getOppositionDefenderY() {
-		int y = colour == RobotColour.YELLOW ? getBlueDefenderYVision() : getYellowDefenderYVision();
-		return y - getPitchTopLeft().y;
-	}
-	
-	public int getOppositionAttackerX() {
-		int x = colour == RobotColour.YELLOW ? getBlueAttackerXVision() : getYellowAttackerXVision();
-		return x - getPitchTopLeft().x;
-	}
-
-	public int getOppositionAttackerY() {
-		int y = colour == RobotColour.YELLOW ? getBlueAttackerYVision() : getYellowAttackerYVision();
+	public int getOppositionY() {
+		int y = colour == RobotColour.YELLOW ? getBlueYVision() : getYellowYVision();
 		return y - getPitchTopLeft().y;
 	}
 
@@ -537,20 +416,12 @@ public class WorldState {
 		return new Point(getBallX(), getBallY());
 	}
 
-	public Point getOurDefenderPosition(){
-		return new Point(getOurDefenderX(), getOurDefenderY());
-	}
-	
-	public Point getOurAttackerPosition(){
-		return new Point(getOurAttackerX(), getOurAttackerY());
+	public Point getOurPosition(){
+		return new Point(getOurX(), getOurY());
 	}
 
-	public Point getOppositionDefenderPosition(){
-		return new Point(getOppositionDefenderX(), getOppositionDefenderY());
-	}
-	
-	public Point getOppositionAttackerPosition(){
-		return new Point(getOppositionAttackerX(), getOppositionAttackerY());
+	public Point getOppositionPosition(){
+		return new Point(getOppositionX(), getOppositionY());
 	}
 
 	public void setBallVisible(boolean ballVisible) {
@@ -569,36 +440,20 @@ public class WorldState {
 		return ballHistory;
 	}
 
-	public Point getOurDefenderVelocity() {
-		return ourDefenderVelocity;
-	}
-	
-	public Point getOurAttackerVelocity() {
-		return ourAttackerVelocity;
+	public Point getOurVelocity() {
+		return ourVelocity;
 	}
 
-	public Point[] getOurDefenderHistory() {
-		return ourDefenderHistory;
-	}
-	
-	public Point[] getOurAttackerHistory() {
-		return ourAttackerHistory;
+	public Point[] getOurHistory() {
+		return ourHistory;
 	}
 
-	public Point getOppositionDefenderVelocity() {
-		return oppositionDefenderVelocity;
-	}
-	
-	public Point getOppositionAttackerVelocity() {
-		return oppositionAttackerVelocity;
+	public Point getOppositionVelocity() {
+		return oppositionVelocity;
 	}
 
-	public Point[] getOppositionDefenderHistory() {
-		return oppositionDefenderHistory;
-	}
-	
-	public Point[] getOppositionAttackerHistory() {
-		return oppositionAttackerHistory;
+	public Point[] getOppositionHistory() {
+		return oppositionHistory;
 	}
 
 	public long[] getBallTimes() {
@@ -621,36 +476,20 @@ public class WorldState {
 		this.ballHistory=bh;
 	}
 
-	public void setOurDefenderVelocity(Point ov) {
-		this.ourDefenderVelocity=ov;
-	}
-	
-	public void setOurAttackerVelocity(Point ov) {
-		this.ourAttackerVelocity=ov;
+	public void setOurVelocity(Point ov) {
+		this.ourVelocity=ov;
 	}
 
-	public void setOurDefenderHistory(Point[] oh) {
-		this.ourDefenderHistory=oh;
-	}
-	
-	public void setOurAttackerHistory(Point[] oh) {
-		this.ourAttackerHistory=oh;
+	public void setOurHistory(Point[] oh) {
+		this.ourHistory=oh;
 	}
 
-	public void setOppositionDefenderVelocity(Point opv) {
-		this.oppositionDefenderVelocity=opv;
-	}
-	
-	public void setOppositionAttackerVelocity(Point opv) {
-		this.oppositionAttackerVelocity=opv;
+	public void setOppositionVelocity(Point opv) {
+		this.oppositionVelocity=opv;
 	}
 
-	public void setOppositionDefenderHistory(Point[] oph) {
-		this.oppositionDefenderHistory=oph;
-	}
-	
-	public void setOppositionAttackerHistory(Point[] oph) {
-		this.oppositionAttackerHistory=oph;
+	public void setOppositionHistory(Point[] oph) {
+		this.oppositionHistory=oph;
 	}
 
 	public void setBallTimes(long[] bt) {
@@ -669,8 +508,6 @@ public class WorldState {
 		return new Point2D.Double(1.5, 3);
 	}
 
-	
-	//TODO Alter for getOurAttackerPosition
 	/**
 	 *  If we can't see the opposition robot, it may be off the pitch. This method provides the location in this case.
 	 * @param robot The colour of the robot for which a position should be provided
@@ -679,7 +516,7 @@ public class WorldState {
 	Point getDefaultPoint(RobotColour robot) {
 		if (robot==colour) {
 			// if the robot is ours, just make the best on pitch guess
-			return new Point((int) (getPitchTopLeft().getX()+getOurDefenderPosition().getX()), (int) (getPitchTopLeft().getY()+getOurDefenderPosition().getY()));
+			return new Point((int) (getPitchTopLeft().getX()+getOurPosition().getX()), (int) (getPitchTopLeft().getY()+getOurPosition().getY()));
 		} else {
 			// if the robot is opposition, assume it's off the pitch
 			if (direction==0) {
@@ -690,20 +527,12 @@ public class WorldState {
 		}
 	}
 
-	int getOppositionDefenderXVision(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderXVision() : getYellowDefenderXVision();
+	int getOppositionXVision(){
+		return colour == RobotColour.YELLOW ? getBlueXVision() : getYellowXVision();
 	}
 
-	int getOppositionDefenderYVision(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderYVision() : getYellowDefenderYVision();
-	}
-	
-	int getOppositionAttackerXVision(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerXVision() : getYellowAttackerXVision();
-	}
-
-	int getOppositionAttackerYVision(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerYVision() : getYellowAttackerYVision();
+	int getOppositionYVision(){
+		return colour == RobotColour.YELLOW ? getBlueYVision() : getYellowYVision();
 	}
 	
 	int getShadowTopY() {

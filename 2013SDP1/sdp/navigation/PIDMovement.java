@@ -103,9 +103,10 @@ public class PIDMovement extends Thread implements Movement {
 			integralY.clear();
 			tolerance=mStartTolerance;
 			count=startCount;
-			errorX = updateErrors(mWorldState, (getTargetPoint().getX()-mWorldState.getOurPosition().getX()), errorX, integralX);
+			//TODO Alter for Attacker Robot
+			errorX = updateErrors(mWorldState, (getTargetPoint().getX()-mWorldState.getOurDefenderPosition().getX()), errorX, integralX);
 			errorX[2]=errorX[0]/4+errorX[1]/2;
-			errorY = updateErrors(mWorldState, (getTargetPoint().getY()-mWorldState.getOurPosition().getY()), errorY, integralY);
+			errorY = updateErrors(mWorldState, (getTargetPoint().getY()-mWorldState.getOurDefenderPosition().getY()), errorY, integralY);
 			errorY[2]=errorY[0]/4+errorY[1]/2;
 		}
 		mIsMoving = moving;
@@ -125,16 +126,17 @@ public class PIDMovement extends Thread implements Movement {
 		setMoving(true);
 	}
 
+	//TODO Alter for Attacker Robot
 	public void run() {
 		while (!isInterrupted()) {
 			if (mIsMoving) {
-				errorX = updateErrors(mWorldState, (getTargetPoint().getX()-mWorldState.getOurPosition().getX()), errorX, integralX);
-				errorY = updateErrors(mWorldState, (getTargetPoint().getY()-mWorldState.getOurPosition().getY()), errorY, integralY);
+				errorX = updateErrors(mWorldState, (getTargetPoint().getX()-mWorldState.getOurDefenderPosition().getX()), errorX, integralX);
+				errorY = updateErrors(mWorldState, (getTargetPoint().getY()-mWorldState.getOurDefenderPosition().getY()), errorY, integralY);
 				controlX=constants[0]*errorX[0] + constants[1]*errorX[1] + constants[2]*errorX[2];
 				controlY=constants[0]*errorY[0] + constants[1]*errorY[1] + constants[2]*errorY[2];
 				controlBearing=Math.atan2(controlY, controlX);
 				try {
-					mComms.move(controlBearing-mWorldState.getOurOrientation());
+					mComms.move(controlBearing-mWorldState.getOurDefenderOrientation());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -171,9 +173,10 @@ public class PIDMovement extends Thread implements Movement {
 		mPathfinding.setAvoidBall(avoidBall);
 	}
 
+	//TODO Alter for Attacker Robot
 	public double distanceToTarget() {
 		if (getTargetPoint()!=null) {
-			return getTargetPoint().distance(mWorldState.getOurPosition());
+			return getTargetPoint().distance(mWorldState.getOurDefenderPosition());
 		} else {
 			return 0;
 		}

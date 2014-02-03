@@ -68,12 +68,12 @@ public class AStarPathfinding implements Pathfinding{
 		
 
 		Point boxSize = cordToNode(new Point(ROBOT_WIDTH/2, ROBOT_WIDTH/3));
-		
-		for ( int x = cordToNode(mWorldState.getOppositionPosition()).x - boxSize.x;
-				   x < cordToNode(mWorldState.getOppositionPosition()).x + boxSize.x;
+		//TODO Alter for Attacker Robot
+		for ( int x = cordToNode(mWorldState.getOppositionDefenderPosition()).x - boxSize.x;
+				   x < cordToNode(mWorldState.getOppositionDefenderPosition()).x + boxSize.x;
 				   ++x ){
-			for ( int y = cordToNode(mWorldState.getOppositionPosition()).y - boxSize.y;
-					  y < cordToNode(mWorldState.getOppositionPosition()).y + boxSize.y;
+			for ( int y = cordToNode(mWorldState.getOppositionDefenderPosition()).y - boxSize.y;
+					  y < cordToNode(mWorldState.getOppositionDefenderPosition()).y + boxSize.y;
 					  ++y ){
 				int weight = ROBOT_COST;
 				
@@ -131,9 +131,9 @@ public class AStarPathfinding implements Pathfinding{
 			drawables.add(drawableForObject(ballPoints));
 
 		}
-			
+		//TODO Alter for Attacker Robot
 		AStarRun run = new AStarRun(mAstarGridWidth, mAstarGridHeight,
-									new Node(cordToNode(new Point(mWorldState.getOurX(), mWorldState.getOurY()))),
+									new Node(cordToNode(new Point(mWorldState.getOurDefenderX(), mWorldState.getOurDefenderY()))),
 									new Node(cordToNode(new Point(getTarget().x, getTarget().y))),
 									ballPoints,
 									oppositionPoints);

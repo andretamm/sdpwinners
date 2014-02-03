@@ -84,9 +84,8 @@ public class OriginalRotation extends Thread {
 		mHasStopped = false;
 		setRotating(true);
 	}
-	
 	public synchronized double angleToTarget(){
-		double angleDiff = mWorldState.getOurOrientation() - mAngleToFace;
+		double angleDiff = mWorldState.getOurDefenderOrientation() - mAngleToFace;
 		if ( angleDiff > Math.PI)
 			angleDiff -= 2*Math.PI;
 		if ( angleDiff < -Math.PI)

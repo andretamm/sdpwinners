@@ -47,7 +47,8 @@ public class Milestone4SimpleIntercept extends Thread{
 //
 //			int estimateBally = (int)((grad*(estimateBallx-mWorldState.getOppositionX())) + mWorldState.getOppositionY());
 //			ballStartPos.setLocation(estimateBallx, estimateBally);
-			this.ballStartPos = new Point(mWorldState.getOppositionX(), mWorldState.getOppositionX());
+			//TODO Alter for Attacker Robot
+			this.ballStartPos = new Point(mWorldState.getOppositionDefenderX(), mWorldState.getOppositionDefenderX());
 		}
 
 	}
@@ -177,7 +178,8 @@ public class Milestone4SimpleIntercept extends Thread{
 //			x = 480;
 //		} else 
 //			x = (int) (((mWorldState.getOurGoalCentre().getX()*37)+(mWorldState.getOppositionGoalCentre().getX()*3))/40);
-			x = mWorldState.getOurX();
+			//TODO Alter for Attacker Robot
+			x = mWorldState.getOurDefenderX();
 		// get the line of the ball, as an equation of y, solve and find y
 		// using x above, and ball starting point
 		int y = (int)((m*(x-ballStartPos.x)) + ballStartPos.y);
@@ -195,9 +197,9 @@ public class Milestone4SimpleIntercept extends Thread{
 	public double euclidDist(Point u, Point v) {
 		return Math.sqrt((Math.pow(u.x-v.x,2) + (Math.pow(u.y-v.y,2))));
 	}
-
+	//TODO Alter for Attacker Robot
 	public boolean nearball(int threshold) {
-		if (euclidDist(mWorldState.getBallPoint(),mWorldState.getOurPosition())<threshold)
+		if (euclidDist(mWorldState.getBallPoint(),mWorldState.getOurDefenderPosition())<threshold)
 			return true;
 		//		if (Math.abs(mWorldState.getBallX()-mWorldState.getOurX()) < threshold) {
 		//			if (Math.abs(mWorldState.getBallY()-mWorldState.getOurY()) < threshold) {
@@ -225,7 +227,8 @@ public class Milestone4SimpleIntercept extends Thread{
 			
 			mComms.setMaximumSpeed(255);
 			mCommandHelper.setAvoidBall(false);
-			Point helperPoint = new Point (mWorldState.getOurX(), mWorldState.getOurGoalCentre().y);
+			//TODO Alter for Attacker Robot
+			Point helperPoint = new Point (mWorldState.getOurDefenderX(), mWorldState.getOurGoalCentre().y);
 //			System.out.println("HelperPoint: " + helperPoint);
 
 

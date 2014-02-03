@@ -66,9 +66,9 @@ public class Intercept {
 			System.out.println("intercept=("+intercept.getX()+", "+intercept.getY()+")");
 		//} while ((intercepts.size()<20)&&((Math.abs(robotTravelTime-travelTimeMiddle))>5));
 		*/
-		
+		//TODO Alter for Attacker Robot
 		Point ballStart=ws.getBallPoint();
-		Point robotStart = ws.getOurPosition();
+		Point robotStart = ws.getOurDefenderPosition();
 		double c = 300;
 		Point2D.Double ballVelocity = new Point2D.Double(c*ws.getBallVelocity().getX(), c*ws.getBallVelocity().getY());
 		double ballVelocityMagnitude = Math.sqrt(Math.pow(ballVelocity.getX(),2) + Math.pow(ballVelocity.getY(),2));

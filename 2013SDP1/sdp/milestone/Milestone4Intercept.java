@@ -94,9 +94,9 @@ public class Milestone4Intercept extends Thread{
 	public double euclidDist(Point u, Point v) { //calculate euclid distance from two points
 		return Math.sqrt((Math.pow(u.x-v.x,2) + (Math.pow(u.y-v.y,2))));
 	}
-	
+	//TODO Alter for Attacker Robot
 	public boolean nearball(int threshold) { //checks if near the ball
-		if (euclidDist(mWorldState.getBallPoint(),mWorldState.getOurPosition())<threshold)
+		if (euclidDist(mWorldState.getBallPoint(),mWorldState.getOurDefenderPosition())<threshold)
 			return true;
 		return false;
 	}
@@ -129,7 +129,8 @@ public class Milestone4Intercept extends Thread{
 //		if (mWorldState.getOurX() > 480) {  //might need adjustments
 //			x = 480;
 //		} else 
-			x = mWorldState.getOurX();
+			//TODO Alter for Attacker Robot
+			x = mWorldState.getOurDefenderX();
 
 		// get the line of the ball, as an equation of y, solve and find y
 		// using x above, and ball starting point

@@ -15,9 +15,9 @@ public class Milestone3GoToBall extends Thread {
 		mWorldState = worldstate;
 		mMovement = ch.movement;
 	}
-	
+	//TODO Alter for Attacker Robot
 	private void setTarget() throws IOException{
-		if ( mWorldState.getOurPosition().distance(mWorldState.getOppositionPosition()) < 80 ){
+		if ( mWorldState.getOurDefenderPosition().distance(mWorldState.getOppositionDefenderPosition()) < 80 ){
 			mMovement.setTarget(mWorldState.getOurGoalCentre());
 		}else{
 			mMovement.setTarget(mWorldState.getBallPoint());
