@@ -28,13 +28,13 @@ public class Milestone2 implements Behavior {
 		
 		while(isActive)
 		{
-			Button.ENTER.waitForPressAndRelease();
+			int buttonID = Button.waitForAnyPress();
 			
 			//Plays a little beep before it kicks the ball.
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 				reset();
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				System.err.println("Robot sleep interrupted");
 				e.printStackTrace();
@@ -43,8 +43,31 @@ public class Milestone2 implements Behavior {
 			Sound.beep();
 			
 			//for the forward motion of the kicker
-			kicker.setSpeed(150);
-			kicker.setAcceleration(6000);
+			int speed = 150;
+			int acceleration = 6000;
+			
+			// 
+			switch (buttonID) {
+				case Button.ID_LEFT:
+					speed = 100;
+					acceleration = 4000;
+					break;
+				case Button.ID_ENTER:
+					speed = 150;
+					acceleration = 6000;
+					break;
+				case Button.ID_RIGHT:
+					speed = 200;
+					acceleration = 8000;
+					break;
+				case Button.ID_ESCAPE:
+					speed = 1000;
+					acceleration = 14000;
+					break;
+			}
+			
+			kicker.setSpeed(speed);
+			kicker.setAcceleration(acceleration);
 			kicker.rotate(-50);
 			kicker.stop();
 			
