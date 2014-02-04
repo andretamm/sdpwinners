@@ -254,7 +254,7 @@ public class ImageProcessor {
             if (plate.size()<4) {
             	throw new Exception("Plate contains less than four corners");
             }
-    		Point[] plate4Points = BackupPlate.getCorners(plate, robot1, robot2);
+    		Point[] plate4Points = Plate.getCorners(plate, robot1, robot2);
             for (int i=0; i<plate4Points.length; i++) {
                 plate4Points[i]=new Point((int) (plate4Points[i].getX()*0.88+robot1.getX()*0.12), (int) (plate4Points[i].getY()*0.88+robot1.getY()*0.12));
             }

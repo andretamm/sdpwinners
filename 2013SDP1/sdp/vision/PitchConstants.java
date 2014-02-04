@@ -295,14 +295,14 @@ public class PitchConstants {
 		this.rightBuffer = scanner.nextInt();
 		
 		/* Quadrants */
-		 q1_low = scanner.nextInt();
-		 q1_high = scanner.nextInt();
-		 q2_low = scanner.nextInt();
-		 q2_high = scanner.nextInt();
-		 q3_low = scanner.nextInt();
-		 q3_high = scanner.nextInt();
-		 q4_low = scanner.nextInt();
-		 q4_high = scanner.nextInt();
+		 this.q1_low = scanner.nextInt();
+		 this.q1_high = scanner.nextInt();
+		 this.q2_low = scanner.nextInt();
+		 this.q2_high = scanner.nextInt();
+		 this.q3_low = scanner.nextInt();
+		 this.q3_high = scanner.nextInt();
+		 this.q4_low = scanner.nextInt();
+		 this.q4_high = scanner.nextInt();
 	}
 	
 	/**

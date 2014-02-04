@@ -1000,6 +1000,12 @@ public class VisionGUI implements ChangeListener {
         q4_panel.add(q4_label);
 		q4_panel.add(q4);
 		quadrantPanel.add(q4_panel);
+		
+		q1.addChangeListener(this);
+		q2.addChangeListener(this);
+		q3.addChangeListener(this);
+		q4.addChangeListener(this);
+		
 	}
 	
 	/**
