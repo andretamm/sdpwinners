@@ -13,6 +13,7 @@ public class PitchConstants {
 	
 	/* The pitch number. 0 is the main pitch, 1 is the side pitch. */
 	private int pitchNum;
+	private WorldState worldState;
 
 	/* Ball. */
 	public int ball_r_low;
@@ -114,6 +115,18 @@ public class PitchConstants {
 	public int green_rb_high;
 	public int green_gb_low;
 	public int green_gb_high;
+	
+	/*
+	 
+	 Quadrant
+	public int q1_low;
+	public int q1_high;
+	public int q2_low;
+	public int q2_high;
+	public int q3_low;
+	public int q3_high;
+	public int q4_low;
+	public int q4_high;*/
 	
 	/* Pitch dimensions:
 	 * When scanning the pitch we look at pixels starting from topBuffer and 
@@ -283,6 +296,15 @@ public class PitchConstants {
 		this.leftBuffer = scanner.nextInt();
 		this.rightBuffer = scanner.nextInt();
 		
+		/* Quadrants */
+		worldState.setQ1LowX(scanner.nextInt());
+		worldState.setQ1HighX(scanner.nextInt());
+		worldState.setQ2LowX(scanner.nextInt());
+		worldState.setQ2HighX(scanner.nextInt());
+		worldState.setQ3LowX(scanner.nextInt());
+		worldState.setQ3HighX(scanner.nextInt());
+		worldState.setQ4LowX(scanner.nextInt());
+		worldState.setQ4HighX(scanner.nextInt());
 	}
 	
 	/**
