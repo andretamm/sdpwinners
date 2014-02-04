@@ -289,7 +289,6 @@ public class ImageProcessor {
         	int LINE = 50;
         	try {
 				op.setBall(Position.findMean(op.getBallPoints()));
-				System.out.println(Position.findMean(op.getBallPoints()));
                 Position.ballFilterPoints(op.getBallPoints(), op.getBall());
                 try {
                 	

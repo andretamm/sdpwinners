@@ -72,10 +72,10 @@ public class Display {
                 graphics.drawLine((int) ws.getBallXVision(), 0, (int) ws.getBallXVision(), 480);
                 
                 /* Display markers for the quadrants */ 
-                graphics.drawRect(ws.getQ1LowX(), ws.getPitchTopLeft().y, ws.getQ1HighX(), (int) ws.getPitchHeight());
-                graphics.drawRect(ws.getQ2LowX(), ws.getPitchTopLeft().y, ws.getQ2HighX(), (int) ws.getPitchHeight());
-                graphics.drawRect(ws.getQ3LowX(), ws.getPitchTopLeft().y, ws.getQ3HighX(), (int) ws.getPitchHeight());
-                graphics.drawRect(ws.getQ4LowX(), ws.getPitchTopLeft().y, ws.getQ4HighX(), (int) ws.getPitchHeight());
+                graphics.drawRect(ws.getQ1LowX(), ws.getPitchTopLeft().y, ws.getQ1HighX()-ws.getQ1LowX(), (int) ws.getPitchHeight());
+                graphics.drawRect(ws.getQ2LowX(), ws.getPitchTopLeft().y, ws.getQ2HighX()-ws.getQ2LowX(), (int) ws.getPitchHeight());
+                graphics.drawRect(ws.getQ3LowX(), ws.getPitchTopLeft().y, ws.getQ3HighX()-ws.getQ3LowX(), (int) ws.getPitchHeight());
+                graphics.drawRect(ws.getQ4LowX(), ws.getPitchTopLeft().y, ws.getQ4HighX()-ws.getQ4LowX(), (int) ws.getPitchHeight());
 
                 
                 //graphics.drawOval(ball.getX() - ballRadius, ball.getY() - ballRadius, 2*ballRadius, 2*ballRadius);
