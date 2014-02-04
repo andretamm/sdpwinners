@@ -77,7 +77,7 @@ public class WorldState {
 		return q1LowX;
 	}
 	
-	void setQ1LowX(int q1LowX) {
+	public void setQ1LowX(int q1LowX) {
 		this.q1LowX = q1LowX;
 	}
 	
@@ -85,7 +85,7 @@ public class WorldState {
 		return q1HighX;
 	}
 	
-	void setQ1HighX(int q1HighX) {
+	public void setQ1HighX(int q1HighX) {
 		this.q1HighX = q1HighX;
 	}
 	
@@ -93,7 +93,7 @@ public class WorldState {
 		return q2LowX;
 	}
 	
-	void setQ2LowX(int q2LowX) {
+	public void setQ2LowX(int q2LowX) {
 		this.q2LowX = q2LowX;
 	}
 	
@@ -101,7 +101,7 @@ public class WorldState {
 		return q2HighX;
 	}
 	
-	void setQ2HighX(int q2HighX) {
+	public void setQ2HighX(int q2HighX) {
 		this.q2HighX = q2HighX;
 	}
 	
@@ -109,7 +109,7 @@ public class WorldState {
 		return q3LowX;
 	}
 	
-	void setQ3LowX(int q3LowX) {
+	public void setQ3LowX(int q3LowX) {
 		this.q3LowX = q3LowX;
 	}
 	
@@ -117,7 +117,7 @@ public class WorldState {
 		return q3HighX;
 	}
 	
-	void setQ3HighX(int q3HighX) {
+	public void setQ3HighX(int q3HighX) {
 		this.q3HighX = q3HighX;
 	}
 	
@@ -125,7 +125,7 @@ public class WorldState {
 		return q4LowX;
 	}
 	
-	void setQ4LowX(int q4LowX) {
+	public void setQ4LowX(int q4LowX) {
 		this.q4LowX = q4LowX;
 	}
 	
@@ -133,7 +133,7 @@ public class WorldState {
 		return q4HighX;
 	}
 	
-	void setQ4HighX(int q4HighX) {
+	public void setQ4HighX(int q4HighX) {
 		this.q4HighX = q4HighX;
 	}
 	

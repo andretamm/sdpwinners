@@ -976,6 +976,14 @@ public class VisionGUI implements ChangeListener {
         q1_panel.add(q1_label);
 		q1_panel.add(q1);
 		quadrantPanel.add(q1_panel);
+		q1.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				worldState.setQ1LowX(q1.getValue());
+				worldState.setQ1HighX(q1.getUpperValue());
+			}
+		});
 		
 		/*Quadrant2*/
 		JPanel q2_panel = new JPanel();
@@ -984,6 +992,14 @@ public class VisionGUI implements ChangeListener {
         q2_panel.add(q2_label);
 		q2_panel.add(q2);
 		quadrantPanel.add(q2_panel);
+		q2.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				worldState.setQ2LowX(q2.getValue());
+				worldState.setQ2HighX(q2.getUpperValue());
+			}
+		});
 		
 		/*Quadrant3*/
 		JPanel q3_panel = new JPanel();
@@ -992,6 +1008,14 @@ public class VisionGUI implements ChangeListener {
         q3_panel.add(q3_label);
 		q3_panel.add(q3);
 		quadrantPanel.add(q3_panel);
+		q3.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				worldState.setQ3LowX(q3.getValue());
+				worldState.setQ3HighX(q3.getUpperValue());
+			}
+		});
 		
 		/*Quadrant4*/
 		JPanel q4_panel = new JPanel();
@@ -1001,11 +1025,22 @@ public class VisionGUI implements ChangeListener {
 		q4_panel.add(q4);
 		quadrantPanel.add(q4_panel);
 		
+<<<<<<< HEAD
+		q4.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				worldState.setQ4LowX(q4.getValue());
+				worldState.setQ4HighX(q4.getUpperValue());
+			}
+		});
+=======
 		q1.addChangeListener(this);
 		q2.addChangeListener(this);
 		q3.addChangeListener(this);
 		q4.addChangeListener(this);
 		
+>>>>>>> 8947d115f1187522838780f182316364571cfb03
 	}
 	
 	/**
