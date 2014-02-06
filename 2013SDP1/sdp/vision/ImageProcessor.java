@@ -82,14 +82,26 @@ public class ImageProcessor {
 				if (worldState.getRemoveShadows()) {
 					Deshadow.deshadowImage(worldState, image, top, bottom, left, right);
 				}
-                
+				System.out.println(worldState.getQ1LowX() + " " + worldState.getQ1HighX());
+				
+				/* ----------------------------- */
+				/* THIS NEEDS TO BE PARALLELISED */
+				/* ----------------------------- */
+				//TODO
+				
                 if (worldState.isFindRobotsAndBall()) {
                     //threshold to find ball and robot Ts
                     Thresholder.initialThresholds(image, op, ts, top, bottom, left, right);
+                    
                 	//locate the robot Ts and the ball
-                	findRobotsAndBall(op);      
+                    // TODO
+                    // Divide into 4 quadrants
+                    int quadrant = 0;
+                	findRobotsAndBall(quadrant, op);
+                	
                     //threshold to find green plates and grey dots
                     Thresholder.secondaryThresholds(image, op, ts, worldState, top, bottom, left, right);
+                    
                     //get orientation of the two robots
                 	allOrientation(op);
                 }
@@ -97,6 +109,10 @@ public class ImageProcessor {
                     //threshold all points in image, and collect matches in ObjectPoints op
                     Thresholder.simpleThresholds(image, op, ts, worldState, top, bottom, left, right);
                 }
+                
+                /* ----------------------------- */
+                /* END PARALLELISATION */
+                /* ----------------------------- */
                 
                 //transfer the readied data in objectpoints op to the worldstate
                 updateWorldState(op, worldState);
@@ -199,7 +215,7 @@ public class ImageProcessor {
             
             /* Attempt to find the blue robot's orientation. */
             try {
-                    op.setBlueOrientation((float) Orientation.findOrient(op.getBlue(), op.getBluePoints(), op.getBlueGreyPoints(), op.getBlueGreenPlate4Points(), 120, 500, true));
+                    op.setBlueOrientation((float) Orientation.findOrient(op.getBlueGreyPoints(), op.getBlueGreenPlate()));
             } catch (NoAngleException e) {
 //            	System.out.print("Blue robot NoAngleException: " + e.getMessage());
 //            	System.out.println("op.getBlueOrientation():" + op.getBlueOrientation());
@@ -211,7 +227,7 @@ public class ImageProcessor {
 
             /* Attempt to find the yellow robot's orientation. */
             try {
-                    op.setYellowOrientation((float) Orientation.findOrient(op.getYellow(), op.getYellowPoints(), op.getYellowGreyPoints(), op.getYellowGreenPlate4Points(), 120, 500, false));
+                    op.setYellowOrientation((float) Orientation.findOrient(op.getYellowGreyPoints(), op.getYellowGreenPlate()));
             } catch (NoAngleException e) {
 //            	System.out.print("Yellow robot NoAngleException: " + e.getMessage());
 //            	System.out.println("op.getYellowOrientation():" + op.getYellowOrientation());
@@ -285,13 +301,13 @@ public class ImageProcessor {
          * Sets the position of the centroid of the blue T, the yellow T, and the ball
          * @param op
          */
-        public void findRobotsAndBall(ObjectPoints op) {
+        public void findRobotsAndBall(int quadrant, ObjectPoints op) {
         	int LINE = 50;
         	try {
 				op.setBall(Position.findMean(op.getBallPoints()));
                 Position.ballFilterPoints(op.getBallPoints(), op.getBall());
+                
                 try {
-                	
                 	//TODO Alter for Attacker Robot
                 	worldState.setBallVisible(true);
     				op.setBall(Position.findMean(op.getBallPoints()));

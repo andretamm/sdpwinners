@@ -46,9 +46,7 @@ public class RunVision {
                     compressionQuality, worldState, thresholdsState, pitchConstants);
             
             /* Create the Control GUI for threshold setting/etc. */
-            thresholdsGUI = new VisionGUI(thresholdsState,
-									            	  worldState,
-									            	  pitchConstants, vision);      
+            thresholdsGUI = new VisionGUI(thresholdsState, worldState, pitchConstants, vision);      
             thresholdsGUI.initGUI();
         } catch (V4L4JException e) {
             e.printStackTrace();

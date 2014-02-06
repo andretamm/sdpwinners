@@ -123,6 +123,9 @@ public class Position {
 	    			i=i-1;
 	    		}
 	    	}
+	    	
+	    	// TODO
+	    	// Actually update the centroid of the ball? lol?
     	}
     }
     
