@@ -87,7 +87,7 @@ public class ImageProcessor {
 				/* ----------------------------- */
 				/* THIS NEEDS TO BE PARALLELISED */
 				/* ----------------------------- */
-				//TODO
+				//TODO MAKE PARALLEL
 				
                 if (worldState.isFindRobotsAndBall()) {
                     //threshold to find ball and robot Ts
