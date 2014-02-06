@@ -4,12 +4,16 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 /**
- * Vision's internal representation of the image. Use this rather than 
- * worldState, which should only recieve the final positions
+ * Vision's internal representation of the image. This is for use with only a
+ * single quadrant. To get the data for the whole field you need to aggregate
+ * the data from all four quadrants. This should be done by TablePoints.
  * 
  * @author Thomas Wallace
  */
 public class ObjectPoints {
+	
+	private RobotColour rColour;
+	private RobotType rType;
 
 	private ArrayList<Point> ballPoints = null;
 	private ArrayList<Point> bluePoints = null;
@@ -211,5 +215,29 @@ public class ObjectPoints {
 	
 	public void setYellowOrientation(double yellowOrientation) {
 		this.yellowOrientation = yellowOrientation;
+	}
+
+	public RobotColour getrColour() {
+		return rColour;
+	}
+
+	public void setrColour(RobotColour rColour) {
+		this.rColour = rColour;
+	}
+
+	public RobotType getrType() {
+		return rType;
+	}
+
+	public void setrType(RobotType rType) {
+		this.rType = rType;
+	}
+	
+	public ArrayList<Point> getPoints(RobotColour colour) {
+		if (colour == RobotColour.BLUE) {
+			return bluePoints;
+		} else {
+			return yellowPoints;
+		}
 	}
 }
