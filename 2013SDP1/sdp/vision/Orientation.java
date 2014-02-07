@@ -46,22 +46,22 @@ public class Orientation {
         //To get the angle need to establish the location of the grey circle with respect to the centre of the green plate.
         //Quadrant 1 case:
         if ((greyCentreX >= x0) && (greyCentreY >= y0)) {
-        	return Math.acos((greyCentreX-x0)/distance);
+        	return (Math.PI + Math.acos((greyCentreX-x0)/distance));
         }
         
         //Quadrant 2 case:
         if ((greyCentreX >= x0) && (greyCentreY <= y0)) {
-        	return (2*Math.PI - Math.acos((greyCentreX-x0)/distance));
+        	return (Math.PI - Math.acos((greyCentreX-x0)/distance));
         }
         
         //Quadrant 3 case:
         if ((greyCentreX <= x0) && (greyCentreY <= y0)) {
-        	return Math.PI + Math.acos((x0-greyCentreX)/distance);
+        	return  Math.acos((x0-greyCentreX)/distance);
         }
         
         //Quadrant 4 case:
         if ((greyCentreX <= x0) && (greyCentreY >= y0)) {
-        	return (Math.PI - Math.acos((x0-greyCentreX)/distance));
+        	return (2*Math.PI - Math.acos((x0-greyCentreX)/distance));
         }
         
         throw new NoAngleException();
