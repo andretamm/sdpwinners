@@ -17,11 +17,14 @@ import constants.RobotType;
  */
 public class PitchPoints extends ObjectPoints {
 	
+	
 	// The four quadrants
 	private ObjectPoints q1;
 	private ObjectPoints q2;
 	private ObjectPoints q3;
 	private ObjectPoints q4;
+	
+	private Point ballPosition;
 	
 	public PitchPoints(WorldState worldstate) {
 		super();
@@ -140,6 +143,20 @@ public class PitchPoints extends ObjectPoints {
 		quadrant.setRobotOrientation(orientation);
 	}
 	
+	/* -------------------------------------------------- */
+	/* Methods for the ball position
+	/* -------------------------------------------------- */
+	public Point getBallPosition() {
+		return ballPosition;
+	}
+	
+	public void setBallPosition(Point ballPosition) {
+		this.ballPosition = ballPosition;
+	}
+	
+	/* -------------------------------------------------- */
+	/* Everything else
+	/* -------------------------------------------------- */
 	/**
 	 * Returns the quadrant that contains this robot
 	 * @param colour
