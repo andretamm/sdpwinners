@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import constants.Colours;
 import constants.RobotColour;
+import constants.RobotType;
 import sdp.strategy.KickFrom;
 
 /**
@@ -193,58 +195,36 @@ public class ImageProcessor {
          * @param image Use the robots in this image
          * @param op Relevant lists of points, which will be updated
          */
-        public void allOrientation(ObjectPoints op) {        
+        public void allOrientation(PitchPoints pitchPoints) {        
             /*
-                Mila, WORK YOUR MAGIC
-                
-                
-             
+            //For later
             //Create a list of all points that could be in the blue robot plate. Likewise for yellow.
             allocatePlatePoints(op.getGreenPoints(), op.getBlueGreenPlate(), op.getYellowGreenPlate(), op.getBlue(), op.getYellow());
-            
-            //find blue robot plate corners
-            try {
-				op.setBlueGreenPlate4Points(getSmallCorners(op.getBlueGreenPlate(), op.getBlue(), op.getYellow()));
-				greyPointsWithinPlate(op.getBlueGreenPlate4Points(), op.getGreyPoints(), op.getBlueGreyPoints());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				//e1.printStackTrace();
-			}
-
-            //find yellow robot plate corners
-			try {
-				op.setYellowGreenPlate4Points(getSmallCorners(op.getYellowGreenPlate(), op.getYellow(), op.getBlue()));
-				greyPointsWithinPlate(op.getYellowGreenPlate4Points(), op.getGreyPoints(), op.getYellowGreyPoints());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				//e1.printStackTrace();
-			}
-            
-            // Attempt to find the blue robot's orientation. 
-            try {
-                    op.setBlueOrientation((float) Orientation.findOrient(op.getBlueGreyPoints(), op.getBlueGreenPlate()));
-            } catch (NoAngleException e) {
-//            	System.out.print("Blue robot NoAngleException: " + e.getMessage());
-//            	System.out.println("op.getBlueOrientation():" + op.getBlueOrientation());
-//            	System.out.println("blue position:(" + op.getBlue().getX() +", "+ op.getBlue().getY()+")");
-            } catch (Exception e) {
-            	//System.out.print("Blue robot Exception: " + e.getMessage());
-            	//e.printStackTrace();
-            }
-
-            // Attempt to find the yellow robot's orientation.
-            try {
-                    op.setYellowOrientation((float) Orientation.findOrient(op.getYellowGreyPoints(), op.getYellowGreenPlate()));
-            } catch (NoAngleException e) {
-//            	System.out.print("Yellow robot NoAngleException: " + e.getMessage());
-//            	System.out.println("op.getYellowOrientation():" + op.getYellowOrientation());
-//           	System.out.println("yellow position:(" + op.getYellow().getX() +", "+ op.getYellow().getY()+")");
-            } catch (Exception e) {
-            	//System.out.print("Yellow robot Exception: " + e.getMessage());
-            	//e.printStackTrace();
-            }
-            
             */
+        	
+        	for (RobotType rType : constants.RobotType.values()) {
+        		for (RobotColour rColour : constants.RobotColour.values()) {
+        			
+                    try {
+                    	ArrayList<Point> greyPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GRAY);
+                    	ArrayList<Point> greenPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GREEN);
+                    	
+                    	double orientation = Orientation.findOrient(greyPoints, greenPoints);
+                    	pitchPoints.setRobotOrientation(rColour, rType, orientation);
+                           
+                    } catch (NoAngleException e) {
+                    	//System.out.print("Blue robot NoAngleException: " + e.getMessage());
+                    	//System.out.println("op.getBlueOrientation():" + op.getBlueOrientation());
+                    	//System.out.println("blue position:(" + op.getBlue().getX() +", "+ op.getBlue().getY()+")");
+                    } catch (Exception e) {
+                    	//System.out.print("Blue robot Exception: " + e.getMessage());
+                    	//e.printStackTrace();
+                    }
+                    
+        		}
+        		
+        	}
+            
         }
         
         /**
