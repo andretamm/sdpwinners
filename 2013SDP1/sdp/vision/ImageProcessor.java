@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import constants.Colours;
+import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
 import sdp.strategy.KickFrom;
@@ -94,13 +95,25 @@ public class ImageProcessor {
 				
                 if (worldState.isFindRobotsAndBall()) {
                     //threshold to find ball and robot Ts
-                    Thresholder.initialThresholds(image, pitch, ts, top, bottom, left, right);
+                    Thresholder.initialThresholds(image, pitch, ts, worldState);
                     
                 	//locate the robot Ts and the ball
                     // TODO
                     // Divide into 4 quadrants
-                    int quadrant = 0;
+                    
                 	findRobotsAndBall(pitch);
+                	
+//                	for ( Point p: pitch.getPoints(Colours.BLUE) ){
+//                		System.out.println(p.x + " " + p.y);
+//                	}
+//                	
+                	for ( Quadrant q : Quadrant.values()) {
+                		for ( Point p: pitch.getQuadrant(q).getPoints(Colours.BLUE)) {
+                			System.out.println(p.x + " " + p.y);
+                		}
+                		System.out.println("\n\n\n\n");
+                	}
+                	System.out.println(pitch.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER));
                 	
                     //threshold to find green plates and grey dots
                     Thresholder.secondaryThresholds(image, pitch, ts, worldState, top, bottom, left, right);
