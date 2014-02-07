@@ -153,19 +153,52 @@ public class Thresholder {
 	 * @param left Index of the leftmost column
 	 * @param right Index of the rightmost column, plus one
 	 */
-	public static void secondaryThresholds(BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState worldState, int top, int bottom, int left, int right) {
+	public static void secondaryThresholds(BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState worldState) {
 		
 		int rg;
 		int rb;
 		int gb;
 		
 		/*
-		 * For every pixel near the blue T, test to see if it belongs to either a green plate or a grey circle.
+		 * For each quadrant, in the list of Quadrant enums, look at the plates
 		 */
-		for (int column= worldState.getBlueDefenderX()-plateSize; column< worldState.getBlueDefenderX()+plateSize; column++) {
-        	for (int row= worldState.getBlueDefenderY()-plateSize; row< worldState.getBlueDefenderY()+plateSize; row++) {
+		for(Quadrant q : Quadrant.values()){
+			
+			/*
+			 * For every pixel near the blue i, test to see if it belongs to either a green plate or a grey circle.
+			 */
+			for(int column = pp.getQuadrant(q).getRobotPosition().x - plateSize; column < pp.getQuadrant(q).getRobotPosition().x + plateSize; column++){
+				for(int row = pp.getQuadrant(q).getRobotPosition().y - plateSize; row < pp.getQuadrant(q).getRobotPosition().y + plateSize; row++){
+					try {
+						Color c = new Color(image.getRGB(column, row));
+						float hsbvals[] = new float[3];
+						Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsbvals);
+						
+						rg=c.getRed()-c.getGreen();
+						rb=c.getRed()-c.getBlue();
+						gb=c.getGreen()-c.getBlue();
+						
+						if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
+							pp.getPoints(Colours.GREEN).add(new Point(column, row));
+						}
+
+						if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
+							pp.getPoints(Colours.GRAY).add(new Point(column, row));
+						}
+					} catch (Exception e) {
+						//point was outside the image?
+					}
+				}
+			}
+		}
+		
+/*		
+		 * For every pixel near the blue T, test to see if it belongs to either a green plate or a grey circle.
+		 
+		for (int column= pp.getBlueDefenderXVision()-plateSize; column< worldState.getBlueDefenderXVision()+plateSize; column++) {
+        	for (int row= worldState.getBlueDefenderYVision()-plateSize; row< worldState.getBlueDefenderYVision()+plateSize; row++) {
 				try {
-					/* The RGB colours and hsv values for the current pixel. */
+					 The RGB colours and hsv values for the current pixel. 
 					Color c = new Color(image.getRGB(column, row));
 					float hsbvals[] = new float[3];
 					Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
@@ -194,13 +227,13 @@ public class Thresholder {
 			}
 		}
 		
-		/*
+		
 		 * For every pixel near the yellow T, test to see if it belongs to either a green plate or a grey circle.
 		 */
-		for (int column= worldState.getYellowDefenderX()-plateSize; column< worldState.getYellowDefenderX()+plateSize; column++) {
+		/*for (int column= worldState.getYellowDefenderX()-plateSize; column< worldState.getYellowDefenderX()+plateSize; column++) {
         	for (int row= worldState.getYellowDefenderY()-plateSize; row< worldState.getYellowDefenderY()+plateSize; row++) {
 				try {
-					/* The RGB colours and hsv values for the current pixel. */
+//					 The RGB colours and hsv values for the current pixel. 
 					Color c = new Color(image.getRGB(column, row));
 					float hsbvals[] = new float[3];
 					Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
@@ -226,7 +259,8 @@ public class Thresholder {
 				} catch (Exception e) {
 					//point was outside the image?
 				}
+        	
 			}
-		}
+		}*/
 	}
 }

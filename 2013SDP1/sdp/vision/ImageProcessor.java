@@ -104,7 +104,7 @@ public class ImageProcessor {
                 	findRobotsAndBall(pitch);
                 	
                     //threshold to find green plates and grey dots
-                    Thresholder.secondaryThresholds(image, pitch, ts, worldState, top, bottom, left, right);
+                    Thresholder.secondaryThresholds(image, pitch, ts, worldState);
                     
                     //get orientation of the two robots
                 	allOrientation(pitch);
