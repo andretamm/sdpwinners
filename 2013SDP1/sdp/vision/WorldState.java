@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import constants.RobotColour;
+import constants.RobotType;
 
 
 public class WorldState {
@@ -289,6 +290,47 @@ public class WorldState {
 	public int getBallY() {
 		return ballY-getPitchTopLeft().y;
 	}
+	
+	
+	/*-------------------------------------------------------------------*/
+	/*-----Getters and setters for robot positions and orientation-------*/
+	/*-------------------------------------------------------------------*/
+	
+	public void setRobotX(RobotType rType, RobotColour rColour, int x) {
+		
+		if (rType == RobotType.ATTACKER) {
+			if (rColour == RobotColour.BLUE) setBlueAttackerX(x);
+			else setYellowAttackerX(x);
+		}
+		else {
+			if (rColour == RobotColour.BLUE) setBlueDefenderX(x);
+			else setYellowDefenderX(x);
+		}
+	}
+	
+	public void setRobotY(RobotType rType, RobotColour rColour, int y) {
+		
+		if (rType == RobotType.ATTACKER) {
+			if (rColour == RobotColour.BLUE) setBlueAttackerY(y);
+			else setYellowAttackerY(y);
+		}
+		else {
+			if (rColour == RobotColour.BLUE) setBlueDefenderY(y);
+			else setYellowDefenderY(y);
+		}
+	}
+	
+	public void setRobotOrientation(RobotType rType, RobotColour rColour, double orientation) {
+		
+		if (rType == RobotType.ATTACKER) {
+			if (rColour == RobotColour.BLUE) setBlueAttackerOrientation(orientation);
+			else setYellowAttackerOrientation(orientation);
+		}
+		else {
+			if (rColour == RobotColour.BLUE) setBlueDefenderOrientation(orientation);
+			else setYellowDefenderOrientation(orientation);
+		}
+	}
 
 	int getBlueDefenderXVision() {
 		return blueDefenderX;
@@ -342,7 +384,7 @@ public class WorldState {
 		return yellowAttackerX;
 	}
 
-	public void setYellowAttackerX(int yellowX) {
+ public void setYellowAttackerX(int yellowX) {
 		this.yellowAttackerX = yellowX;
 	}
 
@@ -401,6 +443,13 @@ public class WorldState {
 	public void setYellowAttackerOrientation(double yellowOrientation) {
 		this.yellowAttackerOrientation = yellowOrientation;
 	}
+	
+	
+	/*-------------------------------------------------------------------*/
+	/*--End of getters and setters for robot positions and orientation---*/
+	/*-------------------------------------------------------------------*/
+	
+	
 
 	public int getDirection() {
 		return direction;

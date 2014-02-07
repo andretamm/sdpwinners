@@ -145,16 +145,16 @@ public class ImageProcessor {
             Point ballP = DistortionFix.barrelCorrected(pp.getBallPosition());
             ws.setBallX((int) ballP.getX());
             ws.setBallY((int) ballP.getY());
-
-            Point blueP = DistortionFix.barrelCorrected(pp.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER));
-            ws.setBlueDefenderX((int) blueP.getX());
-            ws.setBlueDefenderY((int) blueP.getY());
-            ws.setBlueDefenderOrientation(pp.getRobotOrientation(RobotColour.BLUE, RobotType.DEFENDER));
             
-            Point yellowP = DistortionFix.barrelCorrected(pp.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
-            ws.setYellowDefenderX((int) yellowP.getX());
-            ws.setYellowDefenderY((int) yellowP.getY());
-            ws.setYellowDefenderOrientation(pp.getRobotOrientation(RobotColour.YELLOW, RobotType.DEFENDER));
+            for (RobotType rType : RobotType.values()) {
+            	for (RobotColour rColour : RobotColour.values()) {
+            		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(rColour, rType));
+                    ws.setRobotX(rType, rColour, (int) position.getX());
+                    ws.setRobotY(rType, rColour, (int) position.getY());
+                    ws.setRobotOrientation(rType, rColour, pp.getRobotOrientation(rColour, rType));
+                    
+            	}
+            }
         }
         
         /**
