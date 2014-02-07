@@ -84,7 +84,6 @@ public class ImageProcessor {
                 if (worldState.getRemoveShadows()) {
 					Deshadow.deshadowImage(worldState, image, top, bottom, left, right);
 				}
-				System.out.println(worldState.getQ1LowX() + " " + worldState.getQ1HighX());
 				
 				/* ----------------------------- */
 				/* THIS NEEDS TO BE PARALLELISED */
@@ -102,18 +101,6 @@ public class ImageProcessor {
                     // Divide into 4 quadrants
                     
                 	findRobotsAndBall(pitch);
-                	
-//                	for ( Point p: pitch.getPoints(Colours.BLUE) ){
-//                		System.out.println(p.x + " " + p.y);
-//                	}
-//                	
-                	for ( Quadrant q : Quadrant.values()) {
-                		for ( Point p: pitch.getQuadrant(q).getPoints(Colours.YELLOW)) {
-                			System.out.println(p.x + " " + p.y);
-                		}
-                		System.out.println("\n\n\n\n");
-                	}
-                	System.out.println(pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
                 	
                     //threshold to find green plates and grey dots
                     Thresholder.secondaryThresholds(image, pitch, ts, worldState, top, bottom, left, right);

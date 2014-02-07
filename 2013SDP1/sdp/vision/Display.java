@@ -95,11 +95,6 @@ public class Display {
 				  		  (int) op.getRobotPosition(RobotColour.YELLOW, RobotType.ATTACKER).getY() - WorldState.plateRadius, 
 				  		  2*WorldState.plateRadius+1, 2*WorldState.plateRadius); 
 		
-//		System.out.println(op.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER));
-//		System.out.println(op.getRobotPosition(RobotColour.BLUE, RobotType.ATTACKER));
-//		System.out.println(op.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
-//		System.out.println(op.getRobotPosition(RobotColour.YELLOW, RobotType.ATTACKER));
-		
 		// TODO draw rectangles around each of the robot plates????
 		// TODO draw rectangles around each of the robot plates????
 		// TODO draw rectangles around each of the robot plates????

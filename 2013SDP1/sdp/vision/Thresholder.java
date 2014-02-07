@@ -133,25 +133,11 @@ public class Thresholder {
 					if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
 						pp.getQuadrant(q).getPoints(Colours.YELLOW).add(new Point(column, row));
 					}
-				}
-			}
-			
-			// Now looking at everything twice :(
-			// Possible problem :((((
-			for (int column= ws.getPitchTopLeft().x; column< ws.getPitchTopRight().x; column++) {
-	        	for (int row= ws.getPitchTopLeft().y; row < ws.getPitchBottomLeft().y; row++) {
-	        		/* The RGB colours and hsv values for the current pixel. */
-					Color c = new Color(image.getRGB(column, row));
-					float hsbvals[] = new float[3];
-					Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
-					rg=c.getRed()-c.getGreen();
-					rb=c.getRed()-c.getBlue();
-					gb=c.getGreen()-c.getBlue();
 					
-	        		if (ts.isBall(c, hsbvals, rg, rb, gb)) {
+					if (ts.isBall(c, hsbvals, rg, rb, gb)) {
 						pp.getPoints(Colours.RED).add(new Point(column, row));
 					}
-	        	}
+				}
 			}
 		}
 	}
