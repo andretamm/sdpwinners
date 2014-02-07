@@ -38,7 +38,7 @@ public class ObjectPoints {
 	}
 	
 	/* -------------------------------------------------- */
-	/* Methods for the robot's position and orientation  
+	/* Methods for the robot's position and orientation
 	/* -------------------------------------------------- */
 	
 	public Point getRobotPosition() {
