@@ -320,6 +320,30 @@ public class WorldState {
 		}
 	}
 	
+	public int getRobotX(RobotType rType, RobotColour rColour) {
+		
+		if (rType == RobotType.ATTACKER) {
+			if (rColour == RobotColour.BLUE) return getBlueAttackerX();
+			else return getYellowAttackerX();
+		}
+		else {
+			if (rColour == RobotColour.BLUE) return getBlueDefenderX();
+			else return getYellowDefenderX();
+		}
+	}
+	
+	public int getRobotY(RobotType rType, RobotColour rColour) {
+		
+		if (rType == RobotType.ATTACKER) {
+			if (rColour == RobotColour.BLUE) return getBlueAttackerY();
+			else return getYellowAttackerY();
+		}
+		else {
+			if (rColour == RobotColour.BLUE) return getBlueDefenderY();
+			else return getYellowDefenderY();
+		}
+	}
+	
 	public void setRobotOrientation(RobotType rType, RobotColour rColour, double orientation) {
 		
 		if (rType == RobotType.ATTACKER) {
@@ -332,7 +356,7 @@ public class WorldState {
 		}
 	}
 
-	int getBlueDefenderXVision() {
+	int getBlueDefenderX() {
 		return blueDefenderX;
 	}
 
@@ -340,7 +364,7 @@ public class WorldState {
 		this.blueDefenderX = blueX;
 	}
 
-	int getBlueDefenderYVision() {
+	int getBlueDefenderY() {
 		return blueDefenderY;
 	}
 
@@ -348,7 +372,7 @@ public class WorldState {
 		this.blueDefenderY = blueY;
 	}
 	
-	int getBlueAttackerXVision() {
+	int getBlueAttackerX() {
 		return blueAttackerX;
 	}
 
@@ -356,7 +380,7 @@ public class WorldState {
 		this.blueAttackerX = blueX;
 	}
 
-	int getBlueAttackerYVision() {
+	int getBlueAttackerY() {
 		return blueAttackerY;
 	}
 
@@ -364,7 +388,7 @@ public class WorldState {
 		this.blueAttackerY = blueY;
 	}
 
-	int getYellowDefenderXVision() {
+	int getYellowDefenderX() {
 		return yellowDefenderX;
 	}
 
@@ -372,7 +396,7 @@ public class WorldState {
 		this.yellowDefenderX = yellowX;
 	}
 
-	int getYellowDefenderYVision() {
+	int getYellowDefenderY() {
 		return yellowDefenderY;
 	}
 
@@ -380,7 +404,7 @@ public class WorldState {
 		this.yellowDefenderY = yellowY;
 	}
 	
-	int getYellowAttackerXVision() {
+	int getYellowAttackerX() {
 		return yellowAttackerX;
 	}
 
@@ -388,7 +412,7 @@ public class WorldState {
 		this.yellowAttackerX = yellowX;
 	}
 
-	int getYellowAttackerYVision() {
+	int getYellowAttackerY() {
 		return yellowAttackerY;
 	}
 
@@ -510,38 +534,38 @@ public class WorldState {
 	//TODO fix getters for X and Y Vision for two robots
 
 	int getOurDefenderXVision(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderXVision() : getBlueDefenderXVision();
+		return colour == RobotColour.YELLOW ? getYellowDefenderX() : getBlueDefenderX();
 	}
 
 	int getOurDefenderYVision(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderYVision() : getBlueDefenderYVision();
+		return colour == RobotColour.YELLOW ? getYellowDefenderY() : getBlueDefenderY();
 	}
 	
 	int getOurAttackerXVision(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerXVision() : getBlueAttackerXVision();
+		return colour == RobotColour.YELLOW ? getYellowAttackerX() : getBlueAttackerX();
 	}
 
 	int getOurAttackerYVision(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerYVision() : getBlueAttackerYVision();
+		return colour == RobotColour.YELLOW ? getYellowAttackerY() : getBlueAttackerY();
 	}
 
 	public int getOurDefenderX(){
-		int x = colour == RobotColour.YELLOW ? getYellowDefenderXVision() : getBlueDefenderXVision();
+		int x = colour == RobotColour.YELLOW ? getYellowDefenderX() : getBlueDefenderX();
 		return x - getPitchTopLeft().x;
 	}
 	
 	public int getOurAttackerX(){
-		int x = colour == RobotColour.YELLOW ? getYellowAttackerXVision() : getBlueAttackerXVision();
+		int x = colour == RobotColour.YELLOW ? getYellowAttackerX() : getBlueAttackerX();
 		return x - getPitchTopLeft().x;
 	}
 
 	public int getOurDefenderY(){  
-		int y = colour == RobotColour.YELLOW ? getYellowDefenderYVision() : getBlueDefenderYVision();
+		int y = colour == RobotColour.YELLOW ? getYellowDefenderY() : getBlueDefenderY();
 		return y - getPitchTopLeft().y;
 	}
 	
 	public int getOurAttackerY(){  
-		int y = colour == RobotColour.YELLOW ? getYellowAttackerYVision() : getBlueAttackerYVision();
+		int y = colour == RobotColour.YELLOW ? getYellowAttackerY() : getBlueAttackerY();
 		return y - getPitchTopLeft().y;
 	}
 
@@ -562,22 +586,22 @@ public class WorldState {
 	}
 
 	public int getOppositionDefenderX() {
-		int x = colour == RobotColour.YELLOW ? getBlueDefenderXVision() : getYellowDefenderXVision();
+		int x = colour == RobotColour.YELLOW ? getBlueDefenderX() : getYellowDefenderX();
 		return x - getPitchTopLeft().x;
 	}
 
 	public int getOppositionDefenderY() {
-		int y = colour == RobotColour.YELLOW ? getBlueDefenderYVision() : getYellowDefenderYVision();
+		int y = colour == RobotColour.YELLOW ? getBlueDefenderY() : getYellowDefenderY();
 		return y - getPitchTopLeft().y;
 	}
 	
 	public int getOppositionAttackerX() {
-		int x = colour == RobotColour.YELLOW ? getBlueAttackerXVision() : getYellowAttackerXVision();
+		int x = colour == RobotColour.YELLOW ? getBlueAttackerX() : getYellowAttackerX();
 		return x - getPitchTopLeft().x;
 	}
 
 	public int getOppositionAttackerY() {
-		int y = colour == RobotColour.YELLOW ? getBlueAttackerYVision() : getYellowAttackerYVision();
+		int y = colour == RobotColour.YELLOW ? getBlueAttackerY() : getYellowAttackerY();
 		return y - getPitchTopLeft().y;
 	}
 
@@ -819,19 +843,19 @@ public class WorldState {
 	}
 
 	int getOppositionDefenderXVision(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderXVision() : getYellowDefenderXVision();
+		return colour == RobotColour.YELLOW ? getBlueDefenderX() : getYellowDefenderX();
 	}
 
 	int getOppositionDefenderYVision(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderYVision() : getYellowDefenderYVision();
+		return colour == RobotColour.YELLOW ? getBlueDefenderY() : getYellowDefenderY();
 	}
 	
 	int getOppositionAttackerXVision(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerXVision() : getYellowAttackerXVision();
+		return colour == RobotColour.YELLOW ? getBlueAttackerX() : getYellowAttackerX();
 	}
 
 	int getOppositionAttackerYVision(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerYVision() : getYellowAttackerYVision();
+		return colour == RobotColour.YELLOW ? getBlueAttackerY() : getYellowAttackerY();
 	}
 	
 	int getShadowTopY() {
