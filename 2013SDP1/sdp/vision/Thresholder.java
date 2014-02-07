@@ -7,6 +7,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import constants.Colours;
+
 import sdp.vision.ThresholdsState;
 import sdp.vision.WorldState;
 
@@ -47,23 +49,23 @@ public class Thresholder {
 				gb=c.getGreen()-c.getBlue();
 
 				if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
-					op.getGreyPoints().add(new Point(column, row));
+					op.getPoints(Colours.GRAY).add(new Point(column, row));
 				}
 
 				if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
-					op.getBluePoints().add(new Point(column, row));
+					op.getPoints(Colours.BLUE).add(new Point(column, row));
 				}
 
 				if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
-					op.getGreenPoints().add(new Point(column, row));
+					op.getPoints(Colours.GREEN).add(new Point(column, row));
 				}
 
 				if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
-					op.getYellowPoints().add(new Point(column, row));
+					op.getPoints(Colours.YELLOW).add(new Point(column, row));
 				}
 				
 				if (ts.isBall(c, hsbvals, rg, rb, gb)) {
-					op.getBallPoints().add(new Point(column, row));
+					op.getPoints(Colours.RED).add(new Point(column, row));
 				}
 			}
 		}
@@ -100,15 +102,15 @@ public class Thresholder {
 				gb=c.getGreen()-c.getBlue();
 
 				if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
-					op.getBluePoints().add(new Point(column, row));
+					op.getPoints(Colours.BLUE).add(new Point(column, row));
 				}
 
 				if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
-					op.getYellowPoints().add(new Point(column, row));
+					op.getPoints(Colours.YELLOW).add(new Point(column, row));
 				}
 				
 				if (ts.isBall(c, hsbvals, rg, rb, gb)) {
-					op.getBallPoints().add(new Point(column, row));
+					op.getPoints(Colours.RED).add(new Point(column, row));
 				}
 			}
 		}
@@ -154,11 +156,11 @@ public class Thresholder {
 					gb=c.getGreen()-c.getBlue();
 
 					if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
-						op.getGreenPoints().add(new Point(column, row));
+						op.getPoints(Colours.GREEN).add(new Point(column, row));
 					}
 
 					if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
-						op.getGreyPoints().add(new Point(column, row));
+						op.getPoints(Colours.GRAY).add(new Point(column, row));
 					}
 				} catch (Exception e) {
 					//point was outside the image?
@@ -189,11 +191,11 @@ public class Thresholder {
 					gb=c.getGreen()-c.getBlue();
 
 					if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
-						op.getGreenPoints().add(new Point(column, row));
+						op.getPoints(Colours.GREEN).add(new Point(column, row));
 					}
 
 					if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
-						op.getGreyPoints().add(new Point(column, row));
+						op.getPoints(Colours.GRAY).add(new Point(column, row));
 					}
 				} catch (Exception e) {
 					//point was outside the image?
