@@ -3,6 +3,9 @@ package sdp.vision;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import constants.RobotColour;
+import constants.RobotType;
+
 /**
  * Vision's internal representation of the image. This is for use with only a
  * single quadrant. To get the data for the whole field you need to aggregate
@@ -29,40 +32,8 @@ public class ObjectPoints {
     private Point ball = null;
     private Point blue = null;
     private Point yellow = null;
-    private double blueOrientation = 0;
-    private double yellowOrientation = 0;
-	
-	public ObjectPoints(
-			ArrayList<Point> ballPoints,
-			ArrayList<Point> bluePoints,
-			ArrayList<Point> yellowPoints,
-			ArrayList<Point> greenPoints,
-			ArrayList<Point> greyPoints,
-			ArrayList<Point> blueGreenPlate,
-			ArrayList<Point> yellowGreenPlate,
-			ArrayList<Point> blueGreyPoints,
-			ArrayList<Point> yellowGreyPoints,
-			Point ball,
-			Point blue,
-			Point yellow,
-			double blueOrientation,
-			double yellowOrientation) {
-		
-		this.ballPoints = ballPoints;
-		this.setBluePoints(bluePoints);
-		this.yellowPoints = yellowPoints;
-		this.greenPoints = greenPoints;
-		this.greyPoints = greyPoints;
-		this.blueGreenPlate = blueGreenPlate;
-		this.yellowGreenPlate = yellowGreenPlate;
-		this.blueGreyPoints = blueGreyPoints;
-		this.yellowGreyPoints = yellowGreyPoints;
-		this.ball = ball;
-		this.blue = blue;
-		this.yellow = yellow;
-		this.blueOrientation = blueOrientation;
-		this.yellowOrientation = yellowOrientation;
-	}
+    private double blueOrientation;
+    private double yellowOrientation;
 	
 	public ObjectPoints() {
 		this.ballPoints = new ArrayList<Point>();

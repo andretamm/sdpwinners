@@ -2,13 +2,14 @@ package sdp.vision;
 
 import java.awt.Point;
 
+import constants.Quadrant;
+import constants.QuadrantX;
+import constants.RobotColour;
+import constants.RobotType;
+
 
 public interface VisionInterface {
-
-	//Constants
-	public static enum QuadrantX {LOW, HIGH};
-	
-	
+		
 	//Method signatures
 	public int getDirection();
 	public int getPitch();

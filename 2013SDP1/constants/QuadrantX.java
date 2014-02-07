@@ -1,4 +1,4 @@
-package sdp.vision;
+package constants;
 
 public enum QuadrantX {
 	LOW, HIGH

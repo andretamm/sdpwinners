@@ -18,8 +18,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import constants.RobotColour;
 import sdp.vision.PitchConstants;
-import sdp.vision.RobotColour;
 import sdp.vision.ThresholdsState;
 import sdp.vision.Vision;
 import sdp.vision.WorldState;

@@ -4,6 +4,10 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.util.ArrayList;
 
+import constants.Quadrant;
+import constants.RobotColour;
+import constants.RobotType;
+
 /**
  * Contains the image info for the whole pitch.
  * 
@@ -17,47 +21,6 @@ public class PitchPoints extends ObjectPoints {
 	private ObjectPoints q2;
 	private ObjectPoints q3;
 	private ObjectPoints q4;
-	
-	public PitchPoints(
-			ArrayList<Point> ballPoints,
-			ArrayList<Point> bluePoints,
-			ArrayList<Point> yellowPoints,
-			ArrayList<Point> greenPoints,
-			ArrayList<Point> greyPoints,
-			ArrayList<Point> blueGreenPlate,
-			ArrayList<Point> yellowGreenPlate,
-			ArrayList<Point> blueGreyPoints,
-			ArrayList<Point> yellowGreyPoints,
-			Point ball,
-			Point blue,
-			Point yellow,
-			double blueOrientation,
-			double yellowOrientation, 
-			ObjectPoints q1,
-			ObjectPoints q2,
-			ObjectPoints q3,
-			ObjectPoints q4) {
-		
-		super(
-				ballPoints,
-				bluePoints,
-				yellowPoints,
-				greenPoints,
-				greyPoints,
-				blueGreenPlate,
-				yellowGreenPlate,
-				blueGreyPoints,
-				yellowGreyPoints,
-				ball,
-				blue,
-				yellow,
-				blueOrientation,
-				yellowOrientation);
-		this.q1 = q1;
-		this.q2 = q2;
-		this.q3 = q3;
-		this.q4 = q4;
-	}
 	
 	public PitchPoints(WorldState worldstate) {
 		super();
