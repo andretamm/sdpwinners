@@ -2,7 +2,9 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import constants.Colours;
 import constants.RobotColour;
 import constants.RobotType;
 
@@ -17,153 +19,47 @@ public class ObjectPoints {
 	
 	private RobotColour rColour;
 	private RobotType rType;
-
-	private ArrayList<Point> ballPoints = null;
-	private ArrayList<Point> bluePoints = null;
-	private ArrayList<Point> yellowPoints = null;
-	private ArrayList<Point> greenPoints = null;
-	private ArrayList<Point> greyPoints = null;
-
-	private ArrayList<Point> blueGreenPlate = new ArrayList<Point>();
-	private ArrayList<Point> yellowGreenPlate = new ArrayList<Point>();
-	private ArrayList<Point> blueGreyPoints = new ArrayList<Point>();
-	private ArrayList<Point> yellowGreyPoints = new ArrayList<Point>();
 	
-    private Point ball = null;
-    private Point blue = null;
-    private Point yellow = null;
-    private double blueOrientation;
-    private double yellowOrientation;
+	// List of points for all the colours that interest us
+	private HashMap<Colours, ArrayList<Point>> points = null;
+	
+	// Info about the robot in this quadrant
+	private Point robotPosition;
+	private double robotOrientation;
 	
 	public ObjectPoints() {
-		this.ballPoints = new ArrayList<Point>();
-		this.bluePoints = new ArrayList<Point>();
-		this.yellowPoints = new ArrayList<Point>();
-		this.greenPoints = new ArrayList<Point>();
-		this.greyPoints = new ArrayList<Point>();
-		this.blueGreenPlate = new ArrayList<Point>();
-		this.yellowGreenPlate = new ArrayList<Point>();
-		this.blueGreyPoints = new ArrayList<Point>();
-		this.yellowGreyPoints = new ArrayList<Point>();
-		this.ball = new Point();
-		this.blue = new Point();
-		this.yellow = new Point();
-		this.blueOrientation = 0;
-		this.yellowOrientation = 0;
+		// Initialise list of points of each colour
+		for (Colours colour: Colours.values()) {
+			points.put(colour, new ArrayList<Point>());
+		}
+		
+		robotOrientation = 0;
+		robotPosition = new Point();
 	}
 	
-	public void setBallPoints(ArrayList<Point> ballPoints) {
-		this.ballPoints = ballPoints;
-	}
-
-	public ArrayList<Point> getBallPoints() {
-		return ballPoints;
-	}
-
-	public void setBluePoints(ArrayList<Point> bluePoints) {
-		this.bluePoints = bluePoints;
-	}
-
-	public ArrayList<Point> getBluePoints() {
-		return bluePoints;
+	/* -------------------------------------------------- */
+	/* Methods for the robot's position and orientation
+	/* -------------------------------------------------- */
+	
+	public Point getRobotPosition() {
+		return robotPosition;
 	}
 	
-	public void setYellowPoints(ArrayList<Point> yellowPoints) {
-		this.yellowPoints = yellowPoints;
-	}
-
-	public ArrayList<Point> getYellowPoints() {
-		return yellowPoints;
+	public double getRobotOrientation() {
+		return robotOrientation;
 	}
 	
-	public ArrayList<Point> getGreenPoints() {
-		return greenPoints;
+	public void setRobotPosition(Point robotPosition) {
+		this.robotPosition = robotPosition;
+	}
+
+	public void setRobotOrientation(double robotOrientation) {
+		this.robotOrientation = robotOrientation;
 	}
 	
-	public void setGreenPoints(ArrayList<Point> greenPoints) {
-		this.greenPoints = greenPoints;
-	}
-	
-	public ArrayList<Point> getGreyPoints() {
-		return greyPoints;
-	}
-	
-	public void setGreyPoints(ArrayList<Point> greyPoints) {
-		this.greyPoints = greyPoints;
-	}
-
-	public ArrayList<Point> getBlueGreenPlate() {
-		return blueGreenPlate;
-	}
-
-	public void setBlueGreenPlate(ArrayList<Point> blueGreenPlate) {
-		this.blueGreenPlate = blueGreenPlate;
-	}
-
-	public ArrayList<Point> getYellowGreenPlate() {
-		return yellowGreenPlate;
-	}
-
-	public void setYellowGreenPlate(ArrayList<Point> yellowGreenPlate) {
-		this.yellowGreenPlate = yellowGreenPlate;
-	}
-
-	public ArrayList<Point> getBlueGreyPoints() {
-		return blueGreyPoints;
-	}
-
-	public void setBlueGreyPoints(ArrayList<Point> blueGreyPoints) {
-		this.blueGreyPoints = blueGreyPoints;
-	}
-
-	public ArrayList<Point> getYellowGreyPoints() {
-		return yellowGreyPoints;
-	}
-
-	public void setYellowGreyPoints(ArrayList<Point> yellowGreyPoints) {
-		this.yellowGreyPoints = yellowGreyPoints;
-	}
-
-	public Point getBall() {
-		return ball;
-	}
-
-	public void setBall(Point ball) {
-		this.ball = ball;
-	}
-
-	public Point getBlue() {
-		return blue;
-	}
-
-	public void setBlue(Point blue) {
-		this.blue = blue;
-	}
-
-	public Point getYellow() {
-		return yellow;
-	}
-
-	public void setYellow(Point yellow) {
-		this.yellow = yellow;
-	}
-	
-	public double getBlueOrientation() {
-		return blueOrientation;
-	}
-	
-	public void setBlueOrientation(double blueOrientation) {
-		this.blueOrientation = blueOrientation;
-	}
-	
-	public double getYellowOrientation() {
-		return yellowOrientation;
-	}
-	
-	public void setYellowOrientation(double yellowOrientation) {
-		this.yellowOrientation = yellowOrientation;
-	}
-
+	/* -------------------------------------------------- */
+	/* Methods for setting the robot type for this quadrant
+	/* -------------------------------------------------- */
 	public RobotColour getrColour() {
 		return rColour;
 	}
@@ -184,14 +80,15 @@ public class ObjectPoints {
 	 * @param colour
 	 * @return
 	 */
-	public ArrayList<Point> getPoints(RobotColour colour) {
-		if (colour == RobotColour.BLUE) {
-			return bluePoints;
-		} else {
-			return yellowPoints;
-		}
+	public ArrayList<Point> getPoints(Colours colour) {
+		return points.get(colour);
 	}
 	
-	// TODO Replace all getBLUE/YELLOWblabla with just getblabla(COLOUR)
-	// same thing for set, etc.
+	/** Set the points of the colour
+	 * @param colour Colour of the points
+	 * @param points List of points of that colours
+	 */
+	public void setPoints(Colours colour, ArrayList<Point> points) {
+		this.points.put(colour, points);
+	}
 }
