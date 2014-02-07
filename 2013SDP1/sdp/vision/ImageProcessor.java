@@ -102,7 +102,7 @@ public class ImageProcessor {
                     // Divide into 4 quadrants
                     
                 	findRobotsAndBall(pitch);
-                	
+                	                	
                     //threshold to find green plates and grey dots
                     Thresholder.secondaryThresholds(image, pitch, ts, worldState);
                     
@@ -371,14 +371,14 @@ public class ImageProcessor {
 						pitch.setRobotPosition(rc, rt, Position.findMean(pitch.getColouredPoints(rc, rt, c)));
 						
 						// Do K-Means magic
-						pitch.setRobotPosition(
-								RobotColour.YELLOW, 
-     			                RobotType.DEFENDER, 
+						/*pitch.setRobotPosition(
+								rc, 
+     			                rt, 
      			                KMeans.findOne(
      			                		pitch.getColouredPoints(rc, rt, c), 
      			                		new Point(worldState.getRobotX(rt, rc), worldState.getRobotY(rt, rc)), 
      			                		new Point((int) pitch.getRobotPosition(rc, rt).getX(), (int) pitch.getRobotPosition(rc, rt).getY()),
-     			                		2));
+     			                		2));*/
 						
 						// Remove points that are too far from where we currently think the robot centre is
 						Position.filterPoints(pitch.getColouredPoints(rc, rt, c),
