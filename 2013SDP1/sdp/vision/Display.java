@@ -8,51 +8,55 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import constants.Colours;
+import constants.RobotColour;
+import constants.RobotType;
+
 import sdp.gui.MainWindow;
 import sdp.strategy.Intercept;
 import sdp.strategy.KickFrom;
 
 public class Display {
 
-	public static void thresholds(BufferedImage img, ObjectPoints op, ThresholdsState ts) {
+	public static void thresholds(BufferedImage img, PitchPoints op, ThresholdsState ts) {
 		
 		//Debug graphics for the grey circles
 		if (ts.isGrey_debug()) {
-			for (int i=0; (i<op.getGreyPoints().size()); i++) {
-				img.setRGB((int) op.getGreyPoints().get(i).getX(), (int) op.getGreyPoints().get(i).getY(), 0xFF333333);	
+			for (int i=0; (i<op.getPoints(Colours.GRAY).size()); i++) {
+				img.setRGB((int) op.getPoints(Colours.GRAY).get(i).getX(), (int) op.getPoints(Colours.GRAY).get(i).getY(), 0xFF333333);	
 			}					
 		}
 		
 		//Debug graphics for the green plates
 		if (ts.isGreen_debug()) {
-			for (int i=0; (i<op.getGreenPoints().size()); i++) {
-				img.setRGB((int) op.getGreenPoints().get(i).getX(), (int) op.getGreenPoints().get(i).getY(), 0xFF00FF00);	
+			for (int i=0; (i<op.getPoints(Colours.GREEN).size()); i++) {
+				img.setRGB((int) op.getPoints(Colours.GREEN).get(i).getX(), (int) op.getPoints(Colours.GREEN).get(i).getY(), 0xFF00FF00);	
 			}					
 		}
 		
 		//Debug graphics for the ball
 		if (ts.isBall_debug()) {
-			for (int i=0; (i<op.getBallPoints().size()); i++) {
-				img.setRGB((int) op.getBallPoints().get(i).getX(), (int) op.getBallPoints().get(i).getY(), 0xFFFF0000);	
+			for (int i=0; (i<op.getPoints(Colours.RED).size()); i++) {
+				img.setRGB((int) op.getPoints(Colours.RED).get(i).getX(), (int) op.getPoints(Colours.RED).get(i).getY(), 0xFFFF0000);	
 			}					
 		}
 		
 		//Debug graphics for the blue plate
 		if (ts.isBlue_debug()) {
-			for (int i=0; (i<op.getBluePoints().size()); i++) {
-				img.setRGB((int) op.getBluePoints().get(i).getX(), (int) op.getBluePoints().get(i).getY(), 0xFF0000FF);	
+			for (int i=0; (i<op.getPoints(Colours.BLUE).size()); i++) {
+				img.setRGB((int) op.getPoints(Colours.BLUE).get(i).getX(), (int) op.getPoints(Colours.BLUE).get(i).getY(), 0xFF0000FF);	
 			}					
 		}
 		
 		//Debug graphics for the yellow plate
 		if (ts.isYellow_debug()) {
-			for (int i=0; (i<op.getYellowPoints().size()); i++) {
-				img.setRGB((int) op.getYellowPoints().get(i).getX(), (int) op.getYellowPoints().get(i).getY(), 0xFFFF7538);	
+			for (int i=0; (i<op.getPoints(Colours.YELLOW).size()); i++) {
+				img.setRGB((int) op.getPoints(Colours.YELLOW).get(i).getX(), (int) op.getPoints(Colours.YELLOW).get(i).getY(), 0xFFFF7538);	
 			}					
 		}
 	}
 	
-	public static void markers(ThresholdsState ts, BufferedImage img, ObjectPoints op, WorldState ws) {
+	public static void markers(ThresholdsState ts, BufferedImage img, PitchPoints op, WorldState ws) {
 
 		Graphics graphics = img.getGraphics();
 
@@ -81,6 +85,8 @@ public class Display {
                 //graphics.drawOval(ball.getX() - ballRadius, ball.getY() - ballRadius, 2*ballRadius, 2*ballRadius);
                 
                 graphics.setColor(Color.red);
+                
+                
                 
                 // TODO draw rectangles around each of the robot plates????
                 // TODO draw rectangles around each of the robot plates????
@@ -144,12 +150,20 @@ public class Display {
                 graphics.drawLine((int) (ws.getOurGoalTop().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalTop().getY()+ws.getPitchTopLeft().getY()), 
                 		(int) (ws.getOurGoalBottom().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalBottom().getY()+ws.getPitchTopLeft().getY()));
 
-                for (int i=0; i<op.getBlueGreyPoints().size(); i++) {
-                	img.setRGB((int)op.getBlueGreyPoints().get(i).getX(), (int)op.getBlueGreyPoints().get(i).getY(), 0xFF000000);
+                for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
+                	img.setRGB((int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getY(), 0xFF000000);
                 }
                 
-                for (int i=0; i<op.getYellowGreyPoints().size(); i++) {
-                	img.setRGB((int)op.getYellowGreyPoints().get(i).getX(), (int)op.getYellowGreyPoints().get(i).getY(), 0xFFFFFFFF);
+                for (int i=0; i<op.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
+                	img.setRGB((int)op.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.GRAY).get(i).getY(), 0xFFFFFFFF);
+                }
+                
+                for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.ATTACKER, Colours.GRAY).size(); i++) {
+                	img.setRGB((int)op.getColouredPoints(RobotColour.BLUE, RobotType.ATTACKER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.BLUE, RobotType.ATTACKER, Colours.GRAY).get(i).getY(), 0xFF000000);
+                }
+                
+                for (int i=0; i<op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).size(); i++) {
+                	img.setRGB((int)op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).get(i).getY(), 0xFFFFFFFF);
                 }
 
                 if ((Math.pow(ws.getBallVelocity().getX(),2)+Math.pow(ws.getBallVelocity().getY(),2))>0.01) {
