@@ -51,12 +51,12 @@ public class Orientation {
         
         //Quadrant 2 case:
         if ((greyCentreX >= x0) && (greyCentreY <= y0)) {
-        	return (Math.PI - Math.acos((greyCentreX-x0)/distance));
+        	return (2*Math.PI - Math.acos((greyCentreX-x0)/distance));
         }
         
         //Quadrant 3 case:
         if ((greyCentreX <= x0) && (greyCentreY <= y0)) {
-        	return Math.acos((x0-greyCentreX)/distance);
+        	return Math.PI + Math.acos((x0-greyCentreX)/distance);
         }
         
         //Quadrant 4 case:
