@@ -26,8 +26,6 @@ public class PitchPoints extends ObjectPoints {
 			ArrayList<Point> greyPoints,
 			ArrayList<Point> blueGreenPlate,
 			ArrayList<Point> yellowGreenPlate,
-			Point[] blueGreenPlate4Points,
-			Point[] yellowGreenPlate4Points,
 			ArrayList<Point> blueGreyPoints,
 			ArrayList<Point> yellowGreyPoints,
 			Point ball,
@@ -48,8 +46,6 @@ public class PitchPoints extends ObjectPoints {
 				greyPoints,
 				blueGreenPlate,
 				yellowGreenPlate,
-				blueGreenPlate4Points,
-				yellowGreenPlate4Points,
 				blueGreyPoints,
 				yellowGreyPoints,
 				ball,
@@ -88,8 +84,8 @@ public class PitchPoints extends ObjectPoints {
 	
 	/**
 	 * Initialises the four quarters by figuring out which robot each one
-	 * contains. Call this before you do anything else with the class or
-	 * suffer the consequences.
+	 * contains. Call this in the constructor before you do anything else 
+	 * with the class or suffer the consequences.
 	 */
 	private void initQuarters(WorldState worldstate) {
 		this.q1 = new ObjectPoints();
@@ -179,5 +175,8 @@ public class PitchPoints extends ObjectPoints {
 		// Didn't find matching quadrant, something is seriously wrong
 		System.err.println("Couldn't find quadrant for robot (" + colour + ", " + type + ")");
 		return null;
-	}
+	}	
+	
+	//TODO Methods for aggregating the values from the quadrants 
+	// 
 }

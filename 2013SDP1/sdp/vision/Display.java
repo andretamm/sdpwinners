@@ -81,17 +81,13 @@ public class Display {
                 //graphics.drawOval(ball.getX() - ballRadius, ball.getY() - ballRadius, 2*ballRadius, 2*ballRadius);
                 
                 graphics.setColor(Color.red);
-                graphics.drawLine(op.getBlueGreenPlate4Points()[0].x, op.getBlueGreenPlate4Points()[0].y, op.getBlueGreenPlate4Points()[3].x, op.getBlueGreenPlate4Points()[3].y);
-                graphics.drawLine(op.getBlueGreenPlate4Points()[0].x,op.getBlueGreenPlate4Points()[0].y, op.getBlueGreenPlate4Points()[2].x, op.getBlueGreenPlate4Points()[2].y);
-                graphics.drawLine(op.getBlueGreenPlate4Points()[1].x,op.getBlueGreenPlate4Points()[1].y, op.getBlueGreenPlate4Points()[3].x, op.getBlueGreenPlate4Points()[3].y);
-                graphics.drawLine(op.getBlueGreenPlate4Points()[1].x,op.getBlueGreenPlate4Points()[1].y, op.getBlueGreenPlate4Points()[2].x, op.getBlueGreenPlate4Points()[2].y);
-                //graphics.drawOval(op.getBlueGreenPlate4Points[3].y, op.getBlueGreenPlate4Points[3].x, 4, 4);
-    
-                graphics.drawLine(op.getYellowGreenPlate4Points()[0].x,op.getYellowGreenPlate4Points()[0].y, op.getYellowGreenPlate4Points()[3].x, op.getYellowGreenPlate4Points()[3].y);
-                graphics.drawLine(op.getYellowGreenPlate4Points()[0].x,op.getYellowGreenPlate4Points()[0].y, op.getYellowGreenPlate4Points()[2].x, op.getYellowGreenPlate4Points()[2].y);
-                graphics.drawLine(op.getYellowGreenPlate4Points()[1].x,op.getYellowGreenPlate4Points()[1].y, op.getYellowGreenPlate4Points()[3].x, op.getYellowGreenPlate4Points()[3].y);
-                graphics.drawLine(op.getYellowGreenPlate4Points()[1].x,op.getYellowGreenPlate4Points()[1].y, op.getYellowGreenPlate4Points()[2].x, op.getYellowGreenPlate4Points()[2].y);
                 
+                // TODO draw rectangles around each of the robot plates????
+                // TODO draw rectangles around each of the robot plates????
+                // TODO draw rectangles around each of the robot plates????
+                // TODO draw rectangles around each of the robot plates????
+                // TODO draw rectangles around each of the robot plates????
+                // TODO remove this TODO spam
 
                 graphics.setColor(new Color(0xFF00FF00));
                 int x2=(int) (ws.getBlueDefenderXVision()+150*Math.cos(ws.getBlueDefenderOrientation()));

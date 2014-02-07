@@ -88,6 +88,8 @@ public class ImageProcessor {
 				/* THIS NEEDS TO BE PARALLELISED */
 				/* ----------------------------- */
 				//TODO MAKE PARALLEL
+				// Everything is accessed through pitch
+				PitchPoints pitch = new PitchPoints(worldState);
 				
                 if (worldState.isFindRobotsAndBall()) {
                     //threshold to find ball and robot Ts
@@ -191,7 +193,11 @@ public class ImageProcessor {
          * @param op Relevant lists of points, which will be updated
          */
         public void allOrientation(ObjectPoints op) {        
-            
+            /*
+                Mila, WORK YOUR MAGIC
+                
+                
+             
             //Create a list of all points that could be in the blue robot plate. Likewise for yellow.
             allocatePlatePoints(op.getGreenPoints(), op.getBlueGreenPlate(), op.getYellowGreenPlate(), op.getBlue(), op.getYellow());
             
@@ -213,7 +219,7 @@ public class ImageProcessor {
 				//e1.printStackTrace();
 			}
             
-            /* Attempt to find the blue robot's orientation. */
+            // Attempt to find the blue robot's orientation. 
             try {
                     op.setBlueOrientation((float) Orientation.findOrient(op.getBlueGreyPoints(), op.getBlueGreenPlate()));
             } catch (NoAngleException e) {
@@ -225,7 +231,7 @@ public class ImageProcessor {
             	//e.printStackTrace();
             }
 
-            /* Attempt to find the yellow robot's orientation. */
+            // Attempt to find the yellow robot's orientation.
             try {
                     op.setYellowOrientation((float) Orientation.findOrient(op.getYellowGreyPoints(), op.getYellowGreenPlate()));
             } catch (NoAngleException e) {
@@ -236,6 +242,8 @@ public class ImageProcessor {
             	//System.out.print("Yellow robot Exception: " + e.getMessage());
             	//e.printStackTrace();
             }
+            
+            */
         }
         
         /**

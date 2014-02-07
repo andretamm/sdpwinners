@@ -23,8 +23,6 @@ public class ObjectPoints {
 
 	private ArrayList<Point> blueGreenPlate = new ArrayList<Point>();
 	private ArrayList<Point> yellowGreenPlate = new ArrayList<Point>();
-	private Point[] blueGreenPlate4Points = new Point[]{new Point(0,0),new Point(0,0),new Point(0,0),new Point(0,0)};
-	private Point[] yellowGreenPlate4Points = new Point[]{new Point(0,0),new Point(0,0),new Point(0,0),new Point(0,0)};
 	private ArrayList<Point> blueGreyPoints = new ArrayList<Point>();
 	private ArrayList<Point> yellowGreyPoints = new ArrayList<Point>();
 	
@@ -42,8 +40,6 @@ public class ObjectPoints {
 			ArrayList<Point> greyPoints,
 			ArrayList<Point> blueGreenPlate,
 			ArrayList<Point> yellowGreenPlate,
-			Point[] blueGreenPlate4Points,
-			Point[] yellowGreenPlate4Points,
 			ArrayList<Point> blueGreyPoints,
 			ArrayList<Point> yellowGreyPoints,
 			Point ball,
@@ -59,8 +55,6 @@ public class ObjectPoints {
 		this.greyPoints = greyPoints;
 		this.blueGreenPlate = blueGreenPlate;
 		this.yellowGreenPlate = yellowGreenPlate;
-		this.blueGreenPlate4Points = blueGreenPlate4Points;
-		this.yellowGreenPlate4Points = yellowGreenPlate4Points;
 		this.blueGreyPoints = blueGreyPoints;
 		this.yellowGreyPoints = yellowGreyPoints;
 		this.ball = ball;
@@ -78,8 +72,6 @@ public class ObjectPoints {
 		this.greyPoints = new ArrayList<Point>();
 		this.blueGreenPlate = new ArrayList<Point>();
 		this.yellowGreenPlate = new ArrayList<Point>();
-		this.blueGreenPlate4Points = new Point[]{new Point(0,0),new Point(0,0),new Point(0,0),new Point(0,0)};
-		this.yellowGreenPlate4Points = new Point[]{new Point(0,0),new Point(0,0),new Point(0,0),new Point(0,0)};
 		this.blueGreyPoints = new ArrayList<Point>();
 		this.yellowGreyPoints = new ArrayList<Point>();
 		this.ball = new Point();
@@ -143,22 +135,6 @@ public class ObjectPoints {
 
 	public void setYellowGreenPlate(ArrayList<Point> yellowGreenPlate) {
 		this.yellowGreenPlate = yellowGreenPlate;
-	}
-
-	public Point[] getBlueGreenPlate4Points() {
-		return blueGreenPlate4Points;
-	}
-
-	public void setBlueGreenPlate4Points(Point[] blueGreenPlate4Points) {
-		this.blueGreenPlate4Points = blueGreenPlate4Points;
-	}
-
-	public Point[] getYellowGreenPlate4Points() {
-		return yellowGreenPlate4Points;
-	}
-
-	public void setYellowGreenPlate4Points(Point[] yellowGreenPlate4Points) {
-		this.yellowGreenPlate4Points = yellowGreenPlate4Points;
 	}
 
 	public ArrayList<Point> getBlueGreyPoints() {
@@ -233,6 +209,10 @@ public class ObjectPoints {
 		this.rType = rType;
 	}
 	
+	/** Returns all points of that colour
+	 * @param colour
+	 * @return
+	 */
 	public ArrayList<Point> getPoints(RobotColour colour) {
 		if (colour == RobotColour.BLUE) {
 			return bluePoints;
@@ -240,4 +220,7 @@ public class ObjectPoints {
 			return yellowPoints;
 		}
 	}
+	
+	// TODO Replace all getBLUE/YELLOWblabla with just getblabla(COLOUR)
+	// same thing for set, etc.
 }
