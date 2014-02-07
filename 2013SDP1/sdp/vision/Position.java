@@ -94,7 +94,7 @@ public class Position {
     }
 	
 	/**
-	 * Eliminates points from the list that are in the ball
+	 * Eliminates points from the list that are NOT in the ball
 	 * 
 	 * @param xs		The new set of x points.
 	 * @param ys		The new set of y points.

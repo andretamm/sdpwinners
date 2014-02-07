@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import constants.Colours;
+import constants.Quadrant;
 import constants.RobotColour;
+import constants.RobotType;
 import sdp.strategy.KickFrom;
 
 /**
@@ -78,9 +81,7 @@ public class ImageProcessor {
                         }
                 }
                 
-                ObjectPoints op = new ObjectPoints();
-                
-				if (worldState.getRemoveShadows()) {
+                if (worldState.getRemoveShadows()) {
 					Deshadow.deshadowImage(worldState, image, top, bottom, left, right);
 				}
 				System.out.println(worldState.getQ1LowX() + " " + worldState.getQ1HighX());
@@ -88,29 +89,41 @@ public class ImageProcessor {
 				/* ----------------------------- */
 				/* THIS NEEDS TO BE PARALLELISED */
 				/* ----------------------------- */
-				//TODO MAKE PARALLEL
+				// TODO MAKE PARALLEL
 				// Everything is accessed through pitch
 				PitchPoints pitch = new PitchPoints(worldState);
 				
                 if (worldState.isFindRobotsAndBall()) {
                     //threshold to find ball and robot Ts
-                    Thresholder.initialThresholds(image, op, ts, top, bottom, left, right);
+                    Thresholder.initialThresholds(image, pitch, ts, worldState);
                     
                 	//locate the robot Ts and the ball
                     // TODO
                     // Divide into 4 quadrants
-                    int quadrant = 0;
-                	findRobotsAndBall(quadrant, op);
+                    
+                	findRobotsAndBall(pitch);
+                	
+//                	for ( Point p: pitch.getPoints(Colours.BLUE) ){
+//                		System.out.println(p.x + " " + p.y);
+//                	}
+//                	
+                	for ( Quadrant q : Quadrant.values()) {
+                		for ( Point p: pitch.getQuadrant(q).getPoints(Colours.YELLOW)) {
+                			System.out.println(p.x + " " + p.y);
+                		}
+                		System.out.println("\n\n\n\n");
+                	}
+                	System.out.println(pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
                 	
                     //threshold to find green plates and grey dots
-                    Thresholder.secondaryThresholds(image, op, ts, worldState, top, bottom, left, right);
+                    Thresholder.secondaryThresholds(image, pitch, ts, worldState, top, bottom, left, right);
                     
                     //get orientation of the two robots
-                	allOrientation(op);
+                	allOrientation(pitch);
                 }
                 else {
                     //threshold all points in image, and collect matches in ObjectPoints op
-                    Thresholder.simpleThresholds(image, op, ts, worldState, top, bottom, left, right);
+                    Thresholder.simpleThresholds(image, pitch, ts, worldState, top, bottom, left, right);
                 }
                 
                 /* ----------------------------- */
@@ -118,43 +131,43 @@ public class ImageProcessor {
                 /* ----------------------------- */
                 
                 //transfer the readied data in objectpoints op to the worldstate
-                updateWorldState(op, worldState);
+                updateWorldState(pitch, worldState);
                 //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
                 updateWorldStateVelocities(worldState);
                 
                 //Print the debug threshold graphics to screen
-                Display.thresholds(image, op, ts);
+                Display.thresholds(image, pitch, ts);
 
             	//Display the custom drawables as stored in worldstate
                 Display.renderDrawables(worldState, image);
                 
                 //Print the plate edges and other markers to the screen
-                Display.markers(ts, image, op, worldState);
+                Display.markers(ts, image, pitch, worldState);
                 //transfer the readied data in objectpoints op to the worldstate
-                updateWorldState(op, worldState);
+                updateWorldState(pitch, worldState);
                 //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
                 updateWorldStateVelocities(worldState);
         }
         
         /**
          * Stores the coords in ObjectPoints into the Worldstate, first applying barrel distortion correction
-         * @param op The results of the vision methods. Not yet barrel corrected.
+         * @param pp The results of the vision methods. Not yet barrel corrected.
          * @param ws The worldstate into which this data should be stored. This will be barrelcorrected.
          */
-        public void updateWorldState(ObjectPoints op, WorldState ws) {
-            Point ballP = DistortionFix.barrelCorrected(op.getBall());
+        public void updateWorldState(PitchPoints pp, WorldState ws) {
+            Point ballP = DistortionFix.barrelCorrected(pp.getBallPosition());
             ws.setBallX((int) ballP.getX());
             ws.setBallY((int) ballP.getY());
 
-            Point blueP = DistortionFix.barrelCorrected(op.getBlue());
+            Point blueP = DistortionFix.barrelCorrected(pp.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER));
             ws.setBlueDefenderX((int) blueP.getX());
             ws.setBlueDefenderY((int) blueP.getY());
-            ws.setBlueDefenderOrientation(op.getBlueOrientation());
+            ws.setBlueDefenderOrientation(pp.getRobotOrientation(RobotColour.BLUE, RobotType.DEFENDER));
             
-            Point yellowP = DistortionFix.barrelCorrected(op.getYellow());
+            Point yellowP = DistortionFix.barrelCorrected(pp.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
             ws.setYellowDefenderX((int) yellowP.getX());
             ws.setYellowDefenderY((int) yellowP.getY());
-            ws.setYellowDefenderOrientation(op.getYellowOrientation());
+            ws.setYellowDefenderOrientation(pp.getRobotOrientation(RobotColour.YELLOW, RobotType.DEFENDER));
         }
         
         /**
@@ -193,58 +206,36 @@ public class ImageProcessor {
          * @param image Use the robots in this image
          * @param op Relevant lists of points, which will be updated
          */
-        public void allOrientation(ObjectPoints op) {        
+        public void allOrientation(PitchPoints pitchPoints) {        
             /*
-                Mila, WORK YOUR MAGIC
-                
-                
-             
+            //For later
             //Create a list of all points that could be in the blue robot plate. Likewise for yellow.
             allocatePlatePoints(op.getGreenPoints(), op.getBlueGreenPlate(), op.getYellowGreenPlate(), op.getBlue(), op.getYellow());
-            
-            //find blue robot plate corners
-            try {
-				op.setBlueGreenPlate4Points(getSmallCorners(op.getBlueGreenPlate(), op.getBlue(), op.getYellow()));
-				greyPointsWithinPlate(op.getBlueGreenPlate4Points(), op.getGreyPoints(), op.getBlueGreyPoints());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				//e1.printStackTrace();
-			}
-
-            //find yellow robot plate corners
-			try {
-				op.setYellowGreenPlate4Points(getSmallCorners(op.getYellowGreenPlate(), op.getYellow(), op.getBlue()));
-				greyPointsWithinPlate(op.getYellowGreenPlate4Points(), op.getGreyPoints(), op.getYellowGreyPoints());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				//e1.printStackTrace();
-			}
-            
-            // Attempt to find the blue robot's orientation. 
-            try {
-                    op.setBlueOrientation((float) Orientation.findOrient(op.getBlueGreyPoints(), op.getBlueGreenPlate()));
-            } catch (NoAngleException e) {
-//            	System.out.print("Blue robot NoAngleException: " + e.getMessage());
-//            	System.out.println("op.getBlueOrientation():" + op.getBlueOrientation());
-//            	System.out.println("blue position:(" + op.getBlue().getX() +", "+ op.getBlue().getY()+")");
-            } catch (Exception e) {
-            	//System.out.print("Blue robot Exception: " + e.getMessage());
-            	//e.printStackTrace();
-            }
-
-            // Attempt to find the yellow robot's orientation.
-            try {
-                    op.setYellowOrientation((float) Orientation.findOrient(op.getYellowGreyPoints(), op.getYellowGreenPlate()));
-            } catch (NoAngleException e) {
-//            	System.out.print("Yellow robot NoAngleException: " + e.getMessage());
-//            	System.out.println("op.getYellowOrientation():" + op.getYellowOrientation());
-//           	System.out.println("yellow position:(" + op.getYellow().getX() +", "+ op.getYellow().getY()+")");
-            } catch (Exception e) {
-            	//System.out.print("Yellow robot Exception: " + e.getMessage());
-            	//e.printStackTrace();
-            }
-            
             */
+        	
+        	for (RobotType rType : constants.RobotType.values()) {
+        		for (RobotColour rColour : constants.RobotColour.values()) {
+        			
+                    try {
+                    	ArrayList<Point> greyPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GRAY);
+                    	ArrayList<Point> greenPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GREEN);
+                    	
+                    	double orientation = Orientation.findOrient(greyPoints, greenPoints);
+                    	pitchPoints.setRobotOrientation(rColour, rType, orientation);
+                           
+                    } catch (NoAngleException e) {
+                    	//System.out.print("Blue robot NoAngleException: " + e.getMessage());
+                    	//System.out.println("op.getBlueOrientation():" + op.getBlueOrientation());
+                    	//System.out.println("blue position:(" + op.getBlue().getX() +", "+ op.getBlue().getY()+")");
+                    } catch (Exception e) {
+                    	//System.out.print("Blue robot Exception: " + e.getMessage());
+                    	//e.printStackTrace();
+                    }
+                    
+        		}
+        		
+        	}
+            
         }
         
         /**
@@ -310,86 +301,98 @@ public class ImageProcessor {
          * Sets the position of the centroid of the blue T, the yellow T, and the ball
          * @param op
          */
-        public void findRobotsAndBall(int quadrant, ObjectPoints op) {
+        public void findRobotsAndBall(PitchPoints pitch) {
         	int LINE = 50;
         	try {
-				op.setBall(Position.findMean(op.getBallPoints()));
-                Position.ballFilterPoints(op.getBallPoints(), op.getBall());
+        		// Get the position of the ball
+				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
+                Position.ballFilterPoints(pitch.getPoints(Colours.RED), pitch.getBallPosition());
                 
                 try {
                 	//TODO Alter for Attacker Robot
                 	worldState.setBallVisible(true);
-    				op.setBall(Position.findMean(op.getBallPoints()));
+    				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
                     lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurDefenderPosition());
                     lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionDefenderPosition());
                 } catch (Exception e2) {
                 	//No points left after filtering
                 	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
                 		//System.out.println("Assumming ball is where it was 1");
-                		op.setBall(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
+                		pitch.setBallPosition(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
                 	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
                 		//System.out.println("Assumming ball is moving with us 1");
                 		//TODO Alter for Attacker Robot
-                		op.setBall(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
+                		pitch.setBallPosition(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
                 	} else if (KickFrom.distanceFromOrigin(lineFromOpponent) <= LINE) {
                 		//System.out.println("Assumming ball is moving with them 1");
                 		//TODO Alter for Attacker Robot
-                		op.setBall(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
+                		pitch.setBallPosition(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
                 	}
                 	worldState.setBallVisible(false);
                 }
 			} catch (Exception e2) {
             	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
             		//System.out.println("Assumming ball is where it was 2");
-            		op.setBall(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
+            		pitch.setBallPosition(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
             	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
             		//System.out.println("Assumming ball is moving with us 2: " + (int) (worldState.getOurXVision() + lineFromUs.getX()) + " " + (int) (worldState.getOurYVision() + lineFromUs.getY()));
-            		op.setBall(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
+            		pitch.setBallPosition(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
             		//TODO Alter for Attacker Robot
             	} else if (KickFrom.distanceFromOrigin(lineFromOpponent) <= LINE) {
             		//System.out.println("Assumming ball is moving with them 2");
             		//TODO Alter for Attacker Robot
-            		op.setBall(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
+            		pitch.setBallPosition(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
             	}
             	worldState.setBallVisible(false);
 			}
 			//this probably isn't a ball identification
 			//if (op.getBallPoints().size()<2) {worldState.setBallVisible(false);}
 
-			try {
-				op.setBlue(Position.findMean(op.getBluePoints()));
-                Position.filterPoints(op.getBluePoints(), op.getBlue());
+        	try {
+				pitch.setRobotPosition(RobotColour.BLUE, 
+									   RobotType.DEFENDER, 
+									   Position.findMean(pitch.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.BLUE)));
+                Position.filterPoints(pitch.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.BLUE), 
+                					  pitch.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER));
                 try {
-    				op.setBlue(Position.findMean(op.getBluePoints()));
+    				pitch.setRobotPosition(RobotColour.BLUE, 
+    									   RobotType.DEFENDER, 
+    									   Position.findMean(pitch.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.BLUE)));
     			} catch (Exception e2) {
     				//System.out.println("Exception: Error finding mean of blue robot points");
     			}
 			} catch (Exception e2) {
 				//No points left after filtering
-            	op.setBlue(worldState.getDefaultPoint(RobotColour.BLUE));
+            	pitch.setRobotPosition(RobotColour.BLUE, RobotType.DEFENDER, worldState.getDefaultPoint(RobotColour.BLUE));
 				//System.out.println("Exception: No points left in blue robot after filtering");
 			}      
 			
             //Filter out any yellow points too close to the ball
-			if (worldState.getBallVisible()) {
-	            Position.filterOutCircle(op.getYellowPoints(), op.getBall(), WorldState.ballRadius);  
+        	if (worldState.getBallVisible()) {
+	            Position.filterOutCircle(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW), 
+	            					     pitch.getBallPosition(), 
+	            					     WorldState.ballRadius);  
 			}          
 			
             try {
-				op.setYellow(Position.findMean(op.getYellowPoints()));
+				pitch.setRobotPosition(RobotColour.YELLOW, 
+									   RobotType.DEFENDER, 
+									   Position.findMean(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW)));
 				
                 //Filter out any yellow points that make up the blue robot
                 try {
-                	op.setYellow(KMeans.findOne(op.getYellowPoints(), new Point(worldState.getBlueDefenderXVision(), worldState.getBlueDefenderYVision()), 
-                                        new Point((int) op.getYellow().getX(), (int) op.getYellow().getY()), 2));
+                	pitch.setRobotPosition(RobotColour.YELLOW, 
+                			               RobotType.DEFENDER, 
+                			               KMeans.findOne(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW), new Point(worldState.getBlueDefenderXVision(), worldState.getBlueDefenderYVision()), 
+                			            		   new Point((int) pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER).getX(), (int) pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER).getY()), 2));
                 } catch (Exception e) {
                         //System.out.println("Kmeans to find yellow centre failed: "+e.getMessage());
                         e.printStackTrace();
                 }
                 
-                Position.filterPoints(op.getYellowPoints(), op.getYellow());
+                Position.filterPoints(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW), pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
                 try {
-					op.setYellow(Position.findMean(op.getYellowPoints()));
+					pitch.setRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER, Position.findMean(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW)));
 				} catch (Exception e2) {
 					//No points left after filtering
     				//System.out.println("Exception: Error finding mean of yellow robot points");
@@ -397,7 +400,7 @@ public class ImageProcessor {
 			} catch (Exception e2) {
 				//No points left after filtering
 				//System.out.println("Exception: No points left in yellow robot after filtering");
-            	op.setYellow(worldState.getDefaultPoint(RobotColour.YELLOW));
+            	pitch.setRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER, worldState.getDefaultPoint(RobotColour.YELLOW));
 			}
         }
         

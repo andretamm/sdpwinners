@@ -3,6 +3,7 @@ package sdp.vision;
 import java.awt.Point;
 import java.awt.Robot;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import constants.Colours;
 import constants.Quadrant;
@@ -17,34 +18,19 @@ import constants.RobotType;
  */
 public class PitchPoints extends ObjectPoints {
 	
-	
-	// The four quadrants
-	private ObjectPoints q1;
-	private ObjectPoints q2;
-	private ObjectPoints q3;
-	private ObjectPoints q4;
+	// The four quadrants	
+	private HashMap<Quadrant, ObjectPoints> quadrants;
 	
 	private Point ballPosition;
 	
 	public PitchPoints(WorldState worldstate) {
 		super();
-		initQuarters(worldstate);
+		this.ballPosition = new Point(0,0);
+		initQuadrants(worldstate);
 	}
 	
 	public ObjectPoints getQuadrant(Quadrant q) {
-		switch (q) {
-			case Q1:
-				return q1;
-			case Q2:
-				return q2;
-			case Q3:
-				return q3;
-			case Q4:
-				return q4;
-			default:
-				System.err.println("Unknown quadrant " + q + " specified for getQuadrant");
-				return null;
-		}
+		return quadrants.get(q);
 	}
 	
 	/**
@@ -52,11 +38,12 @@ public class PitchPoints extends ObjectPoints {
 	 * contains. Call this in the constructor before you do anything else 
 	 * with the class or suffer the consequences.
 	 */
-	private void initQuarters(WorldState worldstate) {
-		this.q1 = new ObjectPoints();
-		this.q2 = new ObjectPoints();
-		this.q3 = new ObjectPoints();
-		this.q4 = new ObjectPoints();
+	private void initQuadrants(WorldState worldstate) {
+		quadrants = new HashMap<Quadrant, ObjectPoints>();
+		
+		for (Quadrant q: Quadrant.values()) {
+			quadrants.put(q, new ObjectPoints());
+		}
 		
 		RobotColour ourColour = worldstate.getColour();
 		RobotColour oppositionColour = ourColour == RobotColour.BLUE ? RobotColour.YELLOW : RobotColour.BLUE;
@@ -65,22 +52,22 @@ public class PitchPoints extends ObjectPoints {
 		if (worldstate.getDirection() == 1) {
 			// Left goal is ours...
 			// TODO omg just use a constant instead of 0/1
-			q1.setrColour(ourColour);
-			q2.setrColour(oppositionColour);
-			q3.setrColour(ourColour);
-			q4.setrColour(oppositionColour);
+			quadrants.get(Quadrant.Q1).setrColour(ourColour);
+			quadrants.get(Quadrant.Q2).setrColour(oppositionColour);
+			quadrants.get(Quadrant.Q3).setrColour(ourColour);
+			quadrants.get(Quadrant.Q4).setrColour(oppositionColour);
 		} else {
 			// Right goal is ours
-			q1.setrColour(oppositionColour);
-			q2.setrColour(ourColour);
-			q3.setrColour(oppositionColour);
-			q4.setrColour(ourColour);			
+			quadrants.get(Quadrant.Q1).setrColour(oppositionColour);
+			quadrants.get(Quadrant.Q2).setrColour(ourColour);
+			quadrants.get(Quadrant.Q3).setrColour(oppositionColour);
+			quadrants.get(Quadrant.Q4).setrColour(ourColour);			
 		}
 		
-		q1.setrType(RobotType.DEFENDER);
-		q2.setrType(RobotType.ATTACKER);
-		q3.setrType(RobotType.ATTACKER);
-		q4.setrType(RobotType.DEFENDER);
+		quadrants.get(Quadrant.Q1).setrType(RobotType.DEFENDER);
+		quadrants.get(Quadrant.Q2).setrType(RobotType.ATTACKER);
+		quadrants.get(Quadrant.Q3).setrType(RobotType.ATTACKER);
+		quadrants.get(Quadrant.Q4).setrType(RobotType.DEFENDER);
 	}
 	
 	/**
@@ -108,17 +95,6 @@ public class PitchPoints extends ObjectPoints {
 		return quadrant.getGreenPoints();
 	}
 	*/
-	
-	/** Returns all the points of the given colour in the robot's quadrant 
-	 * @param rColour Colour of the robot
-	 * @param rType Type of the robot
-	 * @param colour Which colour points to return
-	 * @return
-	 */
-	public ArrayList<Point> getColouredPoints(RobotColour rColour, RobotType rType, Colours colour) {
-		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
-		return quadrant.getPoints(colour);
-	}
 
 	/* -------------------------------------------------- */
 	/* Methods for each robot's position and orientation
@@ -178,6 +154,30 @@ public class PitchPoints extends ObjectPoints {
 		return null;
 	}	
 	
-	//TODO Methods for aggregating the values from the quadrants 
-	// 
+	/** Returns all the points of the given colour in the robot's quadrant 
+	 * @param rColour Colour of the robot
+	 * @param rType Type of the robot
+	 * @param colour Which colour points to return
+	 * @return
+	 */
+	public ArrayList<Point> getColouredPoints(RobotColour rColour, RobotType rType, Colours colour) {
+		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
+		return quadrant.getPoints(colour);
+	}
+	
+	@Override
+	public ArrayList<Point> getPoints(Colours colour) {
+		if (super.getPoints(colour).isEmpty()) {
+			// Need to compile the list of colours
+			ArrayList<Point> result = new ArrayList<Point>();
+			
+			for (Quadrant q: Quadrant.values()) {
+				result.addAll(getQuadrant(q).getPoints(colour));
+			}
+			
+			setPoints(colour, result);
+		}
+		
+		return super.getPoints(colour);
+	}
 }

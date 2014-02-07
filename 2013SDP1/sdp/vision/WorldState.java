@@ -59,6 +59,7 @@ public class WorldState {
 	
 
 	public static final int ballRadius = 12;
+	public static final int plateRadius = 15;
 	public static double cmToPixels = 0.38;
 
 	//TODO Alter history and velocity for two robots

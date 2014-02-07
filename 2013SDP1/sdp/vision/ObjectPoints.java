@@ -29,6 +29,7 @@ public class ObjectPoints {
 	
 	public ObjectPoints() {
 		// Initialise list of points of each colour
+		points = new HashMap<Colours, ArrayList<Point>>();
 		for (Colours colour: Colours.values()) {
 			points.put(colour, new ArrayList<Point>());
 		}
@@ -38,7 +39,7 @@ public class ObjectPoints {
 	}
 	
 	/* -------------------------------------------------- */
-	/* Methods for the robot's position and orientation
+	/* Methods for the robot's position and orientation  
 	/* -------------------------------------------------- */
 	
 	public Point getRobotPosition() {
