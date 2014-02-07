@@ -80,9 +80,7 @@ public class ImageProcessor {
                         }
                 }
                 
-                ObjectPoints op = new ObjectPoints();
-                
-				if (worldState.getRemoveShadows()) {
+                if (worldState.getRemoveShadows()) {
 					Deshadow.deshadowImage(worldState, image, top, bottom, left, right);
 				}
 				System.out.println(worldState.getQ1LowX() + " " + worldState.getQ1HighX());
@@ -96,7 +94,7 @@ public class ImageProcessor {
 				
                 if (worldState.isFindRobotsAndBall()) {
                     //threshold to find ball and robot Ts
-                    Thresholder.initialThresholds(image, op, ts, top, bottom, left, right);
+                    Thresholder.initialThresholds(image, pitch, ts, top, bottom, left, right);
                     
                 	//locate the robot Ts and the ball
                     // TODO
@@ -105,14 +103,14 @@ public class ImageProcessor {
                 	findRobotsAndBall(pitch);
                 	
                     //threshold to find green plates and grey dots
-                    Thresholder.secondaryThresholds(image, op, ts, worldState, top, bottom, left, right);
+                    Thresholder.secondaryThresholds(image, pitch, ts, worldState, top, bottom, left, right);
                     
                     //get orientation of the two robots
-                	allOrientation(op);
+                	allOrientation(pitch);
                 }
                 else {
                     //threshold all points in image, and collect matches in ObjectPoints op
-                    Thresholder.simpleThresholds(image, op, ts, worldState, top, bottom, left, right);
+                    Thresholder.simpleThresholds(image, pitch, ts, worldState, top, bottom, left, right);
                 }
                 
                 /* ----------------------------- */
@@ -125,13 +123,13 @@ public class ImageProcessor {
                 updateWorldStateVelocities(worldState);
                 
                 //Print the debug threshold graphics to screen
-                Display.thresholds(image, op, ts);
+                Display.thresholds(image, pitch, ts);
 
             	//Display the custom drawables as stored in worldstate
                 Display.renderDrawables(worldState, image);
                 
                 //Print the plate edges and other markers to the screen
-                Display.markers(ts, image, op, worldState);
+                Display.markers(ts, image, pitch, worldState);
                 //transfer the readied data in objectpoints op to the worldstate
                 updateWorldState(pitch, worldState);
                 //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
