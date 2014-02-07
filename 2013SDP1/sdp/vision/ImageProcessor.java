@@ -2,6 +2,7 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Robot;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -285,11 +286,18 @@ public class ImageProcessor {
         }
         
         /**
-         * Sets the position of the centroid of the blue T, the yellow T, and the ball
-         * @param op
+         * Find the location of the ball and store it in PitchPoints.
+         * @param pitch
          */
-        public void findRobotsAndBall(PitchPoints pitch) {
+        public void findBall(PitchPoints pitch) {
         	int LINE = 50;
+        	
+        	/*
+        	 * NB!!
+        	 * All the Exception catch blocks are here to deal with the case if findMean gets an
+        	 * empty list as an input. In that case we try to guesstimate where the ball is.
+        	 */
+        	
         	try {
         		// Get the position of the ball
 				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
@@ -332,63 +340,60 @@ public class ImageProcessor {
             	}
             	worldState.setBallVisible(false);
 			}
-			//this probably isn't a ball identification
-			//if (op.getBallPoints().size()<2) {worldState.setBallVisible(false);}
-
-        	try {
-				pitch.setRobotPosition(RobotColour.BLUE, 
-									   RobotType.DEFENDER, 
-									   Position.findMean(pitch.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.BLUE)));
-                Position.filterPoints(pitch.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.BLUE), 
-                					  pitch.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER));
-                try {
-    				pitch.setRobotPosition(RobotColour.BLUE, 
-    									   RobotType.DEFENDER, 
-    									   Position.findMean(pitch.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.BLUE)));
-    			} catch (Exception e2) {
-    				//System.out.println("Exception: Error finding mean of blue robot points");
-    			}
-			} catch (Exception e2) {
-				//No points left after filtering
-            	pitch.setRobotPosition(RobotColour.BLUE, RobotType.DEFENDER, worldState.getDefaultPoint(RobotColour.BLUE));
-				//System.out.println("Exception: No points left in blue robot after filtering");
-			}      
-			
-            //Filter out any yellow points too close to the ball
-        	if (worldState.getBallVisible()) {
-	            Position.filterOutCircle(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW), 
-	            					     pitch.getBallPosition(), 
-	            					     WorldState.ballRadius);  
-			}          
-			
-            try {
-				pitch.setRobotPosition(RobotColour.YELLOW, 
-									   RobotType.DEFENDER, 
-									   Position.findMean(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW)));
-				
-                //Filter out any yellow points that make up the blue robot
-                try {
-                	pitch.setRobotPosition(RobotColour.YELLOW, 
-                			               RobotType.DEFENDER, 
-                			               KMeans.findOne(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW), new Point(worldState.getBlueDefenderXVision(), worldState.getBlueDefenderYVision()), 
-                			            		   new Point((int) pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER).getX(), (int) pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER).getY()), 2));
-                } catch (Exception e) {
-                        //System.out.println("Kmeans to find yellow centre failed: "+e.getMessage());
-                        e.printStackTrace();
-                }
-                
-                Position.filterPoints(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW), pitch.getRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER));
-                try {
-					pitch.setRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER, Position.findMean(pitch.getColouredPoints(RobotColour.YELLOW, RobotType.DEFENDER, Colours.YELLOW)));
-				} catch (Exception e2) {
-					//No points left after filtering
-    				//System.out.println("Exception: Error finding mean of yellow robot points");
-				}
-			} catch (Exception e2) {
-				//No points left after filtering
-				//System.out.println("Exception: No points left in yellow robot after filtering");
-            	pitch.setRobotPosition(RobotColour.YELLOW, RobotType.DEFENDER, worldState.getDefaultPoint(RobotColour.YELLOW));
-			}
+        }
+        
+        /**
+         * Sets the positions of the centroids of the Robots and the Ball
+         * @param pitch
+         */
+        public void findRobotsAndBall(PitchPoints pitch) {
+        	findBall(pitch);
+        	
+        	for (RobotColour rc: RobotColour.values()) {
+        		Colours c;
+        	
+        		if (rc == RobotColour.BLUE) {
+        			c = Colours.BLUE;
+        		} else {
+        			c = Colours.YELLOW;
+        		}
+        		
+        		for (RobotType rt: RobotType.values()) {
+        			// Filter out any coloured points too close to the ball
+                	if (worldState.getBallVisible()) {
+        	            Position.filterOutCircle(pitch.getColouredPoints(rc, rt, c), 
+        	            					     pitch.getBallPosition(), 
+        	            					     WorldState.ballRadius);  
+        			}  
+        			
+        			try {
+        				// Set the robot position to be the middle of the coloured points
+						pitch.setRobotPosition(rc, rt, Position.findMean(pitch.getColouredPoints(rc, rt, c)));
+						
+						// Do K-Means magic
+						pitch.setRobotPosition(
+								RobotColour.YELLOW, 
+     			                RobotType.DEFENDER, 
+     			                KMeans.findOne(
+     			                		pitch.getColouredPoints(rc, rt, c), 
+     			                		new Point(worldState.getRobotX(rt, rc), worldState.getRobotY(rt, rc)), 
+     			                		new Point((int) pitch.getRobotPosition(rc, rt).getX(), (int) pitch.getRobotPosition(rc, rt).getY()),
+     			                		2));
+						
+						// Remove points that are too far from where we currently think the robot centre is
+						Position.filterPoints(pitch.getColouredPoints(rc, rt, c),
+								  			  pitch.getRobotPosition(rc, rt));
+						
+						// The robot position is the mean of the coloured points after filtering 
+						pitch.setRobotPosition(rc, rt, Position.findMean(pitch.getColouredPoints(rc, rt, c)));
+					} catch (Exception e) {
+						// We don't have any coloured points left for this robot, set it to its "default" position
+						// TODO set this to be its previous location instead together with copious error reporting
+						System.err.println("No points found for the robot (" + rc + " " + rt + ")");
+						pitch.setRobotPosition(rc, rt, worldState.getDefaultPoint(rc));
+					}
+        		}
+        	}
         }
         
         public void updateHistory(Point[] history, long[] times, Point current, String obj) {

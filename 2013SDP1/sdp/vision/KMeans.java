@@ -16,14 +16,13 @@ public class KMeans {
 	 * Takes two initial cluster centres. Clusters the points among the two, returning the position 
 	 * of the 'good' cluster.
 	 * 
-	 * @param xPoints The x-values of the points to be clustered
-	 * @param yPoints The y-values of the points to be clustered
+	 * @param points The (x,y) values of the points to be clustered
 	 * @param initialBad Initial co-ords of the cluster to be discarded
 	 * @param initialGood Initial co-ords of the cluster to be returned
 	 * @param cutoff End the kmeans when the clusters move less than this between steps
 	 * @throws Exception If one cluster has no points
 	 */
-	public static Point findOne(ArrayList<Point> points, Point initialBad, Point initialGood, double cutoff) throws Exception {
+	public static Point findOne(ArrayList<Point> points, Point initialBad, Point initialGood, double cutoff){
 		assert(points.size()>0);
 		Point oldBad = initialBad;
 		Point oldGood = initialGood;
@@ -56,7 +55,9 @@ public class KMeans {
 				}
 			}
 			if (numGood==0) {
-				throw new Exception("Clustering error: the returned cluster has no points");
+				// No points left, return the initial good point instead
+				System.err.println("Clustering error: the returned cluster has no points");
+				return initialGood;
 			}
 			else {
 				if (numBad==0) {

@@ -103,13 +103,13 @@ public class Display {
 		// TODO remove this TODO spam
 
 		graphics.setColor(new Color(0xFF00FF00));
-		int x2=(int) (ws.getBlueDefenderXVision()+150*Math.cos(ws.getBlueDefenderOrientation()));
-		int y2=(int) (ws.getBlueDefenderYVision()+150*Math.sin(ws.getBlueDefenderOrientation()));
-		graphics.drawLine((int) ws.getBlueDefenderXVision(), (int) ws.getBlueDefenderYVision(), x2, y2);
+		int x2=(int) (ws.getBlueDefenderX()+150*Math.cos(ws.getBlueDefenderOrientation()));
+		int y2=(int) (ws.getBlueDefenderY()+150*Math.sin(ws.getBlueDefenderOrientation()));
+		graphics.drawLine((int) ws.getBlueDefenderX(), (int) ws.getBlueDefenderY(), x2, y2);
 
-		x2=(int) (ws.getYellowDefenderXVision()+150*Math.cos(ws.getYellowDefenderOrientation()));
-		y2=(int) (ws.getYellowDefenderYVision()+150*Math.sin(ws.getYellowDefenderOrientation()));
-		graphics.drawLine((int) ws.getYellowDefenderXVision(), (int) ws.getYellowDefenderYVision(), x2, y2);
+		x2=(int) (ws.getYellowDefenderX()+150*Math.cos(ws.getYellowDefenderOrientation()));
+		y2=(int) (ws.getYellowDefenderY()+150*Math.sin(ws.getYellowDefenderOrientation()));
+		graphics.drawLine((int) ws.getYellowDefenderX(), (int) ws.getYellowDefenderY(), x2, y2);
 		
 		graphics.drawOval((int) ws.getBallXVision() - WorldState.ballRadius, (int) ws.getBallYVision() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
 		

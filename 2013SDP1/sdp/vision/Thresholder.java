@@ -162,8 +162,8 @@ public class Thresholder {
 		/*
 		 * For every pixel near the blue T, test to see if it belongs to either a green plate or a grey circle.
 		 */
-		for (int column= worldState.getBlueDefenderXVision()-plateSize; column< worldState.getBlueDefenderXVision()+plateSize; column++) {
-        	for (int row= worldState.getBlueDefenderYVision()-plateSize; row< worldState.getBlueDefenderYVision()+plateSize; row++) {
+		for (int column= worldState.getBlueDefenderX()-plateSize; column< worldState.getBlueDefenderX()+plateSize; column++) {
+        	for (int row= worldState.getBlueDefenderY()-plateSize; row< worldState.getBlueDefenderY()+plateSize; row++) {
 				try {
 					/* The RGB colours and hsv values for the current pixel. */
 					Color c = new Color(image.getRGB(column, row));
@@ -197,8 +197,8 @@ public class Thresholder {
 		/*
 		 * For every pixel near the yellow T, test to see if it belongs to either a green plate or a grey circle.
 		 */
-		for (int column= worldState.getYellowDefenderXVision()-plateSize; column< worldState.getYellowDefenderXVision()+plateSize; column++) {
-        	for (int row= worldState.getYellowDefenderYVision()-plateSize; row< worldState.getYellowDefenderYVision()+plateSize; row++) {
+		for (int column= worldState.getYellowDefenderX()-plateSize; column< worldState.getYellowDefenderX()+plateSize; column++) {
+        	for (int row= worldState.getYellowDefenderY()-plateSize; row< worldState.getYellowDefenderY()+plateSize; row++) {
 				try {
 					/* The RGB colours and hsv values for the current pixel. */
 					Color c = new Color(image.getRGB(column, row));

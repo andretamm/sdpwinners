@@ -408,7 +408,7 @@ public class WorldState {
 		return yellowAttackerX;
 	}
 
- public void setYellowAttackerX(int yellowX) {
+	public void setYellowAttackerX(int yellowX) {
 		this.yellowAttackerX = yellowX;
 	}
 
