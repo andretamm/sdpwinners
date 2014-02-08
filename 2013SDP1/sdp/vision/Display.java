@@ -101,15 +101,17 @@ public class Display {
 		// TODO draw rectangles around each of the robot plates????
 		// TODO draw rectangles around each of the robot plates????
 		// TODO remove this TODO spam
-
+		
+		// Draw orientation lines for the robots
 		graphics.setColor(new Color(0xFF00FF00));
-		int x2=(int) (ws.getBlueDefenderX()+150*Math.cos(ws.getBlueDefenderOrientation()));
-		int y2=(int) (ws.getBlueDefenderY()+150*Math.sin(ws.getBlueDefenderOrientation()));
-		graphics.drawLine((int) ws.getBlueDefenderX(), (int) ws.getBlueDefenderY(), x2, y2);
-
-		x2=(int) (ws.getYellowDefenderX()+150*Math.cos(ws.getYellowDefenderOrientation()));
-		y2=(int) (ws.getYellowDefenderY()+150*Math.sin(ws.getYellowDefenderOrientation()));
-		graphics.drawLine((int) ws.getYellowDefenderX(), (int) ws.getYellowDefenderY(), x2, y2);
+		
+		for (RobotColour rc : RobotColour.values()) {
+			for (RobotType rt : RobotType.values()) {
+				int x2=(int) (ws.getRobotX(rt, rc)+150*Math.cos(ws.getRobotOrientation(rt, rc)));
+				int y2=(int) (ws.getRobotY(rt, rc)+150*Math.sin(ws.getRobotOrientation(rt, rc)));
+				graphics.drawLine((int) ws.getRobotX(rt, rc), (int) ws.getRobotY(rt, rc), x2, y2);
+			}
+		}
 		
 		graphics.drawOval((int) ws.getBallXVision() - WorldState.ballRadius, (int) ws.getBallYVision() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
 		

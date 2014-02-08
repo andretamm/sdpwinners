@@ -355,6 +355,18 @@ public class WorldState {
 			else setYellowDefenderOrientation(orientation);
 		}
 	}
+	
+	public double getRobotOrientation(RobotType rType, RobotColour rColour) {
+		
+		if (rType == RobotType.ATTACKER) {
+			if (rColour == RobotColour.BLUE) return getBlueAttackerOrientation();
+			else return getYellowAttackerOrientation();
+		}
+		else {
+			if (rColour == RobotColour.BLUE) return getBlueDefenderOrientation();
+			else return getYellowDefenderOrientation();
+		}
+	}
 
 	int getBlueDefenderX() {
 		return blueDefenderX;
