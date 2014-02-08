@@ -10,9 +10,12 @@ import constants.RobotType;
  * @author Andre
  */
 public class Robot {
-	public RobotColour c;
-	public RobotType t;
+	public RobotColour colour;
+	public RobotType type;
 	
+	/**
+	 * Gives an iterable list of all the robots 
+	 */
 	public static ArrayList<Robot> listAll() {
 		ArrayList<Robot> allRobots = new ArrayList<Robot>();
 		
@@ -26,7 +29,7 @@ public class Robot {
 	}
 	
 	public Robot(RobotColour c, RobotType t) {
-		this.c = c;
-		this.t = t;
+		this.colour = c;
+		this.type = t;
 	}
 }

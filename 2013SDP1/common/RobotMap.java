@@ -26,7 +26,7 @@ public class RobotMap<T> {
 		initMap();
 		
 		for (Robot r: Robot.listAll()) {
-			
+			put(r, def);
 		}
 	}
 	
@@ -41,12 +41,10 @@ public class RobotMap<T> {
 
 	/**
 	 * Gets the stored value in the HashMap for this robot
-	 * @param c Robot colour
-	 * @param t Robot type
 	 * @return Stored value
 	 */
-	public T get(RobotColour c, RobotType t) {
-		return map.get(c).get(t);
+	public T get(Robot r) {
+		return map.get(r.colour).get(r.type);
 	}
 	
 	/**
@@ -55,7 +53,7 @@ public class RobotMap<T> {
 	 * @param t Robot type
 	 * @param value Value to set
 	 */
-	public void put(RobotColour c, RobotType t, T value) {
-		map.get(c).put(t, value);
+	public void put(Robot r, T value) {
+		map.get(r.colour).put(r.type, value);
 	}
 }
