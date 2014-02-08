@@ -2,6 +2,7 @@ package sdp.vision;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import constants.Colours;
+import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
 
@@ -23,8 +25,8 @@ public class Display {
 		//Debug graphics for the grey circles
 		if (ts.isGrey_debug()) {
 			for (int i=0; (i<op.getPoints(Colours.GRAY).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.GRAY).get(i).getX(), (int) op.getPoints(Colours.GRAY).get(i).getY(), 0xFF333333);	
-			}					
+				img.setRGB((int) op.getPoints(Colours.GRAY).get(i).getX(), (int) op.getPoints(Colours.GRAY).get(i).getY(), Color.RED.getRGB());	
+			}		
 		}
 		
 		//Debug graphics for the green plates
@@ -160,7 +162,7 @@ public class Display {
 				(int) (ws.getOurGoalBottom().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalBottom().getY()+ws.getPitchTopLeft().getY()));
 
 		// WHY CLAUDIU????
-		/*for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
+		for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
 			img.setRGB((int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getY(), 0xFF000000);
 		}
 		
@@ -174,7 +176,7 @@ public class Display {
 		
 		for (int i=0; i<op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).size(); i++) {
 			img.setRGB((int)op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).get(i).getY(), 0xFFFFFFFF);
-		}*/
+		}
 
 		if ((Math.pow(ws.getBallVelocity().getX(),2)+Math.pow(ws.getBallVelocity().getY(),2))>0.01) {
 //                    System.out.println("worldState.getBallVelocity()="+ws.getBallVelocity().getX() + ", " + ws.getBallVelocity().getY());
@@ -183,6 +185,14 @@ public class Display {
 		graphics.setColor(Color.ORANGE);
 		Point a = ws.getDefendPenaltyPoint();
 		graphics.drawOval((int) (a.getX()+ws.getPitchTopLeft().getX()-3), (int) (a.getY()+ws.getPitchTopLeft().getY()-3), 6,6);
+		
+		for(Quadrant q : Quadrant.values()) {
+			ObjectPoints quadrant = op.getQuadrant(q);
+			
+			Graphics2D graphics1 = img.createGraphics();
+			graphics1.setColor(Color.BLUE);
+			graphics1.drawRect(quadrant.getRobotPosition().x - 20, quadrant.getRobotPosition().y - 20, 40, 40);
+		}
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

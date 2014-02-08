@@ -15,7 +15,7 @@ import sdp.vision.WorldState;
 
 public class Thresholder {
 	
-	private final static int plateSize = 15;//35
+	private final static int plateSize = 20;//35
 	
 	/**
 	 * Thresholds every point in the image, for ball red, robot yellow, robot blue, plate green and spot grey. The results are stored in op.

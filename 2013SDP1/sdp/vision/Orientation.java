@@ -10,14 +10,23 @@ import java.util.ArrayList;
 
 public class Orientation {
 	
-	public static double findOrient(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate) throws NoAngleException {
-		
+	public static double findOrient(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, ObjectPoints op) throws NoAngleException {
 		// Calculate centre of grey circle points
         int totalX = 0;
         int totalY = 0;
+        
         for (int i = 0; i < greyCircle.size(); i++) {
-            totalX += greyCircle.get(i).getX();
-            totalY += greyCircle.get(i).getY();
+        	Point p = greyCircle.get(i);
+        	double distanceFromRobotCentre = op.getRobotPosition().distance(new Point((int) p.getX(), (int) p.getY()));
+        	
+        	if (distanceFromRobotCentre <= WorldState.ballRadius+3) {
+	        	totalX += p.getX();
+	            totalY += p.getY();
+        	} else {
+        		// Remove grey points too far from the robot's centre
+        		greyCircle.remove(i);
+        		i -= 1;
+        	}
         }
         
         double greyCentreX = 0, greyCentreY = 0;
@@ -25,13 +34,21 @@ public class Orientation {
         if (greyCircle.size() != 0) {
 	        greyCentreX = totalX / greyCircle.size();
 	        greyCentreY = totalY / greyCircle.size();
+	               
+	        try {
+				Point greyCenter = Position.findMean(greyCircle);
+				greyCentreX = greyCenter.x;
+				greyCentreY = greyCenter.y;
+			} catch (Exception e) {
+				System.err.println("No grey points!");
+			}
         } else {
         	System.err.println("No points in grey circle");
         }
         
         Point2D greyCentre = new Point2D.Double(greyCentreX, greyCentreY);
         
-        //Centre of green plate:
+        //Add up the values of the green pixels:
         int greenTotalX = 0;
         int greenTotalY = 0;
         for (int i = 0; i < greenPlate.size(); i++) {
@@ -40,7 +57,7 @@ public class Orientation {
         }
         
          
-        // Centre of grey circle
+        // Centre of green plate
         double x0 = 0, y0 = 0;
         
         if (greenPlate.size() != 0) {
@@ -50,7 +67,11 @@ public class Orientation {
         	System.err.println("No points in green plate!");
         }
         
+        // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
+        x0 = op.getRobotPosition().getX();
+        y0 = op.getRobotPosition().getY();
         Point2D plateCentre = new Point2D.Double(x0, y0);
+
         
         //Distance between grey centre and plate centre
         double distance = plateCentre.distance(greyCentre);
