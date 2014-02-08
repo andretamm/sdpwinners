@@ -5,11 +5,12 @@ import java.awt.geom.Point2D;
 
 import constants.RobotColour;
 import constants.RobotType;
+import constants.ShootingDirection;
 
 
 public class WorldState {
 
-	private int direction; // 0 = right, 1 = left.
+	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour colour;
 	private int pitch; // 0 = main, 1 = side room
 	private int blueDefenderX;
@@ -197,7 +198,7 @@ public class WorldState {
 	public WorldState() {
 
 		/* control properties */
-		this.direction = 0;
+		this.direction = ShootingDirection.RIGHT;
 		this.colour = RobotColour.YELLOW;
 		this.pitch = 1;
 
@@ -487,11 +488,11 @@ public class WorldState {
 	
 	
 
-	public int getDirection() {
+	public ShootingDirection getDirection() {
 		return direction;
 	}
 
-	public void setDirection(int direction) {
+	public void setDirection(ShootingDirection direction) {
 		this.direction = direction;
 	}
 
@@ -670,11 +671,11 @@ public class WorldState {
 	}
 
 	public Point getOurGoalCentre() {
-		return direction == 0 ? getLeftGoalPoint() : getRightGoalPoint();
+		return direction == ShootingDirection.RIGHT ? getLeftGoalPoint() : getRightGoalPoint();
 	}
 
 	public Point getOppositionGoalCentre() {
-		return direction == 1 ? getLeftGoalPoint() : getRightGoalPoint();
+		return direction == ShootingDirection.LEFT ? getLeftGoalPoint() : getRightGoalPoint();
 	}
 
 	public Point getOurGoalTop() {
@@ -846,7 +847,7 @@ public class WorldState {
 			return new Point((int) (getPitchTopLeft().getX()+getOurDefenderPosition().getX()), (int) (getPitchTopLeft().getY()+getOurDefenderPosition().getY()));
 		} else {
 			// if the robot is opposition, assume it's off the pitch
-			if (direction==0) {
+			if (direction == ShootingDirection.RIGHT) {
 				return new Point((int) (getPitchTopLeft().getX()+getOurGoalCentre().getX()-50), (int) (getPitchTopLeft().getY()+getOurGoalCentre().getY()));
 			} else {
 				return new Point((int) (getPitchTopLeft().getX()+getOurGoalCentre().getX()+50), (int) (getPitchTopLeft().getY()+getOurGoalCentre().getY()));

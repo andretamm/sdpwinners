@@ -9,6 +9,7 @@ import constants.Colours;
 import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
+import constants.ShootingDirection;
 
 /**
  * Contains the image info for the whole pitch.
@@ -49,9 +50,8 @@ public class PitchPoints extends ObjectPoints {
 		RobotColour oppositionColour = ourColour == RobotColour.BLUE ? RobotColour.YELLOW : RobotColour.BLUE;
 		
 		// Figure out which quadrant is responsible for what
-		if (worldstate.getDirection() == 1) {
+		if (worldstate.getDirection() == ShootingDirection.LEFT) {
 			// Left goal is ours...
-			// TODO omg just use a constant instead of 0/1
 			quadrants.get(Quadrant.Q1).setrColour(ourColour);
 			quadrants.get(Quadrant.Q2).setrColour(oppositionColour);
 			quadrants.get(Quadrant.Q3).setrColour(ourColour);

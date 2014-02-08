@@ -19,6 +19,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import constants.RobotColour;
+import constants.ShootingDirection;
 import sdp.vision.PitchConstants;
 import sdp.vision.ThresholdsState;
 import sdp.vision.Vision;
@@ -59,7 +60,7 @@ public class VisionGUI implements ChangeListener {
 	private JPanel yellowPanel;
 	private JPanel greyPanel;
 	private JPanel greenPanel;
-	private JPanel quadrantPanel; //Added by CMurray
+	private JPanel quadrantPanel;
 	
 	/* Radio buttons */
 	JRadioButton pitch_0;
@@ -124,7 +125,6 @@ public class VisionGUI implements ChangeListener {
 	private RangeSlider green_rb;
 	private RangeSlider green_gb;
 	
-	//Added by CMurray
 	/* Quadrant Sliders. */
 	private RangeSlider q1;
 	private RangeSlider q2;
@@ -184,7 +184,6 @@ public class VisionGUI implements ChangeListener {
         greenPanel = new JPanel();
         greenPanel.setLayout(new BoxLayout(greenPanel, BoxLayout.Y_AXIS));
         
-        // Added by CMurray
         quadrantPanel = new JPanel();
         quadrantPanel.setLayout(new BoxLayout(quadrantPanel, BoxLayout.Y_AXIS));
         
@@ -198,9 +197,7 @@ public class VisionGUI implements ChangeListener {
         setUpYellowSliders();
         setUpGreySliders();
         setUpGreenSliders();
-        
         setUpQuadrantSliders();
-        
         
         tabPane.addTab("default", defaultPanel);
         tabPane.addTab("Ball", ballPanel);
@@ -208,7 +205,7 @@ public class VisionGUI implements ChangeListener {
         tabPane.addTab("Yellow Robot", yellowPanel);
         tabPane.addTab("Grey Circles", greyPanel);
         tabPane.addTab("Green Plates", greenPanel);
-        tabPane.addTab("Quadrant Guides", quadrantPanel); //Added by CMurray
+        tabPane.addTab("Quadrant Guides", quadrantPanel);
         
         tabPane.addChangeListener(this);
         
@@ -1092,10 +1089,11 @@ public class VisionGUI implements ChangeListener {
 			worldState.setColour(RobotColour.BLUE);
 		}
 		if(direction_right.isSelected()) {
-			worldState.setDirection(0);
+			worldState.setDirection(ShootingDirection.RIGHT);
 		} else {
-			worldState.setDirection(1);
+			worldState.setDirection(ShootingDirection.LEFT);
 		}
+		
 		
 		/* Update the ThresholdsState object. */
 		

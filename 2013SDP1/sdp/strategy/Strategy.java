@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import constants.ShootingDirection;
+
 import sdp.communication.CommsInterface;
 import sdp.gui.MainWindow;
 import sdp.vision.Circle;
@@ -357,7 +359,7 @@ public class Strategy extends Thread {
 			ballStart= mWorldState.getDefendPenaltyPoint();
 		}
 		int startX;
-		if (mWorldState.getDirection()==0) {
+		if (mWorldState.getDirection()== ShootingDirection.RIGHT) {
 			startX = (int) (mWorldState.getOurDefenderPosition().getX())-8;
 		} else {
 			startX = (int) (mWorldState.getOurDefenderPosition().getX())+8;
