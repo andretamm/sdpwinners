@@ -2,7 +2,6 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
 
 import common.Robot;
 import common.RobotMap;
@@ -24,14 +23,7 @@ public class WorldState implements VisionInterface {
 	private int ballX;
 	private int ballY;
 	
-	// start refactor
-	private double blueDefenderOrientation;
-	private double blueAttackerOrientation;
-	private double yellowDefenderOrientation;
-	private double yellowAttackerOrientation;
-	
-	private RobotMap<Double> robotOrientation;
-	// end
+	private RobotMap<Double> robotOrientation; // Orientations of all the robots
 	
 	private long counter;
 	private boolean subtractBackground;
@@ -216,10 +208,6 @@ public class WorldState implements VisionInterface {
 		
 		this.ballX = 0;
 		this.ballY = 0;
-		this.blueDefenderOrientation = 0;
-		this.blueAttackerOrientation = 0;
-		this.yellowDefenderOrientation = 0;
-		this.yellowAttackerOrientation = 0;
 		this.setBallVisible(false);
 		this.setSubtractBackground(false);
 		this.setFindRobotsAndBall(true);
@@ -297,29 +285,13 @@ public class WorldState implements VisionInterface {
 	/*-------------------------------------------------------------------*/
 	/*-----Getters and setters for robot positions and orientation-------*/
 	/*-------------------------------------------------------------------*/
-	public void setRobotOrientation(RobotType rType, RobotColour rColour, double orientation) {
-		
-		if (rType == RobotType.ATTACKER) {
-			if (rColour == RobotColour.BLUE) setBlueAttackerOrientation(orientation);
-			else setYellowAttackerOrientation(orientation);
-		}
-		else {
-			if (rColour == RobotColour.BLUE) setBlueDefenderOrientation(orientation);
-			else setYellowDefenderOrientation(orientation);
-		}
+	public void setRobotOrientation(RobotType rType, RobotColour rColour, double orientation) {		
+		robotOrientation.put(new Robot(rColour, rType), orientation);
 	}
 	
 	@Override
 	public double getRobotOrientation(RobotType rType, RobotColour rColour) {
-		
-		if (rType == RobotType.ATTACKER) {
-			if (rColour == RobotColour.BLUE) return getBlueAttackerOrientation();
-			else return getYellowAttackerOrientation();
-		}
-		else {
-			if (rColour == RobotColour.BLUE) return getBlueDefenderOrientation();
-			else return getYellowDefenderOrientation();
-		}
+		return robotOrientation.get(new Robot(rColour, rType));
 	}
 	
 	// New position getters/setters
@@ -354,40 +326,7 @@ public class WorldState implements VisionInterface {
 
 	public void setBallY(int ballY) {
 		this.ballY = ballY;
-	}
-
-	public double getBlueDefenderOrientation() {
-		return blueDefenderOrientation;
-	}
-
-	public void setBlueDefenderOrientation(double blueOrientation) {
-		this.blueDefenderOrientation = blueOrientation;
-	}
-	
-	public double getBlueAttackerOrientation() {
-		return blueAttackerOrientation;
-	}
-
-	public void setBlueAttackerOrientation(double blueOrientation) {
-		this.blueAttackerOrientation = blueOrientation;
-	}
-
-	public double getYellowDefenderOrientation() {
-		return yellowDefenderOrientation;
-	}
-
-	public void setYellowDefenderOrientation(double yellowOrientation) {
-		this.yellowDefenderOrientation = yellowOrientation;
-	}
-	
-	public double getYellowAttackerOrientation() {
-		return yellowAttackerOrientation;
-	}
-
-	public void setYellowAttackerOrientation(double yellowOrientation) {
-		this.yellowAttackerOrientation = yellowOrientation;
-	}
-	
+	}	
 	
 	/*-------------------------------------------------------------------*/
 	/*--End of getters and setters for robot positions and orientation---*/
@@ -484,20 +423,20 @@ public class WorldState implements VisionInterface {
 		return getOurAttackerYVision() - getPitchTopLeft().y;
 	}
 
-	public double getOurDefenderOrientation(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderOrientation() : getBlueDefenderOrientation();
+	public double getOurDefenderOrientation() {
+		return robotOrientation.get(new Robot(colour, RobotType.DEFENDER));
 	}
 	
-	public double getOurAttackerOrientation(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerOrientation() : getBlueAttackerOrientation();
+	public double getOurAttackerOrientation() {
+		return robotOrientation.get(new Robot(colour, RobotType.ATTACKER));
 	}
 
-	public double getOppositionDefenderOrientation(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderOrientation() : getYellowDefenderOrientation();
+	public double getOppositionDefenderOrientation() {
+		return robotOrientation.get(new Robot(getOppositionColour(), RobotType.DEFENDER));
 	}
 	
-	public double getOppositionAttackerOrientation(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerOrientation() : getYellowAttackerOrientation();
+	public double getOppositionAttackerOrientation() {
+		return robotOrientation.get(new Robot(getOppositionColour(), RobotType.ATTACKER));
 	}
 
 	public int getOppositionDefenderX() {
