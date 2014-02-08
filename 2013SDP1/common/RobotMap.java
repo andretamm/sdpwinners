@@ -15,6 +15,22 @@ public class RobotMap<T> {
 	HashMap<RobotColour, HashMap<RobotType, T>> map;
 	
 	public RobotMap() {
+		initMap();
+	}
+	
+	/**
+	 * Fills the map with a default value for each robot
+	 * @param def
+	 */
+	public RobotMap(T def) {
+		initMap();
+		
+		for (Robot r: Robot.listAll()) {
+			
+		}
+	}
+	
+	private void initMap() {
 		// Initialise hashmaps for all robots
 		map = new HashMap<RobotColour, HashMap<RobotType,T>>();
 		
@@ -22,7 +38,7 @@ public class RobotMap<T> {
 			map.put(c, new HashMap<RobotType, T>());
 		}
 	}
-	
+
 	/**
 	 * Gets the stored value in the HashMap for this robot
 	 * @param c Robot colour
