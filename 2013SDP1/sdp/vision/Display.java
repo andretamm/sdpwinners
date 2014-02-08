@@ -159,7 +159,8 @@ public class Display {
 		graphics.drawLine((int) (ws.getOurGoalTop().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalTop().getY()+ws.getPitchTopLeft().getY()), 
 				(int) (ws.getOurGoalBottom().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalBottom().getY()+ws.getPitchTopLeft().getY()));
 
-		for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
+		// WHY CLAUDIU????
+		/*for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
 			img.setRGB((int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getY(), 0xFF000000);
 		}
 		
@@ -173,7 +174,7 @@ public class Display {
 		
 		for (int i=0; i<op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).size(); i++) {
 			img.setRGB((int)op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.YELLOW, RobotType.ATTACKER, Colours.GRAY).get(i).getY(), 0xFFFFFFFF);
-		}
+		}*/
 
 		if ((Math.pow(ws.getBallVelocity().getX(),2)+Math.pow(ws.getBallVelocity().getY(),2))>0.01) {
 //                    System.out.println("worldState.getBallVelocity()="+ws.getBallVelocity().getX() + ", " + ws.getBallVelocity().getY());

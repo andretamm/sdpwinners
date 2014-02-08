@@ -19,10 +19,15 @@ public class Orientation {
             totalX += greyCircle.get(i).getX();
             totalY += greyCircle.get(i).getY();
         }
-
+        
+        double greyCentreX = 0, greyCentreY = 0;
         // Centre of grey circle
-        double greyCentreX = totalX / greyCircle.size();
-        double greyCentreY = totalY / greyCircle.size();
+        if (greyCircle.size() != 0) {
+	        greyCentreX = totalX / greyCircle.size();
+	        greyCentreY = totalY / greyCircle.size();
+        } else {
+        	System.err.println("No points in grey circle");
+        }
         
         Point2D greyCentre = new Point2D.Double(greyCentreX, greyCentreY);
         
@@ -33,10 +38,17 @@ public class Orientation {
             greenTotalX += greenPlate.get(i).getX();
             greenTotalY += greenPlate.get(i).getY();
         }
-
+        
+         
         // Centre of grey circle
-        double x0 = greenTotalX / greenPlate.size();
-        double y0 = greenTotalY / greenPlate.size();
+        double x0 = 0, y0 = 0;
+        
+        if (greenPlate.size() != 0) {
+	        x0 = greenTotalX / greenPlate.size();
+	        y0 = greenTotalY / greenPlate.size();
+        } else {
+        	System.err.println("No points in green plate!");
+        }
         
         Point2D plateCentre = new Point2D.Double(x0, y0);
         
