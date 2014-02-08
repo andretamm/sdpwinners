@@ -3,12 +3,14 @@ package sdp.vision;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+import constants.Quadrant;
+import constants.QuadrantX;
 import constants.RobotColour;
 import constants.RobotType;
 import constants.ShootingDirection;
 
 
-public class WorldState {
+public class WorldState implements VisionInterface {
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour colour;
@@ -357,6 +359,7 @@ public class WorldState {
 		}
 	}
 	
+	@Override
 	public double getRobotOrientation(RobotType rType, RobotColour rColour) {
 		
 		if (rType == RobotType.ATTACKER) {
@@ -485,9 +488,8 @@ public class WorldState {
 	/*-------------------------------------------------------------------*/
 	/*--End of getters and setters for robot positions and orientation---*/
 	/*-------------------------------------------------------------------*/
-	
-	
 
+	
 	public ShootingDirection getDirection() {
 		return direction;
 	}
@@ -725,11 +727,7 @@ public class WorldState {
 	public boolean getBallVisible() {
 		return ballVisible;
 	}
-
-	public Point2D.Double getBallVelocity() {
-		return ballVelocity;
-	}
-
+	
 	public Point[] getBallHistory() {
 		return ballHistory;
 	}
@@ -893,4 +891,55 @@ public class WorldState {
 		return new Point((int) (((getOurGoalCentre().getX()*ratio1)+(getOppositionGoalCentre().getX()*ratio2))/(ratio1+ratio2)),
 						(int) (((getOurGoalCentre().getY()*ratio1)+(getOppositionGoalCentre().getY()*ratio2))/(ratio1+ratio2)));
 	}
+
+	@Override
+	public Point getRobotXY(RobotColour colour, RobotType type) {
+		return new Point(getRobotX(type, colour), getRobotY(type, colour));
+	}
+
+	@Override
+	public Point getBallXY() {
+		return new Point(getBallX(), getBallY());
+	}
+
+	@Override
+	public int getQuadrantX(Quadrant quadrant, QuadrantX quadrantX) {
+		switch (quadrant) {
+			case Q1:
+				return quadrantX == QuadrantX.LOW ? getQ1LowX() : getQ1HighX();
+			case Q2:
+				return quadrantX == QuadrantX.LOW ? getQ2LowX() : getQ2HighX();
+			case Q3:
+				return quadrantX == QuadrantX.LOW ? getQ3LowX() : getQ3HighX();
+			case Q4:
+				return quadrantX == QuadrantX.LOW ? getQ4LowX() : getQ4HighX();
+			default:
+				return getQ1LowX();
+		}
+	}
+	
+	@Override
+	public Point2D.Double getBallVelocity() {
+		return ballVelocity;
+	}
+
+	@Override
+	public Point getRobotVelocity(RobotColour colour, RobotType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Point[] getRobotHistory(RobotColour colour, RobotType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getAimingAngle() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	
 }
