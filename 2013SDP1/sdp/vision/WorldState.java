@@ -2,7 +2,10 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.HashMap;
 
+import common.Robot;
+import common.RobotMap;
 import constants.Quadrant;
 import constants.QuadrantX;
 import constants.RobotColour;
@@ -15,20 +18,21 @@ public class WorldState implements VisionInterface {
 	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour colour;
 	private int pitch; // 0 = main, 1 = side room
-	private int blueDefenderX;
-	private int blueDefenderY;
-	private int yellowDefenderX;
-	private int yellowDefenderY;
-	private int blueAttackerX;
-	private int blueAttackerY;
-	private int yellowAttackerX;
-	private int yellowAttackerY;
+	
+	private RobotMap<Point> robotPosition; // Positions of all the robots
+
 	private int ballX;
 	private int ballY;
+	
+	// start refactor
 	private double blueDefenderOrientation;
 	private double blueAttackerOrientation;
 	private double yellowDefenderOrientation;
 	private double yellowAttackerOrientation;
+	
+	private RobotMap<Double> robotOrientation;
+	// end
+	
 	private long counter;
 	private boolean subtractBackground;
 	private boolean findRobotsAndBall; //used when setting thresholds. Disables filtering, clustering etc so
@@ -207,14 +211,9 @@ public class WorldState implements VisionInterface {
 		//TODO Alter object properties for velocities, history
 		
 		/* object properties */
-		this.blueDefenderX = 0;
-		this.blueDefenderY = 0;
-		this.blueAttackerX = 0;
-		this.blueAttackerY = 0;
-		this.yellowDefenderX = 0;
-		this.yellowDefenderY = 0;
-		this.yellowAttackerX = 0;
-		this.yellowAttackerY = 0;
+		this.robotPosition = new RobotMap<Point>(new Point(0,0));
+		this.robotOrientation = new RobotMap<Double>(0.0);
+		
 		this.ballX = 0;
 		this.ballY = 0;
 		this.blueDefenderOrientation = 0;
@@ -298,55 +297,6 @@ public class WorldState implements VisionInterface {
 	/*-------------------------------------------------------------------*/
 	/*-----Getters and setters for robot positions and orientation-------*/
 	/*-------------------------------------------------------------------*/
-	
-	public void setRobotX(RobotType rType, RobotColour rColour, int x) {
-		
-		if (rType == RobotType.ATTACKER) {
-			if (rColour == RobotColour.BLUE) setBlueAttackerX(x);
-			else setYellowAttackerX(x);
-		}
-		else {
-			if (rColour == RobotColour.BLUE) setBlueDefenderX(x);
-			else setYellowDefenderX(x);
-		}
-	}
-	
-	public void setRobotY(RobotType rType, RobotColour rColour, int y) {
-		
-		if (rType == RobotType.ATTACKER) {
-			if (rColour == RobotColour.BLUE) setBlueAttackerY(y);
-			else setYellowAttackerY(y);
-		}
-		else {
-			if (rColour == RobotColour.BLUE) setBlueDefenderY(y);
-			else setYellowDefenderY(y);
-		}
-	}
-	
-	public int getRobotX(RobotType rType, RobotColour rColour) {
-		
-		if (rType == RobotType.ATTACKER) {
-			if (rColour == RobotColour.BLUE) return getBlueAttackerX();
-			else return getYellowAttackerX();
-		}
-		else {
-			if (rColour == RobotColour.BLUE) return getBlueDefenderX();
-			else return getYellowDefenderX();
-		}
-	}
-	
-	public int getRobotY(RobotType rType, RobotColour rColour) {
-		
-		if (rType == RobotType.ATTACKER) {
-			if (rColour == RobotColour.BLUE) return getBlueAttackerY();
-			else return getYellowAttackerY();
-		}
-		else {
-			if (rColour == RobotColour.BLUE) return getBlueDefenderY();
-			else return getYellowDefenderY();
-		}
-	}
-	
 	public void setRobotOrientation(RobotType rType, RobotColour rColour, double orientation) {
 		
 		if (rType == RobotType.ATTACKER) {
@@ -371,70 +321,24 @@ public class WorldState implements VisionInterface {
 			else return getYellowDefenderOrientation();
 		}
 	}
-
-	int getBlueDefenderX() {
-		return blueDefenderX;
-	}
-
-	public void setBlueDefenderX(int blueX) {
-		this.blueDefenderX = blueX;
-	}
-
-	int getBlueDefenderY() {
-		return blueDefenderY;
-	}
-
-	void setBlueDefenderY(int blueY) {
-		this.blueDefenderY = blueY;
+	
+	// New position getters/setters
+	public int getRobotX(Robot r) {
+		return robotPosition.get(r).x;
 	}
 	
-	int getBlueAttackerX() {
-		return blueAttackerX;
-	}
-
-	public void setBlueAttackerX(int blueX) {
-		this.blueAttackerX = blueX;
-	}
-
-	int getBlueAttackerY() {
-		return blueAttackerY;
-	}
-
-	void setBlueAttackerY(int blueY) {
-		this.blueAttackerY = blueY;
-	}
-
-	int getYellowDefenderX() {
-		return yellowDefenderX;
-	}
-
-	public void setYellowDefenderX(int yellowX) {
-		this.yellowDefenderX = yellowX;
-	}
-
-	int getYellowDefenderY() {
-		return yellowDefenderY;
-	}
-
-	public void setYellowDefenderY(int yellowY) {
-		this.yellowDefenderY = yellowY;
+	public int getRobotY(Robot r) {
+		return robotPosition.get(r).y;
 	}
 	
-	int getYellowAttackerX() {
-		return yellowAttackerX;
+	public void setRobotX(Robot r, int x) {
+		robotPosition.get(r).x = x;
 	}
-
-	public void setYellowAttackerX(int yellowX) {
-		this.yellowAttackerX = yellowX;
+	
+	public void setRobotY(Robot r, int y) {
+		robotPosition.get(r).y = y;
 	}
-
-	int getYellowAttackerY() {
-		return yellowAttackerY;
-	}
-
-	void setYellowAttackerY(int yellowY) {
-		this.yellowAttackerY = yellowY;
-	}
+	
 
 	int getBallXVision() {
 		return ballX;
@@ -549,39 +453,35 @@ public class WorldState implements VisionInterface {
 	//TODO fix getters for X and Y Vision for two robots
 
 	int getOurDefenderXVision(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderX() : getBlueDefenderX();
+		return getRobotX(new Robot(colour, RobotType.DEFENDER));
 	}
 
 	int getOurDefenderYVision(){
-		return colour == RobotColour.YELLOW ? getYellowDefenderY() : getBlueDefenderY();
+		return getRobotY(new Robot(colour, RobotType.DEFENDER));
 	}
 	
 	int getOurAttackerXVision(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerX() : getBlueAttackerX();
+		return getRobotX(new Robot(colour, RobotType.ATTACKER));
 	}
 
 	int getOurAttackerYVision(){
-		return colour == RobotColour.YELLOW ? getYellowAttackerY() : getBlueAttackerY();
+		return getRobotY(new Robot(colour, RobotType.ATTACKER));
 	}
 
 	public int getOurDefenderX(){
-		int x = colour == RobotColour.YELLOW ? getYellowDefenderX() : getBlueDefenderX();
-		return x - getPitchTopLeft().x;
+		return getOurDefenderXVision() - getPitchTopLeft().x;
 	}
 	
 	public int getOurAttackerX(){
-		int x = colour == RobotColour.YELLOW ? getYellowAttackerX() : getBlueAttackerX();
-		return x - getPitchTopLeft().x;
+		return getOurAttackerXVision() - getPitchTopLeft().x;
 	}
 
 	public int getOurDefenderY(){  
-		int y = colour == RobotColour.YELLOW ? getYellowDefenderY() : getBlueDefenderY();
-		return y - getPitchTopLeft().y;
+		return getOurDefenderYVision() - getPitchTopLeft().y;
 	}
 	
 	public int getOurAttackerY(){  
-		int y = colour == RobotColour.YELLOW ? getYellowAttackerY() : getBlueAttackerY();
-		return y - getPitchTopLeft().y;
+		return getOurAttackerYVision() - getPitchTopLeft().y;
 	}
 
 	public double getOurDefenderOrientation(){
@@ -601,23 +501,19 @@ public class WorldState implements VisionInterface {
 	}
 
 	public int getOppositionDefenderX() {
-		int x = colour == RobotColour.YELLOW ? getBlueDefenderX() : getYellowDefenderX();
-		return x - getPitchTopLeft().x;
+		return getOppositionDefenderXVision() - getPitchTopLeft().x;
 	}
 
 	public int getOppositionDefenderY() {
-		int y = colour == RobotColour.YELLOW ? getBlueDefenderY() : getYellowDefenderY();
-		return y - getPitchTopLeft().y;
+		return getOppositionDefenderYVision() - getPitchTopLeft().y;
 	}
 	
 	public int getOppositionAttackerX() {
-		int x = colour == RobotColour.YELLOW ? getBlueAttackerX() : getYellowAttackerX();
-		return x - getPitchTopLeft().x;
+		return getOppositionAttackerXVision() - getPitchTopLeft().x;
 	}
 
 	public int getOppositionAttackerY() {
-		int y = colour == RobotColour.YELLOW ? getBlueAttackerY() : getYellowAttackerY();
-		return y - getPitchTopLeft().y;
+		return getOppositionAttackerYVision() - getPitchTopLeft().y;
 	}
 
 	public void setNormaliseRGB(boolean normaliseRGB) {
@@ -852,21 +748,28 @@ public class WorldState implements VisionInterface {
 			}
 		}
 	}
-
+	
+	/**
+	 * @return Colour of the opposition
+	 */
+	private RobotColour getOppositionColour() {
+		return colour == RobotColour.YELLOW ? RobotColour.BLUE : RobotColour.YELLOW;
+	}
+	
 	int getOppositionDefenderXVision(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderX() : getYellowDefenderX();
+		return getRobotX(new Robot(getOppositionColour(), RobotType.DEFENDER));
 	}
 
 	int getOppositionDefenderYVision(){
-		return colour == RobotColour.YELLOW ? getBlueDefenderY() : getYellowDefenderY();
+		return getRobotY(new Robot(getOppositionColour(), RobotType.DEFENDER));
 	}
 	
 	int getOppositionAttackerXVision(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerX() : getYellowAttackerX();
+		return getRobotX(new Robot(getOppositionColour(), RobotType.ATTACKER));
 	}
 
 	int getOppositionAttackerYVision(){
-		return colour == RobotColour.YELLOW ? getBlueAttackerY() : getYellowAttackerY();
+		return getRobotY(new Robot(getOppositionColour(), RobotType.ATTACKER));
 	}
 	
 	int getShadowTopY() {
@@ -894,7 +797,8 @@ public class WorldState implements VisionInterface {
 
 	@Override
 	public Point getRobotXY(RobotColour colour, RobotType type) {
-		return new Point(getRobotX(type, colour), getRobotY(type, colour));
+		Robot r = new Robot(colour, type);
+		return new Point(getRobotX(r), getRobotY(r));
 	}
 
 	@Override

@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import common.Robot;
+
 import constants.Colours;
 import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
-
 import sdp.gui.MainWindow;
 import sdp.strategy.Intercept;
 import sdp.strategy.KickFrom;
@@ -107,12 +108,10 @@ public class Display {
 		// Draw orientation lines for the robots
 		graphics.setColor(new Color(0xFF00FF00));
 		
-		for (RobotColour rc : RobotColour.values()) {
-			for (RobotType rt : RobotType.values()) {
-				int x2=(int) (ws.getRobotX(rt, rc)+150*Math.cos(ws.getRobotOrientation(rt, rc)));
-				int y2=(int) (ws.getRobotY(rt, rc)+150*Math.sin(ws.getRobotOrientation(rt, rc)));
-				graphics.drawLine((int) ws.getRobotX(rt, rc), (int) ws.getRobotY(rt, rc), x2, y2);
-			}
+		for (Robot r: Robot.listAll()) {
+				int x2=(int) (ws.getRobotX(r)+150*Math.cos(ws.getRobotOrientation(r.type, r.colour)));
+				int y2=(int) (ws.getRobotY(r)+150*Math.sin(ws.getRobotOrientation(r.type, r.colour)));
+				graphics.drawLine((int) ws.getRobotX(r), (int) ws.getRobotY(r), x2, y2);
 		}
 		
 		graphics.drawOval((int) ws.getBallXVision() - WorldState.ballRadius, (int) ws.getBallYVision() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);

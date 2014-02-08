@@ -14,10 +14,6 @@ import constants.RobotType;
 public class RobotMap<T> {
 	HashMap<RobotColour, HashMap<RobotType, T>> map;
 	
-	public RobotMap() {
-		initMap();
-	}
-	
 	/**
 	 * Fills the map with a default value for each robot
 	 * @param def

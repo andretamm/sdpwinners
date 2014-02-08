@@ -2,12 +2,13 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.Robot;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+
+import common.Robot;
 
 import constants.Colours;
 import constants.Quadrant;
@@ -147,14 +148,11 @@ public class ImageProcessor {
             ws.setBallX((int) ballP.getX());
             ws.setBallY((int) ballP.getY());
             
-            for (RobotType rType : RobotType.values()) {
-            	for (RobotColour rColour : RobotColour.values()) {
-            		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(rColour, rType));
-                    ws.setRobotX(rType, rColour, (int) position.getX());
-                    ws.setRobotY(rType, rColour, (int) position.getY());
-                    ws.setRobotOrientation(rType, rColour, pp.getRobotOrientation(rColour, rType));
-                    
-            	}
+            for (Robot r : Robot.listAll()) {
+        		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type));
+                ws.setRobotX(r, (int) position.getX());
+                ws.setRobotY(r, (int) position.getY());
+                ws.setRobotOrientation(r.type, r.colour, pp.getRobotOrientation(r.colour, r.type));
             }
         }
         
