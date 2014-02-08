@@ -139,7 +139,7 @@ public class PitchPoints extends ObjectPoints {
 	 * @param type
 	 * @return
 	 */
-	private ObjectPoints getRobotQuadrant(RobotColour colour, RobotType type) {
+	public ObjectPoints getRobotQuadrant(RobotColour colour, RobotType type) {
 		// Check all quadrants and see which one has our desired robot
 		for (Quadrant q: Quadrant.values()) {
 			ObjectPoints quadrant = getQuadrant(q);

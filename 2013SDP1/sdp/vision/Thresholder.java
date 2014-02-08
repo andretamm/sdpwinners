@@ -154,21 +154,23 @@ public class Thresholder {
 	 * @param right Index of the rightmost column, plus one
 	 */
 	public static void secondaryThresholds(BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState worldState) {
-		
+
 		int rg;
 		int rb;
 		int gb;
-		
+
 		/*
 		 * For each quadrant, in the list of Quadrant enums, look at the plates
 		 */
 		for(Quadrant q : Quadrant.values()){
 			
+			ObjectPoints quadrant = pp.getQuadrant(q);
+			
 			/*
 			 * For every pixel near the blue i, test to see if it belongs to either a green plate or a grey circle.
 			 */
-			for(int column = pp.getQuadrant(q).getRobotPosition().x - plateSize; column < pp.getQuadrant(q).getRobotPosition().x + plateSize; column++){
-				for(int row = pp.getQuadrant(q).getRobotPosition().y - plateSize; row < pp.getQuadrant(q).getRobotPosition().y + plateSize; row++){
+			for(int column = quadrant.getRobotPosition().x - plateSize; column < quadrant.getRobotPosition().x + plateSize; column++){
+				for(int row = quadrant.getRobotPosition().y - plateSize; row < quadrant.getRobotPosition().y + plateSize; row++){
 					try {
 						Color c = new Color(image.getRGB(column, row));
 						float hsbvals[] = new float[3];
@@ -179,11 +181,11 @@ public class Thresholder {
 						gb=c.getGreen()-c.getBlue();
 						
 						if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
-							pp.getPoints(Colours.GREEN).add(new Point(column, row));
+							quadrant.getPoints(Colours.GREEN).add(new Point(column, row));
 						}
 
 						if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
-							pp.getPoints(Colours.GRAY).add(new Point(column, row));
+							quadrant.getPoints(Colours.GRAY).add(new Point(column, row));
 						}
 					} catch (Exception e) {
 						//point was outside the image?

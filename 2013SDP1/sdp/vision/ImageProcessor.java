@@ -215,11 +215,7 @@ public class ImageProcessor {
                     	//System.out.print("Blue robot NoAngleException: " + e.getMessage());
                     	//System.out.println("op.getBlueOrientation():" + op.getBlueOrientation());
                     	//System.out.println("blue position:(" + op.getBlue().getX() +", "+ op.getBlue().getY()+")");
-                    } catch (Exception e) {
-                    	//System.out.print("Blue robot Exception: " + e.getMessage());
-                    	//e.printStackTrace();
                     }
-                    
         		}
         		
         	}
