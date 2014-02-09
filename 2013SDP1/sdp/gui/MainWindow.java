@@ -83,7 +83,8 @@ public class MainWindow {
 	 * Create the application.
 	 */
 	public MainWindow() throws IOException {
-		initVision();
+//		initVision();
+		mWorldState = new WorldState();
 		initControl();
 		//initComms();
 		//initStrategy();

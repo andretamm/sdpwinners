@@ -28,10 +28,10 @@ public class Manager {
 	 * Initialises manager with a list of default behaviors 
 	 */
 	public Manager(WorldState ws, Robot r, Server s) {
-		arbitrator = new Arbitrator(getAllBehaviors());
 		this.ws = ws;
 		this.r = r;
 		this.s = s;
+		arbitrator = new Arbitrator(getAllBehaviors());
 	}
 	
 	/**
