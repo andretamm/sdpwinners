@@ -14,8 +14,17 @@ import constants.RobotType;
 public class RobotMap<T> {
 	HashMap<RobotColour, HashMap<RobotType, T>> map;
 	
+	public RobotMap() {
+		initMap();
+	}
+	
 	/**
-	 * Fills the map with a default value for each robot
+	 * Fills the map with a default value for each robot.
+	 * 
+	 * NB! - Use this ONLY if you're using primitive types such as
+	 * int, char etc. Do NOT use this if you are using classes
+	 * such as Double, Point etc. Doing the latter would cause all the
+	 * map entries to point to the same object! (You do not want this)
 	 * @param def
 	 */
 	public RobotMap(T def) {

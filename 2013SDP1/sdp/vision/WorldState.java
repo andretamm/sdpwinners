@@ -13,6 +13,8 @@ import constants.ShootingDirection;
 
 
 public class WorldState implements VisionInterface {
+	
+	public static final int HISTORY_LENGTH = 5;
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour colour;
@@ -67,10 +69,16 @@ public class WorldState implements VisionInterface {
 	private Point[] ballHistory;
 	private long[] ballTimeStamps;
 	private Point2D.Double ballVelocity;
-	private Point[] ourDefenderHistory;
-	private Point[] ourAttackerHistory;
+	
+	
+	// refactor
 	private Point ourDefenderVelocity;
 	private Point ourAttackerVelocity;
+	
+	private RobotMap<Point[]> robotHistory;
+	private RobotMap<Point> robotVelocity;
+	// end
+	
 	private long[] ourTimeStamps;
 
 	private boolean removeShadows = false;
@@ -180,8 +188,6 @@ public class WorldState implements VisionInterface {
 		return new Boolean(this.removeShadows);
 	}
 
-	private Point[] oppositionDefenderHistory;
-	private Point[] oppositionAttackerHistory;
 	private Point oppositionDefenderVelocity;
 	private Point oppositionAttackerVelocity;
 	private long[] oppositionTimeStamps;
@@ -203,8 +209,25 @@ public class WorldState implements VisionInterface {
 		//TODO Alter object properties for velocities, history
 		
 		/* object properties */
-		this.robotPosition = new RobotMap<Point>(new Point(0,0));
 		this.robotOrientation = new RobotMap<Double>(0.0);
+		this.robotPosition = new RobotMap<Point>();
+		this.robotHistory = new RobotMap<Point[]>();
+		this.robotVelocity = new RobotMap<Point>();
+		
+		// Set default values for all the robots
+		for (Robot r: Robot.listAll()) {
+			robotPosition.put(r, new Point(0,0));
+			
+			robotVelocity.put(r, new Point(0,0));
+			
+			// History values
+			// TODO MAKE SURE THESE ARE RIGHT AND MAKE SENSE
+			Point[] history = new Point[HISTORY_LENGTH];
+			for (int i = 0; (i < HISTORY_LENGTH); i++) {
+				history[i] = new Point(1,1);
+				robotHistory.put(r, history);
+			}
+		}
 		
 		this.ballX = 0;
 		this.ballY = 0;
@@ -220,20 +243,15 @@ public class WorldState implements VisionInterface {
 		this.ballTimeStamps = new long[5];
 		this.ourDefenderVelocity = new Point(0,0);
 		this.ourAttackerVelocity = new Point(0,0);
-		this.ourDefenderHistory = new Point[5];
-		this.ourAttackerHistory = new Point[5];
 		this.ourTimeStamps = new long[5];
 		this.oppositionDefenderVelocity = new Point(0,0);
 		this.oppositionAttackerVelocity = new Point(0,0);
-		this.oppositionDefenderHistory = new Point[5];
-		this.oppositionAttackerHistory = new Point[5];
 		this.oppositionTimeStamps = new long[5];
-		for (int i=0; (i<this.ourDefenderHistory.length); i++) {
+		
+		for (int i = 0; (i < HISTORY_LENGTH); i++) {
 			this.ballHistory[i] = new Point(1,1);
 			this.ballTimeStamps[i] = 1;
-			this.ourDefenderHistory[i] = new Point(1,1);
 			this.ourTimeStamps[i] = 1;
-			this.oppositionDefenderHistory[i] = new Point(1,1);
 			this.oppositionTimeStamps[i] = 1;
 		}
 		// TODO not sure what's going on here will need to check it out
@@ -575,28 +593,36 @@ public class WorldState implements VisionInterface {
 		return ourAttackerVelocity;
 	}
 
-	public Point[] getOurDefenderHistory() {
-		return ourDefenderHistory;
+	public Point[] getRobotHistory(Robot r) {
+		return robotHistory.get(r);
 	}
 	
-	public Point[] getOurAttackerHistory() {
-		return ourAttackerHistory;
+	public void setRobotHistory(Robot r, Point[] history) {
+		robotHistory.put(r, history);
 	}
-
+	
+	/**
+	 * Get our robot
+	 * @param type Type of robot
+	 */
+	public Robot getOur(RobotType type) {
+		return new Robot(colour, type);
+	}
+	
+	/**
+	 * Get opposition's robot
+	 * @param type Type of robot
+	 */
+	public Robot getOpposition(RobotType type) {
+		return new Robot(getOppositionColour(), type);
+	}
+	
 	public Point getOppositionDefenderVelocity() {
 		return oppositionDefenderVelocity;
 	}
 	
 	public Point getOppositionAttackerVelocity() {
 		return oppositionAttackerVelocity;
-	}
-
-	public Point[] getOppositionDefenderHistory() {
-		return oppositionDefenderHistory;
-	}
-	
-	public Point[] getOppositionAttackerHistory() {
-		return oppositionAttackerHistory;
 	}
 
 	public long[] getBallTimes() {
@@ -627,28 +653,12 @@ public class WorldState implements VisionInterface {
 		this.ourAttackerVelocity=ov;
 	}
 
-	public void setOurDefenderHistory(Point[] oh) {
-		this.ourDefenderHistory=oh;
-	}
-	
-	public void setOurAttackerHistory(Point[] oh) {
-		this.ourAttackerHistory=oh;
-	}
-
 	public void setOppositionDefenderVelocity(Point opv) {
 		this.oppositionDefenderVelocity=opv;
 	}
 	
 	public void setOppositionAttackerVelocity(Point opv) {
 		this.oppositionAttackerVelocity=opv;
-	}
-
-	public void setOppositionDefenderHistory(Point[] oph) {
-		this.oppositionDefenderHistory=oph;
-	}
-	
-	public void setOppositionAttackerHistory(Point[] oph) {
-		this.oppositionAttackerHistory=oph;
 	}
 
 	public void setBallTimes(long[] bt) {
@@ -783,6 +793,5 @@ public class WorldState implements VisionInterface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
 	
 }

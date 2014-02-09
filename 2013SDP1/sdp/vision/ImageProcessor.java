@@ -170,11 +170,12 @@ public class ImageProcessor {
             ws.setBallVelocity(ballVelocity);
             
             //TODO Alter for Attacker Robot
-            Point[] ourHistory = ws.getOurDefenderHistory();
+            Point[] ourHistory = ws.getRobotHistory(ws.getOur(RobotType.DEFENDER));
             Point ourCurrent = ws.getOurDefenderPosition();
             long[] ourTimes = ws.getOurTimes();
             updateHistory(ourHistory, ourTimes, ourCurrent, "our");
-            Point2D.Double ourVelocity = calcVelocity(ws.getOurDefenderHistory(),ws.getOurTimes());
+            Point2D.Double ourVelocity = calcVelocity(ws.getRobotHistory(ws.getOur(RobotType.DEFENDER)),
+            										  ws.getOurTimes());
             ws.setBallVelocity(ourVelocity);
             
             //TODO Alter for Attacker Robot
@@ -182,7 +183,7 @@ public class ImageProcessor {
             Point oppositionCurrent = ws.getBallPoint();
             long[] oppositionTimes = ws.getOppositionTimes();
             updateHistory(oppositionHistory, oppositionTimes, oppositionCurrent, "opp");
-            Point2D.Double oppVelocity = calcVelocity(ws.getOppositionDefenderHistory(),ws.getOppositionTimes());
+            Point2D.Double oppVelocity = calcVelocity(ws.getRobotHistory(ws.getOpposition(RobotType.DEFENDER)), ws.getOppositionTimes());
             ws.setBallVelocity(oppVelocity);
         }
 
@@ -401,10 +402,10 @@ public class ImageProcessor {
         		worldState.setBallHistory(history);
         		worldState.setBallTimes(times);
         	} else if (obj.equals("our")){
-        		worldState.setOurDefenderHistory(history);
+        		worldState.setRobotHistory(worldState.getOur(RobotType.DEFENDER), history);
         		worldState.setOurTimes(times);
           	} else if (obj.equals("opp")) {
-          		worldState.setOppositionDefenderHistory(history);
+          		worldState.setRobotHistory(worldState.getOpposition(RobotType.DEFENDER), history);
         		worldState.setOppositionTimes(times);
           	}
         }
