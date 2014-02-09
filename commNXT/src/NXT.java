@@ -23,8 +23,25 @@ public class NXT {
     		switch (i) {
     			case 0:
     				robot.fail();
+    				break;
     			case 1:
+    				robot.forward();
+    				break;
+    			case 2:
+    				robot.backward();
+    				break;
+    			case 3:
+    				robot.chill();
+    				break;
+    			case 4:
+    				robot.turnCW();
+    				break;
+    			case 5:
+    				robot.turnCCW();
+    				break;
+    			case 6:
     				robot.kick();
+    				break;
     		}    			
     	}
     }
