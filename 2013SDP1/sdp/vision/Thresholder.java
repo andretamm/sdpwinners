@@ -13,7 +13,7 @@ import constants.Quadrant;
 import sdp.vision.ThresholdsState;
 import sdp.vision.WorldState;
 
-public class Thresholder {
+public class Thresholder{
 	
 	private final static int plateSize = 20;//35
 	
@@ -72,48 +72,30 @@ public class Thresholder {
 		}
 	}
 	
-	/**
-	 * Thresholds every point in the image, for ball red, robot yellow and robot blue. The results are stored in op.
-	 * @param image The image to be thresholded
-	 * @param pp The results are stored here
-	 * @param ts The thresholds to be used
-	 * @param top Index of the top row
-	 * @param bottom Index of the bottom row, plus one
-	 * @param left Index of the leftmost column
-	 * @param right Index of the rightmost column, plus one
-	 */
-	public static void initialThresholds(BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState ws) {
+	private static class ThresholderThread implements Runnable {
 		
-		int rg;
-		int rb;
-		int gb;
+		private BufferedImage image;
+		private PitchPoints pp;
+		private ThresholdsState ts;
+		private WorldState ws;
+		private Quadrant q;
+		private int qLow;
+		private int qHigh;
 		
-		/*
-		 * For every pixel within the pitch, test to see if it belongs to the ball, the yellow T, or the blue T.
-		 */
+		public ThresholderThread (BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState ws, Quadrant q, int qLow, int qHigh){
+			this.image = image;
+			this.pp = pp;
+			this.ts = ts;
+			this.ws = ws;
+			this.q = q;
+			this.qLow = qLow;
+			this.qHigh = qHigh;
+		}
 		
-		// For Q1
-		
-		int qLow = 0, qHigh = 0;
-		
-		for (Quadrant q : Quadrant.values()) {
-			
-			if(q == Quadrant.Q1){
-				qLow = ws.getQ1LowX();
-				qHigh = ws.getQ1HighX();
-			}
-			else if(q == Quadrant.Q2){
-				qLow = ws.getQ2LowX();
-				qHigh = ws.getQ2HighX();
-			}
-			else if(q == Quadrant.Q3){
-				qLow = ws.getQ3LowX();
-				qHigh = ws.getQ3HighX();
-			}
-			else if(q == Quadrant.Q4){
-				qLow = ws.getQ4LowX();
-				qHigh = ws.getQ4HighX();
-			}
+		public void run() {
+			int rg;
+			int rb;
+			int gb;
 			
 			for (int column= qLow; column< qHigh; column++) {
 	        	for (int row= ws.getPitchTopLeft().y; row < ws.getPitchBottomLeft().y; row++) {
@@ -125,6 +107,7 @@ public class Thresholder {
 					rg=c.getRed()-c.getGreen();
 					rb=c.getRed()-c.getBlue();
 					gb=c.getGreen()-c.getBlue();
+					
 
 					if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
 						pp.getQuadrant(q).getPoints(Colours.BLUE).add(new Point(column, row));
@@ -135,12 +118,48 @@ public class Thresholder {
 					}
 					
 					if (ts.isBall(c, hsbvals, rg, rb, gb)) {
-						pp.getPoints(Colours.RED).add(new Point(column, row));
+						pp.getQuadrant(q).getPoints(Colours.RED).add(new Point(column, row));
 					}
 				}
 			}
+//			System.out.println("Thread Running Quadrant:" + q);
 		}
 	}
+	/**
+	 * Thresholds every point in the image, for ball red, robot yellow and robot blue. The results are stored in op.
+	 * @param image The image to be thresholded
+	 * @param pp The results are stored here
+	 * @param ts The thresholds to be used
+	 * @param top Index of the top row
+	 * @param bottom Index of the bottom row, plus one
+	 * @param left Index of the leftmost column
+	 * @param right Index of the rightmost column, plus one
+	 */
+	public static void initialThresholds(BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState ws){
+	
+		/*
+		 * For every pixel within the pitch, test to see if it belongs to the ball, the yellow T, or the blue T.
+		 */
+		Thread q1Thread = new Thread(new ThresholderThread(image, pp, ts, ws, Quadrant.Q1, ws.getQ1LowX(), ws.getQ1HighX()));
+		Thread q2Thread = new Thread(new ThresholderThread(image, pp, ts, ws, Quadrant.Q2, ws.getQ2LowX(), ws.getQ2HighX()));
+		Thread q3Thread = new Thread(new ThresholderThread(image, pp, ts, ws, Quadrant.Q3, ws.getQ3LowX(), ws.getQ3HighX()));
+		Thread q4Thread = new Thread(new ThresholderThread(image, pp, ts, ws, Quadrant.Q4, ws.getQ4LowX(), ws.getQ4HighX()));
+		
+		q1Thread.start();
+		q2Thread.start();
+		q3Thread.start();
+		q4Thread.start();
+		
+		try {
+			q1Thread.join();
+			q2Thread.join();
+			q3Thread.join();
+			q4Thread.join();
+		} catch (Exception e) {
+			System.err.println("Thresholding threads killed prematurely!");
+		}
+	}
+	
 
 	/**
 	 * Thresholds points near the robot T's for plate green and spot grey. The results are stored in op.
