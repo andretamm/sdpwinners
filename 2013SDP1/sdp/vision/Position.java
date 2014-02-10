@@ -277,9 +277,6 @@ public class Position {
 		}
 		points[3] = new Point(xpoints.get(index), ypoints.get(index));
 
-		for(int i=0; i<points.length; i++) {
-			//frameImage.getGraphics().drawOval(points[i].getX(), points[i].getY(), 2, 2);
-		}
 		return points;
 	}	
 	

@@ -206,7 +206,7 @@ public class ImageProcessor {
                     try {
                     	ArrayList<Point> greyPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GRAY);
                     	ArrayList<Point> greenPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GREEN);
-                    	
+                    	 
                     	double orientation = Orientation.findOrient(greyPoints, greenPoints, pitchPoints.getRobotQuadrant(rColour, rType));
                     	pitchPoints.setRobotOrientation(rColour, rType, orientation);
                     } catch (NoAngleException e) {
@@ -353,6 +353,8 @@ public class ImageProcessor {
         		}
         		
         		for (RobotType rt: RobotType.values()) {
+        			System.out.println(rt + " " + rc + " " + pitch.getColouredPoints(rc, rt, c).size());
+        			
         			// Filter out any coloured points too close to the ball
                 	if (worldState.getBallVisible()) {
         	            Position.filterOutCircle(pitch.getColouredPoints(rc, rt, c), 

@@ -103,6 +103,8 @@ public class Thresholder{
 			int rb;
 			int gb;
 			
+//			System.out.println(q + " " + plateCentroid.x + " " + plateCentroid.y);
+			
 			for (int column= plateCentroid.x - plateSize; column < plateCentroid.x + plateSize; column++) {
 	        	for (int row= plateCentroid.y - plateSize; row < plateCentroid.y + plateSize; row++) {
 					

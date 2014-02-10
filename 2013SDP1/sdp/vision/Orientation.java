@@ -56,27 +56,10 @@ public class Orientation {
         }
         
         Point2D greyCentre = new Point2D.Double(greyCentreX, greyCentreY);
-        
-        //Add up the values of the green pixels:
-        int greenTotalX = 0;
-        int greenTotalY = 0;
-        for (int i = 0; i < greenPlate.size(); i++) {
-            greenTotalX += greenPlate.get(i).getX();
-            greenTotalY += greenPlate.get(i).getY();
-        }
-        
-         
-        // Centre of green plate
+      
+        // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         double x0 = 0, y0 = 0;
         
-        if (greenPlate.size() != 0) {
-	        x0 = greenTotalX / greenPlate.size();
-	        y0 = greenTotalY / greenPlate.size();
-        } else {
-        	System.err.println("No points in green plate!");
-        }
-        
-        // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         x0 = op.getRobotPosition().getX();
         y0 = op.getRobotPosition().getY();
         Point2D plateCentre = new Point2D.Double(x0, y0);

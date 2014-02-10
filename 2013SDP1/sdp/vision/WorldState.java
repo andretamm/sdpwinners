@@ -254,17 +254,7 @@ public class WorldState implements VisionInterface {
 			this.ourTimeStamps[i] = 1;
 			this.oppositionTimeStamps[i] = 1;
 		}
-		// TODO not sure what's going on here will need to check it out
-		/*
-		for (int i=0; (i<this.ourAttackerHistory.length); i++) {
-			this.ballHistory[i] = new Point(1,1);
-			this.ballTimeStamps[i] = 1;
-			this.ourAttackerHistory[i] = new Point(1,1);
-			this.ourTimeStamps[i] = 1;
-			this.oppositionAttackerHistory[i] = new Point(1,1);
-			this.oppositionTimeStamps[i] = 1;
-		}
-		*/
+		
 	}
 
 	public boolean getShowDrawables() {
@@ -307,7 +297,7 @@ public class WorldState implements VisionInterface {
 		robotOrientation.put(new Robot(rColour, rType), orientation);
 	}
 	
-	@Override
+	
 	public double getRobotOrientation(RobotType rType, RobotColour rColour) {
 		return robotOrientation.get(new Robot(rColour, rType));
 	}
@@ -744,18 +734,18 @@ public class WorldState implements VisionInterface {
 						(int) (((getOurGoalCentre().getY()*ratio1)+(getOppositionGoalCentre().getY()*ratio2))/(ratio1+ratio2)));
 	}
 
-	@Override
+
 	public Point getRobotXY(RobotColour colour, RobotType type) {
 		Robot r = new Robot(colour, type);
 		return new Point(getRobotX(r), getRobotY(r));
 	}
 
-	@Override
+	
 	public Point getBallXY() {
 		return new Point(getBallX(), getBallY());
 	}
 
-	@Override
+	
 	public int getQuadrantX(Quadrant quadrant, QuadrantX quadrantX) {
 		switch (quadrant) {
 			case Q1:
@@ -771,24 +761,24 @@ public class WorldState implements VisionInterface {
 		}
 	}
 	
-	@Override
+	
 	public Point2D.Double getBallVelocity() {
 		return ballVelocity;
 	}
 
-	@Override
+	
 	public Point getRobotVelocity(RobotColour colour, RobotType type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	
 	public Point[] getRobotHistory(RobotColour colour, RobotType type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	
 	public double getAimingAngle() {
 		// TODO Auto-generated method stub
 		return 0;

@@ -53,10 +53,7 @@ public class Plate {
 	 */
 	public static Point[] getCorners(ArrayList<Point> points, Point c, Point otherCentroid) {
 		Point[] corners = getCorners(points);
-		//Graphics g = img.getGraphics();
-		//g.setColor(new Color(0xFF000000));
-		//g.drawOval((int) c.getX()-4, (int) c.getY()-4, 8, 8);
-		//if (false) {
+		
 		if (Position.sqrdEuclidDist((int) c.getX(), (int) c.getY(), (int) otherCentroid.getX(), (int) otherCentroid.getY())>(3025)) {//(55 squared)
 			//System.out.println("dist="+Math.sqrt(Position.sqrdEuclidDist((int) c.getX(), (int) c.getY(), (int) otherCentroid.getX(), (int) otherCentroid.getY())));
 			return corners;
@@ -88,14 +85,6 @@ public class Plate {
 				//there is a line l between these two corners
 				Point l = new Point((int) (p2.getX()-p1.getX()), (int) (p2.getY()-p1.getY())); //line vector for l
 				
-				/*
-				for (int i=0; i<151; i++) {
-					int x=(int) (i*0.01*l.getX()+c.getX());
-					int y=(int) (i*0.01*l.getY()+c.getY());
-					if (x>0 && y>0 && x<img.getWidth() && y<img.getHeight()) {
-						img.setRGB(x, y, 0xFF000000);
-					}
-				}*/
 				
 				double[][] r = new double[2][2]; //rotation matrix
 				
@@ -148,23 +137,8 @@ public class Plate {
 			} catch (Exception e) {
 				e.printStackTrace();
 				return getCorners(points);
-			}/*
-			g.setColor(new Color(0xFF000000));
-			g.drawOval((int) corners[0].getX()-2, (int) corners[0].getY()-2, 4, 4);
-			g.setColor(new Color(0xFFFF0000));
-			g.drawOval((int) corners[3].getX()-2, (int) corners[3].getY()-2, 4, 4);
-			g.setColor(new Color(0xFF0000FF));
-			g.drawOval((int) corners[1].getX()-2, (int) corners[1].getY()-2, 4, 4);
-			g.setColor(new Color(0xFF00FF00));
-			g.drawOval((int) corners[2].getX()-2, (int) corners[2].getY()-2, 4, 4);
+			}
 			
-			g.setColor(Color.magenta);
-			g.drawLine(corners[0].x, corners[0].y, c.x, c.y);
-			g.drawLine(corners[2].x, corners[2].y, c.x, c.y);
-			g.setColor(Color.cyan);
-			g.drawLine(corners[1].x, corners[1].y, c.x, c.y);
-			g.drawLine(corners[3].x, corners[3].y, c.x, c.y);*/
-			//return getCorners(points, img);
 			return corners;
 		}
 	}
@@ -228,16 +202,7 @@ public class Plate {
 				//dist = Line2D.ptLineDist(furthest.x, furthest.y, opposite.x, opposite.y, p.x, p.y);
 			}
 		}
-		/*
-		Graphics g = img.getGraphics();
-		g.setColor(new Color(0xFF000000));
-		g.drawOval((int) furthest.getY()-2, (int) furthest.getX()-2, 4, 4);
-		g.setColor(new Color(0xFFFFFFFF));
-		g.drawOval((int) opposite.getY()-2, (int) opposite.getX()-2, 4, 4);
-		g.setColor(new Color(0xFFFF0000));
-		g.drawOval((int) adjacent.getY()-2, (int) adjacent.getX()-2, 4, 4);
-		g.setColor(new Color(0xFF0000FF));
-		g.drawOval((int) adjacent2.getY()-2, (int) adjacent2.getX()-2, 4, 4);*/
+		
 
 		return new Point[]	{	
 								furthest,

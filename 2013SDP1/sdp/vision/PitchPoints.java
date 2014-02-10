@@ -76,12 +76,7 @@ public class PitchPoints extends ObjectPoints {
 	 * @param type
 	 * @return
 	 */
-	/* useless now?
-	public ArrayList<Point> getGreyPoints(RobotColour colour, RobotType type) {
-		ObjectPoints quadrant = getRobotQuadrant(colour, type);
-		return quadrant.getGreyPoints();
-	}
-	*/
+	
 	
 	/**
 	 * Gets all the (plate-)green points in the robot's quadrant
@@ -89,12 +84,7 @@ public class PitchPoints extends ObjectPoints {
 	 * @param type
 	 * @return
 	 */
-	/* useless now?
-	public ArrayList<Point> getGreenPoints(RobotColour colour, RobotType type) {
-		ObjectPoints quadrant = getRobotQuadrant(colour, type);
-		return quadrant.getGreenPoints();
-	}
-	*/
+	
 
 	/* -------------------------------------------------- */
 	/* Methods for each robot's position and orientation
