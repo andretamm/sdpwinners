@@ -207,13 +207,6 @@ public class Display {
 		Point a = ws.getDefendPenaltyPoint();
 		graphics.drawOval((int) (a.getX()+ws.getPitchTopLeft().getX()-3), (int) (a.getY()+ws.getPitchTopLeft().getY()-3), 6,6);
 		
-		/*for(Quadrant q : Quadrant.values()) {
-			ObjectPoints quadrant = op.getQuadrant(q);
-			
-			Graphics2D graphics1 = img.createGraphics();
-			graphics1.setColor(Color.BLUE);
-			graphics1.drawRect(quadrant.getRobotPosition().x - 20, quadrant.getRobotPosition().y - 20, 40, 40);
-		}*/
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

@@ -76,24 +76,6 @@ public class KMeans {
 				}
 			}
 		}
-		/*
-		for (int i=0; (i<points.size()); i++) {
-			if ((Position.sqrdEuclidDist((int) points.get(i).getX(), (int) points.get(i).getY(), (int) oldBad.getX(), (int) oldBad.getY()))
-				< (Position.sqrdEuclidDist((int) points.get(i).getX(), (int) points.get(i).getY(), (int) oldGood.getX(),(int)  oldGood.getY()))) {
-				//g.setColor(new Color(0xFF333333));
-				//g.drawOval((int) xPoints.get(i)-2, (int) yPoints.get(i)-2, 4, 4);
-				//img.setRGB(xPoints.get(i), yPoints.get(i), 0xFF000000);
-				points.remove(i);
-				i=i-1;
-				//System.out.println("Yellow Point discarded");
-			}
-			else {
-				//g.setColor(new Color(0xFFFFFF66));
-				//g.drawOval((int) xPoints.get(i)-2, (int) yPoints.get(i)-2, 4, 4);
-				//img.setRGB(xPoints.get(i), yPoints.get(i), 0xFFFFFF66);
-			}
-		}
-		*/
 		
 		return oldGood;
 	}
