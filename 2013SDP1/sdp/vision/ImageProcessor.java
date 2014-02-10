@@ -51,11 +51,7 @@ public class ImageProcessor {
          * @param image The camera image
          */
         public void processImage(BufferedImage image) {
-
-//                this.top=pitchConstants.topBuffer;
-//                this.bottom=image.getHeight()-pitchConstants.bottomBuffer;
-//                this.left=pitchConstants.leftBuffer;
-//                this.right=image.getWidth()-pitchConstants.rightBuffer;
+        	
     		this.top=(int) worldState.getOuterPitchTopLeft().getY();
     		this.bottom=(int) worldState.getOuterPitchBottomRight().getY();
     		this.left=(int) worldState.getOuterPitchTopLeft().getX();

@@ -17,12 +17,7 @@ public class DistortionFix {
 	
 	private static int width = 640;
 	private static int height = 480;
-	//private static final double barrelCorrectionX = -0.4;
-	//private static final double barrelCorrectionY = -0.2;
-	//private static final double barrelCorrectionX = 0.1;
-	//private static final double barrelCorrectionY = 0.85;
 	private static final double barrelCorrectionX = -0.016;	
-	//private static final double barrelCorrectionY = -0.032;	
 	private static final double barrelCorrectionY = -0.115;
 
 
@@ -50,10 +45,6 @@ public class DistortionFix {
 		}
 		for (int row = 0; (row < image.getHeight()); row++) {
 			for (int column = 0; (column < image.getWidth()); column++) {    			
-    			//if (left <= p.x && p.x < right
-    			//		 && top <=  p.y&& p.y < bottom ){
-    			//if (0 <= p.x && p.x < image.getWidth()
-    			//		 && 0 <=  p.y&& p.y < image.getHeight() ){
     			try{
     				image.setRGB(column, row, newImage.getRGB(column,row));
     		    }
@@ -92,21 +83,4 @@ public class DistortionFix {
     	// System.out.println("New Pixel: (" + pixi + ", " + pixj + ")");
     	return new Point(pixi, pixj);
     	}
-
-	/* Doesn't work */
-	/*
-	 * private void calculateDistortion() { this.xDistortion = new int[640];
-	 * this.yDistortion = new int[480];
-	 * 
-	 * int centerX = 320; int centerY = 240; float k = (float) 0.01;
-	 * 
-	 * for (int i = 0; i < 480; i++) { for (int j = 0; j < 640; j++) { int x =
-	 * (int) Math.floor(getRadialX(j, i, centerX, centerY, (float) Math.pow(k,
-	 * 2))); int y = (int) Math.floor(getRadialY(j, i, centerX, centerY, (float)
-	 * Math.pow(k, 2)));
-	 * 
-	 * if (y >= 480) { y = 240; } if (x >= 640) { x = 320; }
-	 * 
-	 * xDistortion[j] = x; yDistortion[i] = y; } } }
-	 */
 }
