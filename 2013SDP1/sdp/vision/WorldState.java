@@ -22,8 +22,8 @@ public class WorldState implements VisionInterface {
 	
 	private RobotMap<Point> robotPosition; // Positions of all the robots
 
-	private int ballX;
-	private int ballY;
+	public int ballX;
+	public int ballY;
 	
 	private RobotMap<Double> robotOrientation; // Orientations of all the robots
 	

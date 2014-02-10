@@ -23,7 +23,7 @@ public class Server {
 	 */
 	public Server() {
 		defenderRobot = new BluetoothCommunication(DEFENDER_NXT_NAME, DEFENDER_NXT_MAC_ADDRESS);
-		attackerRobot = new BluetoothCommunication(ATTACKER_NXT_NAME, ATTACKER_NXT_MAC_ADDRESS);
+//		attackerRobot = new BluetoothCommunication(ATTACKER_NXT_NAME, ATTACKER_NXT_MAC_ADDRESS);
 		
 		try {
 			defenderRobot.openBluetoothConnection();
@@ -32,12 +32,12 @@ public class Server {
 			e.printStackTrace();
 		}
 		
-		try {
-			attackerRobot.openBluetoothConnection();
-		} catch (IOException e) {
-			System.err.println("Failed to connect to attacker robot");
-			e.printStackTrace();
-		}
+//		try {
+//			attackerRobot.openBluetoothConnection();
+//		} catch (IOException e) {
+//			System.err.println("Failed to connect to attacker robot");
+//			e.printStackTrace();
+//		}
 		
 		System.out.println("Connected");		
 	}

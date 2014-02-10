@@ -14,7 +14,6 @@ public class StartRobot {
 		
 		WorldState worldstate = new WorldState();
 		RunVision.setupVision(worldstate); 
-		
 		// Start Behavior manager for the yellow defender
 		Manager m = new Manager(worldstate, new Robot(RobotColour.YELLOW, RobotType.DEFENDER), server);
 		m.start();
