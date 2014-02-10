@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import constants.Colours;
 import constants.Quadrant;
@@ -79,8 +80,9 @@ public class Thresholder{
 		private ThresholdsState ts;
 		private WorldState ws;
 		private Quadrant q;
-		private int qLow;
-		private int qHigh;
+		//private int qLow;
+		//private int qHigh;
+		private Point plateCentroid;
 		
 		public ThresholderThread (BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState ws, Quadrant q, int qLow, int qHigh){
 			this.image = image;
@@ -88,8 +90,34 @@ public class Thresholder{
 			this.ts = ts;
 			this.ws = ws;
 			this.q = q;
-			this.qLow = qLow;
-			this.qHigh = qHigh;
+			this.plateCentroid = centroidOfGreenPlate(q);
+			//this.qLow = qLow;
+			//this.qHigh = qHigh;
+		}
+		
+		private Point centroidOfGreenPlate (Quadrant q){
+			
+			ArrayList<Point> greenPlate = pp.getQuadrant(q).getPoints(Colours.GREEN);
+			//Add up the values of the green pixels:
+	        int greenTotalX = 0;
+	        int greenTotalY = 0;
+	        for (int i = 0; i < greenPlate.size(); i++) {
+	            greenTotalX += greenPlate.get(i).getX();
+	            greenTotalY += greenPlate.get(i).getY();
+	        }
+	        
+	         
+	        // Centre of green plate
+	        Point centroid = new Point(0,0);
+	        
+	        if (greenPlate.size() != 0) {
+		        centroid.x = greenTotalX / greenPlate.size();
+		        centroid.y = greenTotalY / greenPlate.size();
+	        } else {
+	        	System.err.println("No points in green plate!: centroidOfGreenPlate");
+	        }
+			return centroid;
+			
 		}
 		
 		public void run() {
@@ -97,8 +125,8 @@ public class Thresholder{
 			int rb;
 			int gb;
 			
-			for (int column= qLow; column< qHigh; column++) {
-	        	for (int row= ws.getPitchTopLeft().y; row < ws.getPitchBottomLeft().y; row++) {
+			for (int column= plateCentroid.x - plateSize; column < plateCentroid.x + plateSize; column++) {
+	        	for (int row= plateCentroid.y - plateSize; row < plateCentroid.y + plateSize; row++) {
 					
 					/* The RGB colours and hsv values for the current pixel. */
 					Color c = new Color(image.getRGB(column, row));
