@@ -177,19 +177,44 @@ public class Thresholder{
 		int rg;
 		int rb;
 		int gb;
+		
+		int qLow = 0;
+		int qHigh = 0;
 
 		/*
 		 * For each quadrant, in the list of Quadrant enums, look at the plates
 		 */
 		for(Quadrant q : Quadrant.values()){
 			
+			switch (q) {
+			case Q1:
+				qLow = worldState.getQ1LowX();
+				qHigh = worldState.getQ1HighX();
+				break;
+			case Q2:
+				qLow = worldState.getQ2LowX();
+				qHigh = worldState.getQ2HighX();
+				break;
+			case Q3:
+				qLow = worldState.getQ3LowX();
+				qHigh = worldState.getQ3HighX();
+				break;
+			case Q4:
+				qLow = worldState.getQ4LowX();
+				qHigh = worldState.getQ4HighX();
+				break;
+
+			default:
+				break;
+			}
+			
 			ObjectPoints quadrant = pp.getQuadrant(q);
 			
 			/*
 			 * For every pixel near the blue i, test to see if it belongs to either a green plate or a grey circle.
 			 */
-			for(int column = quadrant.getRobotPosition().x - plateSize; column < quadrant.getRobotPosition().x + plateSize; column++){
-				for(int row = quadrant.getRobotPosition().y - plateSize; row < quadrant.getRobotPosition().y + plateSize; row++){
+			for(int column = qLow; column < qHigh; column++){
+				for(int row = worldState.getPitchTopLeft().y; row < worldState.getPitchBottomLeft().y; row++){
 					try {
 						Color c = new Color(image.getRGB(column, row));
 						float hsbvals[] = new float[3];
