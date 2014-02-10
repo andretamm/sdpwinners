@@ -83,7 +83,8 @@ public class MainWindow {
 	 * Create the application.
 	 */
 	public MainWindow() throws IOException {
-		initVision();
+//		initVision();
+		mWorldState = new WorldState();
 		initControl();
 		//initComms();
 		//initStrategy();
@@ -174,12 +175,12 @@ public class MainWindow {
 		JPanel rotation = Helper.titledPanel("Rotation");
 		rotation.setLayout(new GridLayout(0, 3, 0, 0));
 
-		JButton btnAnticlockwise = new JButton("↶");
-		JButton btnClockwise = new JButton("↷");
-		JButton btnStop = new JButton("◾");
+		JButton btnAnticlockwise = new JButton("â†¶");
+		JButton btnClockwise = new JButton("â†·");
+		JButton btnStop = new JButton("â—¾");
 
-		btnAnticlockwise.setActionCommand("↶");
-		btnClockwise.setActionCommand("↷");
+		btnAnticlockwise.setActionCommand("â†¶");
+		btnClockwise.setActionCommand("â†·");
 
 		btnAnticlockwise.addActionListener(new RotateListener());
 		btnClockwise.addActionListener(new RotateListener());
@@ -197,23 +198,23 @@ public class MainWindow {
 		movement.setLayout(new GridLayout(0, 3, 0, 0));
 		movement.setBounds(0, 0, 0, 0);
 
-		JButton btnNW = new JButton("↖");
-		btnNW.setActionCommand("↖");
-		JButton btnN = new JButton("↑");
-		btnN.setActionCommand("↑");
-		JButton btnNE = new JButton("↗");
-		btnNE.setActionCommand("↗");
-		JButton btnW = new JButton("←");
-		btnW.setActionCommand("←");
-		JButton btnStop = new JButton("◾");
-		JButton btnE = new JButton("→");
-		btnE.setActionCommand("→");
-		JButton btnSW = new JButton("↙");
-		btnSW.setActionCommand("↙");
-		JButton btnS = new JButton("↓");
-		btnS.setActionCommand("↓");
-		JButton btnSE = new JButton("↘");
-		btnSE.setActionCommand("↘");
+		JButton btnNW = new JButton("â†–");
+		btnNW.setActionCommand("â†–");
+		JButton btnN = new JButton("â†‘");
+		btnN.setActionCommand("â†‘");
+		JButton btnNE = new JButton("â†—");
+		btnNE.setActionCommand("â†—");
+		JButton btnW = new JButton("â†�");
+		btnW.setActionCommand("â†�");
+		JButton btnStop = new JButton("â—¾");
+		JButton btnE = new JButton("â†’");
+		btnE.setActionCommand("â†’");
+		JButton btnSW = new JButton("â†™");
+		btnSW.setActionCommand("â†™");
+		JButton btnS = new JButton("â†“");
+		btnS.setActionCommand("â†“");
+		JButton btnSE = new JButton("â†˜");
+		btnSE.setActionCommand("â†˜");
 
 		btnNW.addActionListener(new MoveListener());
 		btnN.addActionListener(new MoveListener());
@@ -642,7 +643,7 @@ public class MainWindow {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			try {
-				if ("↷" == e.getActionCommand()){
+				if ("â†·" == e.getActionCommand()){
 					mComms.rotate(RotationDirection.CLOCKWISE, 10);
 				} else {
 					mComms.rotate(RotationDirection.COUNTERCLOCKWISE, 10);
@@ -656,21 +657,21 @@ public class MainWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				if ("↖" == e.getActionCommand()){
+				if ("â†–" == e.getActionCommand()){
 					mComms.move(-Math.PI/4);
-				} else if("↑" == e.getActionCommand()){
+				} else if("â†‘" == e.getActionCommand()){
 					mComms.move(0);
-				} else if("↗" == e.getActionCommand()){
+				} else if("â†—" == e.getActionCommand()){
 					mComms.move(Math.PI/4);
-				} else if("←" == e.getActionCommand()){
+				} else if("â†�" == e.getActionCommand()){
 					mComms.move(-Math.PI/2);
-				} else if("→" == e.getActionCommand()){
+				} else if("â†’" == e.getActionCommand()){
 					mComms.move(Math.PI/2);
-				} else if("↙" == e.getActionCommand()){
+				} else if("â†™" == e.getActionCommand()){
 					mComms.move(-3 * Math.PI/4);
-				} else if("↓" == e.getActionCommand()){
+				} else if("â†“" == e.getActionCommand()){
 					mComms.move(Math.PI);
-				} else if("↘" == e.getActionCommand()){
+				} else if("â†˜" == e.getActionCommand()){
 					mComms.move(3 * Math.PI/4);
 				}
 			} catch (IOException ex) {

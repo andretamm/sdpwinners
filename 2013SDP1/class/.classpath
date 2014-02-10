@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="Inverted/|lib/|class/" kind="src" output="class" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/pc"/>
 	<classpathentry kind="lib" path="lib/v4l4j.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://v4l4j.googlecode.com/svn/www/v4l4j-api"/>
@@ -21,6 +22,5 @@
 	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/pccomm.jar"/>
 	<classpathentry kind="lib" path="lib/pctools.jar"/>
-	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1126659/Desktop/opencv-2.4.8/build/bin/opencv-248.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

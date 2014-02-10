@@ -1,4 +1,4 @@
-package communication;
+package ourcommunication;
 
 public class TestComm {
 	

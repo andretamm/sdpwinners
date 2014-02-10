@@ -9,7 +9,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib"/>
 	<classpathentry kind="lib" path="lib/Ice.jar"/>
-	<classpathentry kind="lib" path="lib/classes.jar"/>
 	<classpathentry kind="lib" path="lib/Common.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
@@ -21,6 +20,10 @@
 	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/pccomm.jar"/>
 	<classpathentry kind="lib" path="lib/pctools.jar"/>
-	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1126659/Desktop/opencv-2.4.8/build/bin/opencv-248.jar"/>
+	<classpathentry kind="lib" path="lib/libbluetooth.so"/>
+	<classpathentry kind="lib" path="lib/bluecove-gpl.jar"/>
+	<classpathentry kind="lib" path="lib/bluecove.jar"/>
+	<classpathentry kind="lib" path="lib/libbluetooth.so"/>
+	<classpathentry kind="lib" path="lib/classes.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
