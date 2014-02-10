@@ -23,7 +23,6 @@
 	<classpathentry kind="lib" path="lib/libbluetooth.so"/>
 	<classpathentry kind="lib" path="lib/bluecove-gpl.jar"/>
 	<classpathentry kind="lib" path="lib/bluecove.jar"/>
-	<classpathentry kind="lib" path="lib/libbluetooth.so"/>
 	<classpathentry kind="lib" path="lib/classes.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
