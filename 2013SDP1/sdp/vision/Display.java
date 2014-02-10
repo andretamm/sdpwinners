@@ -68,10 +68,18 @@ public class Display {
 		int width = (int) (ws.getOuterPitchBottomRight().getX()-ws.getOuterPitchTopLeft().getX());
 		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
 		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
-
-        graphics.setColor(Color.red);
+		
+		
+        graphics.setColor(Color.blue);
+        
+        /* The intersections of these two lines, defines the ball location. 
+         * 0 and 640 are the boundaries of the field for the x value.
+         * 0 and 480 are the boundaries of the field for the y value.
+         */
+        
 		graphics.drawLine(0, (int) ws.getBallYVision(), 640, (int) ws.getBallYVision());
 		graphics.drawLine((int) ws.getBallXVision(), 0, (int) ws.getBallXVision(), 480);
+		
 		
 		/* Display markers for the quadrants */ 
 		graphics.drawRect(ws.getQ1LowX(), ws.getPitchTopLeft().y, ws.getQ1HighX()-ws.getQ1LowX(), (int) ws.getPitchHeight());
@@ -80,12 +88,10 @@ public class Display {
 		graphics.drawRect(ws.getQ4LowX(), ws.getPitchTopLeft().y, ws.getQ4HighX()-ws.getQ4LowX(), (int) ws.getPitchHeight());
 
 		
-		//graphics.drawOval(ball.getX() - ballRadius, ball.getY() - ballRadius, 2*ballRadius, 2*ballRadius);
-		
 		graphics.setColor(Color.red);
 		
 		
-		graphics.fillOval((int) op.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER).getX() - WorldState.plateRadius,
+		/*graphics.fillOval((int) op.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER).getX() - WorldState.plateRadius,
 						  (int) op.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER).getY() - WorldState.plateRadius, 
 						  2*WorldState.plateRadius+1, 2*WorldState.plateRadius);
 		graphics.fillOval((int) op.getRobotPosition(RobotColour.BLUE, RobotType.ATTACKER).getX() - WorldState.plateRadius,
@@ -97,6 +103,22 @@ public class Display {
 		graphics.fillOval((int) op.getRobotPosition(RobotColour.YELLOW, RobotType.ATTACKER).getX() - WorldState.plateRadius,
 				  		  (int) op.getRobotPosition(RobotColour.YELLOW, RobotType.ATTACKER).getY() - WorldState.plateRadius, 
 				  		  2*WorldState.plateRadius+1, 2*WorldState.plateRadius); 
+		*/
+		
+		for (Quadrant q : Quadrant.values()) {
+			
+			Point mean = new Point(0,0);
+			try {
+				mean = Position.findMean(op.getQuadrant(q).getPoints(Colours.GREEN));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			graphics.fillOval(mean.x - 2, mean.y - 2, 4, 4);
+			graphics.drawRect(mean.x - Thresholder.plateSize,mean.y - Thresholder.plateSize , Thresholder.plateSize*2, Thresholder.plateSize*2);
+		}
+		
 		
 		// TODO draw rectangles around each of the robot plates????
 		// TODO draw rectangles around each of the robot plates????
@@ -185,13 +207,13 @@ public class Display {
 		Point a = ws.getDefendPenaltyPoint();
 		graphics.drawOval((int) (a.getX()+ws.getPitchTopLeft().getX()-3), (int) (a.getY()+ws.getPitchTopLeft().getY()-3), 6,6);
 		
-		for(Quadrant q : Quadrant.values()) {
+		/*for(Quadrant q : Quadrant.values()) {
 			ObjectPoints quadrant = op.getQuadrant(q);
 			
 			Graphics2D graphics1 = img.createGraphics();
 			graphics1.setColor(Color.BLUE);
 			graphics1.drawRect(quadrant.getRobotPosition().x - 20, quadrant.getRobotPosition().y - 20, 40, 40);
-		}
+		}*/
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

@@ -11,15 +11,24 @@ import java.util.ArrayList;
 public class Orientation {
 	
 	public static double findOrient(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, ObjectPoints op) throws NoAngleException {
+		Point greenCentre = new Point(0,0);
+		
+		try {
+			greenCentre = Position.findMean(greenPlate);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		
 		// Calculate centre of grey circle points
         int totalX = 0;
         int totalY = 0;
         
         for (int i = 0; i < greyCircle.size(); i++) {
         	Point p = greyCircle.get(i);
-        	double distanceFromRobotCentre = op.getRobotPosition().distance(new Point((int) p.getX(), (int) p.getY()));
+        	double distanceFromRobotCentre = greenCentre.distance(new Point((int) p.getX(), (int) p.getY()));
         	
-        	if (distanceFromRobotCentre <= WorldState.ballRadius+3) {
+        	if (distanceFromRobotCentre <= Thresholder.plateSize - 3) {
 	        	totalX += p.getX();
 	            totalY += p.getY();
         	} else {

@@ -10,7 +10,7 @@ import sdp.vision.Position;
  * 
  * @author Dale Myers
  */
-public class Plate{
+public class Plate {
 	
 	/**
 	 * Taken from http://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order

@@ -16,7 +16,7 @@ import sdp.vision.WorldState;
 
 public class Thresholder{
 	
-	private final static int plateSize = 20;//35
+	public static final int plateSize = 14;//35
 	
 	/**
 	 * Thresholds every point in the image, for ball red, robot yellow, robot blue, plate green and spot grey. The results are stored in op.
@@ -90,34 +90,12 @@ public class Thresholder{
 			this.ts = ts;
 			this.ws = ws;
 			this.q = q;
-			this.plateCentroid = centroidOfGreenPlate(q);
-			//this.qLow = qLow;
-			//this.qHigh = qHigh;
-		}
-		
-		private Point centroidOfGreenPlate (Quadrant q){
-			
-			ArrayList<Point> greenPlate = pp.getQuadrant(q).getPoints(Colours.GREEN);
-			//Add up the values of the green pixels:
-	        int greenTotalX = 0;
-	        int greenTotalY = 0;
-	        for (int i = 0; i < greenPlate.size(); i++) {
-	            greenTotalX += greenPlate.get(i).getX();
-	            greenTotalY += greenPlate.get(i).getY();
-	        }
-	        
-	         
-	        // Centre of green plate
-	        Point centroid = new Point(0,0);
-	        
-	        if (greenPlate.size() != 0) {
-		        centroid.x = greenTotalX / greenPlate.size();
-		        centroid.y = greenTotalY / greenPlate.size();
-	        } else {
-	        	System.err.println("No points in green plate!: centroidOfGreenPlate");
-	        }
-			return centroid;
-			
+			try {
+				this.plateCentroid = Position.findMean(pp.getQuadrant(q).getPoints(Colours.GREEN));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.err.println("No green points: ThresholdThread");;
+			}
 		}
 		
 		public void run() {
@@ -145,12 +123,13 @@ public class Thresholder{
 						pp.getQuadrant(q).getPoints(Colours.YELLOW).add(new Point(column, row));
 					}
 					
-					if (ts.isBall(c, hsbvals, rg, rb, gb)) {
-						pp.getQuadrant(q).getPoints(Colours.RED).add(new Point(column, row));
-					}
+					
 				}
 			}
-//			System.out.println("Thread Running Quadrant:" + q);
+			
+			
+//			System.out.println(plateCentroid);
+			
 		}
 	}
 	/**
@@ -259,6 +238,10 @@ public class Thresholder{
 
 						if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
 							quadrant.getPoints(Colours.GRAY).add(new Point(column, row));
+						}
+						
+						if (ts.isBall(c, hsbvals, rg, rb, gb)) {
+							pp.getQuadrant(q).getPoints(Colours.RED).add(new Point(column, row));
 						}
 					} catch (Exception e) {
 						//point was outside the image?
