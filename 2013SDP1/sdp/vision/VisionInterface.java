@@ -75,5 +75,5 @@ public interface VisionInterface {
 	
 	/* Retrieve the angle at which you want to aim */
 	public double getAimingAngle();
-	
+		
 }

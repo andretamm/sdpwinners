@@ -238,8 +238,9 @@ public class Thresholder{
 			
 			ObjectPoints quadrant = pp.getQuadrant(q);
 			
+			
 			/*
-			 * For every pixel near the blue i, test to see if it belongs to either a green plate or a grey circle.
+			 * For every pixel near the coloured i, test to see if it belongs to either a green plate or a grey circle.
 			 */
 			for(int column = qLow; column < qHigh; column++){
 				for(int row = worldState.getPitchTopLeft().y; row < worldState.getPitchBottomLeft().y; row++){
