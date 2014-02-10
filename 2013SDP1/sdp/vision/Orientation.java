@@ -10,7 +10,15 @@ import java.util.ArrayList;
 
 public class Orientation {
 	
-	public static double findOrient(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, ObjectPoints op) throws NoAngleException {
+	/**
+	 * Finds the orientation of the robot in the given quadrant in RADIANS.
+	 * @param greyCircle All the grey points in the quadrant
+	 * @param greenPlate All the green points in the quadrant
+	 * @param qp The QuadrantPoints of the quadrant
+	 * @return The angle the robot is facing in RADIANS
+	 * @throws NoAngleException
+	 */
+	public static double findRobotOrientation(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, QuadrantPoints qp) throws NoAngleException {
 		Point greenCentre = new Point(0,0);
 		
 		try {
@@ -18,7 +26,6 @@ public class Orientation {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
 		
 		// Calculate centre of grey circle points
         int totalX = 0;
@@ -55,41 +62,65 @@ public class Orientation {
         	System.err.println("No points in grey circle");
         }
         
-        Point2D greyCentre = new Point2D.Double(greyCentreX, greyCentreY);
+        Point2D.Double greyCentre = new Point2D.Double(greyCentreX, greyCentreY);
       
         // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         double x0 = 0, y0 = 0;
         
-        x0 = op.getRobotPosition().getX();
-        y0 = op.getRobotPosition().getY();
-        Point2D plateCentre = new Point2D.Double(x0, y0);
-
+        x0 = qp.getRobotPosition().getX();
+        y0 = qp.getRobotPosition().getY();
+        Point2D.Double plateCentre = new Point2D.Double(x0, y0);
         
-        //Distance between grey centre and plate centre
-        double distance = plateCentre.distance(greyCentre);
-        
-        //To get the angle need to establish the location of the grey circle with respect to the centre of the green plate.
-        //Quadrant 1 case:
-        if ((greyCentreX >= x0) && (greyCentreY >= y0)) {
-        	return (Math.PI + Math.acos((greyCentreX-x0)/distance));
-        }
-        
-        //Quadrant 2 case:
-        if ((greyCentreX >= x0) && (greyCentreY <= y0)) {
-        	return (Math.PI - Math.acos((greyCentreX-x0)/distance));
-        }
-        
-        //Quadrant 3 case:
-        if ((greyCentreX <= x0) && (greyCentreY <= y0)) {
-        	return  Math.acos((x0-greyCentreX)/distance);
-        }
-        
-        //Quadrant 4 case:
-        if ((greyCentreX <= x0) && (greyCentreY >= y0)) {
-        	return (2*Math.PI - Math.acos((x0-greyCentreX)/distance));
-        }
-        
-        throw new NoAngleException();
+        return getAngle(greyCentre, plateCentre);
 	}
+	
+	
+	/**
+	 * Finds the angle between the 'from' and 'to' point.
+	 * @param from The origin point of the angle calculation. Essentially the tail of the angle vector 
+	 * @param to The destination point of the angle calculation. Essentially the head of the angle vector
+	 * @return The angle in RADIANS
+	 */
+	public static double getAngle(Point2D.Double from, Point2D.Double to) {
+        double angle = 0;
+        
+        if (from != null && to != null) {
+        	double distance = Math.abs(from.distance(to));
+        	double side = Math.abs(from.getX() - to.getX());
+        	double triangleAngle = Math.acos(side/distance);
+        	
+	        //To get the angle need to establish the location of the "to" point in respect to the "from" point
+        	if ((from.getX() >= to.getX()) && (from.getY() <= to.getY())) {
+	        	// Quadrant 2 case
+	        	angle = Math.PI - triangleAngle;
+        	} else if ((from.getX() >= to.getX()) && (from.getY() >= to.getY())) {
+	        	// Quadrant 3 case
+	        	angle = Math.PI + triangleAngle;
+	        } else if ((from.getX() <= to.getX()) && (from.getY() >= to.getY())) {
+	        	// Quadrant 4 case
+	        	angle = 2*Math.PI - triangleAngle;
+	        } else if ((from.getX() <= to.getX()) && (from.getY() <= to.getY())) {
+	        	// Quadrant 1 case
+	        	angle = triangleAngle;
+	        }
+        }
+        
+        return angle;
+	}
+	
+	/**
+	 * Test Orientation class methods
+	 */
+	public static void main(String[] args) {
+		Point2D.Double o = new Point2D.Double(0, 0);
+		Point2D.Double a = new Point2D.Double(1, 1);
+		Point2D.Double b = new Point2D.Double(-1, 1);
+		Point2D.Double c = new Point2D.Double(-1, -1);
+		Point2D.Double d = new Point2D.Double(1, -1);
 
+		System.out.println(Math.toDegrees(getAngle(o, a))); // 45
+		System.out.println(Math.toDegrees(getAngle(o, b))); // 135
+		System.out.println(Math.toDegrees(getAngle(o, c))); // 225
+		System.out.println(Math.toDegrees(getAngle(o, d))); // 315
+	}
 }
