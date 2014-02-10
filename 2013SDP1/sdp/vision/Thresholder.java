@@ -217,7 +217,7 @@ public class Thresholder{
 				break;
 			}
 			
-			ObjectPoints quadrant = pp.getQuadrant(q);
+			QuadrantPoints quadrant = pp.getQuadrant(q);
 			
 			
 			/*

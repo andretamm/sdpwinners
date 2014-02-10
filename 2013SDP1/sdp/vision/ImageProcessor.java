@@ -203,7 +203,7 @@ public class ImageProcessor {
                     	ArrayList<Point> greyPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GRAY);
                     	ArrayList<Point> greenPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GREEN);
                     	 
-                    	double orientation = Orientation.findOrient(greyPoints, greenPoints, pitchPoints.getRobotQuadrant(rColour, rType));
+                    	double orientation = Orientation.findRobotOrientation(greyPoints, greenPoints, pitchPoints.getRobotQuadrant(rColour, rType));
                     	pitchPoints.setRobotOrientation(rColour, rType, orientation);
                     } catch (NoAngleException e) {
                     	//System.out.print("Blue robot NoAngleException: " + e.getMessage());

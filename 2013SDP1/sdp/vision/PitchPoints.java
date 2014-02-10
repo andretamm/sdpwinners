@@ -17,10 +17,10 @@ import constants.ShootingDirection;
  * @author Andre
  * @author Thomas Wallace
  */
-public class PitchPoints extends ObjectPoints {
+public class PitchPoints extends QuadrantPoints {
 	
 	// The four quadrants	
-	private HashMap<Quadrant, ObjectPoints> quadrants;
+	private HashMap<Quadrant, QuadrantPoints> quadrants;
 	
 	private Point ballPosition;
 	
@@ -30,7 +30,7 @@ public class PitchPoints extends ObjectPoints {
 		initQuadrants(worldstate);
 	}
 	
-	public ObjectPoints getQuadrant(Quadrant q) {
+	public QuadrantPoints getQuadrant(Quadrant q) {
 		return quadrants.get(q);
 	}
 	
@@ -40,10 +40,10 @@ public class PitchPoints extends ObjectPoints {
 	 * with the class or suffer the consequences.
 	 */
 	private void initQuadrants(WorldState worldstate) {
-		quadrants = new HashMap<Quadrant, ObjectPoints>();
+		quadrants = new HashMap<Quadrant, QuadrantPoints>();
 		
 		for (Quadrant q: Quadrant.values()) {
-			quadrants.put(q, new ObjectPoints());
+			quadrants.put(q, new QuadrantPoints());
 		}
 		
 		RobotColour ourColour = worldstate.getColour();
@@ -90,22 +90,22 @@ public class PitchPoints extends ObjectPoints {
 	/* Methods for each robot's position and orientation
 	/* -------------------------------------------------- */
 	public Point getRobotPosition(RobotColour rColour, RobotType rType) {
-		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
+		QuadrantPoints quadrant = getRobotQuadrant(rColour, rType);
 		return quadrant.getRobotPosition();
 	}
 	
 	public void setRobotPosition(RobotColour rColour, RobotType rType, Point position) {
-		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
+		QuadrantPoints quadrant = getRobotQuadrant(rColour, rType);
 		quadrant.setRobotPosition(position);
 	}
 	
 	public double getRobotOrientation(RobotColour rColour, RobotType rType) {
-		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
+		QuadrantPoints quadrant = getRobotQuadrant(rColour, rType);
 		return quadrant.getRobotOrientation();
 	}
 	
 	public void setRobotOrientation(RobotColour rColour, RobotType rType, double orientation) {
-		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
+		QuadrantPoints quadrant = getRobotQuadrant(rColour, rType);
 		quadrant.setRobotOrientation(orientation);
 	}
 	
@@ -129,10 +129,10 @@ public class PitchPoints extends ObjectPoints {
 	 * @param type
 	 * @return
 	 */
-	public ObjectPoints getRobotQuadrant(RobotColour colour, RobotType type) {
+	public QuadrantPoints getRobotQuadrant(RobotColour colour, RobotType type) {
 		// Check all quadrants and see which one has our desired robot
 		for (Quadrant q: Quadrant.values()) {
-			ObjectPoints quadrant = getQuadrant(q);
+			QuadrantPoints quadrant = getQuadrant(q);
 			
 			if (quadrant.getrColour() == colour && quadrant.getrType() == type) {
 				return quadrant;
@@ -151,7 +151,7 @@ public class PitchPoints extends ObjectPoints {
 	 * @return
 	 */
 	public ArrayList<Point> getColouredPoints(RobotColour rColour, RobotType rType, Colours colour) {
-		ObjectPoints quadrant = getRobotQuadrant(rColour, rType);
+		QuadrantPoints quadrant = getRobotQuadrant(rColour, rType);
 		return quadrant.getPoints(colour);
 	}
 	

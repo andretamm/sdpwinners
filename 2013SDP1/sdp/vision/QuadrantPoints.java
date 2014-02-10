@@ -9,13 +9,13 @@ import constants.RobotColour;
 import constants.RobotType;
 
 /**
- * Vision's internal representation of the image. This is for use with only a
- * single quadrant. To get the data for the whole field you need to aggregate
- * the data from all four quadrants. This should be done by TablePoints.
+ * Vision's internal representation of one quadrant. To get the data 
+ * for the whole field you need to aggregate the data from all four quadrants. 
+ * This should be done by PitchPoints.
  * 
  * @author Thomas Wallace
  */
-public class ObjectPoints {
+public class QuadrantPoints {
 	
 	private RobotColour rColour;
 	private RobotType rType;
@@ -27,7 +27,7 @@ public class ObjectPoints {
 	private Point robotPosition;
 	private double robotOrientation;
 	
-	public ObjectPoints() {
+	public QuadrantPoints() {
 		// Initialise list of points of each colour
 		points = new HashMap<Colours, ArrayList<Point>>();
 		for (Colours colour: Colours.values()) {
