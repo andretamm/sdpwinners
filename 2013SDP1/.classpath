@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/pccomm.jar"/>
 	<classpathentry kind="lib" path="lib/pctools.jar"/>
+	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1126659/Desktop/opencv-2.4.8/build/bin/opencv-248.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
