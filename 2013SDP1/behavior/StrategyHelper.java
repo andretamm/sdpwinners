@@ -7,13 +7,13 @@ import sdp.vision.Orientation;
 
 public class StrategyHelper {
 	
-	public static final double ROBOT_SAFETY_DISTANCE = 20;
+	public static final double ROBOT_SAFETY_DISTANCE = 40;
 	
 	/**
 	 * Normalises the vector to have length one.
 	 */
 	public static Point2D.Double normaliseVector(Point2D.Double point) {
-		double sum = point.getX() + point.getY();
+		double sum = Math.abs(point.getX()) + Math.abs(point.getY());
 		return new Point2D.Double(point.getX() / sum, point.getY() / sum);
 	}
 	
@@ -38,7 +38,8 @@ public class StrategyHelper {
 	 * between the ball and the centre of the goal and finding a point on this line. 
 	 */
 	public static Point findRobotKickPosition(Point ball, Point goalCentre) {
-		Point2D.Double orientationVector = normaliseVector(new Point2D.Double(goalCentre.getX() - ball.getX(), goalCentre.getY() - ball.getY()));		
+		Point2D.Double orientationVector = normaliseVector(new Point2D.Double(ball.getX() - goalCentre.getX(), ball.getY() - goalCentre.getY()));
+//		System.out.println("kickposition orientation vector: " + orientationVector.getX() + ", " + orientationVector.getY());
 		Point robotPosition =  addVectorToPoint(multiplyVector(orientationVector, ROBOT_SAFETY_DISTANCE), ball);
 		
 		return robotPosition;

@@ -152,6 +152,10 @@ public class Display {
 		graphics.setColor(Color.GREEN);
 		graphics.drawOval((int) (pos4.x-5+ws.getPitchTopLeft().getX()), (int) (pos4.y-5+ws.getPitchTopLeft().getY()), 10, 10);
 		
+		Point simpleKickLocation = KickFrom.whereToKickFromSimple(ws.getOppositionGoalCentre(), new Point(ws.ballX, ws.ballY), 10);
+		graphics.setColor(Color.PINK);
+		graphics.fillOval((int) (simpleKickLocation.getX() - 3), (int)simpleKickLocation.getX() - 3, 6, 6);
+		
 		Point target = KickFrom.getPointToShootAt(ws);
 		graphics.setColor(Color.RED);
 		graphics.drawOval((int) (target.x-5+ws.getPitchTopLeft().getX()), (int) (target.y-5+ws.getPitchTopLeft().getY()), 10, 10);
@@ -207,6 +211,11 @@ public class Display {
 		Point a = ws.getDefendPenaltyPoint();
 		graphics.drawOval((int) (a.getX()+ws.getPitchTopLeft().getX()-3), (int) (a.getY()+ws.getPitchTopLeft().getY()-3), 6,6);
 		
+		graphics.fillOval((int) ws.andresPoint.getX() - 3, (int) ws.andresPoint.getY() - 3, 6, 6);
+		
+		Point goalC = ws.getOppositionGoalCentre();
+		graphics.setColor(Color.MAGENTA);
+		graphics.fillOval((int) goalC.getX() - 10, (int) goalC.getY() - 10, 20, 20);
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

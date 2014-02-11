@@ -25,7 +25,9 @@ public class Position {
         	x /= numPos;
         	y /= numPos;
         }
-        else throw new Exception("No points passed to findMean");
+//        else throw new Exception("No points passed to findMean");
+        else return new Point(50, 50);
+        
 		return new Point(x,y);
 	}
 	

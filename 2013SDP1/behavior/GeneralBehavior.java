@@ -67,6 +67,7 @@ public abstract class GeneralBehavior implements Behavior {
 	/**
 	 * Rotates the robot to the specified angle
 	 * @param angle The angle (in rad) the robot will be facing by the end
+	 * @author Andre
 	 */
 	public void rotateTo(double angle) {
 		// Find the complement angle, aka the angle 180deg 
@@ -77,20 +78,16 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 
 		// Now rotate to the correct angle
-		while (isActive) {
-			double orientation = ws.getRobotOrientation(r.type, r.colour);
-			System.out.print("Robot orientation: " + orientation + " | ");
-			
-			if (orientation > (angle - ANGLE_ERROR) && orientation < angleComplement) {
-				// Closer to go clockwise
-				s.send(0, RobotCommand.CW);
-			} else if (orientation < (angle - ANGLE_ERROR) && orientation > angleComplement) {
-				// Closer to go counterclockwise
-				s.send(0, RobotCommand.CCW);
-			} else {
-				// Reached the angle, stop
-				break;
-			}
+		double orientation = ws.getRobotOrientation(r.type, r.colour);
+		
+		if (orientation > (angle - ANGLE_ERROR) && orientation < angleComplement) {
+			// Closer to go clockwise
+			s.send(0, RobotCommand.CW);
+		} else if (orientation < (angle - ANGLE_ERROR) && orientation > angleComplement) {
+			// Closer to go counterclockwise
+			s.send(0, RobotCommand.CCW);
+		} else {
+			// Reached the angle, stop
 		}
 	}
 }

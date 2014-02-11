@@ -21,17 +21,21 @@ public class MatchAttackPositionY extends GeneralBehavior {
 		super.action();
 		
 		while (isActive()) {
+			System.out.println("Doing match Y");
 			if (ws == null) {
 				System.err.println("worldstate not intialised");
 			}
 			
-			Point kickP = StrategyHelper.findRobotKickPosition(ws.getBallPoint(), ws.getOppositionGoalCentre());
+			Point ball = new Point(ws.ballX, ws.ballY);
+			Point kickP = StrategyHelper.findRobotKickPosition(ball, ws.getOppositionGoalCentre());
 			
 			try {
 				int y = ws.getRobotY(r);
 				
 				// Always face up
 				rotateTo(C.UP);
+				
+				System.out.println("Facing up");
 
 				// Move to the right Y
 				if (kickP.getY() - y > DISTANCE_ERROR) {
@@ -63,7 +67,7 @@ public class MatchAttackPositionY extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		Point ballP = ws.getBallPoint();
+		Point ballP = new Point(ws.ballX, ws.ballY);
 		Point kickP = StrategyHelper.findRobotKickPosition(ballP, ws.getOppositionGoalCentre());
 		Point robotP = new Point(ws.getRobotX(r), ws.getRobotY(r));
 		

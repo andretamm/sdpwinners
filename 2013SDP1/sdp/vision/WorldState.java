@@ -14,6 +14,8 @@ import constants.ShootingDirection;
 
 public class WorldState implements VisionInterface {
 	
+	public Point andresPoint = new Point(0,0);
+	
 	public static final int HISTORY_LENGTH = 5;
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
@@ -62,6 +64,9 @@ public class WorldState implements VisionInterface {
 
 	public static final int ballRadius = 12;
 	public static final int plateRadius = 15;
+
+	private boolean haveBall = false;
+
 	public static double cmToPixels = 0.38;
 
 	//TODO Alter history and velocity for two robots
@@ -508,11 +513,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public Point getLeftGoalPoint() {
-		return new Point(0, (getPitchBottomRight().y - getPitchTopLeft().y) / 2);
+		return new Point(0, (getPitchBottomRight().y + getPitchTopLeft().y) / 2);
 	}
 
 	public Point getRightGoalPoint() {
-		return new Point((int) getPitchWidth(), (getPitchBottomRight().y - getPitchTopLeft().y) / 2);
+		return new Point((int) getPitchWidth(), (getPitchBottomRight().y + getPitchTopLeft().y) / 2);
 	}
 
 	public Point getOurGoalCentre() {
@@ -782,6 +787,14 @@ public class WorldState implements VisionInterface {
 	public double getAimingAngle() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public boolean haveBall() {
+		return haveBall;
+	}
+	
+	public void setHaveBall(boolean haveBall) {
+		this.haveBall = haveBall;
 	}
 	
 }

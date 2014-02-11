@@ -16,7 +16,7 @@ public class StartRobot {
 		WorldState worldstate = new WorldState();
 		RunVision.setupVision(worldstate); 
 		// Start Behavior manager for the yellow defender
-		Manager m = new Milestone3AttackerManager(worldstate, new Robot(RobotColour.YELLOW, RobotType.DEFENDER), server);
+		Manager m = new Milestone3AttackerManager(worldstate, new Robot(RobotColour.BLUE, RobotType.ATTACKER), server);
 		m.start();
 		
 		while (true) {

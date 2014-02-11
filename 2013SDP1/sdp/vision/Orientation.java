@@ -56,10 +56,10 @@ public class Orientation {
 				greyCentreX = greyCenter.x;
 				greyCentreY = greyCenter.y;
 			} catch (Exception e) {
-				System.err.println("No grey points!");
+//				System.err.println("No grey points!");
 			}
         } else {
-        	System.err.println("No points in grey circle");
+//        	System.err.println("No points in grey circle");
         }
         
         Point2D.Double greyCentre = new Point2D.Double(greyCentreX, greyCentreY);

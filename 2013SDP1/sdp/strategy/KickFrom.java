@@ -136,7 +136,7 @@ public class KickFrom {
 		return toReturn;
 	}
 	
-    private static Point whereToKickFromSimple(Point goal, Point ball, int distance) {
+    public static Point whereToKickFromSimple(Point goal, Point ball, int distance) {
             Point imaginaryLine, imaginaryLine2;
             double distanceToGoal;
             double ratio;

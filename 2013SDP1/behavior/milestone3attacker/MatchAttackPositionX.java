@@ -6,7 +6,9 @@ import behavior.GeneralBehavior;
 import behavior.StrategyHelper;
 import ourcommunication.RobotCommand;
 import ourcommunication.Server;
+import sdp.vision.Orientation;
 import sdp.vision.WorldState;
+import sun.awt.X11.InfoWindow.Balloon;
 import common.Robot;
 import constants.C;
 
@@ -21,43 +23,67 @@ public class MatchAttackPositionX extends GeneralBehavior {
 		super.action();
 		
 		while (isActive()) {
+			System.out.println("Doing match X");
 			if (ws == null) {
 				System.err.println("worldstate not intialised");
 			}
 			
-			Point kickP = StrategyHelper.findRobotKickPosition(ws.getBallPoint(), ws.getOppositionGoalCentre());
-			
+			Point kickP = StrategyHelper.findRobotKickPosition(new Point(ws.ballX, ws.ballY), ws.getOppositionGoalCentre());
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 			try {
 				int y = ws.getRobotY(r);
 				int x = ws.getRobotX(r);
 				
+				System.out.println("Robot: (" + x + ", " + y + ") | kickP: (" + kickP.getX() + ", " + kickP.getY() + ") Ball: (" + ws.ballX + ", " + ws.ballY + ")");
+				
+				ws.andresPoint = kickP;
+				
 				// Make sure we are at a good distance from the ball
-				if (StrategyHelper.inRange(y, ws.getBallY(), StrategyHelper.ROBOT_SAFETY_DISTANCE)) {
+				if (StrategyHelper.inRange(y, ws.ballY, StrategyHelper.ROBOT_SAFETY_DISTANCE)) {
 					// Too close to the ball to just go to x coordinate straight away
 					// move away in y direction first
+					System.out.println("Robot too close to ball, move to safe Y first");
 					
-					if (ws.getBallY() - y > 0) {
+					if (ws.ballY - y > 0) {
 						// Robot above the ball, quicker to move up
-						rotateTo(C.UP);	
+						if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.UP, ANGLE_ERROR)) {
+							rotateTo(C.UP);
+							continue;
+						}
 					} else {
 						// Robot below the ball, quicker to move down
-						rotateTo(C.DOWN);
+						if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.DOWN, ANGLE_ERROR)) {
+							rotateTo(C.DOWN);
+							continue;
+						}
 					}
 					
 					// Move away from the ball
 					s.send(0, RobotCommand.FORWARD);
 					continue;
-				}
-				
+				}				
+
 				// Move to the right x
-				if (StrategyHelper.inRange(x, kickP.getX(), DISTANCE_ERROR)) {
+				if (!StrategyHelper.inRange(x, kickP.getX(), DISTANCE_ERROR)) {
+					System.out.println("Robot moving to right X");
+					
 					try {
 						if (x - kickP.getX() > 0) {
 							// Robot to the right of the kickpoint, quicker to move left
-							rotateTo(C.LEFT);	
+							if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.LEFT, ANGLE_ERROR)) {
+								rotateTo(C.LEFT);
+								continue;
+							}
 						} else {
 							// Robot to the left of the kickpoint, quicker to move right
-							rotateTo(C.RIGHT);
+							if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.RIGHT, ANGLE_ERROR)) {
+								rotateTo(C.RIGHT);
+								continue;
+							}
 						}
 						
 						s.send(0, RobotCommand.FORWARD);
@@ -70,13 +96,16 @@ public class MatchAttackPositionX extends GeneralBehavior {
 				}
 				
 				// We're in the right position, just chill
+				System.out.println("Sending STOP");
 				s.send(0, RobotCommand.STOP);
 			} catch (Exception e) {
 				System.err.println("We don't know where the robot or kick point is :((((");
+				System.out.println("Sending STOP");
 				s.send(0, RobotCommand.STOP);
 				e.printStackTrace();
 			}
 		}
+		
 	}
 
 	/** 
@@ -85,7 +114,7 @@ public class MatchAttackPositionX extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		Point ballP = ws.getBallPoint();
+		Point ballP = new Point(ws.ballX, ws.ballY);
 		Point kickP = StrategyHelper.findRobotKickPosition(ballP, ws.getOppositionGoalCentre());
 		Point robotP = new Point(ws.getRobotX(r), ws.getRobotY(r));
 		

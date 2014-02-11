@@ -349,7 +349,7 @@ public class ImageProcessor {
         		}
         		
         		for (RobotType rt: RobotType.values()) {
-        			System.out.println(rt + " " + rc + " " + pitch.getColouredPoints(rc, rt, c).size());
+//        			System.out.println(rt + " " + rc + " " + pitch.getColouredPoints(rc, rt, c).size());
         			
         			// Filter out any coloured points too close to the ball
                 	if (worldState.getBallVisible()) {
@@ -381,7 +381,7 @@ public class ImageProcessor {
 					} catch (Exception e) {
 						// We don't have any coloured points left for this robot, set it to its "default" position
 						// TODO set this to be its previous location instead together with copious error reporting
-						System.err.println("No points found for the robot (" + rc + " " + rt + ")");
+//						System.err.println("No points found for the robot (" + rc + " " + rt + ")");
 						pitch.setRobotPosition(rc, rt, worldState.getDefaultPoint(rc));
 					}
         		}

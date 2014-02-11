@@ -95,8 +95,7 @@ public class Thresholder{
 			try {
 				this.plateCentroid = Position.findMean(pp.getQuadrant(q).getPoints(Colours.GREEN));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.err.println("No green points: ThresholdThread");;
+//				System.err.println("No green points: ThresholdThread");;
 			}
 		}
 		
