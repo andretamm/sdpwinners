@@ -6,6 +6,7 @@ import constants.RobotType;
 import sdp.vision.RunVision;
 import sdp.vision.WorldState;
 import behavior.Manager;
+import behavior.Milestone3AttackerManager;
 
 public class StartRobot {
 	public static void main(String[] args){
@@ -15,7 +16,7 @@ public class StartRobot {
 		WorldState worldstate = new WorldState();
 		RunVision.setupVision(worldstate); 
 		// Start Behavior manager for the yellow defender
-		Manager m = new Manager(worldstate, new Robot(RobotColour.YELLOW, RobotType.DEFENDER), server);
+		Manager m = new Milestone3AttackerManager(worldstate, new Robot(RobotColour.YELLOW, RobotType.DEFENDER), server);
 		m.start();
 		
 		while (true) {
