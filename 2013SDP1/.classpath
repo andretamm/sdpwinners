@@ -20,7 +20,6 @@
 	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/pccomm.jar"/>
 	<classpathentry kind="lib" path="lib/pctools.jar"/>
-	<classpathentry kind="lib" path="lib/libbluetooth.so"/>
 	<classpathentry kind="lib" path="lib/bluecove-gpl.jar"/>
 	<classpathentry kind="lib" path="lib/bluecove.jar"/>
 	<classpathentry kind="lib" path="lib/classes.jar"/>
