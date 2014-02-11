@@ -18,6 +18,7 @@ import sdp.vision.WorldState;
 public class Thresholder{
 	
 	public static final int plateSize = 14;//35
+	public static final double threshValue = 196.0;
 	
 	/**
 	 * Thresholds every point in the image, for ball red, robot yellow, robot blue, plate green and spot grey. The results are stored in op.
@@ -109,27 +110,29 @@ public class Thresholder{
 			for (int column= plateCentroid.x - plateSize; column < plateCentroid.x + plateSize; column++) {
 	        	for (int row= plateCentroid.y - plateSize; row < plateCentroid.y + plateSize; row++) {
 					
-					/* The RGB colours and hsv values for the current pixel. */
-					Color c = new Color(image.getRGB(column, row));
-					float hsbvals[] = new float[3];
-					Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
-					rg=c.getRed()-c.getGreen();
-					rb=c.getRed()-c.getBlue();
-					gb=c.getGreen()-c.getBlue();
+	        		//System.out.println(Position.sqrdEuclidDist(plateCentroid.x, plateCentroid.y, column, row) + ": " + column + " " + row + " : " + plateCentroid.x + plateSize);
+	        		if (Position.sqrdEuclidDist(plateCentroid.x, plateCentroid.y, column, row) <= threshValue) {
+						/* The RGB colours and hsv values for the current pixel. */
+						Color c = new Color(image.getRGB(column, row));
+						float hsbvals[] = new float[3];
+						Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
+						rg=c.getRed()-c.getGreen();
+						rb=c.getRed()-c.getBlue();
+						gb=c.getGreen()-c.getBlue();
+						
+						if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
+							pp.getQuadrant(q).getPoints(Colours.GRAY).add(new Point(column, row));
+						}
+	
+						if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
+							pp.getQuadrant(q).getPoints(Colours.BLUE).add(new Point(column, row));
+						}
+	
+						if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
+							pp.getQuadrant(q).getPoints(Colours.YELLOW).add(new Point(column, row));
+						}
 					
-					if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
-						pp.getQuadrant(q).getPoints(Colours.GRAY).add(new Point(column, row));
 					}
-
-					if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
-						pp.getQuadrant(q).getPoints(Colours.BLUE).add(new Point(column, row));
-					}
-
-					if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
-						pp.getQuadrant(q).getPoints(Colours.YELLOW).add(new Point(column, row));
-					}
-					
-					
 				}
 			}
 			

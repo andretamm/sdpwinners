@@ -24,7 +24,7 @@ public class Orientation {
 		try {
 			greenCentre = Position.findMean(greenPlate);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		// Calculate centre of grey circle points

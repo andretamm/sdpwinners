@@ -116,7 +116,7 @@ public class Display {
 			}
 			
 			graphics.fillOval(mean.x - 2, mean.y - 2, 4, 4);
-			graphics.drawRect(mean.x - Thresholder.plateSize,mean.y - Thresholder.plateSize , Thresholder.plateSize*2, Thresholder.plateSize*2);
+			graphics.drawOval(mean.x - (int)Math.sqrt(Thresholder.threshValue),mean.y - (int)Math.sqrt(Thresholder.threshValue) , (int)Math.sqrt(Thresholder.threshValue)*2, (int)Math.sqrt(Thresholder.threshValue)*2);
 		}
 		
 		
