@@ -50,7 +50,7 @@ public class PitchPoints extends QuadrantPoints {
 		RobotColour oppositionColour = ourColour == RobotColour.BLUE ? RobotColour.YELLOW : RobotColour.BLUE;
 		
 		// Figure out which quadrant is responsible for what
-		if (worldstate.getDirection() == ShootingDirection.LEFT) {
+		if (worldstate.getDirection() == ShootingDirection.RIGHT) {
 			// Left goal is ours...
 			quadrants.get(Quadrant.Q1).setrColour(ourColour);
 			quadrants.get(Quadrant.Q2).setrColour(oppositionColour);
