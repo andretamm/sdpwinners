@@ -3,9 +3,11 @@ package behavior;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+import sdp.vision.Orientation;
+
 public class StrategyHelper {
 	
-	public static final double ROBOT_DISTANCE_FROM_BALL = 30;
+	public static final double ROBOT_SAFETY_DISTANCE = 20;
 	
 	/**
 	 * Normalises the vector to have length one.
@@ -37,10 +39,28 @@ public class StrategyHelper {
 	 */
 	public static Point findRobotKickPosition(Point ball, Point goalCentre) {
 		Point2D.Double orientationVector = normaliseVector(new Point2D.Double(goalCentre.getX() - ball.getX(), goalCentre.getY() - ball.getY()));		
-		Point robotPosition =  addVectorToPoint(multiplyVector(orientationVector, ROBOT_DISTANCE_FROM_BALL), ball);
+		Point robotPosition =  addVectorToPoint(multiplyVector(orientationVector, ROBOT_SAFETY_DISTANCE), ball);
 		
 		return robotPosition;
 	}
 	
+	/**
+	 * Finds the angle (in radians) that the robot should be facing if it was
+	 * behind the ball on the line from the goal to the ball and wanted to kick
+	 * the ball in the goal  
+	 */
+	public static double findRobotKickOrientation(Point ball, Point goalCentre) {
+		return Orientation.getAngle(ball, goalCentre);
+	}
 	
+	/**
+	 * Sees if our value is in a certain range of the target value
+	 * @param x Our value
+	 * @param target Target value
+	 * @param error Error range that is satisfiable
+	 * @return
+	 */
+	public static boolean inRange(double x, double target, double error) {
+		return (x < (target + error)) && (x > (target + error));
+	}
 }

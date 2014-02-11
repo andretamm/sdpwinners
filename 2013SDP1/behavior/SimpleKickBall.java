@@ -3,28 +3,30 @@ package behavior;
 import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
+
 import common.Robot;
-import constants.C;
 
-public class SimpleDefendGoal extends GeneralBehavior {
-
+public class SimpleKickBall extends GeneralBehavior {
 	
-
-	public SimpleDefendGoal(WorldState ws, Robot r, Server s) {
+	public static final double ANGLE_ERROR = 0.3;
+	public static final double DISTANCE_ERROR = 0.1;
+	public static final double ANGLE270 = Math.PI * 3 / 2.0;
+	
+	public SimpleKickBall(WorldState ws, Robot r, Server s) {
 		super(ws, r, s);
 	}
-
+	
 	@Override
 	public void action() {
 		isActive = true;
-
+		
 		while (isActive()) {
 			if (ws == null) {
 				System.err.println("worldstate not intialised");
 			}
 			
 			try {
-				Thread.sleep(10);
+				Thread.sleep(500);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -34,12 +36,20 @@ public class SimpleDefendGoal extends GeneralBehavior {
 				int y = ws.getRobotY(r);
 				int ballX = ws.ballX;
 				int ballY = ws.ballY;
+				double orientation = ws.getRobotOrientation(r.type, r.colour);
+				System.out.print("Robot orientation: " + orientation + " | ");
 				
-				// Rotate to 270
-				rotateTo(C.A270);
+				// Turn to 270
+				if (orientation > ANGLE270 + ANGLE_ERROR || orientation < Math.PI/2.0) {
+					s.send(0, RobotCommand.CW);
+					continue;
+				} else if (orientation < ANGLE270 - ANGLE_ERROR) {
+					s.send(0, RobotCommand.CCW);
+					continue;
+				}
 				
 				System.out.println("Robot: " + x + ", " + y + " | " + "Ball: " + ballX + ", " + ballY);
-
+				
 				// Move to same y as ball
 				if (ballY - y > DISTANCE_ERROR) {
 					System.out.println("First distance: " + (ballY - y));
@@ -50,7 +60,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 					s.send(0, RobotCommand.FORWARD);
 					continue;
 				}
-
+				
 				// We're in the right position, just chill
 				s.send(0, RobotCommand.STOP);
 			} catch (Exception e) {

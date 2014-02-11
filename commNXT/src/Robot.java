@@ -11,7 +11,7 @@ public class Robot {
 	DifferentialPilot pilot;
 	
 	public void init() {
-		kicker = Motor.A;
+		kicker = Motor.C;
 		pilot = new DifferentialPilot(56, 112, Motor.A, MirrorMotor.invertMotor(Motor.B), true);
 		pilot.setTravelSpeed(20);
 	}

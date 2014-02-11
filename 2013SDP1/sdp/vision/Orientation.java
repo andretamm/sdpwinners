@@ -108,6 +108,15 @@ public class Orientation {
         return angle;
 	}
 	
+	
+	/**
+	 * Less precise version of getAngle(Point2D.Double, Point2D.Double)
+	 */
+	public static double getAngle(Point from, Point to) {
+		// Make new Point2D.Double from the integer values, then run original function
+		return getAngle(new Point2D.Double(from.getX(), from.getY()), new Point2D.Double(to.getX(), to.getY()));
+	}
+	
 	/**
 	 * Test Orientation class methods
 	 */
