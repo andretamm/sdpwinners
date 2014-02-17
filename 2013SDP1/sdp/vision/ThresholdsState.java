@@ -20,6 +20,7 @@ public class ThresholdsState {
 	}
 	
 	private void initQuadrantThresholds(){
+		thresholds = new HashMap<Quadrant, QuadrantThresholdsState>();
 		
 		for (Quadrant q : Quadrant.values()){
 			thresholds.put(q, new QuadrantThresholdsState());
