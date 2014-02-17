@@ -104,9 +104,9 @@ class StateUpdateTimer extends TimerTask{
 	@Override
 	public void run() {
 		String text = "No Strategy";
-		if ( mParent.getStrategy() != null ){
-			text = mParent.getStrategy().getGameState().toString();
-		}
+//		if ( mParent.getStrategy() != null ){
+//			text = mParent.getStrategy().getGameState().toString();
+//		}
 		mGameStateLabel.setText("Game State: " + text);
 
 		Runtime runtime = Runtime.getRuntime();

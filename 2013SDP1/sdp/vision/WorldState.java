@@ -306,6 +306,10 @@ public class WorldState implements VisionInterface {
 		return robotOrientation.get(new Robot(rColour, rType));
 	}
 	
+	public double getRobotOrientation(Robot r) {
+		return robotOrientation.get(r);
+	}
+	
 	// New position getters/setters
 	public int getRobotX(Robot r) {
 		return robotPosition.get(r).x;
@@ -313,6 +317,10 @@ public class WorldState implements VisionInterface {
 	
 	public int getRobotY(Robot r) {
 		return robotPosition.get(r).y;
+	}
+	
+	public Point getRobotPoint(Robot r) {
+		return robotPosition.get(r);
 	}
 	
 	public void setRobotX(Robot r, int x) {

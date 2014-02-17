@@ -1,34 +1,26 @@
 package ourcommunication;
 
-import common.Robot;
-import constants.RobotColour;
-import constants.RobotType;
+import sdp.gui.MainWindow;
 import sdp.vision.RunVision;
 import sdp.vision.WorldState;
-import behavior.KillerManager;
-import behavior.Manager;
-import behavior.DefenderManager;
+import behavior.Strategy;
 
 public class StartRobot {
 	
 	private static Server server;
 	
 	public static void main(String[] args){
+		// Start vision
 		WorldState worldstate = new WorldState();
 		RunVision.setupVision(worldstate);
 		
-		System.out.println("Starting the Bluetooth communication...");
+		// Set up Bluetooth communications class
 		server = new Server(worldstate);
 			
-		System.out.println("trolololo");
-		// Start Behavior manager for the yellow defender
-
-		Manager m = new KillerManager(worldstate, new Robot(RobotColour.BLUE, RobotType.ATTACKER), server);
-//		Manager m = new DefenderManager(worldstate, new Robot(RobotColour.BLUE, RobotType.DEFENDER), server);
-
-		m.start();
+		// Strategy manager
+		Strategy strategy = new Strategy(worldstate, server);
 		
-		// Close the Bluetooth communication
-//		server.close();
+		// Start GUI
+		MainWindow mw = new MainWindow(worldstate, server, strategy);
 	}
 }

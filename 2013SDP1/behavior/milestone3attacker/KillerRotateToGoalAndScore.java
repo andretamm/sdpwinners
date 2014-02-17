@@ -11,11 +11,12 @@ import sdp.vision.WorldState;
 import sun.awt.X11.InfoWindow.Balloon;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class KillerRotateToGoalAndScore extends GeneralBehavior {
 
-	public KillerRotateToGoalAndScore(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public KillerRotateToGoalAndScore(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -31,11 +32,11 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 			e.printStackTrace();
 		}
 		
-		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point robot = ws.getRobotPoint(robot());
 		Point goal = ws.getOppositionGoalCentre();
 		double orientation = Orientation.getAngle(robot, goal);
 		
-		if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR)) {
+		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
 			rotateTo(orientation);
 			return;
 		}

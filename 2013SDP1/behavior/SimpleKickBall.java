@@ -5,6 +5,7 @@ import ourcommunication.Server;
 import sdp.vision.WorldState;
 
 import common.Robot;
+import constants.RobotType;
 
 public class SimpleKickBall extends GeneralBehavior {
 	
@@ -12,8 +13,8 @@ public class SimpleKickBall extends GeneralBehavior {
 	public static final double DISTANCE_ERROR = 0.1;
 	public static final double ANGLE270 = Math.PI * 3 / 2.0;
 	
-	public SimpleKickBall(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public SimpleKickBall(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 	
 	@Override
@@ -32,11 +33,11 @@ public class SimpleKickBall extends GeneralBehavior {
 			}
 			
 			try {
-				int x = ws.getRobotX(r);
-				int y = ws.getRobotY(r);
+				int x = ws.getRobotX(robot());
+				int y = ws.getRobotY(robot());
 				int ballX = ws.ballX;
 				int ballY = ws.ballY;
-				double orientation = ws.getRobotOrientation(r.type, r.colour);
+				double orientation = ws.getRobotOrientation(robot());
 				System.out.print("Robot orientation: " + orientation + " | ");
 				
 				// Turn to 270

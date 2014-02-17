@@ -11,11 +11,12 @@ import sdp.vision.WorldState;
 import sun.awt.X11.InfoWindow.Balloon;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class MatchAttackPositionX extends GeneralBehavior {
 
-	public MatchAttackPositionX(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public MatchAttackPositionX(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -35,8 +36,8 @@ public class MatchAttackPositionX extends GeneralBehavior {
 //				e.printStackTrace();
 //			}
 			try {
-				int y = ws.getRobotY(r);
-				int x = ws.getRobotX(r);
+				int y = ws.getRobotY(robot());
+				int x = ws.getRobotX(robot());
 				
 				System.out.println("Robot: (" + x + ", " + y + ") | kickP: (" + kickP.getX() + ", " + kickP.getY() + ") Ball: (" + ws.ballX + ", " + ws.ballY + ")");
 				
@@ -50,13 +51,13 @@ public class MatchAttackPositionX extends GeneralBehavior {
 					
 					if (ws.ballY - y > 0) {
 						// Robot above the ball, quicker to move up
-						if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.UP, ANGLE_ERROR)) {
+						if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.UP, ANGLE_ERROR)) {
 							rotateTo(C.UP);
 							continue;
 						}
 					} else {
 						// Robot below the ball, quicker to move down
-						if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.DOWN, ANGLE_ERROR)) {
+						if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR)) {
 							rotateTo(C.DOWN);
 							continue;
 						}
@@ -74,13 +75,13 @@ public class MatchAttackPositionX extends GeneralBehavior {
 					try {
 						if (x - kickP.getX() > 0) {
 							// Robot to the right of the kickpoint, quicker to move left
-							if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.LEFT, ANGLE_ERROR)) {
+							if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.LEFT, ANGLE_ERROR)) {
 								rotateTo(C.LEFT);
 								continue;
 							}
 						} else {
 							// Robot to the left of the kickpoint, quicker to move right
-							if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.RIGHT, ANGLE_ERROR)) {
+							if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.RIGHT, ANGLE_ERROR)) {
 								rotateTo(C.RIGHT);
 								continue;
 							}
@@ -116,7 +117,7 @@ public class MatchAttackPositionX extends GeneralBehavior {
 	public boolean takeControl() {
 		Point ballP = new Point(ws.ballX, ws.ballY);
 		Point kickP = StrategyHelper.findRobotKickPosition(ballP, ws.getOppositionGoalCentre());
-		Point robotP = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point robotP = ws.getRobotPoint(robot());
 		
 		if (!StrategyHelper.inRange(robotP.getX(), kickP.getX(), DISTANCE_ERROR)) {
 			// We are in the wrong X position, get to the right X first

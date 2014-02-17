@@ -9,11 +9,12 @@ import lejos.robotics.subsumption.Behavior;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
 import common.Robot;
+import constants.RobotType;
 
 public class DefenderManager extends behavior.Manager {
 
-	public DefenderManager(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public DefenderManager(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 	
 	@Override
@@ -22,7 +23,7 @@ public class DefenderManager extends behavior.Manager {
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 		// Add behaviors in ascending order of priority
-		behaviorList[0] = new SimpleDefendGoal(getWs(), getR(), getS());
+		behaviorList[0] = new SimpleDefendGoal(getWorldState(), getRobotType(), getServer());
 
 		return behaviorList;
 	}

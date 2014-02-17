@@ -2,6 +2,8 @@ package ourcommunication;
 
 import java.io.IOException;
 
+import constants.RobotType;
+
 import sdp.vision.WorldState;
 
 /**
@@ -30,32 +32,44 @@ public class Server {
 	public Server(WorldState ws) {
 		this.ws = ws;
 		defenderRobot = new BluetoothCommunication(DEFENDER_NXT_NAME, DEFENDER_NXT_MAC_ADDRESS);
-//		attackerRobot = new BluetoothCommunication(ATTACKER_NXT_NAME, ATTACKER_NXT_MAC_ADDRESS);
-//		
-		try {
-			defenderRobot.openBluetoothConnection();
-		} catch (IOException e) {
-			System.err.println("Failed to connect to defender robot");
-			e.printStackTrace();
-		}
-		
-//		try {
-//			attackerRobot.openBluetoothConnection();
-//		} catch (IOException e) {                                            
-//			System.err.println("Failed to connect to attacker robot");
-//			e.printStackTrace();
-//		}
-		
-		System.out.println("Connected");			
+		attackerRobot = new BluetoothCommunication(ATTACKER_NXT_NAME, ATTACKER_NXT_MAC_ADDRESS);
 	}
 	
-	public void receiveHaveBall() {
+	/**
+	 * Gets the attacker or defender robot
+	 */
+	private BluetoothCommunication getRobot(RobotType type) {
+		if (type == RobotType.ATTACKER) {
+			return attackerRobot;
+		} else {
+			return defenderRobot;
+		}
+	}
+	
+	/**
+	 * Connects to a robot
+	 * @param type Attacker or Defender
+	 */
+	public void connectToRobot(RobotType type) {
+		if (getRobot(type).openBluetoothConnection()) {
+			System.out.println("Connected to " + type + " Robot.");
+		} else {
+			System.out.println("Failed to connect to " + type + " Robot.");
+		}
+	}
+	
+	/**
+	 * Waits to receive a signal from a robot saying it has the
+	 * ball in its grabber
+	 * @param type Attacker or Defender
+	 */
+	public void receiveHaveBall(RobotType type) {
 		while (true) {
 			int[] res;
 			
 			try {
-				System.out.println("WAITING FOR SUCCESS PING FROM ROBOT");
-				res = defenderRobot.receiveFromRobot();
+				System.out.println("WAITING FOR SUCCESS PING FROM " + type + " ROBOT");
+				res = getRobot(type).receiveFromRobot();
 				
 				boolean equals = true;
 				int[] haveball = {1, 0, 0, 0};
@@ -87,21 +101,28 @@ public class Server {
 	 * @param command Command byte
 	 */
 	public void send(int robot, int command) {
-//		System.out.println(command);
+		System.out.println(command);
 		
-		if (robot == DEFENDER) {
-			defenderRobot.sendToRobot(command);
-		} else if (robot == ATTACKER) {
-			attackerRobot.sendToRobot(command);
-		}
+//		if (robot == DEFENDER) {
+//			defenderRobot.sendToRobot(command);
+//		} else if (robot == ATTACKER) {
+//			attackerRobot.sendToRobot(command);
+//		}
 	}
-	
+
 	/**
-	 * Closes the bluetooth connections to the robots
+	 * Closes the bluetooth connections to both robots
 	 */
 	public void close() {
 		defenderRobot.closeBluetoothConnection();
 		attackerRobot.closeBluetoothConnection();
+	}
+
+	/**
+	 * Closes the bluetooth connection to a specific robot
+	 */
+	public void disconnectFromRobot(RobotType type) {
+		getRobot(type).closeBluetoothConnection();
 	}
 
 }

@@ -9,11 +9,12 @@ import ourcommunication.Server;
 import sdp.vision.WorldState;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class MatchAttackPositionY extends GeneralBehavior {
 
-	public MatchAttackPositionY(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public MatchAttackPositionY(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class MatchAttackPositionY extends GeneralBehavior {
 			Point kickP = StrategyHelper.findRobotKickPosition(ball, ws.getOppositionGoalCentre());
 			
 			try {
-				int y = ws.getRobotY(r);
+				int y = ws.getRobotY(robot());
 				
 				// Always face up
 				rotateTo(C.UP);
@@ -69,7 +70,7 @@ public class MatchAttackPositionY extends GeneralBehavior {
 	public boolean takeControl() {
 		Point ballP = new Point(ws.ballX, ws.ballY);
 		Point kickP = StrategyHelper.findRobotKickPosition(ballP, ws.getOppositionGoalCentre());
-		Point robotP = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point robotP = new Point(ws.getRobotX(robot()), ws.getRobotY(robot()));
 		
 		if (StrategyHelper.inRange(robotP.getX(), kickP.getX(), DISTANCE_ERROR)) {
 			// We are 'behind' the ball in the right X position, so

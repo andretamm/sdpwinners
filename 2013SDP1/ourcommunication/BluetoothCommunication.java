@@ -90,8 +90,9 @@ public class BluetoothCommunication {
 	 * 
 	 * @throws IOException
 	 *             when we fail to open the Bluetooth connection
+	 * @return true for success, false for failure
 	 */
-	public void openBluetoothConnection() throws IOException {
+	public boolean openBluetoothConnection() {
 		try {
 			nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
 		} catch (NXTCommException e) {
@@ -99,36 +100,47 @@ public class BluetoothCommunication {
 		}
 
 		System.out.println("Attempting to connect to robot...");
-
-		try {
-			nxtComm.open(nxtInfo);
-			in = nxtComm.getInputStream();
-			out = nxtComm.getOutputStream();
-
-			while (true) {
-				int[] res = receiveFromRobot();
-				boolean equals = true;
-				for (int i = 0; i < 4; i++) { // wait for ready signal
-					if (res[i] != ROBOT_READY[i]) {
-						equals = false;
+		
+		for (int attempt = 0; attempt < 2; attempt++) {
+			try {
+				nxtComm.open(nxtInfo);
+				in = nxtComm.getInputStream();
+				out = nxtComm.getOutputStream();
+	
+				while (true) {
+					int[] res = receiveFromRobot();
+					boolean equals = true;
+					for (int i = 0; i < 4; i++) { // wait for ready signal
+						if (res[i] != ROBOT_READY[i]) {
+							equals = false;
+							break;
+						}
+					}
+					if (equals) {
 						break;
+					} else {
+						Thread.sleep(10); // Prevent 100% CPU usage
 					}
 				}
-				if (equals) {
-					break;
-				} else {
-					Thread.sleep(10); // Prevent 100% CPU usage
-				}
+				// Success!
+				robotReady = true;
+				System.out.println("Connected to robot!");
+				connected = true;
+				
+				return true;
+			} catch (NXTCommException e) {
+//				throw new IOException("Failed to connect " + e.toString());
+				System.out.println("Failed to connect (NXTComm) " + e.toString());
+			} catch (InterruptedException e) {
+//				throw new IOException("Failed to connect " + e.toString());
+				System.out.println("Failed to connect (INTERR) " + e.toString());
+			} catch (IOException e) {
+				System.out.println("Failed to connect (IO) " + e.toString());
 			}
-
-			robotReady = true;
-			System.out.println("Connected to robot!");
-			connected = true;
-		} catch (NXTCommException e) {
-			throw new IOException("Failed to connect " + e.toString());
-		} catch (InterruptedException e) {
-			throw new IOException("Failed to connect " + e.toString());
 		}
+		
+		// Failed to connect
+		return false;
 	}
 
 	/**

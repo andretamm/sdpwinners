@@ -11,11 +11,12 @@ import sdp.vision.WorldState;
 import sun.awt.X11.InfoWindow.Balloon;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class KillerRotateToBall extends GeneralBehavior {
 
-	public KillerRotateToBall(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public KillerRotateToBall(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -27,11 +28,11 @@ public class KillerRotateToBall extends GeneralBehavior {
 		}
 		
 		// Correct the angle
-		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point robot = ws.getRobotPoint(robot());
 		Point ball = new Point(ws.ballX, ws.ballY);
 		double orientation = Orientation.getAngle(robot, ball);
 		
-		if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR)) {
+		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
 			rotateTo(orientation);
 		}
 		
@@ -50,11 +51,11 @@ public class KillerRotateToBall extends GeneralBehavior {
 	@Override
 	public boolean takeControl() {
 //		System.out.println("do robot rotation?");
-		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point robot = ws.getRobotPoint(robot());
 		Point ball = new Point(ws.ballX, ws.ballY);
 		double orientation = Orientation.getAngle(robot, ball);
 //		System.out.println("RESULT: "+!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
-		return (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR) &&
+		return (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR) &&
 				!ws.haveBall());
 	}
 

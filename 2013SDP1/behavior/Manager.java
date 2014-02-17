@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.Robot;
+import constants.RobotType;
 
 import ourcommunication.Server;
 import sdp.vision.WorldState;
@@ -21,15 +22,16 @@ public class Manager {
 	
 	private AndreArbitrator arbitrator;
 	private WorldState ws;
-	private Robot r;
+	private RobotType type;
 	private Server s;
+	private Thread arbitratorThread;
 	
 	/**
 	 * Initialises manager with a list of default behaviors 
 	 */
-	public Manager(WorldState ws, Robot r, Server s) {
+	public Manager(WorldState ws, RobotType type, Server s) {
 		this.ws = ws;
-		this.r = r;
+		this.type = type;
 		this.s = s;
 		arbitrator = new AndreArbitrator(getAllBehaviors());
 	}
@@ -38,16 +40,23 @@ public class Manager {
 	 * Starts picking and running behaviors on a new thread
 	 */
 	public void start() {
-		Thread arbitratorThread = new Thread() {
+		arbitratorThread = new Thread() {
 			@Override
 			public void run() {
 				super.run();
-				arbitrator.start();
 				System.out.println("Manager started");
+				arbitrator.start();				
 			}
 		};
 		
-		arbitratorThread.run();
+		arbitratorThread.start();
+	}
+	
+	/**
+	 * Stops the arbitrator
+	 */
+	public void stop() {
+		arbitrator.stop();
 	}
 	
 	/**
@@ -72,23 +81,22 @@ public class Manager {
 //		behaviorList.add(new Milestone2());
 //		behaviorList[0] = new Milestone1();
 //		behaviorList[1] = new Milestone2();
-		behaviorList[0] = new SimpleDefendGoal(ws, r, s);
+		behaviorList[0] = new SimpleDefendGoal(ws, type, s);
 		
 //		return behaviorList.toArray(new Behavior[0]);
 		return behaviorList;
 	}
 
-	public WorldState getWs() {
+	public WorldState getWorldState() {
 		return ws;
 	}
 
-	public Robot getR() {
-		return r;
-	}
-
-	public Server getS() {
+	public Server getServer() {
 		return s;
 	}
 	
+	public RobotType getRobotType() {
+		return type;
+	}
 	
 }

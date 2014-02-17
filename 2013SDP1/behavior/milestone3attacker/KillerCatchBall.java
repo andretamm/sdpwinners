@@ -11,11 +11,12 @@ import sdp.vision.WorldState;
 import sun.awt.X11.InfoWindow.Balloon;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class KillerCatchBall extends GeneralBehavior {
 
-	public KillerCatchBall(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public KillerCatchBall(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class KillerCatchBall extends GeneralBehavior {
 		s.send(0, RobotCommand.GRAB);
 		
 		ws.setHaveBall(true); // UGLY FILTHY HACK
-		s.receiveHaveBall();
+		s.receiveHaveBall(RobotType.ATTACKER);
 	}
 
 	/** 
@@ -38,13 +39,13 @@ public class KillerCatchBall extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point robot = new Point(ws.getRobotX(robot()), ws.getRobotY(robot()));
 		Point ball = new Point(ws.ballX, ws.ballY);
 		double orientation = Orientation.getAngle(robot, ball);
 		
 //		System.out.println("catch ball " + StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
 //		System.out.println(ws.getRobotOrientation(r.type, r.colour) - orientation);
-		return (StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR) &&
+		return (StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR) &&
 				!ws.haveBall());
 	}
 }

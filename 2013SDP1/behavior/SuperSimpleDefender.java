@@ -5,13 +5,14 @@ import ourcommunication.Server;
 import sdp.vision.WorldState;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class SuperSimpleDefender extends GeneralBehavior {
 
 	
 
-	public SuperSimpleDefender(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public SuperSimpleDefender(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -23,8 +24,8 @@ public class SuperSimpleDefender extends GeneralBehavior {
 		try {
 //			System.out.println("Defender in action");
 			//Get the robots coordinates
-			int x = ws.getRobotX(r);
-			int y = ws.getRobotY(r);
+			int x = ws.getRobotX(robot());
+			int y = ws.getRobotY(robot());
 			
 			//Get the balls coordinates
 			int ballX = ws.ballX;

@@ -3,14 +3,17 @@ package behavior;
 import lejos.robotics.subsumption.Behavior;
 
 public class AndreArbitrator {
-	Behavior[] behaviors;
+	private Behavior[] behaviors;
+	private boolean active;
 	
 	public AndreArbitrator(Behavior[] behaviors) {
 		this.behaviors = behaviors;
 	}
 	
 	public void start() {
-		while (true) {
+		active = true;
+		
+		while (active) {
 			Behavior winner = arbitrate();
 			
 			if (winner != null) {
@@ -18,11 +21,15 @@ public class AndreArbitrator {
 			}
 			
 			try {
-				Thread.sleep(20);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void stop() {
+		active = false;
 	}
 	
 	private Behavior arbitrate() {

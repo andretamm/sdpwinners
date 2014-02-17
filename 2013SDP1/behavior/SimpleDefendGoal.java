@@ -5,13 +5,12 @@ import ourcommunication.Server;
 import sdp.vision.WorldState;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 
 public class SimpleDefendGoal extends GeneralBehavior {
 
-	
-
-	public SimpleDefendGoal(WorldState ws, Robot r, Server s) {
-		super(ws, r, s);
+	public SimpleDefendGoal(WorldState ws, RobotType type, Server s) {
+		super(ws, type, s);
 	}
 
 	@Override
@@ -23,8 +22,8 @@ public class SimpleDefendGoal extends GeneralBehavior {
 		try {
 //			System.out.println("Defender in action");
 			//Get the robots coordinates
-			int x = ws.getRobotX(r);
-			int y = ws.getRobotY(r);
+			int x = ws.getRobotX(robot());
+			int y = ws.getRobotY(robot());
 			
 			//Get the balls coordinates
 			int ballX = ws.ballX;
@@ -33,7 +32,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 			// Rotate to 90'			
 			rotatingCounter = 1;
 			rotatingCounter = rotatingCounter % 20;
-			if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.DOWN, ANGLE_ERROR + 5)) {
+			if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR + 5)) {
 				isRotating = true;
 				
 				if(rotatingCounter == 1) {

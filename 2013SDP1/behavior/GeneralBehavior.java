@@ -4,6 +4,7 @@ import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import common.Robot;
 import constants.C;
+import constants.RobotType;
 import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
@@ -13,7 +14,7 @@ public abstract class GeneralBehavior implements Behavior {
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
-	protected Robot r;
+	protected RobotType type;
 	protected Server s;
 	
 	protected boolean isRotating = false;
@@ -24,9 +25,9 @@ public abstract class GeneralBehavior implements Behavior {
 	protected int stopCounter = 0;
 	protected int btCounter = 0;
 	
-	public GeneralBehavior(WorldState ws, Robot r, Server s) {
+	public GeneralBehavior(WorldState ws, RobotType type, Server s) {
 		this.ws = ws;
-		this.r = r;
+		this.type = type;
 		this.s = s;
 	}
 	
@@ -40,14 +41,14 @@ public abstract class GeneralBehavior implements Behavior {
 		setInActive();
 	}
 	
-	public Robot getRobot() {
-		return r;
+	public RobotType getType() {
+		return type;
 	}
 
-	public void setRobot(Robot r) {
-		this.r = r;
+	public void setType(RobotType type) {
+		this.type = type;
 	}
-	
+
 	public void setActive() {
 		this.isActive = true;
 	}
@@ -68,6 +69,10 @@ public abstract class GeneralBehavior implements Behavior {
 		this.ws = ws;
 	}
 	
+	public Robot robot() {
+		return ws.getOur(type);
+	}
+	
 	/* ------------------------------------- */
 	/* --- General robot control helpers --- */
 	/* ------------------------------------- */
@@ -86,7 +91,7 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 
 		// Now rotate to the correct angle
-		double orientation = ws.getRobotOrientation(r.type, r.colour);
+		double orientation = ws.getRobotOrientation(type, ws.getColour());
 		
 		double turnAngle = angle - orientation;
 		if (turnAngle > C.A180) {
