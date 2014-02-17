@@ -1,5 +1,7 @@
 package sdp.vision;
 
+import java.awt.Color;
+
 public class ObjectThresholdState {
 	
 	
@@ -173,6 +175,41 @@ public class ObjectThresholdState {
 	public void set_gb_high(int gb_high) {
 		this.gb_high = gb_high;
 	}
+
+
+	/**
+	 * Determines if a pixel is part of the object, based on input RGB colours and
+	 * hsv values.
+	 * 
+	 * @param color
+	 *            The RGB colours for the pixel.
+	 * @param hsbvals
+	 *            The HSV values for the pixel.
+	 * 
+	 * @return True if the RGB and HSV values are within the defined thresholds
+	 *         (and thus the pixel is part of the ball), false otherwise.
+	 */
+	public boolean isColour(Color colour, float[] hsbvals, int rg, int rb, int gb) {
+		return hsbvals[0] <= get_h_high()
+				&& hsbvals[0] >= get_h_low()
+				&& hsbvals[1] <= get_s_high()
+				&& hsbvals[1] >= get_s_low()
+				&& hsbvals[2] <= get_v_high()
+				&& hsbvals[2] >= get_v_low()
+				&& colour.getRed() <= get_r_high()
+				&& colour.getRed() >= get_r_low()
+				&& colour.getGreen() <= get_g_high()
+				&& colour.getGreen() >= get_g_low()
+				&& colour.getBlue() <= get_b_high()
+				&& colour.getBlue() >= get_b_low()
+				&& rg <= get_rg_high()
+				&& rg >= get_rg_low()
+				&& rb <= get_rb_high()
+				&& rb >= get_rb_low()
+				&& gb <= get_gb_high()
+				&& gb >= get_gb_low();
+	}
+
 	
 
 }
