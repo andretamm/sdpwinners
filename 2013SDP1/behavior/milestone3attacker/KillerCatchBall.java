@@ -20,15 +20,16 @@ public class KillerCatchBall extends GeneralBehavior {
 
 	@Override
 	public void action() {
-		super.action();
-		
-		while (isActive()) {
-			if (ws == null) {
-				System.err.println("worldstate not intialised");
-			}
-			
-			s.send(0, RobotCommand.GRAB);
+	
+		System.out.println("catching ball");
+		if (ws == null) {
+			System.err.println("worldstate not intialised");
 		}
+		
+		s.send(0, RobotCommand.GRAB);
+		
+		ws.setHaveBall(true); // UGLY FILTHY HACK
+		s.receiveHaveBall();
 	}
 
 	/** 
@@ -41,8 +42,9 @@ public class KillerCatchBall extends GeneralBehavior {
 		Point ball = new Point(ws.ballX, ws.ballY);
 		double orientation = Orientation.getAngle(robot, ball);
 		
+//		System.out.println("catch ball " + StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
+//		System.out.println(ws.getRobotOrientation(r.type, r.colour) - orientation);
 		return (StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR) &&
 				!ws.haveBall());
 	}
-
 }

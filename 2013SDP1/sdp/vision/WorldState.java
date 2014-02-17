@@ -302,7 +302,6 @@ public class WorldState implements VisionInterface {
 		robotOrientation.put(new Robot(rColour, rType), orientation);
 	}
 	
-	
 	public double getRobotOrientation(RobotType rType, RobotColour rColour) {
 		return robotOrientation.get(new Robot(rColour, rType));
 	}

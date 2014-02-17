@@ -20,19 +20,26 @@ public class KillerRotateToBall extends GeneralBehavior {
 
 	@Override
 	public void action() {
-		super.action();
+		System.out.println("Rotating towards ball");
 		
-		while (isActive()) {
-			if (ws == null) {
-				System.err.println("worldstate not intialised");
-			}
-			
-			// Correct the angle
-			Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
-			Point ball = new Point(ws.ballX, ws.ballY);
-			double orientation = Orientation.getAngle(robot, ball);
-			
+		if (ws == null) {
+			System.err.println("worldstate not intialised");
+		}
+		
+		// Correct the angle
+		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point ball = new Point(ws.ballX, ws.ballY);
+		double orientation = Orientation.getAngle(robot, ball);
+		
+		if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR)) {
 			rotateTo(orientation);
+		}
+		
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -42,11 +49,13 @@ public class KillerRotateToBall extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
+//		System.out.println("do robot rotation?");
 		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
 		Point ball = new Point(ws.ballX, ws.ballY);
 		double orientation = Orientation.getAngle(robot, ball);
-		
-		return (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
+//		System.out.println("RESULT: "+!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
+		return (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR) &&
+				!ws.haveBall());
 	}
 
 }
