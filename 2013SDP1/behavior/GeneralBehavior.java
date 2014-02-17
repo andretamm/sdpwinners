@@ -8,13 +8,21 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.3;
-	public static final double DISTANCE_ERROR = 0.1;
+	public static final double ANGLE_ERROR = 0.15;
+	public static final double DISTANCE_ERROR = 25;
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
 	protected Robot r;
 	protected Server s;
+	
+	protected boolean isRotating = false;
+	protected boolean isMoving = false;
+	protected int movingCounter = 0;
+	protected int sentCounter = 0;
+	protected int rotatingCounter = 0;
+	protected int stopCounter = 0;
+	protected int btCounter = 0;
 	
 	public GeneralBehavior(WorldState ws, Robot r, Server s) {
 		this.ws = ws;
@@ -80,14 +88,18 @@ public abstract class GeneralBehavior implements Behavior {
 		// Now rotate to the correct angle
 		double orientation = ws.getRobotOrientation(r.type, r.colour);
 		
-		if (orientation > (angle - ANGLE_ERROR) && orientation < angleComplement) {
-			// Closer to go clockwise
+		double turnAngle = angle - orientation;
+		if (turnAngle > C.A180) {
+			turnAngle -= C.A360;
+		}
+		if (turnAngle < - C.A180) {
+			turnAngle += C.A360;
+		}
+		
+		if (turnAngle < 0) {
 			s.send(0, RobotCommand.CW);
-		} else if (orientation < (angle - ANGLE_ERROR) && orientation > angleComplement) {
-			// Closer to go counterclockwise
-			s.send(0, RobotCommand.CCW);
 		} else {
-			// Reached the angle, stop
+			s.send(0, RobotCommand.CCW);
 		}
 	}
 }

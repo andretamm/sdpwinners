@@ -62,6 +62,6 @@ public class StrategyHelper {
 	 * @return
 	 */
 	public static boolean inRange(double x, double target, double error) {
-		return (x < (target + error)) && (x > (target + error));
+		return Math.abs(x - target) <= error;
 	}
 }

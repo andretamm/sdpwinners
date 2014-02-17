@@ -19,7 +19,7 @@ import lejos.robotics.subsumption.Behavior;
  */
 public class Manager {
 	
-	private Arbitrator arbitrator;
+	private AndreArbitrator arbitrator;
 	private WorldState ws;
 	private Robot r;
 	private Server s;
@@ -31,7 +31,7 @@ public class Manager {
 		this.ws = ws;
 		this.r = r;
 		this.s = s;
-		arbitrator = new Arbitrator(getAllBehaviors());
+		arbitrator = new AndreArbitrator(getAllBehaviors());
 	}
 	
 	/**

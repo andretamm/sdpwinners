@@ -20,24 +20,28 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 
 	@Override
 	public void action() {
-		super.action();
-		
-		while (isActive()) {
-			if (ws == null) {
-				System.err.println("worldstate not intialised");
-			}
-			
-			Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
-			Point goal = ws.getOppositionGoalCentre();
-			double orientation = Orientation.getAngle(robot, goal);
-			
-			if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR)) {
-				rotateTo(orientation);
-				continue;
-			}
-			
-			s.send(0, RobotCommand.KICK);
+//		System.out.println("rotating to goal and scoring");
+		if (ws == null) {
+			System.err.println("worldstate not intialised");
 		}
+		
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Point robot = new Point(ws.getRobotX(r), ws.getRobotY(r));
+		Point goal = ws.getOppositionGoalCentre();
+		double orientation = Orientation.getAngle(robot, goal);
+		
+		if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR)) {
+			rotateTo(orientation);
+			return;
+		}
+		
+		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		s.send(0, RobotCommand.KICK);		
 	}
 
 	/** 

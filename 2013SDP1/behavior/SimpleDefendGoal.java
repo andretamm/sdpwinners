@@ -16,47 +16,84 @@ public class SimpleDefendGoal extends GeneralBehavior {
 
 	@Override
 	public void action() {
-		isActive = true;
-
-		while (isActive()) {
-			if (ws == null) {
-				System.err.println("worldstate not intialised");
-			}
+		if (ws == null) {
+			System.err.println("worldstate not intialised");
+		}
+		
+		try {
+//			System.out.println("Defender in action");
+			//Get the robots coordinates
+			int x = ws.getRobotX(r);
+			int y = ws.getRobotY(r);
 			
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			//Get the balls coordinates
+			int ballX = ws.ballX;
+			int ballY = ws.ballY;
 			
-			try {
-				int x = ws.getRobotX(r);
-				int y = ws.getRobotY(r);
-				int ballX = ws.ballX;
-				int ballY = ws.ballY;
+			// Rotate to 90'			
+			rotatingCounter = 1;
+			rotatingCounter = rotatingCounter % 20;
+			if (!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), C.DOWN, ANGLE_ERROR + 5)) {
+				isRotating = true;
 				
-				// Rotate to 270
-				rotateTo(C.A270);
-				
-				System.out.println("Robot: " + x + ", " + y + " | " + "Ball: " + ballX + ", " + ballY);
-
-				// Move to same y as ball
-				if (ballY - y > DISTANCE_ERROR) {
-					System.out.println("First distance: " + (ballY - y));
-					s.send(0, RobotCommand.BACK);
-					continue;
-				} else if (y - ballY > DISTANCE_ERROR) {
-					System.out.println("Second distance: " + (y - ballY));
-					s.send(0, RobotCommand.FORWARD);
-					continue;
+				if(rotatingCounter == 1) {
+					rotateTo(C.DOWN);
 				}
-
-				// We're in the right position, just chill
-				s.send(0, RobotCommand.STOP);
-			} catch (Exception e) {
-				System.err.println("We don't know where the robot is :((((");
-				e.printStackTrace();
+				return;
 			}
+			
+			// Finished rotating
+			if (isRotating) {
+				isRotating = false;
+				s.send(0, RobotCommand.STOP);
+			}
+			rotatingCounter = 0;
+			
+//			while (ws.ballX > ws.getQ4LowX()) {
+////				if (ws.getOurGoalCentre().y - y > DISTANCE_ERROR + 35) {
+////					s.send(0, RobotCommand.BACK);
+////				} else if (y - ws.getOurGoalCentre().y > DISTANCE_ERROR + 35) {
+////					s.send(0, RobotCommand.FORWARD);
+////				} else {
+////					s.send(0, RobotCommand.STOP);
+////				}
+//			}
+
+			// Move to same y as ball
+			movingCounter++;
+			movingCounter = movingCounter % 20;
+//			System.out.println(y + " <? " + (ws.getPitchBottomLeft().getY() - 50));
+//			System.out.println(y + " >? " + (ws.getPitchTopLeft().getY() + 50));
+			
+			if ((ballY - y > (DISTANCE_ERROR + 25)) && (y < (ws.getPitchBottomLeft().getY() - 77))) {
+				if (!isMoving || movingCounter == 1) {
+					System.out.println("Moving DOWN: " + (ballY - y));
+					isMoving = true;
+					s.send(0, RobotCommand.BACK);
+				}
+				return;
+			}
+			else if (((y - ballY) > (DISTANCE_ERROR + 25)) && (y > (ws.getPitchTopLeft().getY() + 90))) {
+				
+				if (!isMoving || movingCounter == 1) {
+					System.out.println("Moving UP: " + (y - ballY));
+					isMoving = true;
+					s.send(0, RobotCommand.FORWARD);
+				}
+				return;
+			} 
+			movingCounter = 0;
+			
+			// We're in the right position, just chill
+			stopCounter++;
+			stopCounter = stopCounter % 10;
+			if (stopCounter == 1) {
+				System.out.println("Stopping");
+				s.send(0, RobotCommand.STOP);
+			}
+		} catch (Exception e) {
+			System.err.println("We don't know where the robot is :((((");
+			e.printStackTrace();
 		}
 	}
 

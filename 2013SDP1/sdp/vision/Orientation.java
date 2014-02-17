@@ -4,6 +4,10 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import constants.C;
+import constants.RobotColour;
+import constants.RobotType;
+
 /**
  * Finds the orientation by setting a line through the centre of the grey circle and the centre of a green plate.
  */
@@ -70,7 +74,9 @@ public class Orientation {
         x0 = qp.getRobotPosition().getX();
         y0 = qp.getRobotPosition().getY();
         Point2D.Double plateCentre = new Point2D.Double(x0, y0);
-        
+//        if (qp.getrType() == RobotType.DEFENDER && qp.getrColour() == RobotColour.BLUE) {
+//        	System.out.println(x0 + " " + y0 + " | " + greyCentreX + " " + greyCentreY);
+//        }
         return getAngle(greyCentre, plateCentre);
 	}
 	
@@ -95,16 +101,18 @@ public class Orientation {
 	        	angle = Math.PI - triangleAngle;
         	} else if ((from.getX() >= to.getX()) && (from.getY() >= to.getY())) {
 	        	// Quadrant 3 case
-	        	angle = Math.PI + triangleAngle;
+	        	angle = Math.PI + triangleAngle;	
 	        } else if ((from.getX() <= to.getX()) && (from.getY() >= to.getY())) {
 	        	// Quadrant 4 case
+//	        	System.out.println("4");
 	        	angle = 2*Math.PI - triangleAngle;
 	        } else if ((from.getX() <= to.getX()) && (from.getY() <= to.getY())) {
 	        	// Quadrant 1 case
+//	        	System.out.println("1");
+//	        	System.out.println(from.x + " " + from.y + " | " + to.x + " " + to.y);
 	        	angle = triangleAngle;
 	        }
-        }
-        
+        }        
         return angle;
 	}
 	
