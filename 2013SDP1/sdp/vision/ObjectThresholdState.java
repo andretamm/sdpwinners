@@ -4,6 +4,7 @@ import java.awt.Color;
 
 public class ObjectThresholdState {
 	
+	private boolean debug;
 	
 	private int r_low;
 	private int r_high;
@@ -24,6 +25,15 @@ public class ObjectThresholdState {
 	private int gb_low;
 	private int gb_high;
 	
+	
+	
+	public boolean isDebug(){
+		return debug;
+	}
+	
+	public void setDebug(boolean t){
+		this.debug = t;
+	}
 	
 	public int get_r_low() {
 		return r_low;

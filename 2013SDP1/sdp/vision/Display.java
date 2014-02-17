@@ -23,39 +23,41 @@ public class Display {
 
 	public static void thresholds(BufferedImage img, PitchPoints op, ThresholdsState ts) {
 		
-		//Debug graphics for the grey circles
-		if (ts.isGrey_debug()) {
-			for (int i=0; (i<op.getPoints(Colours.GRAY).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.GRAY).get(i).getX(), (int) op.getPoints(Colours.GRAY).get(i).getY(), Color.RED.getRGB());	
-			}		
-		}
-		
-		//Debug graphics for the green plates
-		if (ts.isGreen_debug()) {
-			for (int i=0; (i<op.getPoints(Colours.GREEN).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.GREEN).get(i).getX(), (int) op.getPoints(Colours.GREEN).get(i).getY(), 0xFF00FF00);	
-			}					
-		}
-		
-		//Debug graphics for the ball
-		if (ts.isBall_debug()) {
-			for (int i=0; (i<op.getPoints(Colours.RED).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.RED).get(i).getX(), (int) op.getPoints(Colours.RED).get(i).getY(), 0xFFFF0000);	
-			}					
-		}
-		
-		//Debug graphics for the blue plate
-		if (ts.isBlue_debug()) {
-			for (int i=0; (i<op.getPoints(Colours.BLUE).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.BLUE).get(i).getX(), (int) op.getPoints(Colours.BLUE).get(i).getY(), 0xFF0000FF);	
-			}					
-		}
-		
-		//Debug graphics for the yellow plate
-		if (ts.isYellow_debug()) {
-			for (int i=0; (i<op.getPoints(Colours.YELLOW).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.YELLOW).get(i).getX(), (int) op.getPoints(Colours.YELLOW).get(i).getY(), 0xFFFF7538);	
-			}					
+		for (Quadrant q : Quadrant.values()){
+			//Debug graphics for the grey circles
+			if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).isDebug()) {
+				for (int i=0; (i<op.getPoints(Colours.GRAY).size()); i++) {
+					img.setRGB((int) op.getPoints(Colours.GRAY).get(i).getX(), (int) op.getPoints(Colours.GRAY).get(i).getY(), Color.RED.getRGB());	
+				}		
+			}
+			
+			//Debug graphics for the green plates
+			if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).isDebug()) {
+				for (int i=0; (i<op.getPoints(Colours.GREEN).size()); i++) {
+					img.setRGB((int) op.getPoints(Colours.GREEN).get(i).getX(), (int) op.getPoints(Colours.GREEN).get(i).getY(), 0xFF00FF00);	
+				}					
+			}
+			
+			//Debug graphics for the ball
+			if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).isDebug()) {
+				for (int i=0; (i<op.getPoints(Colours.RED).size()); i++) {
+					img.setRGB((int) op.getPoints(Colours.RED).get(i).getX(), (int) op.getPoints(Colours.RED).get(i).getY(), 0xFFFF0000);	
+				}					
+			}
+			
+			//Debug graphics for the blue plate
+			if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).isDebug()) {
+				for (int i=0; (i<op.getPoints(Colours.BLUE).size()); i++) {
+					img.setRGB((int) op.getPoints(Colours.BLUE).get(i).getX(), (int) op.getPoints(Colours.BLUE).get(i).getY(), 0xFF0000FF);	
+				}					
+			}
+			
+			//Debug graphics for the yellow plate
+			if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).isDebug()) {
+				for (int i=0; (i<op.getPoints(Colours.YELLOW).size()); i++) {
+					img.setRGB((int) op.getPoints(Colours.YELLOW).get(i).getX(), (int) op.getPoints(Colours.YELLOW).get(i).getY(), 0xFFFF7538);	
+				}					
+			}
 		}
 	}
 	

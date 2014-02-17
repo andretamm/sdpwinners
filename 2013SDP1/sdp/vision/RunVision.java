@@ -32,7 +32,7 @@ public class RunVision {
         /* Default to main pitch. */
         PitchConstants pitchConstants = new PitchConstants(0);
         /* Default values for the main vision window. */
-        String videoDevice = "/dev/video0";
+        String videoDevice = "/dev/video1";
         int width = 640;
         int height = 480;
         int channel = 0;

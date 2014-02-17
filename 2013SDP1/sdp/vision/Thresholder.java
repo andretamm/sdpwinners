@@ -40,36 +40,38 @@ public class Thresholder{
 		 * For every pixel within the pitch, test to see if it belongs to the
 		 * ball, the yellow T, the blue T, either green plate or a grey circle.
 		 */
-		for (int column= left; column< right; column++) {
-        	for (int row= top; row< bottom; row++) {
-				
-				/* The RGB colours and hsv values for the current pixel. */
-				Color c = new Color(image.getRGB(column, row));
-				float hsbvals[] = new float[3];
-				Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
-				
-				rg=c.getRed()-c.getGreen();
-				rb=c.getRed()-c.getBlue();
-				gb=c.getGreen()-c.getBlue();
-
-				if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
-					pp.getPoints(Colours.GRAY).add(new Point(column, row));
-				}
-
-				if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
-					pp.getPoints(Colours.BLUE).add(new Point(column, row));
-				}
-
-				if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
-					pp.getPoints(Colours.GREEN).add(new Point(column, row));
-				}
-
-				if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
-					pp.getPoints(Colours.YELLOW).add(new Point(column, row));
-				}
-				
-				if (ts.isBall(c, hsbvals, rg, rb, gb)) {
-					pp.getPoints(Colours.RED).add(new Point(column, row));
+		for (Quadrant q : Quadrant.values()){
+			for (int column= worldState.getQuadrantX(q, QuadrantX.LOW); column< worldState.getQuadrantX(q, QuadrantX.HIGH); column++) {
+				for(int row = worldState.getPitchTopLeft().y; row < worldState.getPitchBottomLeft().y; row++){
+					
+					/* The RGB colours and hsv values for the current pixel. */
+					Color c = new Color(image.getRGB(column, row));
+					float hsbvals[] = new float[3];
+					Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
+					
+					rg=c.getRed()-c.getGreen();
+					rb=c.getRed()-c.getBlue();
+					gb=c.getGreen()-c.getBlue();
+	
+					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).isColour(c, hsbvals, rg, rb, gb)) {
+						pp.getPoints(Colours.GRAY).add(new Point(column, row));
+					}
+	
+					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).isColour(c, hsbvals, rg, rb, gb)) {
+						pp.getPoints(Colours.BLUE).add(new Point(column, row));
+					}
+	
+					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).isColour(c, hsbvals, rg, rb, gb)) {
+						pp.getPoints(Colours.GREEN).add(new Point(column, row));
+					}
+	
+					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).isColour(c, hsbvals, rg, rb, gb)) {
+						pp.getPoints(Colours.YELLOW).add(new Point(column, row));
+					}
+					
+					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).isColour(c, hsbvals, rg, rb, gb)) {
+						pp.getPoints(Colours.RED).add(new Point(column, row));
+					}
 				}
 			}
 		}
@@ -82,8 +84,6 @@ public class Thresholder{
 		private ThresholdsState ts;
 		private WorldState ws;
 		private Quadrant q;
-		//private int qLow;
-		//private int qHigh;
 		private Point plateCentroid;
 		
 		public ThresholderThread (BufferedImage image, PitchPoints pp, ThresholdsState ts, WorldState ws, Quadrant q, int qLow, int qHigh){
@@ -119,15 +119,15 @@ public class Thresholder{
 						rb=c.getRed()-c.getBlue();
 						gb=c.getGreen()-c.getBlue();
 						
-						if (ts.isGrey(c, hsbvals, rg, rb, gb)) {
+						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).isColour(c, hsbvals, rg, rb, gb)) {
 							pp.getQuadrant(q).getPoints(Colours.GRAY).add(new Point(column, row));
 						}
 	
-						if (ts.isBlue(c, hsbvals, rg, rb, gb)) {
+						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).isColour(c, hsbvals, rg, rb, gb)) {
 							pp.getQuadrant(q).getPoints(Colours.BLUE).add(new Point(column, row));
 						}
 	
-						if (ts.isYellow(c, hsbvals, rg, rb, gb)) {
+						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).isColour(c, hsbvals, rg, rb, gb)) {
 							pp.getQuadrant(q).getPoints(Colours.YELLOW).add(new Point(column, row));
 						}
 					
@@ -213,11 +213,11 @@ public class Thresholder{
 						rb=c.getRed()-c.getBlue();
 						gb=c.getGreen()-c.getBlue();
 						
-						if (ts.isGreen(c, hsbvals, rg, rb, gb)) {
+						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).isColour(c, hsbvals, rg, rb, gb)) {
 							pp.getQuadrant(q).getPoints(Colours.GREEN).add(new Point(column, row));
 						}
 						
-						if (ts.isBall(c, hsbvals, rg, rb, gb)) {
+						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).isColour(c, hsbvals, rg, rb, gb)) {
 							pp.getQuadrant(q).getPoints(Colours.RED).add(new Point(column, row));
 						}
 					} catch (Exception e) {
