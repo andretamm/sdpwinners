@@ -102,7 +102,7 @@ public class I2CTest {
 			forward = (byte) -forward;
 			degrees = -degrees;
 		}
-		long degToTime = (long) Math.rint(degrees*12.65); // Based on the current speed of rotation
+		long degToTime = (long) Math.rint(degrees*12.65); // Based on the current speed of rotation witout brick
 		
 		//WEST Wheel
 		I2Csensor.sendData(0x01,backward); 
