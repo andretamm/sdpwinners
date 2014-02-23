@@ -189,7 +189,8 @@ public class Display {
 		graphics.drawLine((int) (ws.getOurGoalTop().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalTop().getY()+ws.getPitchTopLeft().getY()), 
 				(int) (ws.getOurGoalBottom().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalBottom().getY()+ws.getPitchTopLeft().getY()));
 
-		// WHY CLAUDIU????
+		// WHY CLAUDIU???? 
+		// This draws all the grey points for a given robot in either black (blue robots) or white (yellow robots) 
 		for (int i=0; i<op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).size(); i++) {
 			img.setRGB((int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getX(), (int)op.getColouredPoints(RobotColour.BLUE, RobotType.DEFENDER, Colours.GRAY).get(i).getY(), 0xFF000000);
 		}

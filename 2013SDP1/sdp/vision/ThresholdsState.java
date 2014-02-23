@@ -1,8 +1,10 @@
 package sdp.vision;
 
 import java.io.Serializable;
+import java.util.EnumMap;
 import java.util.HashMap;
 
+import constants.Colours;
 import constants.Quadrant;
 
 /**
@@ -14,6 +16,12 @@ import constants.Quadrant;
 
 public class ThresholdsState implements Serializable {
 
+	// Whether to show a colour in the Vision GUI.
+	// The value for each colour will be True when we view the tab for that
+	// colour and False otherwise
+	EnumMap<Colours, Boolean> debug;
+	
+	
 	/**
 	 * 
 	 */
@@ -22,7 +30,11 @@ public class ThresholdsState implements Serializable {
 	
 	public ThresholdsState() {
 		initQuadrantThresholds();
-		//System.out.println(this);
+
+		// Init the colour debug values
+		for (Colours c : Colours.values()) {
+			debug.put(c, false);
+		}
 	}
 	
 	private void initQuadrantThresholds(){
@@ -30,13 +42,10 @@ public class ThresholdsState implements Serializable {
 		
 		for (Quadrant q : Quadrant.values()){
 			thresholds.put(q, new QuadrantThresholdsState());
-			//System.out.println(q + " " + thresholds.get(q));
 		}
 	}
 	
 	public QuadrantThresholdsState getQuadrantThresholds(Quadrant q){
-		//System.out.println(this);
-		//System.out.println("returning: " + thresholds.get(q) + " " + q);
 		return thresholds.get(q);
 	}
 	
