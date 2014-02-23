@@ -31,4 +31,8 @@ public class ThresholdsState {
 		return thresholds.get(q);
 	}
 	
+	public int ScaleTo255(double value) {
+		return (int) (value*255);
+	}
+	
 }
