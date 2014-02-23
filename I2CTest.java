@@ -29,8 +29,8 @@ public class I2CTest {
 		speed = (byte)200; 
 		
 		//to achieve rotation in place, the outside wheel have to catch up with the inside wheels.
-		EWrotSpeed = (byte)180; //the speed of the outside wheels
-		NSrotSpeed = (byte)(EWrotSpeed*0.78); //the speed of the inside wheels as a function of the speed of the outside wheels.
+		EWrotSpeed = (byte)100; //the speed of the outside wheels
+		NSrotSpeed = (byte)(EWrotSpeed*0.76); //the speed of the inside wheels as a function of the speed of the outside wheels.
 		
 		//Facing forward towards the kicker, the wheels are programmed accordingly:
 		
@@ -79,6 +79,7 @@ public class I2CTest {
 					
 					e.printStackTrace();
 				}
+				break;
 			case Button.ID_ESCAPE:
 				try {
 					rotateTo(360);
@@ -89,7 +90,7 @@ public class I2CTest {
 				break;
 		}
 		}
-			
+			   
 		}
 	
 	/*This function takes a number of degrees to rotate, as I have made it from scratch,
@@ -102,13 +103,13 @@ public class I2CTest {
 			forward = (byte) -forward;
 			degrees = -degrees;
 		}
-		long degToTime = (long) Math.rint(degrees*12.65); // Based on the current speed of rotation witout brick
+		long degToTime = (long) Math.rint(degrees*8.3); // Based on the current speed of rotation
 		
 		//WEST Wheel
-		I2Csensor.sendData(0x01,backward); 
+		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,EWrotSpeed); 
 		//EAST Wheel
-		I2Csensor.sendData(0x07,forward); 
+		I2Csensor.sendData(0x07,backward); 
 		I2Csensor.sendData(0x08,EWrotSpeed); 
 		//NORTH Wheel
 		I2Csensor.sendData(0x03,forward); 
