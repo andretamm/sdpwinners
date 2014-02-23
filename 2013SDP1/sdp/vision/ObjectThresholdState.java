@@ -9,8 +9,6 @@ public class ObjectThresholdState implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private boolean debug;
 	
 	private int r_low;
 	private int r_high;
@@ -50,14 +48,6 @@ public class ObjectThresholdState implements Serializable {
 		this.rb_high = 255;
 		this.gb_low = -255;
 		this.gb_high = 255;
-	}
-	
-	public boolean isDebug(){
-		return debug;
-	}
-	
-	public void setDebug(boolean t){
-		this.debug = t;
 	}
 	
 	public int get_r_low() {

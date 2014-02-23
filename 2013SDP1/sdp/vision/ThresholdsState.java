@@ -21,7 +21,6 @@ public class ThresholdsState implements Serializable {
 	// colour and False otherwise
 	EnumMap<Colours, Boolean> debug;
 	
-	
 	/**
 	 * 
 	 */
@@ -58,6 +57,14 @@ public class ThresholdsState implements Serializable {
 	
 	public int ScaleTo255(double value) {
 		return (int) (value*255);
+	}
+	
+	public boolean getDebug(Colours c) {
+		return debug.get(c);
+	}
+	
+	public void setDebug(Colours c, boolean value) {
+		debug.put(c, value);
 	}
 	
 }

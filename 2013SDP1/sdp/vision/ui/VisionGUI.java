@@ -1403,59 +1403,62 @@ public class VisionGUI implements ChangeListener {
 		/* Update the ThresholdsState object. */
 
 		int index = tabPane.getSelectedIndex();
-		QuadrantThresholdsState quadrantThresholds = thresholdsState.getQuadrantThresholds(q);
-
+		
+		
 		switch (index) {
 		case (0):
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(false);
+			thresholdsState.setDebug(Colours.RED, false);
+			thresholdsState.setDebug(Colours.BLUE, false);
+			thresholdsState.setDebug(Colours.YELLOW, false);
+			thresholdsState.setDebug(Colours.GRAY, false);
+			thresholdsState.setDebug(Colours.GREEN, false);
 			break;
 		case (1):
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(false);
+			thresholdsState.setDebug(Colours.RED, true);
+			thresholdsState.setDebug(Colours.BLUE, false);
+			thresholdsState.setDebug(Colours.YELLOW, false);
+			thresholdsState.setDebug(Colours.GRAY, false);
+			thresholdsState.setDebug(Colours.GREEN, false);
 			break;
 		case (2):
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(false);
+			thresholdsState.setDebug(Colours.RED, false);
+			thresholdsState.setDebug(Colours.BLUE, true);
+			thresholdsState.setDebug(Colours.YELLOW, false);
+			thresholdsState.setDebug(Colours.GRAY, false);
+			thresholdsState.setDebug(Colours.GREEN, false);
 			break;
 		case (3):
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(false);
+			thresholdsState.setDebug(Colours.RED, false);
+			thresholdsState.setDebug(Colours.BLUE, true);
+			thresholdsState.setDebug(Colours.YELLOW, true);
+			thresholdsState.setDebug(Colours.GRAY, false);
+			thresholdsState.setDebug(Colours.GREEN, false);
 			break;
 		case (4):
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(false);
+			thresholdsState.setDebug(Colours.RED, false);
+			thresholdsState.setDebug(Colours.BLUE, true);
+			thresholdsState.setDebug(Colours.YELLOW, false);
+			thresholdsState.setDebug(Colours.GRAY, true);
+			thresholdsState.setDebug(Colours.GREEN, false);
 			break;
 		case (5):
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(true);
+			thresholdsState.setDebug(Colours.RED, false);
+			thresholdsState.setDebug(Colours.BLUE, true);
+			thresholdsState.setDebug(Colours.YELLOW, false);
+			thresholdsState.setDebug(Colours.GRAY, false);
+			thresholdsState.setDebug(Colours.GREEN, true);
 			break;
 		default:
-			quadrantThresholds.getObjectThresholds(Colours.RED).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.BLUE).setDebug(true);
-			quadrantThresholds.getObjectThresholds(Colours.YELLOW).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GRAY).setDebug(false);
-			quadrantThresholds.getObjectThresholds(Colours.GREEN).setDebug(false);
+			thresholdsState.setDebug(Colours.RED, false);
+			thresholdsState.setDebug(Colours.BLUE, true);
+			thresholdsState.setDebug(Colours.YELLOW, false);
+			thresholdsState.setDebug(Colours.GRAY, false);
+			thresholdsState.setDebug(Colours.GREEN, false);
 			break;
 		}
+		
+		
+		QuadrantThresholdsState quadrantThresholds = thresholdsState.getQuadrantThresholds(q);
 
 		/* Ball. */
 		ObjectThresholdState ball = quadrantThresholds.getObjectThresholds(Colours.RED);
