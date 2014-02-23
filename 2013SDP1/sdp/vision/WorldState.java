@@ -21,14 +21,16 @@ public class WorldState implements VisionInterface {
 	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour colour;
 	private int pitch; // 0 = main, 1 = side room
-	
+
+	// Variables for calculating the velocity and location of the robots and ball
 	private RobotMap<Point> robotPosition; // Positions of all the robots
+	private RobotMap<long[]> robotTimestamps; // Timestamps for all the positions <.<
 
 	public int ballX;
 	public int ballY;
-	
+
 	private RobotMap<Double> robotOrientation; // Orientations of all the robots
-	
+
 	private long counter;
 	private boolean subtractBackground;
 	private boolean findRobotsAndBall; //used when setting thresholds. Disables filtering, clustering etc so
@@ -50,7 +52,7 @@ public class WorldState implements VisionInterface {
 	//these two are already barrelcorrected
 	private Point pitchTopLeft2 = new Point(20, 68);
 	private Point pitchBottomRight2 = new Point(606,400);
-	
+
 	//Quadrant low/high X values
 	private int q1LowX;
 	private int q1HighX;
@@ -60,7 +62,6 @@ public class WorldState implements VisionInterface {
 	private int q3HighX;
 	private int q4LowX;
 	private int q4HighX;
-	
 
 	public static final int ballRadius = 12;
 	public static final int plateRadius = 15;
@@ -81,10 +82,8 @@ public class WorldState implements VisionInterface {
 	private Point ourAttackerVelocity;
 	
 	private RobotMap<Point[]> robotHistory;
-	private RobotMap<Point> robotVelocity;
+	private RobotMap<Point2D.Double> robotVelocity;
 	// end
-	
-	private long[] ourTimeStamps;
 
 	private boolean removeShadows = false;
 
@@ -195,7 +194,6 @@ public class WorldState implements VisionInterface {
 
 	private Point oppositionDefenderVelocity;
 	private Point oppositionAttackerVelocity;
-	private long[] oppositionTimeStamps;
 
 	//horrible hack:
 	private double targetAngle;  //the destination angle
@@ -217,21 +215,27 @@ public class WorldState implements VisionInterface {
 		this.robotOrientation = new RobotMap<Double>(0.0);
 		this.robotPosition = new RobotMap<Point>();
 		this.robotHistory = new RobotMap<Point[]>();
-		this.robotVelocity = new RobotMap<Point>();
+		this.robotVelocity = new RobotMap<Point2D.Double>();
+		this.robotTimestamps = new RobotMap<long[]>();	
 		
 		// Set default values for all the robots
 		for (Robot r: Robot.listAll()) {
 			robotPosition.put(r, new Point(0,0));
 			
-			robotVelocity.put(r, new Point(0,0));
+			robotVelocity.put(r, new Point2D.Double(0,0));
 			
 			// History values
 			// TODO MAKE SURE THESE ARE RIGHT AND MAKE SENSE
 			Point[] history = new Point[HISTORY_LENGTH];
+			long[] timestamps = new long[HISTORY_LENGTH];
+			
 			for (int i = 0; (i < HISTORY_LENGTH); i++) {
 				history[i] = new Point(1,1);
-				robotHistory.put(r, history);
+				timestamps[1] = 1;
 			}
+			
+			robotHistory.put(r, history);
+			robotTimestamps.put(r, timestamps);
 		}
 		
 		this.ballX = 0;
@@ -248,16 +252,14 @@ public class WorldState implements VisionInterface {
 		this.ballTimeStamps = new long[5];
 		this.ourDefenderVelocity = new Point(0,0);
 		this.ourAttackerVelocity = new Point(0,0);
-		this.ourTimeStamps = new long[5];
+		
 		this.oppositionDefenderVelocity = new Point(0,0);
 		this.oppositionAttackerVelocity = new Point(0,0);
-		this.oppositionTimeStamps = new long[5];
-		
+
+
 		for (int i = 0; (i < HISTORY_LENGTH); i++) {
 			this.ballHistory[i] = new Point(1,1);
 			this.ballTimeStamps[i] = 1;
-			this.ourTimeStamps[i] = 1;
-			this.oppositionTimeStamps[i] = 1;
 		}
 		
 	}
@@ -595,13 +597,6 @@ public class WorldState implements VisionInterface {
 		return ourAttackerVelocity;
 	}
 
-	public Point[] getRobotHistory(Robot r) {
-		return robotHistory.get(r);
-	}
-	
-	public void setRobotHistory(Robot r, Point[] history) {
-		robotHistory.put(r, history);
-	}
 	
 	/**
 	 * Get our robot
@@ -630,13 +625,13 @@ public class WorldState implements VisionInterface {
 	public long[] getBallTimes() {
 		return ballTimeStamps;
 	}
-
-	public long[] getOurTimes() {
-		return ourTimeStamps;
+	
+	public long[] getRobotTimestamps(Robot r) {
+		return robotTimestamps.get(r);
 	}
-
-	public long[] getOppositionTimes() {
-		return oppositionTimeStamps;
+	
+	public void setRobotTimestamps(Robot r, long[] timestamps) {
+		robotTimestamps.put(r, timestamps);
 	}
 
 	public void setBallVelocity(Point2D.Double bv) {
@@ -662,17 +657,9 @@ public class WorldState implements VisionInterface {
 	public void setOppositionAttackerVelocity(Point opv) {
 		this.oppositionAttackerVelocity=opv;
 	}
-
+	
 	public void setBallTimes(long[] bt) {
 		this.ballTimeStamps=bt;
-	}
-
-	public void setOurTimes(long[] ot) {
-		this.ourTimeStamps=ot;
-	}
-
-	public void setOppositionTimes(long[] opt) {
-		this.oppositionTimeStamps=opt;
 	}
 
 	public Point2D.Double getRobotVelocity() {
@@ -778,21 +765,36 @@ public class WorldState implements VisionInterface {
 		return ballVelocity;
 	}
 
+	// Velocities
+	public Point2D.Double getRobotVelocity(RobotColour colour, RobotType type) {
+		return getRobotVelocity(new Robot(colour, type));
+	}
 	
-	public Point getRobotVelocity(RobotColour colour, RobotType type) {
-		// TODO Auto-generated method stub
-		return null;
+	public Point2D.Double getRobotVelocity(Robot r) {
+		return robotVelocity.get(r);
+	}
+	
+	public void setRobotVelocity(Robot r, Point2D.Double v) {
+		this.robotVelocity.put(r, v);
 	}
 
-	
+	// Histories
 	public Point[] getRobotHistory(RobotColour colour, RobotType type) {
-		// TODO Auto-generated method stub
-		return null;
+		return getRobotHistory(new Robot(colour, type));
 	}
-
+	
+	public Point[] getRobotHistory(Robot r) {
+		return robotHistory.get(r);
+	}
+	
+	public void setRobotHistory(Robot r, Point[] history) {
+		robotHistory.put(r, history);
+	}
+	
 	
 	public double getAimingAngle() {
 		// TODO Auto-generated method stub
+		System.err.println("getAimingAngle() not yet implemented!");
 		return 0;
 	}
 

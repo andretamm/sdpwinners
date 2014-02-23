@@ -159,29 +159,25 @@ public class ImageProcessor {
          */
         public void updateWorldStateVelocities(WorldState ws){
             Point[] ballHistory = ws.getBallHistory();
-//          Point currentBall = ws.getBallPoint();
-            Point currentBall = new Point(ws.getBallPoint().x, ws.getBallPoint().y);  //there seems to be 
+            Point currentBall = new Point(ws.ballX, ws.ballY);  //there seems to be 
             long[] ballTimes = ws.getBallTimes();
-            updateHistory(ballHistory, ballTimes, currentBall, "ball");
+            updateHistory(ballHistory, ballTimes, currentBall);
             Point2D.Double ballVelocity = calcVelocity(ws.getBallHistory(),ws.getBallTimes());
             ws.setBallVelocity(ballVelocity);
             
-            //TODO Alter for Attacker Robot
-            Point[] ourHistory = ws.getRobotHistory(ws.getOur(RobotType.DEFENDER));
-            Point ourCurrent = ws.getOurDefenderPosition();
-            long[] ourTimes = ws.getOurTimes();
-            updateHistory(ourHistory, ourTimes, ourCurrent, "our");
-            Point2D.Double ourVelocity = calcVelocity(ws.getRobotHistory(ws.getOur(RobotType.DEFENDER)),
-            										  ws.getOurTimes());
-            ws.setBallVelocity(ourVelocity);
-            
-            //TODO Alter for Attacker Robot
-            Point[] oppositionHistory = ws.getBallHistory();
-            Point oppositionCurrent = ws.getBallPoint();
-            long[] oppositionTimes = ws.getOppositionTimes();
-            updateHistory(oppositionHistory, oppositionTimes, oppositionCurrent, "opp");
-            Point2D.Double oppVelocity = calcVelocity(ws.getRobotHistory(ws.getOpposition(RobotType.DEFENDER)), ws.getOppositionTimes());
-            ws.setBallVelocity(oppVelocity);
+            // Change velocities and histories for all the robots
+            for (Robot r: Robot.listAll()) {
+            	Point[] history = ws.getRobotHistory(r);
+            	Point current = ws.getRobotPoint(r);
+            	long[] timestamps = ws.getRobotTimestamps(r);
+            	
+            	// Add current location and timestamp
+            	updateHistory(history, timestamps, current);
+            	
+            	// Find the robot's velocity
+            	Point2D.Double velocity = calcVelocity(history, timestamps);
+            	ws.setRobotVelocity(r, velocity);
+            }
         }
 
         /**
@@ -388,25 +384,24 @@ public class ImageProcessor {
         	}
         }
         
-        public void updateHistory(Point[] history, long[] times, Point current, String obj) {
+        /**
+         * Updates the given history and timestamps arrays. NB! This is done in-place
+         * so your original array will be changed. This is (usually) what you want if you're
+         * e.g. updating some values in a RobotMap.
+         * 
+         * The new timestamp will be gotten with System.currentTimeMillis()
+         * @param history History of location
+         * @param times History of timestamps for those locations
+         * @param current The current location of the object
+         */
+        public void updateHistory(Point[] history, long[] times, Point current) {
         	for (int i = 0; i < history.length-1; i++) {
         		history[i] = history[i+1];
         		times[i] = times[i+1];
         	}
+        	
         	history[history.length-1] = current;
         	times[history.length-1] = System.currentTimeMillis();
-        	
-        	//TODO Alter for Attacker Robot
-        	if (obj.equals("ball")){
-        		worldState.setBallHistory(history);
-        		worldState.setBallTimes(times);
-        	} else if (obj.equals("our")){
-        		worldState.setRobotHistory(worldState.getOur(RobotType.DEFENDER), history);
-        		worldState.setOurTimes(times);
-          	} else if (obj.equals("opp")) {
-          		worldState.setRobotHistory(worldState.getOpposition(RobotType.DEFENDER), history);
-        		worldState.setOppositionTimes(times);
-          	}
         }
         
         public Point2D.Double calcVelocity(Point[] history, long[] times) {

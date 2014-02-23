@@ -60,7 +60,7 @@ public interface VisionInterface {
 	 * @param type The type of the robot: ATTACKER or DEFENDER
 	 * @return The vector representing the velocity
 	 */
-	public Point getRobotVelocity(RobotColour colour, RobotType type);
+	public Point2D.Double getRobotVelocity(RobotColour colour, RobotType type);
 	
 	/* Retrieve the ball's coordinate history */
 	public Point[] getBallHistory();
