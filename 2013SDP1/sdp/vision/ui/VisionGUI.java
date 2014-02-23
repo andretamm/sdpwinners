@@ -18,8 +18,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import constants.Colours;
+import constants.Quadrant;
 import constants.RobotColour;
 import constants.ShootingDirection;
+import sdp.vision.ObjectThresholdState;
 import sdp.vision.PitchConstants;
 import sdp.vision.ThresholdsState;
 import sdp.vision.Vision;
@@ -47,6 +50,11 @@ public class VisionGUI implements ChangeListener {
 	 * shooting direction, ball location, etc. */
 	private WorldState worldState;
 	
+	/* 
+	 * The current quadrant thresholding values we're changing
+	 */
+	private Quadrant q;
+	
 	/* The main frame holding the Control GUI. */
 	private JFrame frame;
 	/* Load/Save buttons. */
@@ -62,6 +70,7 @@ public class VisionGUI implements ChangeListener {
 	private JPanel greenPanel;
 	private JPanel quadrantPanel;
 	
+	
 	/* Radio buttons */
 	JRadioButton pitch_0;
 	JRadioButton pitch_1;
@@ -69,6 +78,10 @@ public class VisionGUI implements ChangeListener {
 	JRadioButton colour_blue;
 	JRadioButton direction_right;
 	JRadioButton direction_left;
+	JRadioButton quadrant1;
+	JRadioButton quadrant2;
+	JRadioButton quadrant3;
+	JRadioButton quadrant4;
 	
 	/* Ball sliders. */
 	private RangeSlider ball_r;
@@ -185,9 +198,8 @@ public class VisionGUI implements ChangeListener {
         greenPanel.setLayout(new BoxLayout(greenPanel, BoxLayout.Y_AXIS));
         
         quadrantPanel = new JPanel();
-        quadrantPanel.setLayout(new BoxLayout(quadrantPanel, BoxLayout.Y_AXIS));
+        quadrantPanel.setLayout(new BoxLayout(quadrantPanel, BoxLayout.Y_AXIS));       
         
-                
         /* The main (default) tab */
         setUpMainPanel();
         
@@ -208,7 +220,6 @@ public class VisionGUI implements ChangeListener {
         tabPane.addTab("Quadrant Guides", quadrantPanel);
         
         tabPane.addChangeListener(this);
-        
         frame.add(tabPane);
        
         frame.pack();
@@ -243,27 +254,6 @@ public class VisionGUI implements ChangeListener {
 	 * choice, the robotcolour choice and save/load buttons.
 	 */
 	private void setUpMainPanel() {
-		
-		/* Pitch choice */
-		JPanel pitch_panel = new JPanel();
-		JLabel pitch_label = new JLabel("Pitch:");
-		pitch_panel.add(pitch_label);
-		
-		ButtonGroup pitch_choice = new ButtonGroup();
-		pitch_0 = new JRadioButton("Main");
-		pitch_1 = new JRadioButton("Side Room");
-		pitch_choice.add(pitch_0);
-		pitch_panel.add(pitch_0);
-		pitch_choice.add(pitch_1);
-		pitch_panel.add(pitch_1);
-		
-		pitch_0.setSelected(true);
-
-		ChangeListener pitchRadioButtonListener = new PitchRadioButtonListener();
-		pitch_0.addChangeListener(pitchRadioButtonListener);
-		pitch_1.addChangeListener(pitchRadioButtonListener);
-		
-		defaultPanel.add(pitch_panel);
 		
 		/* Colour choice */
 		JPanel colour_panel = new JPanel();
@@ -520,7 +510,57 @@ public class VisionGUI implements ChangeListener {
 	 * Sets up the sliders for the thresholding of the ball.
 	 */
 	private void setUpBallSliders() {
-				
+		
+		/* Quadrant Choice */
+		JPanel quadrant_panel = new JPanel();
+		JLabel quadrant_label = new JLabel("Quadrant Values:");
+		quadrant_panel.add(quadrant_label);
+		
+		ButtonGroup quadrant_choice = new ButtonGroup();
+		quadrant1 = new JRadioButton("q1");
+		quadrant2 = new JRadioButton("q2");
+		quadrant3 = new JRadioButton("q3");
+		quadrant4 = new JRadioButton("q4");
+		quadrant_choice.add(quadrant1);
+		quadrant_panel.add(quadrant1);
+		quadrant_choice.add(quadrant2);
+		quadrant_panel.add(quadrant2);
+		quadrant_choice.add(quadrant3);
+		quadrant_panel.add(quadrant3);
+		quadrant_choice.add(quadrant4);
+		quadrant_panel.add(quadrant4);
+		
+		quadrant1.setSelected(true);
+/*
+		ChangeListener quadrantRadioButtonListener = new QuadrantRadioButtonListener();
+		quadrant1.addChangeListener(quadrantRadioButtonListener);
+		quadrant2.addChangeListener(quadrantRadioButtonListener);
+		quadrant3.addChangeListener(quadrantRadioButtonListener);
+		quadrant4.addChangeListener(quadrantRadioButtonListener);
+*/
+		defaultPanel.add(quadrant_panel);
+		
+		/* Pitch choice */
+		JPanel pitch_panel = new JPanel();
+		JLabel pitch_label = new JLabel("Pitch:");
+		pitch_panel.add(pitch_label);
+		
+		ButtonGroup pitch_choice = new ButtonGroup();
+		pitch_0 = new JRadioButton("Main");
+		pitch_1 = new JRadioButton("Side Room");
+		pitch_choice.add(pitch_0);
+		pitch_panel.add(pitch_0);
+		pitch_choice.add(pitch_1);
+		pitch_panel.add(pitch_1);
+		
+		pitch_0.setSelected(true);
+
+		ChangeListener pitchRadioButtonListener = new PitchRadioButtonListener();
+		pitch_0.addChangeListener(pitchRadioButtonListener);
+		pitch_1.addChangeListener(pitchRadioButtonListener);
+		
+		defaultPanel.add(pitch_panel);
+		
 		 /* Red. */
 		JPanel ball_r_panel = new JPanel();
         JLabel ball_r_label = new JLabel("Red:");
@@ -609,7 +649,7 @@ public class VisionGUI implements ChangeListener {
 	 * Sets up the sliders for the thresholding of the blue robot.
 	 */
 	private void setUpBlueSliders() {
-
+		
 		/* Red. */
 		JPanel blue_r_panel = new JPanel();
 		JLabel blue_r_label = new JLabel("Red:");
@@ -1032,6 +1072,7 @@ public class VisionGUI implements ChangeListener {
 		});
 	}
 	
+	
 	/**
 	 * Creates and returns a new RangeSlider from a number of parameters.
 	 * 
@@ -1098,199 +1139,212 @@ public class VisionGUI implements ChangeListener {
 		/* Update the ThresholdsState object. */
 		
 		int index = tabPane.getSelectedIndex();
-		
 		switch(index) {
 		case(0):
-			thresholdsState.setBall_debug(false);
-			thresholdsState.setBlue_debug(false);
-			thresholdsState.setYellow_debug(false);
-			thresholdsState.setGrey_debug(false);
-			thresholdsState.setGreen_debug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
 		case(1):
-			thresholdsState.setBall_debug(true);
-			thresholdsState.setBlue_debug(false);
-			thresholdsState.setYellow_debug(false);
-			thresholdsState.setGrey_debug(false);
-			thresholdsState.setGreen_debug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
 		case(2):
-			thresholdsState.setBall_debug(false);
-			thresholdsState.setBlue_debug(true);
-			thresholdsState.setYellow_debug(false);
-			thresholdsState.setGrey_debug(false);
-			thresholdsState.setGreen_debug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
 		case(3):
-			thresholdsState.setBall_debug(false);
-			thresholdsState.setBlue_debug(false);
-			thresholdsState.setYellow_debug(true);
-			thresholdsState.setGrey_debug(false);
-			thresholdsState.setGreen_debug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
 		case(4):
-			thresholdsState.setBall_debug(false);
-			thresholdsState.setBlue_debug(false);
-			thresholdsState.setYellow_debug(false);
-			thresholdsState.setGrey_debug(true);
-			thresholdsState.setGreen_debug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
 		case(5):
-			thresholdsState.setBall_debug(false);
-			thresholdsState.setBlue_debug(false);
-			thresholdsState.setYellow_debug(false);
-			thresholdsState.setGrey_debug(false);
-			thresholdsState.setGreen_debug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(true);
 			break;
 		default:
-			thresholdsState.setBall_debug(false);
-			thresholdsState.setBlue_debug(false);
-			thresholdsState.setYellow_debug(false);
-			thresholdsState.setGrey_debug(false);
-			thresholdsState.setGreen_debug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE).setDebug(true);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY).setDebug(false);
+			thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
 		}
 		
 		/* Ball. */
-		thresholdsState.setBall_r_low(ball_r.getValue());
-		thresholdsState.setBall_r_high(ball_r.getUpperValue());
+		ObjectThresholdState ball = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED);
+		
+		ball.set_r_low(ball_r.getValue());
+		ball.set_r_high(ball_r.getUpperValue());
 
-		thresholdsState.setBall_g_low(ball_g.getValue());
-		thresholdsState.setBall_g_high(ball_g.getUpperValue());
+		ball.set_g_low(ball_g.getValue());
+		ball.set_g_high(ball_g.getUpperValue());
 		
-		thresholdsState.setBall_b_low(ball_b.getValue());
-		thresholdsState.setBall_b_high(ball_b.getUpperValue());
+		ball.set_b_low(ball_b.getValue());
+		ball.set_b_high(ball_b.getUpperValue());
 		
-		thresholdsState.setBall_h_low(ball_h.getValue() / 255.0);
-		thresholdsState.setBall_h_high(ball_h.getUpperValue() / 255.0);
+		ball.set_h_low(ball_h.getValue() / 255.0);
+		ball.set_h_high(ball_h.getUpperValue() / 255.0);
 
-		thresholdsState.setBall_s_low(ball_s.getValue() / 255.0);
-		thresholdsState.setBall_s_high(ball_s.getUpperValue() / 255.0);
+		ball.set_s_low(ball_s.getValue() / 255.0);
+		ball.set_s_high(ball_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setBall_v_low(ball_v.getValue() / 255.0);
-		thresholdsState.setBall_v_high(ball_v.getUpperValue() / 255.0);
+		ball.set_v_low(ball_v.getValue() / 255.0);
+		ball.set_v_high(ball_v.getUpperValue() / 255.0);
 		
-		thresholdsState.setBall_rg_low(ball_rg.getValue());
-		thresholdsState.setBall_rg_high(ball_rg.getUpperValue());
+		ball.set_rg_low(ball_rg.getValue());
+		ball.set_rg_high(ball_rg.getUpperValue());
 
-		thresholdsState.setBall_rb_low(ball_rb.getValue());
-		thresholdsState.setBall_rb_high(ball_rb.getUpperValue());
+		ball.set_rb_low(ball_rb.getValue());
+		ball.set_rb_high(ball_rb.getUpperValue());
 		
-		thresholdsState.setBall_gb_low(ball_gb.getValue());
-		thresholdsState.setBall_gb_high(ball_gb.getUpperValue());
+		ball.set_gb_low(ball_gb.getValue());
+		ball.set_gb_high(ball_gb.getUpperValue());
 		
 		/* Blue Robot. */
-		thresholdsState.setBlue_r_low(blue_r.getValue());
-		thresholdsState.setBlue_r_high(blue_r.getUpperValue());
+		
+		ObjectThresholdState blue = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE);
+		
+		blue.set_r_low(blue_r.getValue());
+		blue.set_r_high(blue_r.getUpperValue());
 
-		thresholdsState.setBlue_g_low(blue_g.getValue());
-		thresholdsState.setBlue_g_high(blue_g.getUpperValue());
+		blue.set_g_low(blue_g.getValue());
+		blue.set_g_high(blue_g.getUpperValue());
 		
-		thresholdsState.setBlue_b_low(blue_b.getValue());
-		thresholdsState.setBlue_b_high(blue_b.getUpperValue());
+		blue.set_b_low(blue_b.getValue());
+		blue.set_b_high(blue_b.getUpperValue());
 		
-		thresholdsState.setBlue_h_low(blue_h.getValue() / 255.0);
-		thresholdsState.setBlue_h_high(blue_h.getUpperValue() / 255.0);
+		blue.set_h_low(blue_h.getValue() / 255.0);
+		blue.set_h_high(blue_h.getUpperValue() / 255.0);
 
-		thresholdsState.setBlue_s_low(blue_s.getValue() / 255.0);
-		thresholdsState.setBlue_s_high(blue_s.getUpperValue() / 255.0);
+		blue.set_s_low(blue_s.getValue() / 255.0);
+		blue.set_s_high(blue_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setBlue_v_low(blue_v.getValue() / 255.0);
-		thresholdsState.setBlue_v_high(blue_v.getUpperValue() / 255.0);
+		blue.set_v_low(blue_v.getValue() / 255.0);
+		blue.set_v_high(blue_v.getUpperValue() / 255.0);
 		
-		thresholdsState.setBlue_rg_low(blue_rg.getValue());
-		thresholdsState.setBlue_rg_high(blue_rg.getUpperValue());
+		blue.set_rg_low(blue_rg.getValue());
+		blue.set_rg_high(blue_rg.getUpperValue());
 
-		thresholdsState.setBlue_rb_low(blue_rb.getValue());
-		thresholdsState.setBlue_rb_high(blue_rb.getUpperValue());
+		blue.set_rb_low(blue_rb.getValue());
+		blue.set_rb_high(blue_rb.getUpperValue());
 		
-		thresholdsState.setBlue_gb_low(blue_gb.getValue());
-		thresholdsState.setBlue_gb_high(blue_gb.getUpperValue());
+		blue.set_gb_low(blue_gb.getValue());
+		blue.set_gb_high(blue_gb.getUpperValue());
 		
 		/* Yellow Robot. */
-		thresholdsState.setYellow_r_low(yellow_r.getValue());
-		thresholdsState.setYellow_r_high(yellow_r.getUpperValue());
+		ObjectThresholdState yellow = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW);
+		
+		yellow.set_r_low(yellow_r.getValue());
+		yellow.set_r_high(yellow_r.getUpperValue());
 
-		thresholdsState.setYellow_g_low(yellow_g.getValue());
-		thresholdsState.setYellow_g_high(yellow_g.getUpperValue());
+		yellow.set_g_low(yellow_g.getValue());
+		yellow.set_g_high(yellow_g.getUpperValue());
 		
-		thresholdsState.setYellow_b_low(yellow_b.getValue());
-		thresholdsState.setYellow_b_high(yellow_b.getUpperValue());
+		yellow.set_b_low(yellow_b.getValue());
+		yellow.set_b_high(yellow_b.getUpperValue());
 		
-		thresholdsState.setYellow_h_low(yellow_h.getValue() / 255.0);
-		thresholdsState.setYellow_h_high(yellow_h.getUpperValue() / 255.0);
+		yellow.set_h_low(yellow_h.getValue() / 255.0);
+		yellow.set_h_high(yellow_h.getUpperValue() / 255.0);
 
-		thresholdsState.setYellow_s_low(yellow_s.getValue() / 255.0);
-		thresholdsState.setYellow_s_high(yellow_s.getUpperValue() / 255.0);
+		yellow.set_s_low(yellow_s.getValue() / 255.0);
+		yellow.set_s_high(yellow_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setYellow_v_low(yellow_v.getValue() / 255.0);
-		thresholdsState.setYellow_v_high(yellow_v.getUpperValue() / 255.0);
+		yellow.set_v_low(yellow_v.getValue() / 255.0);
+		yellow.set_v_high(yellow_v.getUpperValue() / 255.0);
 		
-		thresholdsState.setYellow_rg_low(yellow_rg.getValue());
-		thresholdsState.setYellow_rg_high(yellow_rg.getUpperValue());
+		yellow.set_rg_low(yellow_rg.getValue());
+		yellow.set_rg_high(yellow_rg.getUpperValue());
 
-		thresholdsState.setYellow_rb_low(yellow_rb.getValue());
-		thresholdsState.setYellow_rb_high(yellow_rb.getUpperValue());
+		yellow.set_rb_low(yellow_rb.getValue());
+		yellow.set_rb_high(yellow_rb.getUpperValue());
 		
-		thresholdsState.setYellow_gb_low(yellow_gb.getValue());
-		thresholdsState.setYellow_gb_high(yellow_gb.getUpperValue());
+		yellow.set_gb_low(yellow_gb.getValue());
+		yellow.set_gb_high(yellow_gb.getUpperValue());
 		
 		/* Grey Circles. */
-		thresholdsState.setGrey_r_low(grey_r.getValue());
-		thresholdsState.setGrey_r_high(grey_r.getUpperValue());
+		
+		ObjectThresholdState grey = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY);
 
-		thresholdsState.setGrey_g_low(grey_g.getValue());
-		thresholdsState.setGrey_g_high(grey_g.getUpperValue());
 		
-		thresholdsState.setGrey_b_low(grey_b.getValue());
-		thresholdsState.setGrey_b_high(grey_b.getUpperValue());
-		
-		thresholdsState.setGrey_h_low(grey_h.getValue() / 255.0);
-		thresholdsState.setGrey_h_high(grey_h.getUpperValue() / 255.0);
+		grey.set_r_low(grey_r.getValue());
+		grey.set_r_high(grey_r.getUpperValue());
 
-		thresholdsState.setGrey_s_low(grey_s.getValue() / 255.0);
-		thresholdsState.setGrey_s_high(grey_s.getUpperValue() / 255.0);
+		grey.set_g_low(grey_g.getValue());
+		grey.set_g_high(grey_g.getUpperValue());
 		
-		thresholdsState.setGrey_v_low(grey_v.getValue() / 255.0);
-		thresholdsState.setGrey_v_high(grey_v.getUpperValue() / 255.0);
+		grey.set_b_low(grey_b.getValue());
+		grey.set_b_high(grey_b.getUpperValue());
 		
-		thresholdsState.setGrey_rg_low(grey_rg.getValue());
-		thresholdsState.setGrey_rg_high(grey_rg.getUpperValue());
+		grey.set_h_low(grey_h.getValue() / 255.0);
+		grey.set_h_high(grey_h.getUpperValue() / 255.0);
 
-		thresholdsState.setGrey_rb_low(grey_rb.getValue());
-		thresholdsState.setGrey_rb_high(grey_rb.getUpperValue());
+		grey.set_s_low(grey_s.getValue() / 255.0);
+		grey.set_s_high(grey_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setGrey_gb_low(grey_gb.getValue());
-		thresholdsState.setGrey_gb_high(grey_gb.getUpperValue());
+		grey.set_v_low(grey_v.getValue() / 255.0);
+		grey.set_v_high(grey_v.getUpperValue() / 255.0);
+		
+		grey.set_rg_low(grey_rg.getValue());
+		grey.set_rg_high(grey_rg.getUpperValue());
+
+		grey.set_rb_low(grey_rb.getValue());
+		grey.set_rb_high(grey_rb.getUpperValue());
+		
+		grey.set_gb_low(grey_gb.getValue());
+		grey.set_gb_high(grey_gb.getUpperValue());
 		
 		
 		/* Green Circles. */
-		thresholdsState.setGreen_r_low(green_r.getValue());
-		thresholdsState.setGreen_r_high(green_r.getUpperValue());
+		
+		ObjectThresholdState green = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN);
+		
+		green.set_r_low(green_r.getValue());
+		green.set_r_high(green_r.getUpperValue());
 
-		thresholdsState.setGreen_g_low(green_g.getValue());
-		thresholdsState.setGreen_g_high(green_g.getUpperValue());
+		green.set_g_low(green_g.getValue());
+		green.set_g_high(green_g.getUpperValue());
 		
-		thresholdsState.setGreen_b_low(green_b.getValue());
-		thresholdsState.setGreen_b_high(green_b.getUpperValue());
+		green.set_b_low(green_b.getValue());
+		green.set_b_high(green_b.getUpperValue());
 		
-		thresholdsState.setGreen_h_low(green_h.getValue() / 255.0);
-		thresholdsState.setGreen_h_high(green_h.getUpperValue() / 255.0);
+		green.set_h_low(green_h.getValue() / 255.0);
+		green.set_h_high(green_h.getUpperValue() / 255.0);
 
-		thresholdsState.setGreen_s_low(green_s.getValue() / 255.0);
-		thresholdsState.setGreen_s_high(green_s.getUpperValue() / 255.0);
+		green.set_s_low(green_s.getValue() / 255.0);
+		green.set_s_high(green_s.getUpperValue() / 255.0);
 		
-		thresholdsState.setGreen_v_low(green_v.getValue() / 255.0);
-		thresholdsState.setGreen_v_high(green_v.getUpperValue() / 255.0);
+		green.set_v_low(green_v.getValue() / 255.0);
+		green.set_v_high(green_v.getUpperValue() / 255.0);
 		
-		thresholdsState.setGreen_rg_low(green_rg.getValue());
-		thresholdsState.setGreen_rg_high(green_rg.getUpperValue());
+		green.set_rg_low(green_rg.getValue());
+		green.set_rg_high(green_rg.getUpperValue());
 
-		thresholdsState.setGreen_rb_low(green_rb.getValue());
-		thresholdsState.setGreen_rb_high(green_rb.getUpperValue());
+		green.set_rb_low(green_rb.getValue());
+		green.set_rb_high(green_rb.getUpperValue());
 		
-		thresholdsState.setGreen_gb_low(green_gb.getValue());
-		thresholdsState.setGreen_gb_high(green_gb.getUpperValue());
+		green.set_gb_low(green_gb.getValue());
+		green.set_gb_high(green_gb.getUpperValue());
 				
 	}
 	
