@@ -31,6 +31,8 @@ public class ThresholdsState implements Serializable {
 		initQuadrantThresholds();
 
 		// Init the colour debug values
+		debug = new EnumMap<Colours, Boolean>(Colours.class);
+		
 		for (Colours c : Colours.values()) {
 			debug.put(c, false);
 		}
