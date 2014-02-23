@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import behavior.StrategyHelper;
 import common.Robot;
-
 import constants.Colours;
 import constants.Quadrant;
 import constants.RobotColour;
@@ -218,6 +219,14 @@ public class Display {
 		Point goalC = ws.getOppositionGoalCentre();
 		graphics.setColor(Color.MAGENTA);
 		graphics.fillOval((int) goalC.getX() - 10, (int) goalC.getY() - 10, 20, 20);
+		
+		// Draw movement predictions
+		graphics.setColor(Color.ORANGE);
+		for (Robot r : Robot.listAll()) {
+			double timeMs = 2000;
+			Point newPos = StrategyHelper.addVectorToPoint(StrategyHelper.multiplyVector(ws.getRobotVelocity(), timeMs), ws.getRobotPoint(r));
+			graphics.drawLine(ws.getRobotX(r), ws.getRobotY(r), newPos.x, newPos.y);
+		}
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {
