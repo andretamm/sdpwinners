@@ -1,1 +1,0 @@
-INDEX VERSION 1.126+/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/.metadata/.plugins/org.eclipse.jdt.core
