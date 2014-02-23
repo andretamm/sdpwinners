@@ -1,6 +1,8 @@
 package sdp.vision;
 
+import java.io.Serializable;
 import java.util.HashMap;
+
 import constants.Quadrant;
 
 /**
@@ -10,13 +12,17 @@ import constants.Quadrant;
  *
  */
 
-public class ThresholdsState {
+public class ThresholdsState implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HashMap<Quadrant, QuadrantThresholdsState> thresholds;
 	
 	public ThresholdsState() {
 		initQuadrantThresholds();
-		
+		//System.out.println(this);
 	}
 	
 	private void initQuadrantThresholds(){
@@ -24,10 +30,13 @@ public class ThresholdsState {
 		
 		for (Quadrant q : Quadrant.values()){
 			thresholds.put(q, new QuadrantThresholdsState());
+			//System.out.println(q + " " + thresholds.get(q));
 		}
 	}
 	
 	public QuadrantThresholdsState getQuadrantThresholds(Quadrant q){
+		//System.out.println(this);
+		//System.out.println("returning: " + thresholds.get(q) + " " + q);
 		return thresholds.get(q);
 	}
 	

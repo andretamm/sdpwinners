@@ -1,8 +1,9 @@
 package sdp.vision;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import sdp.vision.ui.VisionGUI;
-import sdp.vision.PitchConstants;
-import sdp.vision.ThresholdsState;
-import sdp.vision.WorldState;
 import au.edu.jcu.v4l4j.V4L4JConstants;
 import au.edu.jcu.v4l4j.exceptions.V4L4JException;
 
@@ -28,6 +29,22 @@ public class RunVision {
     
     public static Vision setupVision(WorldState worldState) {
         ThresholdsState thresholdsState = new ThresholdsState();
+        
+//        try
+//        {
+//           FileInputStream fileIn = new FileInputStream("./constants/pitchThresholds0.ser");
+//           ObjectInputStream in = new ObjectInputStream(fileIn);
+//           thresholdsState = (ThresholdsState) in.readObject();
+//           in.close();
+//           fileIn.close();
+//        }catch(IOException i)
+//        {
+//           i.printStackTrace();
+//        }catch(ClassNotFoundException c)
+//        {
+//           System.out.println("pitchThresholds0 class not found");
+//           c.printStackTrace();
+//        }
 
         /* Default to main pitch. */
         PitchConstants pitchConstants = new PitchConstants(0);

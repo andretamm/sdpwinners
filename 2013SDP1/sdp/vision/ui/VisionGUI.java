@@ -4,8 +4,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -19,15 +21,16 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import sdp.vision.ObjectThresholdState;
+import sdp.vision.PitchConstants;
+import sdp.vision.QuadrantThresholdsState;
+import sdp.vision.ThresholdsState;
+import sdp.vision.Vision;
+import sdp.vision.WorldState;
 import constants.Colours;
 import constants.Quadrant;
 import constants.RobotColour;
 import constants.ShootingDirection;
-import sdp.vision.ObjectThresholdState;
-import sdp.vision.PitchConstants;
-import sdp.vision.ThresholdsState;
-import sdp.vision.Vision;
-import sdp.vision.WorldState;
 
 /**
  * Creates and maintains the swingbased Control GUI, which provides both control
@@ -353,117 +356,6 @@ public class VisionGUI implements ChangeListener {
 					FileWriter writer = new FileWriter(new File(
 							"constants/pitch" + pitchNum));
 
-					/* Ball */
-					writer.write(String.valueOf(ball_r.getValue()) + "\n");
-					writer.write(String.valueOf(ball_r.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_g.getValue()) + "\n");
-					writer.write(String.valueOf(ball_g.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_b.getValue()) + "\n");
-					writer.write(String.valueOf(ball_b.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_h.getValue()) + "\n");
-					writer.write(String.valueOf(ball_h.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_s.getValue()) + "\n");
-					writer.write(String.valueOf(ball_s.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_v.getValue()) + "\n");
-					writer.write(String.valueOf(ball_v.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_rg.getValue()) + "\n");
-					writer.write(String.valueOf(ball_rg.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_rb.getValue()) + "\n");
-					writer.write(String.valueOf(ball_rb.getUpperValue()) + "\n");
-					writer.write(String.valueOf(ball_gb.getValue()) + "\n");
-					writer.write(String.valueOf(ball_gb.getUpperValue()) + "\n");
-
-					/* Blue */
-					writer.write(String.valueOf(blue_r.getValue()) + "\n");
-					writer.write(String.valueOf(blue_r.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_g.getValue()) + "\n");
-					writer.write(String.valueOf(blue_g.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_b.getValue()) + "\n");
-					writer.write(String.valueOf(blue_b.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_h.getValue()) + "\n");
-					writer.write(String.valueOf(blue_h.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_s.getValue()) + "\n");
-					writer.write(String.valueOf(blue_s.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_v.getValue()) + "\n");
-					writer.write(String.valueOf(blue_v.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_rg.getValue()) + "\n");
-					writer.write(String.valueOf(blue_rg.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_rb.getValue()) + "\n");
-					writer.write(String.valueOf(blue_rb.getUpperValue()) + "\n");
-					writer.write(String.valueOf(blue_gb.getValue()) + "\n");
-					writer.write(String.valueOf(blue_gb.getUpperValue()) + "\n");
-
-					/* Yellow */
-					writer.write(String.valueOf(yellow_r.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_r.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_g.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_g.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_b.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_b.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_h.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_h.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_s.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_s.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_v.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_v.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_rg.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_rg.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_rb.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_rb.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(yellow_gb.getValue()) + "\n");
-					writer.write(String.valueOf(yellow_gb.getUpperValue())
-							+ "\n");
-
-					/* Grey */
-					writer.write(String.valueOf(grey_r.getValue()) + "\n");
-					writer.write(String.valueOf(grey_r.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_g.getValue()) + "\n");
-					writer.write(String.valueOf(grey_g.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_b.getValue()) + "\n");
-					writer.write(String.valueOf(grey_b.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_h.getValue()) + "\n");
-					writer.write(String.valueOf(grey_h.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_s.getValue()) + "\n");
-					writer.write(String.valueOf(grey_s.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_v.getValue()) + "\n");
-					writer.write(String.valueOf(grey_v.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_rg.getValue()) + "\n");
-					writer.write(String.valueOf(grey_rg.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_rb.getValue()) + "\n");
-					writer.write(String.valueOf(grey_rb.getUpperValue()) + "\n");
-					writer.write(String.valueOf(grey_gb.getValue()) + "\n");
-					writer.write(String.valueOf(grey_gb.getUpperValue()) + "\n");
-
-					/* Green */
-					writer.write(String.valueOf(green_r.getValue()) + "\n");
-					writer.write(String.valueOf(green_r.getUpperValue()) + "\n");
-					writer.write(String.valueOf(green_g.getValue()) + "\n");
-					writer.write(String.valueOf(green_g.getUpperValue()) + "\n");
-					writer.write(String.valueOf(green_b.getValue()) + "\n");
-					writer.write(String.valueOf(green_b.getUpperValue()) + "\n");
-					writer.write(String.valueOf(green_h.getValue()) + "\n");
-					writer.write(String.valueOf(green_h.getUpperValue()) + "\n");
-					writer.write(String.valueOf(green_s.getValue()) + "\n");
-					writer.write(String.valueOf(green_s.getUpperValue()) + "\n");
-					writer.write(String.valueOf(green_v.getValue()) + "\n");
-					writer.write(String.valueOf(green_v.getUpperValue()) + "\n");
-					writer.write(String.valueOf(green_rg.getValue()) + "\n");
-					writer.write(String.valueOf(green_rg.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(green_rb.getValue()) + "\n");
-					writer.write(String.valueOf(green_rb.getUpperValue())
-							+ "\n");
-					writer.write(String.valueOf(green_gb.getValue()) + "\n");
-					writer.write(String.valueOf(green_gb.getUpperValue())
-							+ "\n");
 
 					/*
 					 * We need to rewrite the pitch dimensions. TODO: This
@@ -492,12 +384,27 @@ public class VisionGUI implements ChangeListener {
 
 					writer.flush();
 					writer.close();
-
-					System.out.println("Wrote successfully!");
+					
 
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				
+				try
+			      {
+			         FileOutputStream fileOut =
+			         new FileOutputStream("constants/pitchThresholds" + pitchNum + ".ser");
+			         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			         out.writeObject(thresholdsState);
+			         out.close();
+			         fileOut.close();
+			        // System.out.printf("Serialized data is saved in /tmp/employee.ser");
+			      }catch(IOException i)
+			      {
+			          i.printStackTrace();
+			      }
+			      
+			      System.out.println("Wrote successfully!");
 
 			}
 		});
@@ -579,6 +486,7 @@ public class VisionGUI implements ChangeListener {
 		quadrant_panel.add(quadrant4);
 
 		quadrant1.setSelected(true);
+		q = Quadrant.Q1;
 
 		ChangeListener quadrantRadioButtonListener = new QuadrantRadioButtonListener();
 		quadrant1.addChangeListener(quadrantRadioButtonListener);
@@ -608,14 +516,20 @@ public class VisionGUI implements ChangeListener {
 		pitch_1.addChangeListener(pitchRadioButtonListener);
 
 		defaultPanel.add(pitch_panel);
+		QuadrantThresholdsState quadrant;
 
 		/* Red. */
 		JPanel ball_r_panel = new JPanel();
 		JLabel ball_r_label = new JLabel("Red:");
-		ball_r = setUpSlider(0, 255, thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.RED).get_r_low(), thresholdsState
-				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_r_high(), 10, 50);
+		quadrant = thresholdsState.getQuadrantThresholds(q);
+
+		ball_r = setUpSlider(
+						0, 
+						255, 
+						quadrant.getObjectThresholds(Colours.RED).get_r_low(), 
+						quadrant.getObjectThresholds(Colours.RED).get_r_high(), 
+						10, 
+						50);
 		ball_r_panel.add(ball_r_label);
 		ball_r_panel.add(ball_r);
 		ballPanel.add(ball_r_panel);
@@ -1294,8 +1208,6 @@ public class VisionGUI implements ChangeListener {
 		green_gb.addChangeListener(this);
 
 	}
-
-	// TODO create method to initialise Quadrant Slider panel; Done! :)
 
 	public void setUpQuadrantSliders() {
 		/* Quadrant1 */

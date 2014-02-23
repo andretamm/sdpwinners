@@ -25,7 +25,26 @@ public class ObjectThresholdState {
 	private int gb_low;
 	private int gb_high;
 	
-	
+	public ObjectThresholdState() {
+		this.r_low = 0;
+		this.r_high = 255;
+		this.g_low = 0;
+		this.g_high = 255;
+		this.b_low = 0;
+		this.b_high = 255;
+		this.h_low = 0;
+		this.h_high = 255;
+		this.s_low = 0;
+		this.s_high = 255;
+		this.v_low = 0;
+		this.v_high = 255;
+		this.rg_low = 0;
+		this.rg_high = 255;
+		this.rb_low = 0;
+		this.rb_high = 255;
+		this.gb_low = 0;
+		this.gb_high = 255;
+	}
 	
 	public boolean isDebug(){
 		return debug;
@@ -219,7 +238,5 @@ public class ObjectThresholdState {
 				&& gb <= get_gb_high()
 				&& gb >= get_gb_low();
 	}
-
-	
 
 }
