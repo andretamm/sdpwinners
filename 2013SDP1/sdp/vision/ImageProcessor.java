@@ -404,29 +404,29 @@ public class ImageProcessor {
         	times[history.length-1] = System.currentTimeMillis();
         }
         
+        /**
+         * Finds three vectors: 0->2, 1->3 and 2->4, finds their mean and divides with
+         * the time taken for these moves to find the average velocity vector.
+         */
         public Point2D.Double calcVelocity(Point[] history, long[] times) {
-        	/*Point[] velo = new Point[4];
-        	Point averageVelocity = new Point(0,0);
-        	for (int i = 0; i < history.length-1; i++) {
-        		velo[i] = new Point();
-        		velo[i].setLocation((history[i+1].x - history[i].x)/((double)times[i]), (history[i+1].y - history[i].y)/((double)times[i]));
-        		averageVelocity.setLocation(averageVelocity.x+, y)
-//        	}*/
-//        	Point2D.Double velo = new Point2D.Double();
-//        	velo.setLocation((history[2].x-history[0].x)/(double)(times[2]-times[0]),
-//        				(history[2].y-history[0].y)/(double)(times[2]-times[0]));
-        	double historyx = 0;
-        	double historyy = 0;
+        	double historyX = 0;
+        	double historyY = 0;
         	Long historyTimes = (long) 0;
+        	
+        	// Add three vectors together
         	for (int i=0; (i<3); i++) {
-        		historyx=historyx+history[i+2].getX()-history[i].getX();
-        		historyy=historyy+history[i+2].getY()-history[i].getY();
+        		historyX += history[i+2].getX()-history[i].getX();
+        		historyY += history[i+2].getY()-history[i].getY();
         		historyTimes=historyTimes+times[i+2]-times[i];
         	}
-        	historyx = historyx/3;
-        	historyy = historyy/3;
+        	
+        	// Find average vector
+        	historyX = historyX/3;
+        	historyY = historyY/3;
+        	
+        	// Find velocity vector by dividing with time taken to execute the moves
         	historyTimes = historyTimes/3;
-        	Point2D.Double velo = new Point2D.Double(historyx/historyTimes, historyy/historyTimes);
+        	Point2D.Double velo = new Point2D.Double(historyX/historyTimes, historyY/historyTimes);
         	return velo;
         }
 }
