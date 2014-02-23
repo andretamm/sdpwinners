@@ -4,9 +4,11 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.BoxLayout;
@@ -432,7 +434,28 @@ public class VisionGUI implements ChangeListener {
 						|| result == JOptionPane.CANCEL_OPTION)
 					return;
 
-				pitchConstants.setPitchNum(pitchNum);
+				ThresholdsState newState = new ThresholdsState();
+				
+				try
+		        {
+		           FileInputStream fileIn = new FileInputStream("constants/pitchThresholds" + pitchNum + ".ser");
+		           ObjectInputStream in = new ObjectInputStream(fileIn);
+		           newState = (ThresholdsState) in.readObject();
+		           in.close();
+		           fileIn.close();
+		           
+		           System.out.println("ThresholdState " + pitchNum + " was loaded!");
+		        } catch(IOException i)
+		        {
+		           i.printStackTrace();
+		        } catch(ClassNotFoundException c)
+		        
+		        {
+		           System.out.println("pitchThresholds" + pitchNum + " class not found");
+		           c.printStackTrace();
+		        }
+		        
+				thresholdsState.updateState(newState);
 				reloadSliderDefaults();
 
 			}
@@ -1405,11 +1428,11 @@ public class VisionGUI implements ChangeListener {
 			thresholdsState.getQuadrantThresholds(q)
 					.getObjectThresholds(Colours.RED).setDebug(false);
 			thresholdsState.getQuadrantThresholds(q)
-					.getObjectThresholds(Colours.BLUE).setDebug(true);
+					.getObjectThresholds(Colours.BLUE).setDebug(false);
 			thresholdsState.getQuadrantThresholds(q)
 					.getObjectThresholds(Colours.YELLOW).setDebug(false);
 			thresholdsState.getQuadrantThresholds(q)
-					.getObjectThresholds(Colours.GRAY).setDebug(true);
+					.getObjectThresholds(Colours.GRAY).setDebug(false);
 			thresholdsState.getQuadrantThresholds(q)
 					.getObjectThresholds(Colours.GREEN).setDebug(false);
 			break;
@@ -1603,106 +1626,117 @@ public class VisionGUI implements ChangeListener {
 	 * Reloads the default values for the sliders from the PitchConstants file.
 	 */
 	public void reloadSliderDefaults() {
-
+		ObjectThresholdState ball = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.RED);
+		
 		/* Ball slider */
-		setSliderVals(ball_r, pitchConstants.ball_r_low,
-				pitchConstants.ball_r_high);
-		setSliderVals(ball_g, pitchConstants.ball_g_low,
-				pitchConstants.ball_g_high);
-		setSliderVals(ball_b, pitchConstants.ball_b_low,
-				pitchConstants.ball_b_high);
-		setSliderVals(ball_h, pitchConstants.ball_h_low,
-				pitchConstants.ball_h_high);
-		setSliderVals(ball_s, pitchConstants.ball_s_low,
-				pitchConstants.ball_s_high);
-		setSliderVals(ball_v, pitchConstants.ball_v_low,
-				pitchConstants.ball_v_high);
-		setSliderVals(ball_rg, pitchConstants.ball_rg_low,
-				pitchConstants.ball_rg_high);
-		setSliderVals(ball_rb, pitchConstants.ball_rb_low,
-				pitchConstants.ball_rb_high);
-		setSliderVals(ball_gb, pitchConstants.ball_gb_low,
-				pitchConstants.ball_gb_high);
+		setSliderVals(ball_r, ball.get_r_low(),
+				ball.get_r_high());
+		setSliderVals(ball_g, ball.get_g_low(),
+				ball.get_g_high());
+		setSliderVals(ball_b, ball.get_b_low(),
+				ball.get_b_high());
+		setSliderVals(ball_h, thresholdsState.ScaleTo255(ball.get_h_low()),
+				thresholdsState.ScaleTo255(ball.get_h_high()));
+		setSliderVals(ball_s, thresholdsState.ScaleTo255(ball.get_s_low()),
+				thresholdsState.ScaleTo255(ball.get_s_high()));
+		setSliderVals(ball_v, thresholdsState.ScaleTo255(ball.get_v_low()),
+				thresholdsState.ScaleTo255(ball.get_v_high()));
+		setSliderVals(ball_rg, ball.get_rg_low(),
+				ball.get_rg_high());
+		setSliderVals(ball_rb, ball.get_rb_low(),
+				ball.get_rb_high());
+		setSliderVals(ball_gb, ball.get_gb_low(),
+				ball.get_gb_high());
 
+		ObjectThresholdState blue = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.BLUE);
+		
 		/* Blue slider */
-		setSliderVals(blue_r, pitchConstants.blue_r_low,
-				pitchConstants.blue_r_high);
-		setSliderVals(blue_g, pitchConstants.blue_g_low,
-				pitchConstants.blue_g_high);
-		setSliderVals(blue_b, pitchConstants.blue_b_low,
-				pitchConstants.blue_b_high);
-		setSliderVals(blue_h, pitchConstants.blue_h_low,
-				pitchConstants.blue_h_high);
-		setSliderVals(blue_s, pitchConstants.blue_s_low,
-				pitchConstants.blue_s_high);
-		setSliderVals(blue_v, pitchConstants.blue_v_low,
-				pitchConstants.blue_v_high);
-		setSliderVals(blue_rg, pitchConstants.blue_rg_low,
-				pitchConstants.blue_rg_high);
-		setSliderVals(blue_rb, pitchConstants.blue_rb_low,
-				pitchConstants.blue_rb_high);
-		setSliderVals(blue_gb, pitchConstants.blue_gb_low,
-				pitchConstants.blue_gb_high);
+		setSliderVals(blue_r, blue.get_r_low(),
+				blue.get_r_high());
+		setSliderVals(blue_g, blue.get_g_low(),
+				blue.get_g_high());
+		setSliderVals(blue_b, blue.get_b_low(),
+				blue.get_b_high());
+		setSliderVals(blue_h, thresholdsState.ScaleTo255(blue.get_h_low()),
+				thresholdsState.ScaleTo255(blue.get_h_high()));
+		setSliderVals(blue_s, thresholdsState.ScaleTo255(blue.get_s_low()),
+				thresholdsState.ScaleTo255(blue.get_s_high()));
+		setSliderVals(blue_v, thresholdsState.ScaleTo255(blue.get_v_low()),
+				thresholdsState.ScaleTo255(blue.get_v_high()));
+		setSliderVals(blue_rg, blue.get_rg_low(),
+				blue.get_rg_high());
+		setSliderVals(blue_rb, blue.get_rb_low(),
+				blue.get_rb_high());
+		setSliderVals(blue_gb, blue.get_gb_low(),
+				blue.get_gb_high());
 
 		/* Yellow slider */
-		setSliderVals(yellow_r, pitchConstants.yellow_r_low,
-				pitchConstants.yellow_r_high);
-		setSliderVals(yellow_g, pitchConstants.yellow_g_low,
-				pitchConstants.yellow_g_high);
-		setSliderVals(yellow_b, pitchConstants.yellow_b_low,
-				pitchConstants.yellow_b_high);
-		setSliderVals(yellow_h, pitchConstants.yellow_h_low,
-				pitchConstants.yellow_h_high);
-		setSliderVals(yellow_s, pitchConstants.yellow_s_low,
-				pitchConstants.yellow_s_high);
-		setSliderVals(yellow_v, pitchConstants.yellow_v_low,
-				pitchConstants.yellow_v_high);
-		setSliderVals(yellow_rg, pitchConstants.yellow_rg_low,
-				pitchConstants.yellow_rg_high);
-		setSliderVals(yellow_rb, pitchConstants.yellow_rb_low,
-				pitchConstants.yellow_rb_high);
-		setSliderVals(yellow_gb, pitchConstants.yellow_gb_low,
-				pitchConstants.yellow_gb_high);
+
+		ObjectThresholdState yellow = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW);
+		
+		setSliderVals(yellow_r, yellow.get_r_low(),
+				yellow.get_r_high());
+		setSliderVals(yellow_g, yellow.get_g_low(),
+				yellow.get_g_high());
+		setSliderVals(yellow_b, yellow.get_b_low(),
+				yellow.get_b_high());
+		setSliderVals(yellow_h, thresholdsState.ScaleTo255(yellow.get_h_low()),
+				thresholdsState.ScaleTo255(yellow.get_h_high()));
+		setSliderVals(yellow_s, thresholdsState.ScaleTo255(yellow.get_s_low()),
+				thresholdsState.ScaleTo255(yellow.get_s_high()));
+		setSliderVals(yellow_v, thresholdsState.ScaleTo255(yellow.get_v_low()),
+				thresholdsState.ScaleTo255(yellow.get_v_high()));
+		setSliderVals(yellow_rg, yellow.get_rg_low(),
+				yellow.get_rg_high());
+		setSliderVals(yellow_rb, yellow.get_rb_low(),
+				yellow.get_rb_high());
+		setSliderVals(yellow_gb, yellow.get_gb_low(),
+				yellow.get_gb_high());
 
 		/* Grey slider */
-		setSliderVals(grey_r, pitchConstants.grey_r_low,
-				pitchConstants.grey_r_high);
-		setSliderVals(grey_g, pitchConstants.grey_g_low,
-				pitchConstants.grey_g_high);
-		setSliderVals(grey_b, pitchConstants.grey_b_low,
-				pitchConstants.grey_b_high);
-		setSliderVals(grey_h, pitchConstants.grey_h_low,
-				pitchConstants.grey_h_high);
-		setSliderVals(grey_s, pitchConstants.grey_s_low,
-				pitchConstants.grey_s_high);
-		setSliderVals(grey_v, pitchConstants.grey_v_low,
-				pitchConstants.grey_v_high);
-		setSliderVals(grey_rg, pitchConstants.grey_rg_low,
-				pitchConstants.grey_rg_high);
-		setSliderVals(grey_rb, pitchConstants.grey_rb_low,
-				pitchConstants.grey_rb_high);
-		setSliderVals(grey_gb, pitchConstants.grey_gb_low,
-				pitchConstants.grey_gb_high);
+
+		ObjectThresholdState grey = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GRAY);
+		
+		setSliderVals(grey_r, grey.get_r_low(),
+				grey.get_r_high());
+		setSliderVals(grey_g, grey.get_g_low(),
+				grey.get_g_high());
+		setSliderVals(grey_b, grey.get_b_low(),
+				grey.get_b_high());
+		setSliderVals(grey_h, thresholdsState.ScaleTo255(grey.get_h_low()),
+				thresholdsState.ScaleTo255(grey.get_h_high()));
+		setSliderVals(grey_s, thresholdsState.ScaleTo255(grey.get_s_low()),
+				thresholdsState.ScaleTo255(grey.get_s_high()));
+		setSliderVals(grey_v, thresholdsState.ScaleTo255(grey.get_v_low()),
+				thresholdsState.ScaleTo255(grey.get_v_high()));
+		setSliderVals(grey_rg, grey.get_rg_low(),
+				grey.get_rg_high());
+		setSliderVals(grey_rb, grey.get_rb_low(),
+				grey.get_rb_high());
+		setSliderVals(grey_gb, grey.get_gb_low(),
+				grey.get_gb_high());
 
 		/* Green slider */
-		setSliderVals(green_r, pitchConstants.green_r_low,
-				pitchConstants.green_r_high);
-		setSliderVals(green_g, pitchConstants.green_g_low,
-				pitchConstants.green_g_high);
-		setSliderVals(green_b, pitchConstants.green_b_low,
-				pitchConstants.green_b_high);
-		setSliderVals(green_h, pitchConstants.green_h_low,
-				pitchConstants.green_h_high);
-		setSliderVals(green_s, pitchConstants.green_s_low,
-				pitchConstants.green_s_high);
-		setSliderVals(green_v, pitchConstants.green_v_low,
-				pitchConstants.green_v_high);
-		setSliderVals(green_rg, pitchConstants.green_rg_low,
-				pitchConstants.green_rg_high);
-		setSliderVals(green_rb, pitchConstants.green_rb_low,
-				pitchConstants.green_rb_high);
-		setSliderVals(green_gb, pitchConstants.green_gb_low,
-				pitchConstants.green_gb_high);
+		ObjectThresholdState green = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN);
+		
+		setSliderVals(yellow_r, green.get_r_low(),
+				green.get_r_high());
+		setSliderVals(green_g, green.get_g_low(),
+				green.get_g_high());
+		setSliderVals(green_b, green.get_b_low(),
+				green.get_b_high());
+		setSliderVals(green_h, thresholdsState.ScaleTo255(green.get_h_low()),
+				thresholdsState.ScaleTo255(green.get_h_high()));
+		setSliderVals(green_s, thresholdsState.ScaleTo255(green.get_s_low()),
+				thresholdsState.ScaleTo255(green.get_s_high()));
+		setSliderVals(green_v, thresholdsState.ScaleTo255(green.get_v_low()),
+				thresholdsState.ScaleTo255(green.get_v_high()));
+		setSliderVals(green_rg, green.get_rg_low(),
+				green.get_rg_high());
+		setSliderVals(green_rb, green.get_rb_low(),
+				green.get_rb_high());
+		setSliderVals(green_gb, green.get_gb_low(),
+				green.get_gb_high());
 
 		/* Quadrant slider */
 		setSliderVals(q1, pitchConstants.q1_low, pitchConstants.q1_high);

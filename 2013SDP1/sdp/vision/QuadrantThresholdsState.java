@@ -1,5 +1,6 @@
 package sdp.vision;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import constants.Colours;
 
@@ -10,8 +11,13 @@ import constants.Colours;
  *
  */
 
-public class QuadrantThresholdsState {
+public class QuadrantThresholdsState implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private HashMap<Colours,ObjectThresholdState> quadrantThresholds;
 	
 	public QuadrantThresholdsState() {

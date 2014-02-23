@@ -1,9 +1,15 @@
 package sdp.vision;
 
 import java.awt.Color;
+import java.io.Serializable;
 
-public class ObjectThresholdState {
+public class ObjectThresholdState implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private boolean debug;
 	
 	private int r_low;
@@ -38,11 +44,11 @@ public class ObjectThresholdState {
 		this.s_high = 255;
 		this.v_low = 0;
 		this.v_high = 255;
-		this.rg_low = 0;
+		this.rg_low = -255;
 		this.rg_high = 255;
-		this.rb_low = 0;
+		this.rb_low = -255;
 		this.rb_high = 255;
-		this.gb_low = 0;
+		this.gb_low = -255;
 		this.gb_high = 255;
 	}
 	

@@ -186,106 +186,106 @@ public class PitchConstants {
 		/* We assume that the file is well formed. */
 		
 
-		/* Ball. */
-		this.ball_r_low = scanner.nextInt();
-		this.ball_r_high = scanner.nextInt();
-		this.ball_g_low = scanner.nextInt();
-		this.ball_g_high = scanner.nextInt();
-		this.ball_b_low = scanner.nextInt();
-		this.ball_b_high = scanner.nextInt();
-		this.ball_h_low = scanner.nextInt();
-		this.ball_h_high = scanner.nextInt();
-		this.ball_s_low = scanner.nextInt();
-		this.ball_s_high = scanner.nextInt();
-		this.ball_v_low = scanner.nextInt();
-		this.ball_v_high = scanner.nextInt();
-		this.ball_rg_low = scanner.nextInt();
-		this.ball_rg_high = scanner.nextInt();
-		this.ball_rb_low = scanner.nextInt();
-		this.ball_rb_high = scanner.nextInt();
-		this.ball_gb_low = scanner.nextInt();
-		this.ball_gb_high = scanner.nextInt();
-		
-		/* Blue Robot. */
-		this.blue_r_low = scanner.nextInt();
-		this.blue_r_high = scanner.nextInt();
-		this.blue_g_low = scanner.nextInt();
-		this.blue_g_high = scanner.nextInt();
-		this.blue_b_low = scanner.nextInt();
-		this.blue_b_high = scanner.nextInt();
-		this.blue_h_low = scanner.nextInt();
-		this.blue_h_high = scanner.nextInt();
-		this.blue_s_low = scanner.nextInt();
-		this.blue_s_high = scanner.nextInt();
-		this.blue_v_low = scanner.nextInt();
-		this.blue_v_high = scanner.nextInt();
-		this.blue_rg_low = scanner.nextInt();
-		this.blue_rg_high = scanner.nextInt();
-		this.blue_rb_low = scanner.nextInt();
-		this.blue_rb_high = scanner.nextInt();
-		this.blue_gb_low = scanner.nextInt();
-		this.blue_gb_high = scanner.nextInt();
-		
-		/* Yellow Robot. */
-		this.yellow_r_low = scanner.nextInt();
-		this.yellow_r_high = scanner.nextInt();
-		this.yellow_g_low = scanner.nextInt();
-		this.yellow_g_high = scanner.nextInt();
-		this.yellow_b_low = scanner.nextInt();
-		this.yellow_b_high = scanner.nextInt();
-		this.yellow_h_low = scanner.nextInt();
-		this.yellow_h_high = scanner.nextInt();
-		this.yellow_s_low = scanner.nextInt();
-		this.yellow_s_high = scanner.nextInt();
-		this.yellow_v_low = scanner.nextInt();
-		this.yellow_v_high = scanner.nextInt();
-		this.yellow_rg_low = scanner.nextInt();
-		this.yellow_rg_high = scanner.nextInt();
-		this.yellow_rb_low = scanner.nextInt();
-		this.yellow_rb_high = scanner.nextInt();
-		this.yellow_gb_low = scanner.nextInt();
-		this.yellow_gb_high = scanner.nextInt();
-		
-		
-		/* Grey Circle. */
-		this.grey_r_low = scanner.nextInt();
-		this.grey_r_high = scanner.nextInt();
-		this.grey_g_low = scanner.nextInt();
-		this.grey_g_high = scanner.nextInt();
-		this.grey_b_low = scanner.nextInt();
-		this.grey_b_high = scanner.nextInt();
-		this.grey_h_low = scanner.nextInt();
-		this.grey_h_high = scanner.nextInt();
-		this.grey_s_low = scanner.nextInt();
-		this.grey_s_high = scanner.nextInt();
-		this.grey_v_low = scanner.nextInt();
-		this.grey_v_high = scanner.nextInt();
-		this.grey_rg_low = scanner.nextInt();
-		this.grey_rg_high = scanner.nextInt();
-		this.grey_rb_low = scanner.nextInt();
-		this.grey_rb_high = scanner.nextInt();
-		this.grey_gb_low = scanner.nextInt();
-		this.grey_gb_high = scanner.nextInt();
-		
-		/* Green plates */
-		this.green_r_low = scanner.nextInt();
-		this.green_r_high = scanner.nextInt();
-		this.green_g_low = scanner.nextInt();
-		this.green_g_high = scanner.nextInt();
-		this.green_b_low = scanner.nextInt();
-		this.green_b_high = scanner.nextInt();
-		this.green_h_low = scanner.nextInt();
-		this.green_h_high = scanner.nextInt();
-		this.green_s_low = scanner.nextInt();
-		this.green_s_high = scanner.nextInt();
-		this.green_v_low = scanner.nextInt();
-		this.green_v_high = scanner.nextInt();
-		this.green_rg_low = scanner.nextInt();
-		this.green_rg_high = scanner.nextInt();
-		this.green_rb_low = scanner.nextInt();
-		this.green_rb_high = scanner.nextInt();
-		this.green_gb_low = scanner.nextInt();
-		this.green_gb_high = scanner.nextInt();
+//		/* Ball. */
+//		this.ball_r_low = scanner.nextInt();
+//		this.ball_r_high = scanner.nextInt();
+//		this.ball_g_low = scanner.nextInt();
+//		this.ball_g_high = scanner.nextInt();
+//		this.ball_b_low = scanner.nextInt();
+//		this.ball_b_high = scanner.nextInt();
+//		this.ball_h_low = scanner.nextInt();
+//		this.ball_h_high = scanner.nextInt();
+//		this.ball_s_low = scanner.nextInt();
+//		this.ball_s_high = scanner.nextInt();
+//		this.ball_v_low = scanner.nextInt();
+//		this.ball_v_high = scanner.nextInt();
+//		this.ball_rg_low = scanner.nextInt();
+//		this.ball_rg_high = scanner.nextInt();
+//		this.ball_rb_low = scanner.nextInt();
+//		this.ball_rb_high = scanner.nextInt();
+//		this.ball_gb_low = scanner.nextInt();
+//		this.ball_gb_high = scanner.nextInt();
+//		
+//		/* Blue Robot. */
+//		this.blue_r_low = scanner.nextInt();
+//		this.blue_r_high = scanner.nextInt();
+//		this.blue_g_low = scanner.nextInt();
+//		this.blue_g_high = scanner.nextInt();
+//		this.blue_b_low = scanner.nextInt();
+//		this.blue_b_high = scanner.nextInt();
+//		this.blue_h_low = scanner.nextInt();
+//		this.blue_h_high = scanner.nextInt();
+//		this.blue_s_low = scanner.nextInt();
+//		this.blue_s_high = scanner.nextInt();
+//		this.blue_v_low = scanner.nextInt();
+//		this.blue_v_high = scanner.nextInt();
+//		this.blue_rg_low = scanner.nextInt();
+//		this.blue_rg_high = scanner.nextInt();
+//		this.blue_rb_low = scanner.nextInt();
+//		this.blue_rb_high = scanner.nextInt();
+//		this.blue_gb_low = scanner.nextInt();
+//		this.blue_gb_high = scanner.nextInt();
+//		
+//		/* Yellow Robot. */
+//		this.yellow_r_low = scanner.nextInt();
+//		this.yellow_r_high = scanner.nextInt();
+//		this.yellow_g_low = scanner.nextInt();
+//		this.yellow_g_high = scanner.nextInt();
+//		this.yellow_b_low = scanner.nextInt();
+//		this.yellow_b_high = scanner.nextInt();
+//		this.yellow_h_low = scanner.nextInt();
+//		this.yellow_h_high = scanner.nextInt();
+//		this.yellow_s_low = scanner.nextInt();
+//		this.yellow_s_high = scanner.nextInt();
+//		this.yellow_v_low = scanner.nextInt();
+//		this.yellow_v_high = scanner.nextInt();
+//		this.yellow_rg_low = scanner.nextInt();
+//		this.yellow_rg_high = scanner.nextInt();
+//		this.yellow_rb_low = scanner.nextInt();
+//		this.yellow_rb_high = scanner.nextInt();
+//		this.yellow_gb_low = scanner.nextInt();
+//		this.yellow_gb_high = scanner.nextInt();
+//		
+//		
+//		/* Grey Circle. */
+//		this.grey_r_low = scanner.nextInt();
+//		this.grey_r_high = scanner.nextInt();
+//		this.grey_g_low = scanner.nextInt();
+//		this.grey_g_high = scanner.nextInt();
+//		this.grey_b_low = scanner.nextInt();
+//		this.grey_b_high = scanner.nextInt();
+//		this.grey_h_low = scanner.nextInt();
+//		this.grey_h_high = scanner.nextInt();
+//		this.grey_s_low = scanner.nextInt();
+//		this.grey_s_high = scanner.nextInt();
+//		this.grey_v_low = scanner.nextInt();
+//		this.grey_v_high = scanner.nextInt();
+//		this.grey_rg_low = scanner.nextInt();
+//		this.grey_rg_high = scanner.nextInt();
+//		this.grey_rb_low = scanner.nextInt();
+//		this.grey_rb_high = scanner.nextInt();
+//		this.grey_gb_low = scanner.nextInt();
+//		this.grey_gb_high = scanner.nextInt();
+//		
+//		/* Green plates */
+//		this.green_r_low = scanner.nextInt();
+//		this.green_r_high = scanner.nextInt();
+//		this.green_g_low = scanner.nextInt();
+//		this.green_g_high = scanner.nextInt();
+//		this.green_b_low = scanner.nextInt();
+//		this.green_b_high = scanner.nextInt();
+//		this.green_h_low = scanner.nextInt();
+//		this.green_h_high = scanner.nextInt();
+//		this.green_s_low = scanner.nextInt();
+//		this.green_s_high = scanner.nextInt();
+//		this.green_v_low = scanner.nextInt();
+//		this.green_v_high = scanner.nextInt();
+//		this.green_rg_low = scanner.nextInt();
+//		this.green_rg_high = scanner.nextInt();
+//		this.green_rb_low = scanner.nextInt();
+//		this.green_rb_high = scanner.nextInt();
+//		this.green_gb_low = scanner.nextInt();
+//		this.green_gb_high = scanner.nextInt();
 		
 		
 		/* Pitch Dimensions */

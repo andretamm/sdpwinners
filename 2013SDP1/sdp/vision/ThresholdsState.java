@@ -40,6 +40,13 @@ public class ThresholdsState implements Serializable {
 		return thresholds.get(q);
 	}
 	
+	public void updateState(ThresholdsState newState) {
+		for (Quadrant q : Quadrant.values()){
+			thresholds.put(q, newState.getQuadrantThresholds(q));
+			//System.out.println(q + " " + thresholds.get(q));
+		}
+	}
+	
 	public int ScaleTo255(double value) {
 		return (int) (value*255);
 	}
