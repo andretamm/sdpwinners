@@ -216,7 +216,7 @@ public class Display {
 		// Draw movement predictions
 		graphics.setColor(Color.ORANGE);
 		for (Robot r : Robot.listAll()) {
-			double timeMs = 2000;
+			double timeMs = 7;
 			Point newPos = StrategyHelper.addVectorToPoint(StrategyHelper.multiplyVector(ws.getRobotVelocity(), timeMs), ws.getRobotPoint(r));
 			graphics.drawLine(ws.getRobotX(r), ws.getRobotY(r), newPos.x, newPos.y);
 		}

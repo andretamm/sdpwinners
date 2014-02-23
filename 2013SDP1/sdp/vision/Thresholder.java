@@ -35,7 +35,7 @@ public class Thresholder{
 		int rg;
 		int rb;
 		int gb;
-		
+
 		/*
 		 * For every pixel within the pitch, test to see if it belongs to the
 		 * ball, the yellow T, the blue T, either green plate or a grey circle.

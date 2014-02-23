@@ -659,10 +659,10 @@ public class VisionGUI implements ChangeListener {
 		/* Red - Green. */
 		JPanel ball_rg_panel = new JPanel();
 		JLabel ball_rg_label = new JLabel("Red - Green:");
-		ball_rg = setUpSlider(0, 255, thresholdsState.getQuadrantThresholds(q)
+		ball_rg = setUpSlider(-255, 255, thresholdsState.getQuadrantThresholds(q)
 				.getObjectThresholds(Colours.RED).get_rg_low(), thresholdsState
 				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_rg_high(), 10, 50);
+				.get_rg_high(), 20, 100);
 		ball_rg_panel.add(ball_rg_label);
 		ball_rg_panel.add(ball_rg);
 		ballPanel.add(ball_rg_panel);
@@ -670,10 +670,10 @@ public class VisionGUI implements ChangeListener {
 		/* Red - Blue. */
 		JPanel ball_rb_panel = new JPanel();
 		JLabel ball_rb_label = new JLabel("Red - Blue");
-		ball_rb = setUpSlider(0, 255, thresholdsState.getQuadrantThresholds(q)
+		ball_rb = setUpSlider(-255, 255, thresholdsState.getQuadrantThresholds(q)
 				.getObjectThresholds(Colours.RED).get_rb_low(), thresholdsState
 				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_rb_high(), 10, 50);
+				.get_rb_high(), 20, 100);
 		ball_rb_panel.add(ball_rb_label);
 		ball_rb_panel.add(ball_rb);
 		ballPanel.add(ball_rb_panel);
@@ -681,10 +681,10 @@ public class VisionGUI implements ChangeListener {
 		/* Green - Blue */
 		JPanel ball_gb_panel = new JPanel();
 		JLabel ball_gb_label = new JLabel("Green - Blue");
-		ball_gb = setUpSlider(0, 255, thresholdsState.getQuadrantThresholds(q)
+		ball_gb = setUpSlider(-255, 255, thresholdsState.getQuadrantThresholds(q)
 				.getObjectThresholds(Colours.RED).get_gb_low(), thresholdsState
 				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_gb_high(), 10, 50);
+				.get_gb_high(), 20, 100);
 		ball_gb_panel.add(ball_gb_label);
 		ball_gb_panel.add(ball_gb);
 		ballPanel.add(ball_gb_panel);
@@ -801,13 +801,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel blue_rg_panel = new JPanel();
 		JLabel blue_rg_label = new JLabel("Red - Green:");
 		blue_rg = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.BLUE).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.BLUE).get_rg_high(), 10,
-				50);
+						.getObjectThresholds(Colours.BLUE).get_rg_high(), 20, 100);
 		blue_rg_panel.add(blue_rg_label);
 		blue_rg_panel.add(blue_rg);
 		bluePanel.add(blue_rg_panel);
@@ -816,13 +815,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel blue_rb_panel = new JPanel();
 		JLabel blue_rb_label = new JLabel("Red - Blue");
 		blue_rb = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.BLUE).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.BLUE).get_rg_high(), 10,
-				50);
+						.getObjectThresholds(Colours.BLUE).get_rg_high(), 20, 100);
 		blue_rb_panel.add(blue_rb_label);
 		blue_rb_panel.add(blue_rb);
 		bluePanel.add(blue_rb_panel);
@@ -831,13 +829,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel blue_gb_panel = new JPanel();
 		JLabel blue_gb_label = new JLabel("Green - Blue");
 		blue_gb = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.BLUE).get_gb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.BLUE).get_gb_high(), 10,
-				50);
+						.getObjectThresholds(Colours.BLUE).get_gb_high(), 20, 100);
 		blue_gb_panel.add(blue_gb_label);
 		blue_gb_panel.add(blue_gb);
 		bluePanel.add(blue_gb_panel);
@@ -957,10 +954,10 @@ public class VisionGUI implements ChangeListener {
 		/* Red - Green. */
 		JPanel yellow_rg_panel = new JPanel();
 		JLabel yellow_rg_label = new JLabel("Red - Green:");
-		yellow_rg = setUpSlider(0, 255, thresholdsState
+		yellow_rg = setUpSlider(-255, 255, thresholdsState
 				.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW)
 				.get_rg_low(), thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.YELLOW).get_rg_high(), 10, 50);
+				.getObjectThresholds(Colours.YELLOW).get_rg_high(), 20, 100);
 		yellow_rg_panel.add(yellow_rg_label);
 		yellow_rg_panel.add(yellow_rg);
 		yellowPanel.add(yellow_rg_panel);
@@ -968,10 +965,10 @@ public class VisionGUI implements ChangeListener {
 		/* Red - Blue. */
 		JPanel yellow_rb_panel = new JPanel();
 		JLabel yellow_rb_label = new JLabel("Red - Blue");
-		yellow_rb = setUpSlider(0, 255, thresholdsState
+		yellow_rb = setUpSlider(-255, 255, thresholdsState
 				.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW)
 				.get_rb_low(), thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.YELLOW).get_rb_high(), 10, 50);
+				.getObjectThresholds(Colours.YELLOW).get_rb_high(), 20, 100);
 		yellow_rb_panel.add(yellow_rb_label);
 		yellow_rb_panel.add(yellow_rb);
 		yellowPanel.add(yellow_rb_panel);
@@ -979,10 +976,10 @@ public class VisionGUI implements ChangeListener {
 		/* Green - Blue */
 		JPanel yellow_gb_panel = new JPanel();
 		JLabel yellow_gb_label = new JLabel("Green - Blue");
-		yellow_gb = setUpSlider(0, 255, thresholdsState
+		yellow_gb = setUpSlider(-255, 255, thresholdsState
 				.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW)
 				.get_gb_low(), thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.YELLOW).get_gb_high(), 10, 50);
+				.getObjectThresholds(Colours.YELLOW).get_gb_high(), 20, 100);
 		yellow_gb_panel.add(yellow_gb_label);
 		yellow_gb_panel.add(yellow_gb);
 		yellowPanel.add(yellow_gb_panel);
@@ -1092,13 +1089,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel grey_rg_panel = new JPanel();
 		JLabel grey_rg_label = new JLabel("Red - Green:");
 		grey_rg = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GRAY).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GRAY).get_rg_high(), 10,
-				50);
+						.getObjectThresholds(Colours.GRAY).get_rg_high(), 20, 100);
 		grey_rg_panel.add(grey_rg_label);
 		grey_rg_panel.add(grey_rg);
 		greyPanel.add(grey_rg_panel);
@@ -1107,13 +1103,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel grey_rb_panel = new JPanel();
 		JLabel grey_rb_label = new JLabel("Red - Blue");
 		grey_rb = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GRAY).get_rb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GRAY).get_rb_high(), 10,
-				50);
+						.getObjectThresholds(Colours.GRAY).get_rb_high(), 20, 100);
 		grey_rb_panel.add(grey_rb_label);
 		grey_rb_panel.add(grey_rb);
 		greyPanel.add(grey_rb_panel);
@@ -1122,13 +1117,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel grey_gb_panel = new JPanel();
 		JLabel grey_gb_label = new JLabel("Green - Blue");
 		grey_gb = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GRAY).get_gb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GRAY).get_gb_high(), 10,
-				50);
+						.getObjectThresholds(Colours.GRAY).get_gb_high(), 20, 100);
 		grey_gb_panel.add(grey_gb_label);
 		grey_gb_panel.add(grey_gb);
 		greyPanel.add(grey_gb_panel);
@@ -1249,13 +1243,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel green_rg_panel = new JPanel();
 		JLabel green_rg_label = new JLabel("Red - Green:");
 		green_rg = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GREEN).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_rg_high(), 10,
-				50);
+						.getObjectThresholds(Colours.GREEN).get_rg_high(), 20, 100);
 		green_rg_panel.add(green_rg_label);
 		green_rg_panel.add(green_rg);
 		greenPanel.add(green_rg_panel);
@@ -1264,13 +1257,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel green_rb_panel = new JPanel();
 		JLabel green_rb_label = new JLabel("Red - Blue");
 		green_rb = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GREEN).get_rb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_rb_high(), 10,
-				50);
+						.getObjectThresholds(Colours.GREEN).get_rb_high(), 20, 100);
 		green_rb_panel.add(green_rb_label);
 		green_rb_panel.add(green_rb);
 		greenPanel.add(green_rb_panel);
@@ -1279,13 +1271,12 @@ public class VisionGUI implements ChangeListener {
 		JPanel green_gb_panel = new JPanel();
 		JLabel green_gb_label = new JLabel("Green - Blue");
 		green_gb = setUpSlider(
-				0,
+				-255,
 				255,
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GREEN).get_gb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_gb_high(), 10,
-				50);
+						.getObjectThresholds(Colours.GREEN).get_gb_high(), 20, 100);
 		green_gb_panel.add(green_gb_label);
 		green_gb_panel.add(green_gb);
 		greenPanel.add(green_gb_panel);

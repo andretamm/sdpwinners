@@ -28,7 +28,19 @@ public class ObjectThresholdState implements Serializable {
 	private int rb_high;
 	private int gb_low;
 	private int gb_high;
-	
+
+	@Override
+	public String toString() {
+		return "ObjectThresholdState [r_low=" + r_low + ", r_high=" + r_high
+				+ ", g_low=" + g_low + ", g_high=" + g_high + ", b_low="
+				+ b_low + ", b_high=" + b_high + ", h_low=" + h_low
+				+ ", h_high=" + h_high + ", s_low=" + s_low + ", s_high="
+				+ s_high + ", v_low=" + v_low + ", v_high=" + v_high
+				+ ", rg_low=" + rg_low + ", rg_high=" + rg_high + ", rb_low="
+				+ rb_low + ", rb_high=" + rb_high + ", gb_low=" + gb_low
+				+ ", gb_high=" + gb_high + "]";
+	}
+
 	public ObjectThresholdState() {
 		this.r_low = 0;
 		this.r_high = 255;
@@ -215,7 +227,7 @@ public class ObjectThresholdState implements Serializable {
 	 *         (and thus the pixel is part of the ball), false otherwise.
 	 */
 	public boolean isColour(Color colour, float[] hsbvals, int rg, int rb, int gb) {
-		return hsbvals[0] <= get_h_high()
+		return (hsbvals[0] <= get_h_high()
 				&& hsbvals[0] >= get_h_low()
 				&& hsbvals[1] <= get_s_high()
 				&& hsbvals[1] >= get_s_low()
@@ -226,7 +238,7 @@ public class ObjectThresholdState implements Serializable {
 				&& colour.getGreen() <= get_g_high()
 				&& colour.getGreen() >= get_g_low()
 				&& colour.getBlue() <= get_b_high()
-				&& colour.getBlue() >= get_b_low()
+				&& colour.getBlue() >= get_b_low())
 				&& rg <= get_rg_high()
 				&& rg >= get_rg_low()
 				&& rb <= get_rb_high()

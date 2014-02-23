@@ -4,9 +4,13 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 import common.Robot;
 
@@ -56,7 +60,11 @@ public class ImageProcessor {
     		this.bottom=(int) worldState.getOuterPitchBottomRight().getY();
     		this.left=(int) worldState.getOuterPitchTopLeft().getX();
     		this.right=(int) worldState.getOuterPitchBottomRight().getX();
-
+    			
+//    			worldState.setShowNoDistortion(true);
+//    			worldState.setNormaliseRGB(true);
+//    			worldState.setSubtractBackground(true);
+    			
                 //remove barrel distortion
                 if (worldState.isShowNoDistortion()) {
                         DistortionFix.removeBarrelDistortion(image);
@@ -82,6 +90,20 @@ public class ImageProcessor {
                 if (worldState.getRemoveShadows()) {
 					Deshadow.deshadowImage(worldState, image, top, bottom, left, right);
 				}
+                
+//                try {
+//                    // retrieve image
+//                    File outputfile = new File("saved.png");
+//                    ImageIO.write(image, "png", outputfile);
+//                } catch (IOException e) {
+//                }
+//                System.out.println("Sleeping ^^");
+//                try {
+//					Thread.sleep(10000000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				
 				/* ----------------------------- */
 				/* THIS NEEDS TO BE PARALLELISED */
