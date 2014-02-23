@@ -16,9 +16,11 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -86,10 +88,10 @@ public class VisionGUI implements ChangeListener {
 	JRadioButton colour_blue;
 	JRadioButton direction_right;
 	JRadioButton direction_left;
-	JRadioButton quadrant1;
-	JRadioButton quadrant2;
-	JRadioButton quadrant3;
-	JRadioButton quadrant4;
+	JRadioButtonMenuItem quadrant1;
+	JRadioButtonMenuItem quadrant2;
+	JRadioButtonMenuItem quadrant3;
+	JRadioButtonMenuItem quadrant4;
 
 	/* Ball sliders. */
 	private RangeSlider ball_r;
@@ -211,6 +213,31 @@ public class VisionGUI implements ChangeListener {
 
 		quadrantPanel = new JPanel();
 		quadrantPanel.setLayout(new BoxLayout(quadrantPanel, BoxLayout.Y_AXIS));
+		
+		/* Quadrant Choice */
+
+		ButtonGroup quadrant_choice = new ButtonGroup();
+		quadrant1 = new JRadioButtonMenuItem("q1");
+		quadrant2 = new JRadioButtonMenuItem("q2");
+		quadrant3 = new JRadioButtonMenuItem("q3");
+		quadrant4 = new JRadioButtonMenuItem("q4");
+		quadrant_choice.add(quadrant1);
+		frame.add(quadrant1);
+		quadrant_choice.add(quadrant2);
+		frame.add(quadrant2);
+		quadrant_choice.add(quadrant3);
+		frame.add(quadrant3);
+		quadrant_choice.add(quadrant4);
+		frame.add(quadrant4);
+
+		quadrant1.setSelected(true);
+		q = Quadrant.Q1;
+
+		ChangeListener quadrantRadioButtonListener = new QuadrantRadioButtonListener();
+		quadrant1.addChangeListener(quadrantRadioButtonListener);
+		quadrant2.addChangeListener(quadrantRadioButtonListener);
+		quadrant3.addChangeListener(quadrantRadioButtonListener);
+		quadrant4.addChangeListener(quadrantRadioButtonListener);
 
 		/* The main (default) tab */
 		setUpMainPanel();
@@ -232,6 +259,7 @@ public class VisionGUI implements ChangeListener {
 		tabPane.addTab("Quadrant Guides", quadrantPanel);
 
 		tabPane.addChangeListener(this);
+		
 		frame.add(tabPane);
 
 		frame.pack();
@@ -489,35 +517,35 @@ public class VisionGUI implements ChangeListener {
 	 */
 	private void setUpBallSliders() {
 
-		/* Quadrant Choice */
-		JPanel quadrant_panel = new JPanel();
-		JLabel quadrant_label = new JLabel("Quadrant Values:");
-		quadrant_panel.add(quadrant_label);
-
-		ButtonGroup quadrant_choice = new ButtonGroup();
-		quadrant1 = new JRadioButton("q1");
-		quadrant2 = new JRadioButton("q2");
-		quadrant3 = new JRadioButton("q3");
-		quadrant4 = new JRadioButton("q4");
-		quadrant_choice.add(quadrant1);
-		quadrant_panel.add(quadrant1);
-		quadrant_choice.add(quadrant2);
-		quadrant_panel.add(quadrant2);
-		quadrant_choice.add(quadrant3);
-		quadrant_panel.add(quadrant3);
-		quadrant_choice.add(quadrant4);
-		quadrant_panel.add(quadrant4);
-
-		quadrant1.setSelected(true);
-		q = Quadrant.Q1;
-
-		ChangeListener quadrantRadioButtonListener = new QuadrantRadioButtonListener();
-		quadrant1.addChangeListener(quadrantRadioButtonListener);
-		quadrant2.addChangeListener(quadrantRadioButtonListener);
-		quadrant3.addChangeListener(quadrantRadioButtonListener);
-		quadrant4.addChangeListener(quadrantRadioButtonListener);
-
-		defaultPanel.add(quadrant_panel);
+//		/* Quadrant Choice */
+//		JPanel quadrant_panel = new JPanel();
+//		JLabel quadrant_label = new JLabel("Quadrant Values:");
+//		quadrant_panel.add(quadrant_label);
+//
+//		ButtonGroup quadrant_choice = new ButtonGroup();
+//		quadrant1 = new JRadioButton("q1");
+//		quadrant2 = new JRadioButton("q2");
+//		quadrant3 = new JRadioButton("q3");
+//		quadrant4 = new JRadioButton("q4");
+//		quadrant_choice.add(quadrant1);
+//		quadrant_panel.add(quadrant1);
+//		quadrant_choice.add(quadrant2);
+//		quadrant_panel.add(quadrant2);
+//		quadrant_choice.add(quadrant3);
+//		quadrant_panel.add(quadrant3);
+//		quadrant_choice.add(quadrant4);
+//		quadrant_panel.add(quadrant4);
+//
+//		quadrant1.setSelected(true);
+//		q = Quadrant.Q1;
+//
+//		ChangeListener quadrantRadioButtonListener = new QuadrantRadioButtonListener();
+//		quadrant1.addChangeListener(quadrantRadioButtonListener);
+//		quadrant2.addChangeListener(quadrantRadioButtonListener);
+//		quadrant3.addChangeListener(quadrantRadioButtonListener);
+//		quadrant4.addChangeListener(quadrantRadioButtonListener);
+//
+//		defaultPanel.add(quadrant_panel);
 
 		/* Pitch choice */
 		JPanel pitch_panel = new JPanel();
