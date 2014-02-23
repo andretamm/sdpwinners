@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="Inverted/|lib/|class/" kind="src" output="class" path=""/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/Ice.jar"/>
+	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/v4l4j.jar"/>
 	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/lib/bluecove.jar"/>
 	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/lib/bluecove-gpl.jar"/>
 	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/lib/classes.jar"/>
@@ -17,5 +20,5 @@
 	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/lib/pccomm.jar"/>
 	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/lib/pctools.jar"/>
 	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2013SDP1/lib/v4l4j.jar"/>
-	<classpathentry kind="output" path=""/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
