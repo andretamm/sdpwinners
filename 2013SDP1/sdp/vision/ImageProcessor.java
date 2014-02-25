@@ -151,10 +151,11 @@ public class ImageProcessor {
                 
                 //Print the plate edges and other markers to the screen
                 Display.markers(ts, image, pitch, worldState);
-                //transfer the readied data in objectpoints op to the worldstate
-                updateWorldState(pitch, worldState);
-                //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
-                updateWorldStateVelocities(worldState);
+                
+//                //transfer the readied data in objectpoints op to the worldstate
+//                updateWorldState(pitch, worldState);
+//                //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
+//                updateWorldStateVelocities(worldState);
         }
         
         /**
@@ -192,9 +193,11 @@ public class ImageProcessor {
             	Point[] history = ws.getRobotHistory(r);
             	Point current = ws.getRobotPoint(r);
             	long[] timestamps = ws.getRobotTimestamps(r);
+           		
+        		// Add current location and timestamp
+            	updateHistory(history, timestamps, current);	            	
             	
-            	// Add current location and timestamp
-            	updateHistory(history, timestamps, current);
+            	ws.setRobotHistory(r, history);
             	
             	// Find the robot's velocity
             	Point2D.Double velocity = calcVelocity(history, timestamps);
@@ -421,8 +424,8 @@ public class ImageProcessor {
         		history[i] = history[i+1];
         		times[i] = times[i+1];
         	}
-        	
-        	history[history.length-1] = current;
+
+        	history[history.length-1] = new Point(current.x, current.y);
         	times[history.length-1] = System.currentTimeMillis();
         }
         

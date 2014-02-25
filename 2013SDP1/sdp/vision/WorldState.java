@@ -43,15 +43,15 @@ public class WorldState implements VisionInterface {
 	private Point outerPitchBottomRight1 = new Point(630, 396);
 
 	//these two are already barrelcorrected
-	private Point pitchTopLeft1 = new Point(29, 78);
-	private Point pitchBottomRight1 = new Point(609, 396);
+	private Point pitchTopLeft1 = new Point(60, 76);
+	private Point pitchBottomRight1 = new Point(570, 366);
 
 	private Point outerPitchTopLeft2 = new Point(5, 68);
 	private Point outerPitchBottomRight2 = new Point(634,400);
 
 	//these two are already barrelcorrected
-	private Point pitchTopLeft2 = new Point(20, 68);
-	private Point pitchBottomRight2 = new Point(606,400);
+	private Point pitch2TopLeft = new Point(20, 68);
+	private Point pitch2BottomRight = new Point(606,400);
 
 	//Quadrant low/high X values
 	private int q1LowX;
@@ -494,7 +494,7 @@ public class WorldState implements VisionInterface {
 	}
 
 	public Point getPitchTopLeft() {
-		return pitch == 0 ? pitchTopLeft1 : pitchTopLeft2;
+		return pitch == 0 ? pitchTopLeft1 : pitch2TopLeft;
 	}
 
 	public Point getPitchTopRight() {
@@ -510,7 +510,7 @@ public class WorldState implements VisionInterface {
 	}
 
 	public Point getPitchBottomRight(){
-		return pitch == 0 ? pitchBottomRight1 : pitchBottomRight2;
+		return pitch == 0 ? pitchBottomRight1 : pitch2BottomRight;
 	}
 
 	public double getPitchHeight() {
@@ -522,11 +522,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public Point getLeftGoalPoint() {
-		return new Point(0, (getPitchBottomRight().y + getPitchTopLeft().y) / 2);
+		return new Point((int) getPitchTopLeft().getX(), (getPitchBottomRight().y + getPitchTopLeft().y) / 2);
 	}
 
 	public Point getRightGoalPoint() {
-		return new Point((int) getPitchWidth(), (getPitchBottomRight().y + getPitchTopLeft().y) / 2);
+		return new Point((int) getPitchBottomRight().getX(), (getPitchBottomRight().y + getPitchTopLeft().y) / 2);
 	}
 
 	public Point getOurGoalCentre() {
@@ -662,12 +662,8 @@ public class WorldState implements VisionInterface {
 		this.ballTimeStamps=bt;
 	}
 
-	public Point2D.Double getRobotVelocity() {
-		return new Point2D.Double(1.5, 3);
-	}
-
-	
 	//TODO Alter for getOurAttackerPosition
+	
 	/**
 	 *  If we can't see the opposition robot, it may be off the pitch. This method provides the location in this case.
 	 * @param robot The colour of the robot for which a position should be provided

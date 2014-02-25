@@ -60,10 +60,10 @@ public class Display {
 
 		//draw pitch bounds
 		graphics.drawRect((int) ws.getPitchTopLeft().getX(), (int) ws.getPitchTopLeft().getY(), (int) ws.getPitchWidth(), (int) ws.getPitchHeight());
-		int width = (int) (ws.getOuterPitchBottomRight().getX()-ws.getOuterPitchTopLeft().getX());
-		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
-		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
-		
+//		int width = (int) (ws.getOuterPitchBottomRight().getX()-ws.getOuterPitchTopLeft().getX());
+//		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
+//		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
+//		
 		
         graphics.setColor(Color.blue);
         
@@ -114,14 +114,6 @@ public class Display {
 			graphics.drawOval(mean.x - (int)Math.sqrt(Thresholder.threshValue),mean.y - (int)Math.sqrt(Thresholder.threshValue) , (int)Math.sqrt(Thresholder.threshValue)*2, (int)Math.sqrt(Thresholder.threshValue)*2);
 		}
 		
-		
-		// TODO draw rectangles around each of the robot plates????
-		// TODO draw rectangles around each of the robot plates????
-		// TODO draw rectangles around each of the robot plates????
-		// TODO draw rectangles around each of the robot plates????
-		// TODO draw rectangles around each of the robot plates????
-		// TODO remove this TODO spam
-		
 		// Draw orientation lines for the robots
 		graphics.setColor(new Color(0xFF00FF00));
 		
@@ -132,54 +124,6 @@ public class Display {
 		}
 		
 		graphics.drawOval((int) ws.getBallXVision() - WorldState.ballRadius, (int) ws.getBallYVision() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
-		
-		//Point pos1 = KickFrom.whereToKickFromSimple(ws.getOppositionGoalTop(), ws.getBallPoint());
-		//graphics.drawOval((int) (pos1.x-5+ws.getPitchTopLeft().getX()), (int) (pos1.y-5+ws.getPitchTopLeft().getY()), 10, 10);
-		
-		//Point pos2 = KickFrom.whereToKickFromSimple(ws.getOppositionGoalCentre(), ws.getBallPoint());
-		//graphics.drawOval((int) (pos2.x-5+ws.getPitchTopLeft().getX()), (int) (pos2.y-5+ws.getPitchTopLeft().getY()), 10, 10);
-            
-		//Point pos3 = KickFrom.whereToKickFromSimple(ws.getOppositionGoalBottom(), ws.getBallPoint());
-		//graphics.drawOval((int) (pos3.x-5+ws.getPitchTopLeft().getX()), (int) (pos3.y-5+ws.getPitchTopLeft().getY()), 10, 10);
-		
-		//Point pos4 = new Point((int) ((pos1.getX()+pos3.getX())/2), (int) ((pos1.getY()+pos3.getY())/2));
-		Point pos4 = KickFrom.whereToKickFrom(ws);
-		graphics.setColor(Color.GREEN);
-		graphics.drawOval((int) (pos4.x-5+ws.getPitchTopLeft().getX()), (int) (pos4.y-5+ws.getPitchTopLeft().getY()), 10, 10);
-		
-		Point simpleKickLocation = KickFrom.whereToKickFromSimple(ws.getOppositionGoalCentre(), new Point(ws.ballX, ws.ballY), 10);
-		graphics.setColor(Color.PINK);
-		graphics.fillOval((int) (simpleKickLocation.getX() - 3), (int)simpleKickLocation.getX() - 3, 6, 6);
-		
-		Point target = KickFrom.getPointToShootAt(ws);
-		graphics.setColor(Color.RED);
-		graphics.drawOval((int) (target.x-5+ws.getPitchTopLeft().getX()), (int) (target.y-5+ws.getPitchTopLeft().getY()), 10, 10);
-		
-		//Draw goal centres
-		graphics.setColor(Color.WHITE);
-		graphics.drawOval((int) (ws.getOppositionGoalCentre().getX()-5+ws.getPitchTopLeft().getX()), (int) (ws.getOppositionGoalCentre().getY()-5+ws.getPitchTopLeft().getY()), 10, 10);
-		graphics.drawOval((int) (ws.getOurGoalCentre().getX()-5+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalCentre().getY()-5+ws.getPitchTopLeft().getY()), 10, 10);
-
-		graphics.drawOval((int) (ws.getOppositionGoalTop().getX()-5+ws.getPitchTopLeft().getX()), (int) (ws.getOppositionGoalTop().getY()-5+ws.getPitchTopLeft().getY()), 10, 10);
-		graphics.drawOval((int) (ws.getOurGoalTop().getX()-5+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalTop().getY()-5+ws.getPitchTopLeft().getY()), 10, 10);
-
-		graphics.drawOval((int) (ws.getOppositionGoalBottom().getX()-5+ws.getPitchTopLeft().getX()), (int) (ws.getOppositionGoalBottom().getY()-5+ws.getPitchTopLeft().getY()), 10, 10);
-		graphics.drawOval((int) (ws.getOurGoalBottom().getX()-5+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalBottom().getY()-5+ws.getPitchTopLeft().getY()), 10, 10);
-		
-		graphics.setColor(Color.RED);
-		//draw pitch corners
-		graphics.drawOval((int) (ws.getPitchTopLeft().getX()-3), (int) (ws.getPitchTopLeft().getY()-3), 6, 6);   
-		graphics.drawOval((int) (ws.getPitchTopRight().getX()-3), (int) (ws.getPitchTopRight().getY()-3), 6, 6);   
-		graphics.drawOval((int) (ws.getPitchBottomLeft().getX()-3), (int) (ws.getPitchBottomLeft().getY()-3), 6, 6);   
-		graphics.drawOval((int) (ws.getPitchBottomRight().getX()-3), (int) (ws.getPitchBottomRight().getY()-3), 6, 6);                
-
-		graphics.setColor(Color.BLACK);
-		//draw goal lines
-		graphics.drawLine((int) (ws.getOppositionGoalTop().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOppositionGoalTop().getY()+ws.getPitchTopLeft().getY()), 
-				(int) (ws.getOppositionGoalBottom().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOppositionGoalBottom().getY()+ws.getPitchTopLeft().getY()));
-
-		graphics.drawLine((int) (ws.getOurGoalTop().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalTop().getY()+ws.getPitchTopLeft().getY()), 
-				(int) (ws.getOurGoalBottom().getX()+ws.getPitchTopLeft().getX()), (int) (ws.getOurGoalBottom().getY()+ws.getPitchTopLeft().getY()));
 
 		// WHY CLAUDIU???? 
 		// This draws all the grey points for a given robot in either black (blue robots) or white (yellow robots) 
@@ -203,23 +147,30 @@ public class Display {
 //                    System.out.println("worldState.getBallVelocity()="+ws.getBallVelocity().getX() + ", " + ws.getBallVelocity().getY());
 		}                
 
-		graphics.setColor(Color.ORANGE);
-		Point a = ws.getDefendPenaltyPoint();
-		graphics.drawOval((int) (a.getX()+ws.getPitchTopLeft().getX()-3), (int) (a.getY()+ws.getPitchTopLeft().getY()-3), 6,6);
-		
-		graphics.fillOval((int) ws.andresPoint.getX() - 3, (int) ws.andresPoint.getY() - 3, 6, 6);
-		
+		// Draw opposition goal centre
 		Point goalC = ws.getOppositionGoalCentre();
-		graphics.setColor(Color.MAGENTA);
+		graphics.setColor(Color.WHITE);
 		graphics.fillOval((int) goalC.getX() - 10, (int) goalC.getY() - 10, 20, 20);
 		
 		// Draw movement predictions
 		graphics.setColor(Color.ORANGE);
+		Point newPos;
+		double timeMs = 1000;
 		for (Robot r : Robot.listAll()) {
-			double timeMs = 7;
-			Point newPos = StrategyHelper.addVectorToPoint(StrategyHelper.multiplyVector(ws.getRobotVelocity(), timeMs), ws.getRobotPoint(r));
+			newPos = StrategyHelper.addVectorToPoint(StrategyHelper.multiplyVector(ws.getRobotVelocity(r), timeMs), ws.getRobotPoint(r));
 			graphics.drawLine(ws.getRobotX(r), ws.getRobotY(r), newPos.x, newPos.y);
 		}
+		
+		newPos = StrategyHelper.addVectorToPoint(StrategyHelper.multiplyVector(ws.getBallVelocity(), timeMs), new Point(ws.ballX, ws.ballY));
+		graphics.drawLine(ws.ballX, ws.ballY, newPos.x, newPos.y);
+		
+		// Draw position that attacker robot should go to
+		Point kickPos = StrategyHelper.findRobotKickPosition(new Point(ws.ballX, ws.ballY), ws.getOppositionGoalCentre());
+		graphics.setColor(Color.CYAN);
+		graphics.fillOval(kickPos.x - 3, kickPos.y - 3, 6, 6);
+		
+		// Draw a line from the kicking position to the centre of the opposition's goal
+//		graphics.drawLine(kickPos.x, kickPos.y, ws.getOppositionGoalCentre().x, ws.getOppositionGoalCentre().y);
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {
