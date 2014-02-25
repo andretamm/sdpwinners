@@ -152,6 +152,10 @@ public class BluetoothCommunication {
 			in.close();
 			out.close();
 			nxtComm.close();
+			robotReady = false;
+			
+			System.out.println("Communication Closed!");
+			
 		} catch (IOException e) {
 			System.err.println("Couldn't close Bluetooth connection: "
 					+ e.toString());

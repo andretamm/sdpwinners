@@ -42,15 +42,20 @@ public class NXT {
     			case 6:
     				robot.kick();
     				break;
+    			case 7:
+    				establishConnection();
+    				sendReadySignal();
     		}    			
     	}
     }
+    
     /**
      * Create a bluetooth connection to PC
      */
     public static void establishConnection() {
         System.out.println("Waiting for Bluetooth connection...");
         NXTConnection connection = Bluetooth.waitForConnection();
+        
         if ( connection == null ){
         	System.out.println("Failed to establish connection");
         	establishConnection();

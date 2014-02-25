@@ -15,8 +15,10 @@ public class Server {
 	
 	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
 	private static final String DEFENDER_NXT_NAME = "NXT";
-//	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
+
+	//	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
 //	private static final String DEFENDER_NXT_NAME = "4s";
+	
 	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
 	private static final String ATTACKER_NXT_NAME = "4s";
 	
@@ -51,6 +53,8 @@ public class Server {
 	 * @param type Attacker or Defender
 	 */
 	public void connectToRobot(RobotType type) {
+		System.out.println("Trying to connect to " + type + " Robot.");
+		
 		if (getRobot(type).openBluetoothConnection()) {
 			System.out.println("Connected to " + type + " Robot.");
 		} else {
@@ -103,11 +107,11 @@ public class Server {
 	public void send(int robot, int command) {
 		System.out.println(command);
 		
-//		if (robot == DEFENDER) {
-//			defenderRobot.sendToRobot(command);
-//		} else if (robot == ATTACKER) {
-//			attackerRobot.sendToRobot(command);
-//		}
+		if (robot == DEFENDER) {
+			defenderRobot.sendToRobot(command);
+		} else if (robot == ATTACKER) {
+			attackerRobot.sendToRobot(command);
+		}
 	}
 
 	/**
@@ -122,6 +126,7 @@ public class Server {
 	 * Closes the bluetooth connection to a specific robot
 	 */
 	public void disconnectFromRobot(RobotType type) {
+		getRobot(type).sendToRobot(7);
 		getRobot(type).closeBluetoothConnection();
 	}
 
