@@ -3,6 +3,7 @@ package sdp.vision;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import behavior.StrategyHelper;
@@ -118,8 +119,8 @@ public class Display {
 		graphics.setColor(new Color(0xFF00FF00));
 		
 		for (Robot r: Robot.listAll()) {
-				int x2=(int) (ws.getRobotX(r)+150*Math.cos(ws.getRobotOrientation(r.type, r.colour)));
-				int y2=(int) (ws.getRobotY(r)+150*Math.sin(ws.getRobotOrientation(r.type, r.colour)));
+				int x2=(int) (ws.getRobotX(r)+50*Math.cos(ws.getRobotOrientation(r.type, r.colour)));
+				int y2=(int) (ws.getRobotY(r)+50*Math.sin(ws.getRobotOrientation(r.type, r.colour)));
 				graphics.drawLine((int) ws.getRobotX(r), (int) ws.getRobotY(r), x2, y2);
 		}
 		
@@ -152,6 +153,10 @@ public class Display {
 		graphics.setColor(Color.WHITE);
 		graphics.fillOval((int) goalC.getX() - 10, (int) goalC.getY() - 10, 20, 20);
 		
+		// Draw our goal top and bottom
+		graphics.drawOval(ws.getOurGoalTop().x - 2, ws.getOurGoalTop().y - 2, 4, 4);
+		graphics.drawOval(ws.getOurGoalBottom().x - 2, ws.getOurGoalBottom().y - 2, 4, 4);
+		
 		// Draw movement predictions
 		graphics.setColor(Color.ORANGE);
 		Point newPos;
@@ -171,6 +176,46 @@ public class Display {
 		
 		// Draw a line from the kicking position to the centre of the opposition's goal
 //		graphics.drawLine(kickPos.x, kickPos.y, ws.getOppositionGoalCentre().x, ws.getOppositionGoalCentre().y);
+		
+		
+		/* BALL MOVEMENT PREDICTION DRAWING */
+		
+		// Only check ball prediction positions if the ball is moving with at least some minimum speed
+		// This threshhold has been experimentally set to 0.01 :P
+		if (StrategyHelper.magnitude(ws.getBallVelocity()) > 0.01) {
+			// Draw the position on the wall where the ball will hit it if it keeps
+			// moving in the same direction
+			Point wallHitPosition = StrategyHelper.intersectsWithWalls(ws.getBallVelocity(), new Point(ws.ballX, ws.ballY), ws);
+			
+			if (wallHitPosition != null) {
+				graphics.setColor(Color.GREEN);
+				graphics.drawOval(wallHitPosition.x - 4, wallHitPosition.y - 4, 8, 8);
+				
+				// Draw the line from the collision point with the wall to where the ball will go next
+				Point2D.Double velocityAfterCollision = StrategyHelper.collideWithHorizontalWall(ws.getBallVelocity());
+				Point lineAfterCollision = StrategyHelper.addVectorToPoint(StrategyHelper.multiplyVector(StrategyHelper.normaliseVector(velocityAfterCollision), 200), wallHitPosition);
+				graphics.drawLine(wallHitPosition.x, wallHitPosition.y, lineAfterCollision.x, lineAfterCollision.y);
+				
+				// Try to find intersection point after wall kick
+				Point goalIntersectPoint = StrategyHelper.getIntersectWithOurGoal(velocityAfterCollision, wallHitPosition, ws);
+				if (goalIntersectPoint != null) {
+					// Ball will intersect with goal if it keeps moving in this direction
+					graphics.setColor(Color.GREEN);
+					graphics.fillOval(goalIntersectPoint.x - 4, goalIntersectPoint.y - 4, 8, 8);
+				}
+			} else {
+				Point goalIntersectPoint = StrategyHelper.getIntersectWithOurGoal(ws.getBallVelocity(), ws.getBallP(), ws);
+				if (goalIntersectPoint != null) {
+					// Ball will intersect with goal if it keeps moving in this direction
+					graphics.setColor(Color.GREEN);
+					graphics.fillOval(goalIntersectPoint.x - 4, goalIntersectPoint.y - 4, 8, 8);
+				}
+			}
+			
+			
+		}
+		
+		
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import sdp.vision.Orientation;
+import sdp.vision.WorldState;
 
 public class StrategyHelper {
 	
@@ -12,9 +13,9 @@ public class StrategyHelper {
 	/**
 	 * Normalises the vector to have length one.
 	 */
-	public static Point2D.Double normaliseVector(Point2D.Double point) {
-		double sum = Math.abs(point.getX()) + Math.abs(point.getY());
-		return new Point2D.Double(point.getX() / sum, point.getY() / sum);
+	public static Point2D.Double normaliseVector(Point2D.Double vector) {
+		double sum = Math.abs(vector.getX()) + Math.abs(vector.getY());
+		return new Point2D.Double(vector.getX() / sum, vector.getY() / sum);
 	}
 	
 	/**
@@ -52,6 +53,153 @@ public class StrategyHelper {
 	 */
 	public static double findRobotKickOrientation(Point ball, Point goalCentre) {
 		return Orientation.getAngle(ball, goalCentre);
+	}
+	
+	/**
+	 * Find the point on the horizontal line where the line defined by the 
+	 * given grounded vector will intersect with it.
+	 * @param lineY The y coordinate of the line
+	 * @param origin The grounding point for the vector
+	 * @param vector E.g. a velocity vector
+	 * @param worldstate Handle to the worldstate (needed for the wall x coordinates)
+	 * @return The (x,y) coordinates of the intersection point, or null if doesn't intersect
+	 */
+	public static Point getIntersectWithHorizontalLine(int lineY, Point2D.Double vector, 
+													   Point origin, WorldState ws) {
+		Point intersect = null;
+		
+		// If origin is below line, then vector needs to point upwards
+		// If origin is above line, then vector needs to point downwards
+		if ((origin.y > lineY && vector.y < 0) ||
+			(origin.y < lineY && vector.y > 0)) {
+			// Find x difference from origin where the intersection point is
+			// This will already have the right sign, so don't mess with the
+			// order of the subtraction!
+			double diffX = (double) (lineY - origin.y) * vector.x / vector.y;
+			
+			// Find intersection point
+			intersect = new Point((int) (origin.x + diffX), lineY);
+			
+			// Check it is within the pitch x coordinate-wise
+			if (intersect.x > ws.getPitchTopLeft().x && intersect.x < ws.getPitchBottomRight().x) {
+				return intersect;
+			} else {
+				// Will hit the wall outside the pitch
+				return null;
+			}
+		} else {
+			// Won't hit this wall :P
+			return null;
+		}
+	}
+	
+	/**
+	 * Find the point on our goal where the line defined by the 
+	 * given grounded vector will intersect with it.
+	 * @param origin The grounding point for the vector
+	 * @param vector E.g. a velocity vector
+	 * @param worldstate Handle to the worldstate (needed for the wall y coordinates)
+	 * @return The (x,y) coordinates of the intersection point, or null if doesn't intersect
+	 */
+	public static Point getIntersectWithOurGoal(Point2D.Double vector, Point origin, WorldState ws) {
+		Point intersect = null;
+		int goalX = ws.getOurGoalCentre().x;
+		
+		//   o   ball
+		//   |   goal 
+		//   ->  vector direction
+		if ((origin.x < goalX && vector.x > 0) ||  //        o  ->  |
+			(goalX < origin.x && vector.x < 0)) {  // |  <-  o
+			// Find y difference from origin where the intersection point is
+			// This will already have the right sign, so don't mess with the
+			// order of the subtraction!
+			double diffY = (double) (goalX - origin.x) * vector.y / vector.x;
+			
+			// Find intersection point
+			intersect = new Point(goalX, (int) (origin.y + diffY));
+			
+			// Check it is within the goal y coordinate-wise, add +- 5 for error
+			//   _____
+			//  / _  _  _  _
+			//  |  <- o
+			//  | _  _  _  _
+			//  \_____
+			if (intersect.y > ws.getOurGoalTop().y - 5 && intersect.y < ws.getOurGoalBottom().y + 5) {
+				return intersect;
+			} else {
+				// Will hit the wall outside the goal lolololo
+				return null;
+			}
+		} else {
+			// Won't even hit this wall, not to mention the goal :DDD
+			return null;
+		}
+	}
+
+//	/**
+//	 * Find where the given grounded vector will intersect with our goal.
+//	 * @param vector The vector applied to the origin point (e.g. velocity vector)
+//	 * @param origin The origin (grounding) point for the vector
+//	 * @param ws Handle to the WorldState
+//	 * @return Point of intersection or null if it won't hit our goal
+//	 */
+//	public static Point interceptionPoint(Point2D.Double vector, Point origin, WorldState ws) {
+//		// The x coordinate of our goal
+//		int x = ws.getOurGoalCentre().x;
+//		
+//		// Find intersection point of line with our goal
+//		Point intersection = getIntersectWithOurGoal(vector, origin, ws);
+//		
+//		return intersection;
+//	}
+	
+	/**
+	 * Find the point where the given grounded vector will collide with
+	 * one of the horizontal walls
+	 * @param origin The grounding (origin) point for the vector
+	 * @param vector Vector applied to the origin e.g. a velocity vector
+	 * @param worldstate Handle to the worldstate (needed for the wall coordinates)
+	 * @return The (x,y) coordinates of the intersection point, 
+	 * 		   null if doesn't intersect with either of the walls
+	 */
+	public static Point intersectsWithWalls(Point2D.Double vector, Point origin, WorldState worldstate) {
+		int topWall = worldstate.getPitchTopLeft().y;
+		int bottomWall = worldstate.getPitchBottomLeft().y;
+		
+		// Check intersection with upper wall
+		Point upperIntersect = getIntersectWithHorizontalLine(topWall, vector, origin, worldstate);
+		
+		if (upperIntersect != null) {
+			return upperIntersect;
+		}
+		
+		// Check intersection with lower wall
+		Point lowerIntersect = getIntersectWithHorizontalLine(bottomWall, vector, origin, worldstate);
+		
+		if (lowerIntersect != null) {
+			return lowerIntersect;
+		}
+		
+		// No intersection points found
+		return null;
+	}
+	
+	/**
+	 * Get the movement vector after having collided with a horisontal wall
+	 * @param vector Original vector
+	 * @return The vector after the collision
+	 */
+	public static Point2D.Double collideWithHorizontalWall(Point2D.Double vector) {
+		// After colliding with a wall, the y co-ordinate flips, hopefully everything else
+		// should stay the same
+		return new Point2D.Double(vector.getX(), -vector.getY());
+	}
+	
+	/**
+	 * Returns the magnitude of a vector
+	 */
+	public static double magnitude(Point2D.Double vector) {
+		return Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
 	}
 	
 	/**

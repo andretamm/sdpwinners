@@ -560,6 +560,13 @@ public class WorldState implements VisionInterface {
 	public Point getBallPoint() {
 		return new Point(getBallX(), getBallY());
 	}
+	
+	/**
+	 * Gets the Point with the ball x,y coordinates
+	 */
+	public Point getBallP() {
+		return new Point(ballX, ballY);
+	}
 
 	public Point getOurDefenderPosition(){
 		return new Point(getOurDefenderX(), getOurDefenderY());

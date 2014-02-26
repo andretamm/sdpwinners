@@ -164,7 +164,8 @@ public class ImageProcessor {
          * @param ws The worldstate into which this data should be stored. This will be barrelcorrected.
          */
         public void updateWorldState(PitchPoints pp, WorldState ws) {
-            Point ballP = DistortionFix.barrelCorrected(pp.getBallPosition());
+//            Point ballP = DistortionFix.barrelCorrected(pp.getBallPosition());
+            Point ballP = pp.getBallPosition();
             ws.setBallX((int) ballP.getX());
             ws.setBallY((int) ballP.getY());
             
