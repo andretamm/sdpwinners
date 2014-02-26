@@ -207,7 +207,7 @@ public class WorldState implements VisionInterface {
 		/* control properties */
 		this.direction = ShootingDirection.RIGHT;
 		this.colour = RobotColour.YELLOW;
-		this.pitch = 1;
+		this.pitch = 0;
 
 		//TODO Alter object properties for velocities, history
 		

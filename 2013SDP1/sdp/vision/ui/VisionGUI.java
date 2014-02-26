@@ -272,8 +272,12 @@ public class VisionGUI implements ChangeListener {
 		 * Fires off an initial pass through the ChangeListener method, to
 		 * initialise all of the default values.
 		 */
+//		pitchConstants.loadConstants("./constants/pitch" + worldState.getPitch());
 		this.stateChanged(null);
-
+		
+		// Andre's hack - need to do this to make the lines and overlays appear on screen
+		pitch_1.doClick();
+		pitch_0.doClick();
 	}
 
 	/**

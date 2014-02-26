@@ -56,7 +56,6 @@ public class Display {
 	}
 	
 	public static void markers(ThresholdsState ts, BufferedImage img, PitchPoints op, WorldState ws) {
-
 		Graphics graphics = img.getGraphics();
 
 		//draw pitch bounds
