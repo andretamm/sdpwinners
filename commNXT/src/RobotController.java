@@ -5,11 +5,22 @@ import lejos.robotics.MirrorMotor;
 import lejos.robotics.navigation.DifferentialPilot;
 
 
-public class Robot {
+public class RobotController {
 
 	NXTRegulatedMotor kicker;
 	DifferentialPilot pilot;
 	
+	public volatile int previousCommand = 1;
+	public volatile int command = 3;
+	
+	public RobotController() {
+		kicker = Motor.C;
+		pilot = new DifferentialPilot(56, 112, Motor.A, MirrorMotor.invertMotor(Motor.B));
+		pilot.setTravelSpeed(20);
+	}
+	
+	// TODO
+	// remove this? :))))
 	public void init() {
 		kicker = Motor.C;
 		pilot = new DifferentialPilot(56, 112, Motor.A, MirrorMotor.invertMotor(Motor.B));
