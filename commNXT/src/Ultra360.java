@@ -66,6 +66,41 @@ public class Ultra360 {
 		stop();
 	}
 	
+	//Rotate clockwise until Andre stops you
+		public static void rotateClockwise() {
+			//WEST Wheel
+			I2Csensor.sendData(0x01,backward); 
+			I2Csensor.sendData(0x02,rotationSpeed); 
+			//EAST Wheel
+			I2Csensor.sendData(0x07,backward); 
+			I2Csensor.sendData(0x08,rotationSpeed); 
+			//NORTH Wheel
+			I2Csensor.sendData(0x03,forward); 
+			I2Csensor.sendData(0x04,rotationSpeed); 
+			//SOUTH Wheel
+			I2Csensor.sendData(0x05,forward); 
+			I2Csensor.sendData(0x06,rotationSpeed); 
+			
+		}
+		
+		//Rotate anti-clockwise until Andre stops you
+				public static void rotateAniClockwise() {
+					//WEST Wheel
+					I2Csensor.sendData(0x01,forward); 
+					I2Csensor.sendData(0x02,rotationSpeed); 
+					//EAST Wheel
+					I2Csensor.sendData(0x07,forward); 
+					I2Csensor.sendData(0x08,rotationSpeed); 
+					//NORTH Wheel
+					I2Csensor.sendData(0x03,backward); 
+					I2Csensor.sendData(0x04,rotationSpeed); 
+					//SOUTH Wheel
+					I2Csensor.sendData(0x05,backward); 
+					I2Csensor.sendData(0x06,rotationSpeed); 
+					
+				}
+	
+	
 	
 	//Drives the robot forward at a given speed between 0 - 255
 	public static void forward(int speed){
