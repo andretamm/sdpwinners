@@ -4,10 +4,6 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import constants.C;
-import constants.RobotColour;
-import constants.RobotType;
-
 /**
  * Finds the orientation by setting a line through the centre of the grey circle and the centre of a green plate.
  */

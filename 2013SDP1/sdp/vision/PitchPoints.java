@@ -1,7 +1,6 @@
 package sdp.vision;
 
 import java.awt.Point;
-import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.HashMap;
 

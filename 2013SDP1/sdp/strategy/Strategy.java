@@ -15,7 +15,6 @@ import sdp.vision.Circle;
 import sdp.vision.Drawable;
 import sdp.vision.ImageProcessor;
 import sdp.vision.NoAngleException;
-import sdp.vision.Position;
 import sdp.vision.WorldState;
 
 

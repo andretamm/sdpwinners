@@ -2,16 +2,13 @@ package sdp.navigation;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import sdp.gui.MainWindow;
 import sdp.navigation.pathfinding.AStarRun;
 import sdp.navigation.pathfinding.Node;
-import sdp.vision.Circle;
 import sdp.vision.Drawable;
 import sdp.vision.DrawableRectangle;
-import sdp.vision.ImageProcessor;
 import sdp.vision.WorldState;
 import sdp.vision.DrawableLine;
 

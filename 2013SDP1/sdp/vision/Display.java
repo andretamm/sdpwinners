@@ -13,7 +13,6 @@ import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
 import sdp.gui.MainWindow;
-import sdp.strategy.KickFrom;
 
 public class Display {
 

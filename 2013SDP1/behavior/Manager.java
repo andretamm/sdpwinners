@@ -1,14 +1,9 @@
 package behavior;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import common.Robot;
 import constants.RobotType;
 
 import ourcommunication.Server;
 import sdp.vision.WorldState;
-import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
 /**

@@ -4,7 +4,6 @@ import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
 
-import common.Robot;
 import constants.RobotType;
 
 public class SimpleKickBall extends GeneralBehavior {

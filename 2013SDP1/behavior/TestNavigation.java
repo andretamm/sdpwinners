@@ -7,7 +7,6 @@ import common.Robot;
 import constants.RobotColour;
 import constants.RobotType;
 import sdp.navigation.AStarPathfinding;
-import sdp.navigation.pathfinding.Node;
 import sdp.vision.WorldState;
 
 public class TestNavigation {

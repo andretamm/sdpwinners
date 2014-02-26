@@ -7,8 +7,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import sdp.communication.CommsClient;
 import sdp.communication.CommsInterface;
 import sdp.geom.LineMethods;

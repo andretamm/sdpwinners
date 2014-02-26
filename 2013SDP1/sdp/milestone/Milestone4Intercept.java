@@ -1,9 +1,6 @@
 package sdp.milestone;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
-import java.io.IOException;
-
 import sdp.communication.CommsInterface;
 import sdp.strategy.CommandHelper;
 import sdp.vision.WorldState;

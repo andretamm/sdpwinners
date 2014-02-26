@@ -10,7 +10,6 @@ import sdp.gui.MainWindow;
 import sdp.navigation.simplepathfinding.SimplePath;
 import sdp.vision.Circle;
 import sdp.vision.Drawable;
-import sdp.vision.ImageProcessor;
 import sdp.vision.DrawableLine;
 import sdp.vision.WorldState;
 

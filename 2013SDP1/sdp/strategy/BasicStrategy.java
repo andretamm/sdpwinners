@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import sdp.communication.CommsClient;
 import sdp.communication.CommsInterface;
-import sdp.navigation.AStarPathfinding;
 import sdp.navigation.OriginalMovement;
 import sdp.vision.RunVision;
 import sdp.vision.Vision;

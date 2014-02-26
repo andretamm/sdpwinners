@@ -4,18 +4,10 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-
 import common.Robot;
 
 import constants.Colours;
-import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
 import sdp.strategy.KickFrom;

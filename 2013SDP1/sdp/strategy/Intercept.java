@@ -2,7 +2,6 @@ package sdp.strategy;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import sdp.vision.WorldState;
