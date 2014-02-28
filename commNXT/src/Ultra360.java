@@ -33,7 +33,13 @@ public class Ultra360 {
 	static NXTRegulatedMotor kicker;
 	static NXTRegulatedMotor grabber;
 	
-	//these needs
+	
+	//Creates the bytes needed to send directions 
+	forward = (byte)1; 
+	backward = (byte)2; 
+	off = (byte)0;
+	rotationSpeed = (byte)70; 
+		
 	
 	
 	
