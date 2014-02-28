@@ -31,9 +31,10 @@ public class SimpleDefendGoal extends GeneralBehavior {
 			// Rotate to 90'			
 			rotatingCounter = 1;
 			rotatingCounter = rotatingCounter % 20;
-			if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR + 5)) {
+
+			if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR)) {
 				isRotating = true;
-				
+				System.out.println("Rotating");
 				if(rotatingCounter == 1) {
 					rotateTo(C.DOWN);
 				}
@@ -43,7 +44,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 			// Finished rotating
 			if (isRotating) {
 				isRotating = false;
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 			}
 			rotatingCounter = 0;
 			
@@ -58,37 +59,48 @@ public class SimpleDefendGoal extends GeneralBehavior {
 //			}
 
 			// Move to same y as ball
-			movingCounter++;
-			movingCounter = movingCounter % 20;
+//			movingCounter++;
+//			movingCounter = movingCounter % 20;
 //			System.out.println(y + " <? " + (ws.getPitchBottomLeft().getY() - 50));
 //			System.out.println(y + " >? " + (ws.getPitchTopLeft().getY() + 50));
 			
-			if ((ballY - y > (DISTANCE_ERROR + 25)) && (y < (ws.getPitchBottomLeft().getY() - 77))) {
-				if (!isMoving || movingCounter == 1) {
+			if ((ballY - y > (DISTANCE_ERROR + 25)) && (y < (ws.getPitchBottomLeft().getY() - 90))) {
+//				if (!isMoving || movingCounter == 1) {
+				if(!isMovingDown) {
 					System.out.println("Moving DOWN: " + (ballY - y));
-					isMoving = true;
-					s.send(0, RobotCommand.BACK);
+					isMovingDown = true;
+					isMovingUp = false;
+					s.send(type, RobotCommand.BACK);
 				}
+//				}
 				return;
 			}
 			else if (((y - ballY) > (DISTANCE_ERROR + 25)) && (y > (ws.getPitchTopLeft().getY() + 90))) {
 				
-				if (!isMoving || movingCounter == 1) {
+//				if (!isMoving || movingCounter == 1) {
+				if (!isMovingUp) {
 					System.out.println("Moving UP: " + (y - ballY));
-					isMoving = true;
-					s.send(0, RobotCommand.FORWARD);
+					isMovingUp = true;
+					isMovingDown = false;
+					s.send(type, RobotCommand.FORWARD);
 				}
+//				}
 				return;
 			} 
 			movingCounter = 0;
 			
+			
 			// We're in the right position, just chill
-			stopCounter++;
-			stopCounter = stopCounter % 10;
-			if (stopCounter == 1) {
+//			stopCounter++;
+//			stopCounter = stopCounter % 10;
+//			if (stopCounter == 1) {
+			if (isMovingDown || isMovingUp) {
 				System.out.println("Stopping");
-				s.send(0, RobotCommand.STOP);
+				isMovingUp = false;
+				isMovingDown = false;
+				s.send(type, RobotCommand.STOP);
 			}
+//			}
 		} catch (Exception e) {
 			System.err.println("We don't know where the robot is :((((");
 			e.printStackTrace();

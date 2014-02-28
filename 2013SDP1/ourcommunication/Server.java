@@ -1,6 +1,7 @@
 package ourcommunication;
 
 import java.io.IOException;
+import java.util.EnumMap;
 
 import constants.RobotType;
 
@@ -10,21 +11,19 @@ import sdp.vision.WorldState;
  * Server that controls connections to the robots
  */
 public class Server {
-	public static final int DEFENDER = 0;
-	public static final int ATTACKER = 1;
-	
 	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
 	private static final String DEFENDER_NXT_NAME = "NXT";
 
-	//	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
+//		private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
 //	private static final String DEFENDER_NXT_NAME = "4s";
 	
 	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
 	private static final String ATTACKER_NXT_NAME = "4s";
 	
-	
 	private static BluetoothCommunication defenderRobot;
 	private static BluetoothCommunication attackerRobot;
+	
+	private EnumMap<RobotType, Integer> previousCommand;
 	
 	private WorldState ws;
 	
@@ -35,10 +34,14 @@ public class Server {
 		this.ws = ws;
 		defenderRobot = new BluetoothCommunication(DEFENDER_NXT_NAME, DEFENDER_NXT_MAC_ADDRESS);
 		attackerRobot = new BluetoothCommunication(ATTACKER_NXT_NAME, ATTACKER_NXT_MAC_ADDRESS);
+		
+		previousCommand = new EnumMap<RobotType, Integer>(RobotType.class);
+		previousCommand.put(RobotType.DEFENDER, RobotCommand.NO_COMMAND);
+		previousCommand.put(RobotType.ATTACKER, RobotCommand.NO_COMMAND);
 	}
 	
 	/**
-	 * Gets the attacker or defender robot
+	 * Gets the attacker or defender robot bluetooth communication class
 	 */
 	private BluetoothCommunication getRobot(RobotType type) {
 		if (type == RobotType.ATTACKER) {
@@ -99,18 +102,22 @@ public class Server {
 	}
 	
 	/**
-	 * Sends a command to the robot
+	 * Sends a command to the robot. Doesn't send the command
+	 * if the last command we sent was the same command. This 
+	 * helps prevent overspamming the robot with commands.
 	 * 
-	 * @param robot Defender or attacker
+	 * @param type Defender or attacker
 	 * @param command Command byte
 	 */
-	public void send(int robot, int command) {
-		System.out.println(command);
-		
-		if (robot == DEFENDER) {
-			defenderRobot.sendToRobot(command);
-		} else if (robot == ATTACKER) {
-			attackerRobot.sendToRobot(command);
+	public void send(RobotType type, int command) {
+		// Only send command if it is different from the last one
+		// we sent
+		if (previousCommand.get(type) != command) {
+			if (type == RobotType.DEFENDER) {
+				defenderRobot.sendToRobot(command);
+			} else if (type == RobotType.ATTACKER) {
+				attackerRobot.sendToRobot(command);
+			}
 		}
 	}
 

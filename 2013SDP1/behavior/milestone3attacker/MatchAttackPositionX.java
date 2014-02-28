@@ -61,7 +61,7 @@ public class MatchAttackPositionX extends GeneralBehavior {
 					}
 					
 					// Move away from the ball
-					s.send(0, RobotCommand.FORWARD);
+					s.send(type, RobotCommand.FORWARD);
 					continue;
 				}				
 
@@ -84,22 +84,22 @@ public class MatchAttackPositionX extends GeneralBehavior {
 							}
 						}
 						
-						s.send(0, RobotCommand.FORWARD);
+						s.send(type, RobotCommand.FORWARD);
 						continue;
 					} catch (Exception e) {
 						System.err.println("We don't know where the robot or kick point is :((((");
-						s.send(0, RobotCommand.STOP);
+						s.send(type, RobotCommand.STOP);
 						e.printStackTrace();
 					}
 				}
 				
 				// We're in the right position, just chill
 				System.out.println("Sending STOP");
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 			} catch (Exception e) {
 				System.err.println("We don't know where the robot or kick point is :((((");
 				System.out.println("Sending STOP");
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 				e.printStackTrace();
 			}
 		}

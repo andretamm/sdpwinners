@@ -9,8 +9,8 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.15;
-	public static final double DISTANCE_ERROR = 25;
+	public static final double ANGLE_ERROR = 0.30; //15
+	public static final double DISTANCE_ERROR = 2;
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
@@ -19,6 +19,8 @@ public abstract class GeneralBehavior implements Behavior {
 	
 	protected boolean isRotating = false;
 	protected boolean isMoving = false;
+	protected boolean isMovingUp = false;
+	protected boolean isMovingDown = false;
 	protected int movingCounter = 0;
 	protected int sentCounter = 0;
 	protected int rotatingCounter = 0;
@@ -102,9 +104,11 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 		
 		if (turnAngle < 0) {
-			s.send(0, RobotCommand.CW);
+			System.out.println("Rotating CCW");
+			s.send(type, RobotCommand.CCW);
 		} else {
-			s.send(0, RobotCommand.CCW);
+			System.out.println("Rotating CW");
+			s.send(type, RobotCommand.CW);
 		}
 	}
 }

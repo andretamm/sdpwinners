@@ -41,10 +41,10 @@ public class SimpleKickBall extends GeneralBehavior {
 				
 				// Turn to 270
 				if (orientation > ANGLE270 + ANGLE_ERROR || orientation < Math.PI/2.0) {
-					s.send(0, RobotCommand.CW);
+					s.send(type, RobotCommand.CW);
 					continue;
 				} else if (orientation < ANGLE270 - ANGLE_ERROR) {
-					s.send(0, RobotCommand.CCW);
+					s.send(type, RobotCommand.CCW);
 					continue;
 				}
 				
@@ -53,16 +53,16 @@ public class SimpleKickBall extends GeneralBehavior {
 				// Move to same y as ball
 				if (ballY - y > DISTANCE_ERROR) {
 					System.out.println("First distance: " + (ballY - y));
-					s.send(0, RobotCommand.BACK);
+					s.send(type, RobotCommand.BACK);
 					continue;
 				} else if (y - ballY > DISTANCE_ERROR) {
 					System.out.println("Second distance: " + (y - ballY));
-					s.send(0, RobotCommand.FORWARD);
+					s.send(type, RobotCommand.FORWARD);
 					continue;
 				}
 				
 				// We're in the right position, just chill
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 			} catch (Exception e) {
 				System.err.println("We don't know where the robot is :((((");
 				e.printStackTrace();

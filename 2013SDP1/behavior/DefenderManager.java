@@ -17,7 +17,7 @@ public class DefenderManager extends behavior.Manager {
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 		// Add behaviors in ascending order of priority
-		behaviorList[0] = new SimpleDefendGoal(getWorldState(), getRobotType(), getServer());
+		behaviorList[0] = new SimpleReactiveDefendGoal(getWorldState(), getRobotType(), getServer());
 
 		return behaviorList;
 	}

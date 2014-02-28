@@ -30,6 +30,7 @@ public class WorldState implements VisionInterface {
 	public int ballY;
 
 	private RobotMap<Double> robotOrientation; // Orientations of all the robots
+	private RobotMap<Point2D.Double> robotOrientationVector; // Orientation as a vector
 
 	private long counter;
 	private boolean subtractBackground;
@@ -80,10 +81,13 @@ public class WorldState implements VisionInterface {
 	// refactor
 	private Point ourDefenderVelocity;
 	private Point ourAttackerVelocity;
+	// end
 	
 	private RobotMap<Point[]> robotHistory;
 	private RobotMap<Point2D.Double> robotVelocity;
-	// end
+	// MILA add here
+	// RobotMap<Double[]> ....
+	
 
 	private boolean removeShadows = false;
 
@@ -213,10 +217,14 @@ public class WorldState implements VisionInterface {
 		
 		/* object properties */
 		this.robotOrientation = new RobotMap<Double>(0.0);
+		this.robotOrientationVector = new RobotMap<Point2D.Double>(new Point2D.Double(0.0, 0.0));
 		this.robotPosition = new RobotMap<Point>();
 		this.robotHistory = new RobotMap<Point[]>();
 		this.robotVelocity = new RobotMap<Point2D.Double>();
 		this.robotTimestamps = new RobotMap<long[]>();	
+		// MILA add here
+		// new robotmap
+		
 		
 		// Set default values for all the robots
 		for (Robot r: Robot.listAll()) {
@@ -228,14 +236,17 @@ public class WorldState implements VisionInterface {
 			// TODO MAKE SURE THESE ARE RIGHT AND MAKE SENSE
 			Point[] history = new Point[HISTORY_LENGTH];
 			long[] timestamps = new long[HISTORY_LENGTH];
+			// MILA
 			
 			for (int i = 0; (i < HISTORY_LENGTH); i++) {
 				history[i] = new Point(1,1);
 				timestamps[1] = 1;
+				// MILA
 			}
 			
 			robotHistory.put(r, history);
 			robotTimestamps.put(r, timestamps);
+			// MILA
 		}
 		
 		this.ballX = 0;
@@ -312,6 +323,14 @@ public class WorldState implements VisionInterface {
 		return robotOrientation.get(r);
 	}
 	
+	public Point2D.Double getRobotOrientationVector(Robot r) {
+		return robotOrientationVector.get(r);
+	}
+
+	public void setRobotOrientationVector (Robot r, Point2D.Double value) { 
+		this.robotOrientationVector.put(r, value);
+	}
+
 	// New position getters/setters
 	public int getRobotX(Robot r) {
 		return robotPosition.get(r).x;
@@ -577,11 +596,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public Point getOppositionDefenderPosition(){
-		return new Point(getOppositionDefenderX(), getOppositionDefenderY());
+		return getRobotPoint(getOpposition(RobotType.DEFENDER));
 	}
 	
 	public Point getOppositionAttackerPosition(){
-		return new Point(getOppositionAttackerX(), getOppositionAttackerY());
+		return getRobotPoint(getOpposition(RobotType.ATTACKER));
 	}
 
 	public void setBallVisible(boolean ballVisible) {

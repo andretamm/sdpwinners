@@ -24,7 +24,7 @@ public class KillerCatchBall extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
-		s.send(0, RobotCommand.GRAB);
+		s.send(type, RobotCommand.GRAB);
 		
 		ws.setHaveBall(true); // UGLY FILTHY HACK
 		s.receiveHaveBall(RobotType.ATTACKER);

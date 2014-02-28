@@ -2,7 +2,14 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import common.Robot;
+
+import constants.RobotColour;
+import constants.RobotType;
 
 /**
  * Finds the orientation by setting a line through the centre of the grey circle and the centre of a green plate.
@@ -15,10 +22,12 @@ public class Orientation {
 	 * @param greyCircle All the grey points in the quadrant
 	 * @param greenPlate All the green points in the quadrant
 	 * @param qp The QuadrantPoints of the quadrant
+	 * @param rColour 
+	 * @param rType 
 	 * @return The angle the robot is facing in RADIANS
 	 * @throws NoAngleException
 	 */
-	public static double findRobotOrientation(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, QuadrantPoints qp) throws NoAngleException {
+	public static double findRobotOrientation(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, QuadrantPoints qp, WorldState worldState, RobotType rType, RobotColour rColour) throws NoAngleException {
 		Point greenCentre = new Point(0,0);
 		
 		try {
@@ -48,8 +57,8 @@ public class Orientation {
         double greyCentreX = 0, greyCentreY = 0;
         // Centre of grey circle
         if (greyCircle.size() != 0) {
-	        greyCentreX = totalX / greyCircle.size();
-	        greyCentreY = totalY / greyCircle.size();
+//	        greyCentreX = totalX / greyCircle.size();
+//	        greyCentreY = totalY / greyCircle.size();
 	               
 	        try {
 				Point greyCenter = Position.findMean(greyCircle);
@@ -67,12 +76,36 @@ public class Orientation {
         // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         double x0 = 0, y0 = 0;
         
-        x0 = qp.getRobotPosition().getX();
-        y0 = qp.getRobotPosition().getY();
+        /* REMOVE THIS */
+       	Point[] robotHistories = worldState.getRobotHistory(qp.getrColour(), qp.getrType());
+       	Point[] subRobotHistories = Arrays.copyOfRange(robotHistories, robotHistories.length-3, robotHistories.length);
+       	
+       	Point meanRobotHistories = null;
+		try {
+			meanRobotHistories = Position.findMean(subRobotHistories);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       	
+        x0 = meanRobotHistories.getX();
+        y0 = meanRobotHistories.getY();
+        
+        /* END REMOVE */
+         
+        
+        
         Point2D.Double plateCentre = new Point2D.Double(x0, y0);
+        worldState.setRobotOrientationVector(new Robot(rColour, rType), new Point2D.Double(plateCentre.x - greyCentre.x, plateCentre.y - greyCentre.y));
 //        if (qp.getrType() == RobotType.DEFENDER && qp.getrColour() == RobotColour.BLUE) {
 //        	System.out.println(x0 + " " + y0 + " | " + greyCentreX + " " + greyCentreY);
 //        }
+        
+        // double orientation = getAngle(greyCentre, plateCentre);
+        // robotOrientationHistory.get(r) -> from worldstate
+        // double averagedOrientation = mean of (orientation, history[0-5]) (try 2-3??)
+        // Update the history with our new angle that is NORMAL orientation, not the averaged one
+        // return averaged...
         return getAngle(greyCentre, plateCentre);
 	}
 	

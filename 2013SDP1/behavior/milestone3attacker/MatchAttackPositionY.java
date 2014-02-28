@@ -41,20 +41,20 @@ public class MatchAttackPositionY extends GeneralBehavior {
 				if (kickP.getY() - y > DISTANCE_ERROR) {
 					// Kick point below us
 					System.out.println("Kick point below the robot by: " + (kickP.getY() - y));
-					s.send(0, RobotCommand.BACK);
+					s.send(type, RobotCommand.BACK);
 					continue;
 				} else if (y - kickP.getY() > DISTANCE_ERROR) {
 					// Kick point above us
 					System.out.println("Kick point above the robot by: " + (y - kickP.getY()));
-					s.send(0, RobotCommand.FORWARD);
+					s.send(type, RobotCommand.FORWARD);
 					continue;
 				}
 
 				// We're in the right position, just chill
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 			} catch (Exception e) {
 				System.err.println("We don't know where the robot or kick point is :((((");
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 				e.printStackTrace();
 			}
 		}

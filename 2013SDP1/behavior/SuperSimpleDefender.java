@@ -34,20 +34,20 @@ public class SuperSimpleDefender extends GeneralBehavior {
 				System.out.println("Moving DOWN: " + (ballY - y));
 				if (!isMoving || movingCounter == 0) {
 					isMoving = true;
-					s.send(0, RobotCommand.BACK);
+					s.send(type, RobotCommand.BACK);
 				}
 				return;
 			} else if (y - ballY > DISTANCE_ERROR) {
 				System.out.println("Moving UP: " + (y - ballY));
 				if (!isMoving || movingCounter == 0) {
 					isMoving = true;
-					s.send(0, RobotCommand.FORWARD);
+					s.send(type, RobotCommand.FORWARD);
 				}
 				return;
 			}
 			
 			// We're in the right position, just chill
-			s.send(0, RobotCommand.STOP);
+			s.send(type, RobotCommand.STOP);
 			isMoving = false;
 			
 		} catch (Exception e) {

@@ -31,6 +31,25 @@ public class Position {
 		return new Point(x,y);
 	}
 	
+	public static Point findMean(Point[] ps) throws Exception {
+		int x=0;
+		int y=0;
+		int numPos=0;
+        for (int i = 0; i < ps.length; i++) {
+            x = (int) (x + ps[i].getX());
+            y = (int) (y + ps[i].getY());
+            numPos = numPos + 1;
+    	}
+        if (numPos > 0) {
+        	x /= numPos;
+        	y /= numPos;
+        }
+//        else throw new Exception("No points passed to findMean");
+        else return new Point(50, 50);
+        
+		return new Point(x,y);
+	}
+	
 	/**
 	 * Removes from ps all those points that are within circle with radius of point 'centre'
 	 * 
