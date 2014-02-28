@@ -1,5 +1,7 @@
 package ourcommunication;
 
+import constants.RobotType;
+
 public class TestComm {
 	
 	public static void main(String[] args){
@@ -7,7 +9,7 @@ public class TestComm {
 		Server server = new Server(null);
 		
 		System.out.println("Sending defender robot int 1 to kick");
-		server.send(Server.DEFENDER, 1);
+		server.send(RobotType.DEFENDER, 1);
 		
 		// Close the Bluetooth communication
 		server.close();

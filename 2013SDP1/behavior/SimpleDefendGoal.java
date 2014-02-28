@@ -44,7 +44,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 			// Finished rotating
 			if (isRotating) {
 				isRotating = false;
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 			}
 			rotatingCounter = 0;
 			
@@ -70,7 +70,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 					System.out.println("Moving DOWN: " + (ballY - y));
 					isMovingDown = true;
 					isMovingUp = false;
-					s.send(0, RobotCommand.BACK);
+					s.send(type, RobotCommand.BACK);
 				}
 //				}
 				return;
@@ -82,7 +82,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 					System.out.println("Moving UP: " + (y - ballY));
 					isMovingUp = true;
 					isMovingDown = false;
-					s.send(0, RobotCommand.FORWARD);
+					s.send(type, RobotCommand.FORWARD);
 				}
 //				}
 				return;
@@ -98,7 +98,7 @@ public class SimpleDefendGoal extends GeneralBehavior {
 				System.out.println("Stopping");
 				isMovingUp = false;
 				isMovingDown = false;
-				s.send(0, RobotCommand.STOP);
+				s.send(type, RobotCommand.STOP);
 			}
 //			}
 		} catch (Exception e) {

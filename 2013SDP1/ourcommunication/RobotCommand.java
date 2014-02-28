@@ -1,5 +1,6 @@
 package ourcommunication;
 public class RobotCommand{
+	public static final int NO_COMMAND = -1;
 	public static final int CW = 4;
 	public static final int CCW = 5;
 	public static final int STOP = 3;

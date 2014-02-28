@@ -39,7 +39,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		}
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(0, RobotCommand.KICK);		
+		s.send(type, RobotCommand.KICK);		
 	}
 
 	/** 

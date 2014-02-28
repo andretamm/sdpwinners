@@ -104,9 +104,9 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 		
 		if (turnAngle < 0) {
-			s.send(0, RobotCommand.CCW);
+			s.send(type, RobotCommand.CCW);
 		} else {
-			s.send(0, RobotCommand.CW);
+			s.send(type, RobotCommand.CW);
 		}
 	}
 }
