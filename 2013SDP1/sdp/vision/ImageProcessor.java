@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import common.Robot;
 
 import constants.Colours;
+import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
 import sdp.strategy.KickFrom;
@@ -162,7 +163,8 @@ public class ImageProcessor {
             ws.setBallY((int) ballP.getY());
             
             for (Robot r : Robot.listAll()) {
-        		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type));
+//        		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type));
+            	Point position = pp.getRobotPosition(r.colour, r.type);
                 ws.setRobotX(r, (int) position.getX());
                 ws.setRobotY(r, (int) position.getY());
                 ws.setRobotOrientation(r.type, r.colour, pp.getRobotOrientation(r.colour, r.type));
@@ -216,8 +218,8 @@ public class ImageProcessor {
                     try {
                     	ArrayList<Point> greyPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GRAY);
                     	ArrayList<Point> greenPoints = pitchPoints.getColouredPoints(rColour, rType, Colours.GREEN);
-                    	 
-                    	double orientation = Orientation.findRobotOrientation(greyPoints, greenPoints, pitchPoints.getRobotQuadrant(rColour, rType));
+//                    	ArrayList<Point> colouredPoints = pitchPoints.getColouredPoints(rColour, rType, rColour);                    	
+                    	double orientation = Orientation.findRobotOrientation(greyPoints, greenPoints, pitchPoints.getRobotQuadrant(rColour, rType), worldState);
                     	pitchPoints.setRobotOrientation(rColour, rType, orientation);
                     } catch (NoAngleException e) {
                     	//System.out.print("Blue robot NoAngleException: " + e.getMessage());
@@ -225,9 +227,7 @@ public class ImageProcessor {
                     	//System.out.println("blue position:(" + op.getBlue().getX() +", "+ op.getBlue().getY()+")");
                     }
         		}
-        		
         	}
-            
         }
         
         /**
@@ -400,6 +400,7 @@ public class ImageProcessor {
 					}
         		}
         	}
+        	
         }
         
         /**
