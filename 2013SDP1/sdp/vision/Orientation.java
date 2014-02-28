@@ -2,8 +2,14 @@ package sdp.vision;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import common.Robot;
+
+import constants.RobotColour;
+import constants.RobotType;
 
 /**
  * Finds the orientation by setting a line through the centre of the grey circle and the centre of a green plate.
@@ -16,10 +22,12 @@ public class Orientation {
 	 * @param greyCircle All the grey points in the quadrant
 	 * @param greenPlate All the green points in the quadrant
 	 * @param qp The QuadrantPoints of the quadrant
+	 * @param rColour 
+	 * @param rType 
 	 * @return The angle the robot is facing in RADIANS
 	 * @throws NoAngleException
 	 */
-	public static double findRobotOrientation(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, QuadrantPoints qp, WorldState worldState) throws NoAngleException {
+	public static double findRobotOrientation(ArrayList<Point> greyCircle, ArrayList<Point> greenPlate, QuadrantPoints qp, WorldState worldState, RobotType rType, RobotColour rColour) throws NoAngleException {
 		Point greenCentre = new Point(0,0);
 		
 		try {
@@ -88,6 +96,7 @@ public class Orientation {
         
         
         Point2D.Double plateCentre = new Point2D.Double(x0, y0);
+        worldState.setRobotOrientationVector(new Robot(rColour, rType), new Point2D.Double(plateCentre.x - greyCentre.x, plateCentre.y - greyCentre.y));
 //        if (qp.getrType() == RobotType.DEFENDER && qp.getrColour() == RobotColour.BLUE) {
 //        	System.out.println(x0 + " " + y0 + " | " + greyCentreX + " " + greyCentreY);
 //        }

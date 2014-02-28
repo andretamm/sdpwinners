@@ -104,8 +104,10 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 		
 		if (turnAngle < 0) {
+			System.out.println("Rotating CCW");
 			s.send(type, RobotCommand.CCW);
 		} else {
+			System.out.println("Rotating CW");
 			s.send(type, RobotCommand.CW);
 		}
 	}

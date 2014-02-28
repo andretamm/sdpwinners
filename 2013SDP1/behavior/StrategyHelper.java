@@ -135,6 +135,37 @@ public class StrategyHelper {
 			return null;
 		}
 	}
+	
+	/**
+	 * Find the point on the vertical line where the line defined by the 
+	 * given grounded vector will intersect with it.
+	 * @param x The x coordinate of the vertical line
+	 * @param origin The grounding point for the vector
+	 * @param vector E.g. a velocity vector
+	 * @return The (x,y) coordinates of the intersection point, or null if doesn't intersect
+	 */
+	public static Point getIntersectWithVerticalLine(int x, Point2D.Double vector, Point origin) {
+		Point intersect = null;
+		
+		//   o   ball
+		//   |   vertical line 
+		//   ->  vector direction
+		if ((origin.x < x && vector.x > 0) ||  //        o  ->  |
+			(x < origin.x && vector.x < 0)) {  // |  <-  o
+			// Find y difference from origin where the intersection point is
+			// This will already have the right sign, so don't mess with the
+			// order of the subtraction!
+			double diffY = (double) (x - origin.x) * vector.y / vector.x;
+			
+			// Find intersection point
+			intersect = new Point(x, (int) (origin.y + diffY));
+			
+			return intersect;
+		} else {
+			// Won't even hit this wall, not to mention the goal :DDD
+			return null;
+		}
+	}
 
 //	/**
 //	 * Find where the given grounded vector will intersect with our goal.
