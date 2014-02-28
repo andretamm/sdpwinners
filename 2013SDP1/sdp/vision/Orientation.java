@@ -68,6 +68,7 @@ public class Orientation {
         // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         double x0 = 0, y0 = 0;
         
+        /* REMOVE THIS */
        	Point[] robotHistories = worldState.getRobotHistory(qp.getrColour(), qp.getrType());
        	Point[] subRobotHistories = Arrays.copyOfRange(robotHistories, robotHistories.length-3, robotHistories.length);
        	
@@ -81,10 +82,21 @@ public class Orientation {
        	
         x0 = meanRobotHistories.getX();
         y0 = meanRobotHistories.getY();
+        
+        /* END REMOVE */
+         
+        
+        
         Point2D.Double plateCentre = new Point2D.Double(x0, y0);
 //        if (qp.getrType() == RobotType.DEFENDER && qp.getrColour() == RobotColour.BLUE) {
 //        	System.out.println(x0 + " " + y0 + " | " + greyCentreX + " " + greyCentreY);
 //        }
+        
+        // double orientation = getAngle(greyCentre, plateCentre);
+        // robotOrientationHistory.get(r) -> from worldstate
+        // double averagedOrientation = mean of (orientation, history[0-5]) (try 2-3??)
+        // Update the history with our new angle that is NORMAL orientation, not the averaged one
+        // return averaged...
         return getAngle(greyCentre, plateCentre);
 	}
 	

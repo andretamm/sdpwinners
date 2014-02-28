@@ -80,10 +80,13 @@ public class WorldState implements VisionInterface {
 	// refactor
 	private Point ourDefenderVelocity;
 	private Point ourAttackerVelocity;
+	// end
 	
 	private RobotMap<Point[]> robotHistory;
 	private RobotMap<Point2D.Double> robotVelocity;
-	// end
+	// MILA add here
+	// RobotMap<Double[]> ....
+	
 
 	private boolean removeShadows = false;
 
@@ -217,6 +220,9 @@ public class WorldState implements VisionInterface {
 		this.robotHistory = new RobotMap<Point[]>();
 		this.robotVelocity = new RobotMap<Point2D.Double>();
 		this.robotTimestamps = new RobotMap<long[]>();	
+		// MILA add here
+		// new robotmap
+		
 		
 		// Set default values for all the robots
 		for (Robot r: Robot.listAll()) {
@@ -228,14 +234,17 @@ public class WorldState implements VisionInterface {
 			// TODO MAKE SURE THESE ARE RIGHT AND MAKE SENSE
 			Point[] history = new Point[HISTORY_LENGTH];
 			long[] timestamps = new long[HISTORY_LENGTH];
+			// MILA
 			
 			for (int i = 0; (i < HISTORY_LENGTH); i++) {
 				history[i] = new Point(1,1);
 				timestamps[1] = 1;
+				// MILA
 			}
 			
 			robotHistory.put(r, history);
 			robotTimestamps.put(r, timestamps);
+			// MILA
 		}
 		
 		this.ballX = 0;
