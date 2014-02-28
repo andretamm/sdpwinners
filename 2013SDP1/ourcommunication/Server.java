@@ -16,7 +16,7 @@ public class Server {
 	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
 	private static final String DEFENDER_NXT_NAME = "NXT";
 
-	//	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
+//		private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
 //	private static final String DEFENDER_NXT_NAME = "4s";
 	
 	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
