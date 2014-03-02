@@ -88,24 +88,11 @@ public abstract class GeneralBehavior implements Behavior {
 	 * @author Andre
 	 */
 	public void rotateTo(double angle) {
-		// Find the complement angle, aka the angle 180deg 
-		// from the angle we want to turn to
-		double angleComplement = angle + C.A180;
-		if (angleComplement > C.A360) {
-			angleComplement -= C.A360;
-		}
-
-		// Now rotate to the correct angle
+		// Find the quickest angle to rotate towards our target
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
+		double turnAngle = StrategyHelper.angleDiff(orientation, angle);
 		
-		double turnAngle = angle - orientation;
-		if (turnAngle > C.A180) {
-			turnAngle -= C.A360;
-		}
-		if (turnAngle < - C.A180) {
-			turnAngle += C.A360;
-		}
-		
+		// Now rotate
 		if (turnAngle < 0) {
 			s.send(type, RobotCommand.CCW);
 		} else {

@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import common.Robot;
-
+import constants.C;
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 
@@ -244,6 +244,37 @@ public class StrategyHelper {
 	 */
 	public static boolean inRange(double x, double target, double error) {
 		return Math.abs(x - target) <= error;
+	}
+	
+	
+	/**
+	 * Gets the angle that is 180 degrees from the original angle. Need
+	 * to use radians!
+	 * E.g. angleComplement(270') = 90'  
+	 * @return The angle complement
+	 */
+	public static double angleComplement(double angle) {
+		double newAngle = angle + C.A180;
+		return newAngle < C.A360 ? newAngle : newAngle - C.A360;
+	}
+	
+	/**
+	 * Find the shortest angle between the origin and target.
+	 * @param origin Starting angle
+	 * @param target End angle
+	 * @return The angle difference with + for a CW turn and - for a CCW turn
+	 */
+	public static double angleDiff(double origin, double target) {
+		double turnAngle = target - origin;
+		
+		if (turnAngle > C.A180) {
+			turnAngle -= C.A360;
+		}
+		if (turnAngle < - C.A180) {
+			turnAngle += C.A360;
+		}
+		
+		return turnAngle;
 	}
 	
 	public static double getDistance(Point a, Point b){
