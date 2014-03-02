@@ -24,10 +24,5 @@
 	<classpathentry kind="lib" path="lib/bluecove-gpl.jar"/>
 	<classpathentry kind="lib" path="lib/bluecove.jar"/>
 	<classpathentry kind="lib" path="lib/classes.jar"/>
-	<classpathentry kind="lib" path="/afs/inf.ed.ac.uk/user/s11/s1126659/Desktop/opencv-2.4.8/build/bin/opencv-248.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/afs/inf.ed.ac.uk/user/s11/s1126659/Desktop/opencv-2.4.8/build/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path=""/>
 </classpath>
