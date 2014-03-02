@@ -577,7 +577,7 @@ public class WorldState implements VisionInterface {
 	}
 
 	public Point getBallPoint() {
-		return new Point(getBallX(), getBallY());
+		return getBallP();
 	}
 	
 	/**
