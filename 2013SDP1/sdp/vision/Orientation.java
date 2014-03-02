@@ -75,23 +75,9 @@ public class Orientation {
       
         // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         double x0 = 0, y0 = 0;
-        
-        /* REMOVE THIS */
-       	Point[] robotHistories = worldState.getRobotHistory(qp.getrColour(), qp.getrType());
-       	Point[] subRobotHistories = Arrays.copyOfRange(robotHistories, robotHistories.length-3, robotHistories.length);
-       	
-       	Point meanRobotHistories = null;
-		try {
-			meanRobotHistories = Position.findMean(subRobotHistories);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-       	
-        x0 = meanRobotHistories.getX();
-        y0 = meanRobotHistories.getY();
-        
-        /* END REMOVE */
+        x0 = qp.getRobotPosition().getX();
+        y0 = qp.getRobotPosition().getY();
+
          
         
         

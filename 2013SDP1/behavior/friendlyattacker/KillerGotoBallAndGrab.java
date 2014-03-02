@@ -22,7 +22,7 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 		}
 		
 		if (goToBall()) {
-			// We're at the ball. so grab it
+			// We're at the ball, so grab it
 			s.send(type, RobotCommand.GRAB);
 			ws.setHaveBall(true);
 		}
