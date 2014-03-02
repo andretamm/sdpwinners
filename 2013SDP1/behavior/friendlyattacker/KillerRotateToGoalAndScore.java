@@ -29,10 +29,17 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		
 		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
 			rotateTo(orientation);
+			isRotating = true;
 			return;
 		}
 		
+		if (isRotating) {
+			s.send(type, RobotCommand.STOP);
+			isRotating = false;
+		}
+		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		ws.setHaveBall(false);
 		s.send(type, RobotCommand.KICK);
 		
 		try {
@@ -42,7 +49,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 			e.printStackTrace();
 		}
 		
-		ws.setHaveBall(false);
+		
 	}
 
 	/** 

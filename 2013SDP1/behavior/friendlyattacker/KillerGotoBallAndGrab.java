@@ -15,7 +15,7 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 
 	@Override
 	public void action() {
-		System.out.println("Going to ball");
+//		System.out.println("Going to ball");
 		
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
@@ -23,6 +23,7 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 		
 		if (goToBall()) {
 			// We're at the ball, so grab it
+			System.out.println("GRABBING");
 			s.send(type, RobotCommand.GRAB);
 			ws.setHaveBall(true);
 		}

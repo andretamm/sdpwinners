@@ -12,7 +12,7 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.30; //15
+	public static final double ANGLE_ERROR = 0.15; //15
 	public static final double DISTANCE_ERROR = 2;
 	
 	protected boolean isActive = false;
@@ -107,10 +107,8 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 		
 		if (turnAngle < 0) {
-			System.out.println("Rotating CCW");
 			s.send(type, RobotCommand.CCW);
 		} else {
-			System.out.println("Rotating CW");
 			s.send(type, RobotCommand.CW);
 		}
 	}
@@ -131,7 +129,8 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 		
 		// Move forward until we get there
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+		// TODO figure out what 20 should be
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR + 20) {
 			s.send(type, RobotCommand.FORWARD);
 			return false;
 		}
@@ -148,7 +147,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	public boolean goToBall() {
 		if (StrategyHelper.hasBall(robot(), ws)) {
-			s.send(type, RobotCommand.STOP);
+			System.out.println("BALL IS IN RANGE FOR KICK!");
 			return true;
 		} else {
 			goTo(ws.getBallPoint());

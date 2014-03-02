@@ -254,16 +254,16 @@ public class StrategyHelper {
 		//Verify difference between Orientation Angle & Robot-to-Ball angle
 		double orientationAngle = ws.getRobotOrientation(r.type, r.colour);
 		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallP());
-		System.out.println(orientationAngle + " " + robotToBallAngle);
-		double difference = Math.abs(orientationAngle - robotToBallAngle);
-		System.out.println(difference);
+
+		double difference = Math.abs(orientationAngle - robotToBallAngle);		
+
+
 		if(difference <= 0.15){
 			// TODO figure out good value
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallP());
 			
-			if (distance <= 43){
-				System.out.println(distance);
+			if (distance <= 40){
 				// TODO figure out actual value
 				return true;
 			}

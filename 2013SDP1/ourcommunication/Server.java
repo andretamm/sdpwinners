@@ -116,6 +116,8 @@ public class Server {
 		// Only send command if it is different from the last one
 		// we sent
 		if (previousCommand.get(type) != command) {
+			previousCommand.put(type, command);
+			System.out.println("Sending " + command);
 			if (type == RobotType.DEFENDER) {
 				defenderRobot.sendToRobot(command);
 			} else if (type == RobotType.ATTACKER) {

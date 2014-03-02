@@ -38,10 +38,14 @@ public class NXT {
 						robot.turnCCW();
 						break;
 					case 6:
+						robot.chill();
 						robot.kick();
 						break;
 					case 10:
+						System.out.println("grabbing");
+						robot.chill();
 						robot.grab();
+						break;
 					default:
 						robot.chill();
 				}

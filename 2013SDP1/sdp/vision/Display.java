@@ -178,6 +178,10 @@ public class Display {
 		
 		/* BALL MOVEMENT PREDICTION DRAWING */
 		
+//		if (StrategyHelper.hasBall(new Robot(RobotColour.YELLOW, RobotType.ATTACKER), ws)) {
+//			System.out.println("BALL IS IN RANGE FOR KICK!");
+//		}
+		
 		// Predict a point on the line in front of our goal
 		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(ws.getOurGoalCentre().x - 60, ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)), ws.getOppositionAttackerPosition());
 		if (defendPos != null) {

@@ -46,7 +46,7 @@ public class Ultra360 {
 		// Default rotating speed
 		rotationSpeed = (byte)60; 
 		// Default moving speed
-		speed = (byte) 200;
+		speed = (byte) 70;
 		
 		// Init motors
 		rotator = Motor.C;
