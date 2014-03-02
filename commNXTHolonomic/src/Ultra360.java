@@ -250,6 +250,13 @@ public class Ultra360 {
 		grabber.rotateTo(20);
 	}
 	
+	//Reset the grabber to its opening positions
+	public static void openGrabber() {
+		grabber.setSpeed(800);
+		grabber.setAcceleration(10000);
+		grabber.rotateTo(0);
+	}
+	
 	//Kick the ball in a straight direction. This will reset the grabber to open.
 	public void kick() {
 		kicker.resetTachoCount();
