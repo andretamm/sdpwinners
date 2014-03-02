@@ -22,6 +22,12 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
+		
+		// Stop this madness if we didn't actually grab the ball <.<
+		if (!StrategyHelper.hasBall(robot(), ws)) {
+			ws.setHaveBall(false);
+			return;
+		}
 
 		Point robot = ws.getRobotPoint(robot());
 		Point goal = ws.getOppositionGoalCentre();
