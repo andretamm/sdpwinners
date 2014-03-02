@@ -154,6 +154,11 @@ public class PitchPoints extends QuadrantPoints {
 		return quadrant.getPoints(colour);
 	}
 	
+	public ArrayList<Point> getColouredPoints(RobotColour rColour, RobotType rType, RobotColour colour) {
+		QuadrantPoints quadrant = getRobotQuadrant(rColour, rType);
+		return quadrant.getPoints(colour);
+	}
+	
 	@Override
 	public ArrayList<Point> getPoints(Colours colour) {
 		if (super.getPoints(colour).isEmpty()) {

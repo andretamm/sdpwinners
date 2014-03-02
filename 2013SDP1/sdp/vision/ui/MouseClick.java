@@ -78,17 +78,19 @@ public class MouseClick implements MouseListener, MouseMotionListener {
      * @param message Asks what to click on
      * @return The colour of pixel where we clicked
      */
-    public void getCoords(String message){
+    public Point getCoords(String message){
         System.out.println(message);
 
-        while (!mouseClick) {
-        	System.out.println("waiting for mouseclick");
-            try{
-                Thread.sleep(100);
-            } catch (Exception e) {}
-        }
+//        while (!mouseClick) {
+//        	System.out.println("waiting for mouseclick");
+//            try{
+//                Thread.sleep(100);
+//            } catch (Exception e) {}
+//        }
+        
         mouseClick = false;
         count++;
+        return coords;
     }
     
     /**

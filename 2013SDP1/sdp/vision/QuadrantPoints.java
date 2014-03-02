@@ -85,6 +85,10 @@ public class QuadrantPoints {
 		return points.get(colour);
 	}
 	
+	public ArrayList<Point> getPoints(RobotColour colour) {
+		return points.get(colour);
+	}
+	
 	/** Set the points of the colour
 	 * @param colour Colour of the points
 	 * @param points List of points of that colours

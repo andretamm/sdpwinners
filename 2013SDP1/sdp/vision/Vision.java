@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import sdp.vision.ui.MouseClick;
+
 import au.edu.jcu.v4l4j.CaptureCallback;
 import au.edu.jcu.v4l4j.DeviceInfo;
 import au.edu.jcu.v4l4j.FrameGrabber;
@@ -40,9 +42,9 @@ public class Vision extends WindowAdapter {
         private long before = 0;
         private long after = 0;
         
-        public Vision(WorldState worldState, ThresholdsState ts, PitchConstants pitchConstants) throws V4L4JException {
+        public Vision(WorldState worldState, ThresholdsState ts, PitchConstants pitchConstants, JFrame windowFrame) throws V4L4JException {
 			this("/dev/video0", 640, 480, 0, V4L4JConstants.STANDARD_PAL,
-					80, worldState, ts, pitchConstants);
+					80, worldState, ts, pitchConstants, windowFrame);
         }
         
         /**
@@ -69,7 +71,7 @@ public class Vision extends WindowAdapter {
          */
         public Vision(String videoDevice, int width, int height, int channel,
                         int videoStandard, int compressionQuality, WorldState worldState,
-                        ThresholdsState ts, PitchConstants pitchConstants)
+                        ThresholdsState ts, PitchConstants pitchConstants, JFrame windowFrame)
                         throws V4L4JException {
 
                 /* Set the state fields. */
@@ -82,6 +84,7 @@ public class Vision extends WindowAdapter {
                 /* Initialise the GUI that displays the video feed. */
                 initFrameGrabber(videoDevice, width, height, channel, videoStandard,
                                 compressionQuality);
+                this.windowFrame = windowFrame;
                 initGUI();
         }
 
@@ -180,13 +183,15 @@ public class Vision extends WindowAdapter {
          * Creates the graphical interface components and initialises them
          */
         private void initGUI() {
-                windowFrame = new JFrame("Vision Window");
+                
                 label = new JLabel();
                 windowFrame.getContentPane().add(label);
                 windowFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 windowFrame.addWindowListener(this);
                 windowFrame.setVisible(true);
                 windowFrame.setSize(width, height);
+                
+                MouseClick m = new MouseClick(windowFrame);
         }
 
         /**

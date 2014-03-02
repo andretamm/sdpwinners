@@ -1,6 +1,7 @@
 package sdp.vision.ui;
 
 import java.awt.FlowLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -66,6 +67,11 @@ public class VisionGUI implements ChangeListener {
 	 * The current quadrant thresholding values we're changing
 	 */
 	private Quadrant q;
+	
+	/* 
+	 * Mouse click for calibrating thresholds
+	 */
+	private MouseClick mouseClick;
 
 	/* The main frame holding the Control GUI. */
 	private JFrame frame;
@@ -154,6 +160,9 @@ public class VisionGUI implements ChangeListener {
 	private RangeSlider q2;
 	private RangeSlider q3;
 	private RangeSlider q4;
+	
+	/* Calibrate button */
+	private JButton calibrate;
 
 	/**
 	 * Default constructor.
@@ -178,6 +187,7 @@ public class VisionGUI implements ChangeListener {
 		this.thresholdsState = thresholdsState;
 		this.worldState = worldState;
 		this.pitchConstants = pitchConstants;
+		this.mouseClick = mouseClick;
 	}
 
 	/**
@@ -239,6 +249,10 @@ public class VisionGUI implements ChangeListener {
 		quadrant2.addMouseListener(quadrantRadioButtonClickListener);
 		quadrant3.addMouseListener(quadrantRadioButtonClickListener);
 		quadrant4.addMouseListener(quadrantRadioButtonClickListener);
+		
+		calibrate = new JButton("Calibrate now!");
+		bluePanel.add(calibrate);
+				
 
 		/* The main (default) tab */
 		setUpMainPanel();
@@ -278,6 +292,35 @@ public class VisionGUI implements ChangeListener {
 		pitch_1.doClick();
 		pitch_0.doClick();
 	}
+	
+	//TODO
+//	/**
+//	 * Listener for the calibrate button
+//	 */
+//	class calibrateButtonClickListener implements MouseListener {
+//
+//		@Override
+//		public void mouseClicked(MouseEvent e) {
+//			Point a = e.getPoint();
+//			System.out.println(a);
+//		}
+//			
+//		@Override
+//		public void mouseEntered(MouseEvent e) {}
+//
+//		@Override
+//		public void mouseExited(MouseEvent e) {}
+//
+//		@Override
+//		public void mousePressed(MouseEvent e) {}
+//		
+//		// After we have clicked on a Quadrant button, update state
+//		@Override
+//		public void mouseReleased(MouseEvent e) {
+//			
+//			
+//		}
+//	}
 
 	/**
 	 * Listener for the radio buttons for switching quadrants
@@ -704,12 +747,12 @@ public class VisionGUI implements ChangeListener {
 		ball_gb.addChangeListener(this);
 
 	}
-
+	
 	/**
 	 * Sets up the sliders for the thresholding of the blue robot.
 	 */
 	private void setUpBlueSliders() {
-
+		
 		/* Red. */
 		JPanel blue_r_panel = new JPanel();
 		JLabel blue_r_label = new JLabel("Red:");
@@ -1800,4 +1843,5 @@ public class VisionGUI implements ChangeListener {
 		rangeSlider.setUpperValue(high);
 		rangeSlider.setValue(low);
 	}
+
 }
