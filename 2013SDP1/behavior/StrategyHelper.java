@@ -164,7 +164,7 @@ public class StrategyHelper {
 			
 			return intersect;
 		} else {
-			// Won't even hit this wall, not to mention the goal :DDD
+			// Won't hit this vertical line
 			return null;
 		}
 	}

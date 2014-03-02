@@ -586,6 +586,31 @@ public class WorldState implements VisionInterface {
 	public Point getBallP() {
 		return new Point(ballX, ballY);
 	}
+	
+	/**
+	 * Get the quadrant the ball is currently in
+	 * @return The Quadrant or null if the ball is not on the pitch
+	 */
+	public Quadrant getBallQuadrant() {
+		// Check if we're out the y values of the pitch
+		if (!(ballY >= getPitchTopLeft().y && ballY <= getPitchBottomRight().y)) {
+			return null;
+		}
+		
+		// Manually check x values of all quadrants		
+		if (ballX >= q1LowX && ballX <= q1HighX) {
+			return Quadrant.Q1;
+		} else if (ballX >= q2LowX && ballX <= q2HighX) {
+			return Quadrant.Q2;
+		} else if (ballX >= q3LowX && ballX <= q3HighX) {
+			return Quadrant.Q3;
+		} else if (ballX >= q4LowX && ballX <= q4HighX) {
+			return Quadrant.Q4;
+		} 
+		
+		// Ball must not be on the pitch
+		return null;
+	}
 
 	public Point getOurDefenderPosition(){
 		return new Point(getOurDefenderX(), getOurDefenderY());
