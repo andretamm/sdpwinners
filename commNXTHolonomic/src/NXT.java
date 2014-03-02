@@ -40,6 +40,8 @@ public class NXT {
 					case 6:
 						robot.kick();
 						break;
+					case 10:
+						robot.grab();
 					default:
 						robot.chill();
 				}

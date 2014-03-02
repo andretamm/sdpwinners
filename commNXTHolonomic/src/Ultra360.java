@@ -1,5 +1,6 @@
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
+import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 
@@ -33,10 +34,6 @@ public class Ultra360 {
 	private NXTRegulatedMotor kicker;
 	private NXTRegulatedMotor grabber;
 	
-	rotator = Motor.C;
-	kicker = Motor.B;
-	grabber = Motor.A;
-	
 	/**
 	 * Default constructor
 	 */
@@ -47,9 +44,14 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		rotationSpeed = (byte)50; 
+		rotationSpeed = (byte)60; 
 		// Default moving speed
 		speed = (byte) 200;
+		
+		// Init motors
+		rotator = Motor.C;
+		kicker = Motor.B;
+		grabber = Motor.A;
 	}
 	
 	

@@ -57,4 +57,8 @@ public class RobotController {
 	public void close() {
 		Sound.beep();
 	}
+
+	public void grab() {
+		ULTRA.closeGrabber();
+	}
 }
