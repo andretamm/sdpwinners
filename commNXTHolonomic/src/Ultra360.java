@@ -33,6 +33,10 @@ public class Ultra360 {
 	private NXTRegulatedMotor kicker;
 	private NXTRegulatedMotor grabber;
 	
+	rotator = Motor.C;
+	kicker = Motor.B;
+	grabber = Motor.A;
+	
 	/**
 	 * Default constructor
 	 */
