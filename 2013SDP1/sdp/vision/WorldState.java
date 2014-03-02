@@ -19,7 +19,7 @@ public class WorldState implements VisionInterface {
 	public static final int HISTORY_LENGTH = 5;
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
-	private RobotColour colour;
+	private RobotColour ourColour;
 	private int pitch; // 0 = main, 1 = side room
 
 	// Variables for calculating the velocity and location of the robots and ball
@@ -210,7 +210,7 @@ public class WorldState implements VisionInterface {
 
 		/* control properties */
 		this.direction = ShootingDirection.RIGHT;
-		this.colour = RobotColour.YELLOW;
+		this.ourColour = RobotColour.YELLOW;
 		this.pitch = 0;
 
 		//TODO Alter object properties for velocities, history
@@ -374,11 +374,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public RobotColour getColour() {
-		return colour;
+		return ourColour;
 	}
 
 	public void setColour(RobotColour colour) {
-		this.colour = colour;
+		this.ourColour = colour;
 	}
 
 	public int getPitch() {
@@ -424,19 +424,19 @@ public class WorldState implements VisionInterface {
 	//TODO fix getters for X and Y Vision for two robots
 
 	int getOurDefenderXVision(){
-		return getRobotX(new Robot(colour, RobotType.DEFENDER));
+		return getRobotX(new Robot(ourColour, RobotType.DEFENDER));
 	}
 
 	int getOurDefenderYVision(){
-		return getRobotY(new Robot(colour, RobotType.DEFENDER));
+		return getRobotY(new Robot(ourColour, RobotType.DEFENDER));
 	}
 	
 	int getOurAttackerXVision(){
-		return getRobotX(new Robot(colour, RobotType.ATTACKER));
+		return getRobotX(new Robot(ourColour, RobotType.ATTACKER));
 	}
 
 	int getOurAttackerYVision(){
-		return getRobotY(new Robot(colour, RobotType.ATTACKER));
+		return getRobotY(new Robot(ourColour, RobotType.ATTACKER));
 	}
 
 	public int getOurDefenderX(){
@@ -456,11 +456,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public double getOurDefenderOrientation() {
-		return robotOrientation.get(new Robot(colour, RobotType.DEFENDER));
+		return robotOrientation.get(new Robot(ourColour, RobotType.DEFENDER));
 	}
 	
 	public double getOurAttackerOrientation() {
-		return robotOrientation.get(new Robot(colour, RobotType.ATTACKER));
+		return robotOrientation.get(new Robot(ourColour, RobotType.ATTACKER));
 	}
 
 	public double getOppositionDefenderOrientation() {
@@ -641,7 +641,7 @@ public class WorldState implements VisionInterface {
 	 * @param type Type of robot
 	 */
 	public Robot getOur(RobotType type) {
-		return new Robot(colour, type);
+		return new Robot(ourColour, type);
 	}
 	
 	/**
@@ -708,7 +708,7 @@ public class WorldState implements VisionInterface {
 	 * @return The default location of the off-pitch robot
 	 */
 	Point getDefaultPoint(RobotColour robot) {
-		if (robot==colour) {
+		if (robot==ourColour) {
 			// if the robot is ours, just make the best on pitch guess
 			return new Point((int) (getPitchTopLeft().getX()+getOurDefenderPosition().getX()), (int) (getPitchTopLeft().getY()+getOurDefenderPosition().getY()));
 		} else {
@@ -725,7 +725,7 @@ public class WorldState implements VisionInterface {
 	 * @return Colour of the opposition
 	 */
 	private RobotColour getOppositionColour() {
-		return colour == RobotColour.YELLOW ? RobotColour.BLUE : RobotColour.YELLOW;
+		return ourColour == RobotColour.YELLOW ? RobotColour.BLUE : RobotColour.YELLOW;
 	}
 	
 	int getOppositionDefenderXVision(){
@@ -838,6 +838,48 @@ public class WorldState implements VisionInterface {
 	
 	public void setHaveBall(boolean haveBall) {
 		this.haveBall = haveBall;
+	}
+
+	/**
+	 * Find the Quadrant the robot is in
+	 * @param robot The robot to check
+	 */
+	public Quadrant getRobotQuadrant(Robot robot) {
+		if (robot.colour == ourColour) {
+			// Our robot
+			if (direction == ShootingDirection.LEFT) {
+				// Shooting left
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q4;
+				} else {
+					return Quadrant.Q2;
+				}
+			} else {
+				// Shooting right
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q1;
+				} else {
+					return Quadrant.Q3;
+				}
+			}
+		} else {
+			// Opponent's robot
+			if (direction == ShootingDirection.LEFT) {
+				// Shooting left
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q1;
+				} else {
+					return Quadrant.Q3;
+				}
+			} else {
+				// Shooting right
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q4;
+				} else {
+					return Quadrant.Q2;
+				}
+			}
+		}
 	}
 	
 }

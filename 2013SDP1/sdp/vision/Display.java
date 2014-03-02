@@ -185,10 +185,6 @@ public class Display {
 		// Predict a point on the line in front of our goal
 		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(ws.getOurGoalCentre().x - 60, ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)), ws.getOppositionAttackerPosition());
 		if (defendPos != null) {
-//			System.out.println("Opposition: " + ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER)).x + " " + ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER)).y);
-//			System.out.println("Opposition: " + ws.getOppositionAttackerPosition().x + " " + ws.getOppositionAttackerPosition().y);
-//			System.out.println(ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)).x + " " + ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)).y);
-//			System.out.println(defendPos.x + " " + defendPos.y);
 			graphics.setColor(Color.ORANGE);
 			graphics.fillOval(defendPos.x - 3, defendPos.y - 3, 6, 6);
 		}
@@ -224,11 +220,7 @@ public class Display {
 					graphics.fillOval(goalIntersectPoint.x - 4, goalIntersectPoint.y - 4, 8, 8);
 				}
 			}
-			
-			
 		}
-		
-		
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {
