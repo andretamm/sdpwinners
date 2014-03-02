@@ -26,6 +26,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		// Stop this madness if we didn't actually grab the ball <.<
 		if (!StrategyHelper.hasBall(robot(), ws)) {
 			ws.setHaveBall(false);
+			s.send(type, RobotCommand.OPEN_GRABBER);
 			return;
 		}
 

@@ -8,4 +8,5 @@ public class RobotCommand{
 	public static final int BACK = 2;
 	public static final int KICK = 6;
 	public static final int GRAB = 10;
+	public static final int OPEN_GRABBER = 11;
 }

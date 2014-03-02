@@ -42,9 +42,11 @@ public class NXT {
 						robot.kick();
 						break;
 					case 10:
-						System.out.println("grabbing");
 						robot.chill();
 						robot.grab();
+						break;
+					case 11:
+						robot.openGrabber();
 						break;
 					default:
 						robot.chill();

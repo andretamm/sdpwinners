@@ -102,7 +102,7 @@ public class Ultra360 {
 	}
 		
 	//Rotate anti-clockwise until Andre stops you
-	public void rotateAniClockwise() {
+	public void rotateAntiClockwise() {
 		//WEST Wheel
 		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,rotationSpeed); 
@@ -251,7 +251,7 @@ public class Ultra360 {
 	}
 	
 	//Reset the grabber to its opening positions
-	public static void openGrabber() {
+	public void openGrabber() {
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
 		grabber.rotateTo(0);

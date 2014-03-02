@@ -19,7 +19,7 @@ public class RobotController {
 	public void kick() {
 		// Wait for the ball in the grabber to stabilise
 		try {
-			Thread.sleep(1500);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {}
 		ULTRA.kick();
 	}
@@ -45,12 +45,11 @@ public class RobotController {
 	public void turnCCW() {
 //		System.out.println("Turning counterclockwise");
 		ULTRA.stop();
-		ULTRA.rotateAniClockwise();
+		ULTRA.rotateAntiClockwise();
 	}
 	
 	public void chill() {
 //		System.out.println("Chilling in place");
-		// Use higher acceleration for stopping
 		ULTRA.stop();
 	}
 	
@@ -64,5 +63,9 @@ public class RobotController {
 
 	public void grab() {
 		ULTRA.closeGrabber();
+	}
+	
+	public void openGrabber() {
+		ULTRA.openGrabber();
 	}
 }
