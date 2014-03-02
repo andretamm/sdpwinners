@@ -4,14 +4,13 @@ import constants.RobotType;
 
 public class TestComm {
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws InterruptedException{
 		System.out.println("Starting the Bluetooth communication...");
 		Server server = new Server(null);
 		
-		System.out.println("Sending defender robot int 1 to kick");
-		server.send(RobotType.DEFENDER, 1);
-		
-		// Close the Bluetooth communication
+		server.connectToRobot(RobotType.DEFENDER);
+		server.sendDiagonalMovement(RobotType.DEFENDER, 45);
+		Thread.sleep(10000);
 		server.close();
 	}
 

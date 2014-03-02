@@ -14,7 +14,7 @@ public class Server {
 	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
 	private static final String DEFENDER_NXT_NAME = "NXT";
 
-//		private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
+//	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
 //	private static final String DEFENDER_NXT_NAME = "4s";
 	
 //	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
@@ -122,6 +122,49 @@ public class Server {
 				defenderRobot.sendToRobot(command);
 			} else if (type == RobotType.ATTACKER) {
 				attackerRobot.sendToRobot(command);
+			}
+		}
+	}
+	
+	/*
+	 * Send a command to the robot to move diagonally. The method
+	 * choppes an angle and send it to the NXT.
+	 * 
+	 * @param type Defender or attacker
+	 * @param angle to rotate to
+	 */
+	public void sendDiagonalMovement(RobotType type, int angle) {
+		if (type == RobotType.DEFENDER) {
+			defenderRobot.sendToRobot(8);
+			
+			if (angle > 99){
+				while (angle > 0) {
+					defenderRobot.sendToRobot(angle % 10);
+					angle = angle / 10;
+				}
+			} else if (angle <= 99){
+				while (angle > 0) {
+					
+					defenderRobot.sendToRobot(angle % 10);
+					angle = angle / 10;
+				}
+				defenderRobot.sendToRobot(0);
+			}
+			
+		} else if (type == RobotType.ATTACKER) {
+			attackerRobot.sendToRobot(8);
+			
+			if (angle > 99){
+				while (angle > 0) {
+					attackerRobot.sendToRobot(angle % 10);
+					angle = angle / 10;
+				}
+			} else if (angle <= 99){
+				while (angle > 0) {
+					attackerRobot.sendToRobot(angle % 10);
+					angle = angle / 10;
+				}
+				attackerRobot.sendToRobot(0);
 			}
 		}
 	}

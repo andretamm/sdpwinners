@@ -40,6 +40,9 @@ public class NXT {
 					case 6:
 						robot.kick();
 						break;
+					case 8:
+						System.out.println("Moving Diagonally");
+						System.out.println("angle: " + robot.angle);
 					default:
 						robot.chill();
 				}
