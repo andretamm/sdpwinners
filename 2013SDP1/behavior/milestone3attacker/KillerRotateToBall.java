@@ -31,26 +31,18 @@ public class KillerRotateToBall extends GeneralBehavior {
 		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
 			rotateTo(orientation);
 		}
-		
-		try {
-			Thread.sleep(50);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/** 
-	 * Triggers if we are not facing the ball
+	 * Triggers if we are NOT facing the ball
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()
 	 */
 	@Override
 	public boolean takeControl() {
-//		System.out.println("do robot rotation?");
 		Point robot = ws.getRobotPoint(robot());
-		Point ball = new Point(ws.ballX, ws.ballY);
+		Point ball = ws.getBallPoint();
 		double orientation = Orientation.getAngle(robot, ball);
-//		System.out.println("RESULT: "+!StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
+
 		return (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR) &&
 				!ws.haveBall());
 	}

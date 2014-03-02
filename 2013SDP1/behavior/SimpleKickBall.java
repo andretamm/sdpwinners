@@ -11,11 +11,11 @@ public class SimpleKickBall extends GeneralBehavior {
 	public static final double ANGLE_ERROR = 0.3;
 	public static final double DISTANCE_ERROR = 0.1;
 	public static final double ANGLE270 = Math.PI * 3 / 2.0;
-	
+
 	public SimpleKickBall(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
-	
+
 	@Override
 	public void action() {
 		isActive = true;

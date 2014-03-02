@@ -61,7 +61,7 @@ public class Manager {
 	 * 
 	 * @return All behaviors in ascending order of priority 
 	 */
-	Behavior[] getAllBehaviors() {
+	public Behavior[] getAllBehaviors() {
 		// TODO - all the commented out code here should work once we
 		// start running this on the PC. leJOS doesn't seem to like
 		// converting ArrayLists to arrays, so doing this by hand

@@ -1,8 +1,5 @@
-package behavior;
+package behavior.friendlyattacker;
 
-import behavior.milestone3attacker.KillerCatchBall;
-import behavior.milestone3attacker.KillerRotateToBall;
-import behavior.milestone3attacker.KillerRotateToGoalAndScore;
 import lejos.robotics.subsumption.Behavior;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
@@ -16,15 +13,13 @@ public class KillerManager extends behavior.Manager {
 	
 	@Override
 	public Behavior[] getAllBehaviors() {
-		int numOfBehaviors = 3;
+		int numOfBehaviors = 2;
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 //		// Add behaviors in ascending order of priority
 		behaviorList[0] = new KillerRotateToGoalAndScore(getWorldState(), getRobotType(), getServer());
-		behaviorList[1] = new KillerCatchBall(getWorldState(), getRobotType(), getServer());
-		behaviorList[2] = new KillerRotateToBall(getWorldState(), getRobotType(), getServer());
+		behaviorList[1] = new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
 		
-
 //		behaviorList[1] = new SimpleFalse(getWs(), getR(), getS());
 //		behaviorList[0] = new SimpleTrue(getWs(), getR(), getS());
 		return behaviorList;

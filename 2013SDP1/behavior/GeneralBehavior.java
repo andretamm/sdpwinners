@@ -1,10 +1,13 @@
 package behavior;
 
+import java.awt.Point;
+
 import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import common.Robot;
 import constants.C;
 import constants.RobotType;
+import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
@@ -109,6 +112,47 @@ public abstract class GeneralBehavior implements Behavior {
 		} else {
 			System.out.println("Rotating CW");
 			s.send(type, RobotCommand.CW);
+		}
+	}
+	
+	/**
+	 * Takes the robot to the specified point. Rotates to the correct angle, then drives forward.
+	 * @param target Target point.
+	 * @return True if we have reached the target, False otherwise
+	 */
+	public boolean goTo(Point target) {
+		// Correct the angle
+		Point robot = ws.getRobotPoint(robot());
+		double orientation = Orientation.getAngle(robot, target);
+		
+		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
+			rotateTo(orientation);
+			return false;
+		}
+		
+		// Move forward until we get there
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+			s.send(type, RobotCommand.FORWARD);
+			return false;
+		}
+		
+		// We're there, so chill
+		s.send(type, RobotCommand.STOP);
+		return true;
+	}
+	
+	
+	/**
+	 * Goes to the ball.
+	 * @return True if we're at the ball, ready for grabbing. False if we're still getting there.
+	 */
+	public boolean goToBall() {
+		if (StrategyHelper.hasBall(robot(), ws)) {
+			s.send(type, RobotCommand.STOP);
+			return true;
+		} else {
+			goTo(ws.getBallPoint());
+			return false;
 		}
 	}
 }

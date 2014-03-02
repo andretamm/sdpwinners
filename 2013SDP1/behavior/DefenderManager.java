@@ -12,7 +12,7 @@ public class DefenderManager extends behavior.Manager {
 	}
 	
 	@Override
-	Behavior[] getAllBehaviors() {
+	public Behavior[] getAllBehaviors() {
 		int numOfBehaviors = 1;
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
