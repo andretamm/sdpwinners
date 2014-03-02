@@ -83,21 +83,73 @@ public abstract class GeneralBehavior implements Behavior {
 	/* ------------------------------------- */
 	
 	/**
-	 * Rotates the robot to the specified angle
+	 * Rotates the robot to the specified angle. Does nothing if already
+	 * facing the right direction
 	 * @param angle The angle (in rad) the robot will be facing by the end
 	 * @author Andre
 	 */
 	public void rotateTo(double angle) {
-		// Find the quickest angle to rotate towards our target
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
-		double turnAngle = StrategyHelper.angleDiff(orientation, angle);
 		
-		// Now rotate
-		if (turnAngle < 0) {
-			s.send(type, RobotCommand.CCW);
-		} else {
-			s.send(type, RobotCommand.CW);
+		// Check if we need to rotate at all
+		if (StrategyHelper.angleDiff(orientation, angle) > ANGLE_ERROR) {
+			// Find the quickest angle to rotate towards our target
+			double turnAngle = StrategyHelper.angleDiff(orientation, angle);
+			
+			// Now rotate
+			if (turnAngle < 0) {
+				s.send(type, RobotCommand.CCW);
+			} else {
+				s.send(type, RobotCommand.CW);
+			}
 		}
+	}
+	
+	/**
+	 * Takes the robot to the specified point. Rotates to the closest for driving
+	 * straight towards the point (either forward or backward). Then
+	 * drives forward/backward to reach the point. If you want to turn towards the target
+	 * and then move, use goTo() instead.
+	 * @param target Target point.
+	 * @return True if we have reached the target, False otherwise
+	 */
+	public boolean quickGoTo(Point target) {
+		Point robot = ws.getRobotPoint(robot());
+		double orientation = ws.getRobotOrientation(robot());
+		double targetAngle = Orientation.getAngle(robot, target);
+		double targetAngleComplement = StrategyHelper.angleComplement(targetAngle);
+		
+		int direction; 
+		
+		if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) 
+		    < Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement))) {
+			// Closer to go to targetAngle
+			direction = RobotCommand.FORWARD;
+			
+			if (StrategyHelper.angleDiff(orientation, targetAngle) > ANGLE_ERROR) {
+				// Still need to rotate
+				rotateTo(targetAngle);
+				return false;
+			}
+		} else {
+			// Closer to go to the complement and then move backward
+			direction = RobotCommand.BACK;
+			
+			if (StrategyHelper.angleDiff(orientation, targetAngleComplement) > ANGLE_ERROR) {
+				// Still need to rotate
+				rotateTo(targetAngleComplement);
+				return false;
+			}
+		}
+		
+		// Now move to target point
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR + 20) {
+			s.send(type, direction);
+			return false;
+		}
+		
+		// We're there!
+		return true;
 	}
 	
 	/**
