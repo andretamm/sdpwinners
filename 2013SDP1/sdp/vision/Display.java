@@ -183,7 +183,7 @@ public class Display {
 //		}
 		
 		// Predict a point on the line in front of our goal
-		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(ws.getOurGoalCentre().x - 60, ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)), ws.getOppositionAttackerPosition());
+		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(StrategyHelper.getDefendLineX(ws), ws.getOppositionAttackerPosition(), ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)));
 		if (defendPos != null) {
 			graphics.setColor(Color.ORANGE);
 			graphics.fillOval(defendPos.x - 3, defendPos.y - 3, 6, 6);

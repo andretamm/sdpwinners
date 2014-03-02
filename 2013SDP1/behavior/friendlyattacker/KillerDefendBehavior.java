@@ -4,7 +4,6 @@ package behavior.friendlyattacker;
 import java.awt.Point;
 
 import behavior.GeneralBehavior;
-import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
 import constants.Quadrant;

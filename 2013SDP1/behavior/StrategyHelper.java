@@ -5,6 +5,7 @@ import java.awt.geom.Point2D;
 
 import common.Robot;
 import constants.C;
+import constants.ShootingDirection;
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 
@@ -146,7 +147,7 @@ public class StrategyHelper {
 	 * @param vector E.g. a velocity vector
 	 * @return The (x,y) coordinates of the intersection point, or null if doesn't intersect
 	 */
-	public static Point getIntersectWithVerticalLine(int x, Point2D.Double vector, Point origin) {
+	public static Point getIntersectWithVerticalLine(int x, Point origin, Point2D.Double vector) {
 		Point intersect = null;
 		
 		//   o   ball
@@ -275,6 +276,16 @@ public class StrategyHelper {
 		}
 		
 		return turnAngle;
+	}
+	
+	/**
+	 * The vertical line where we want the defender robot to be for maximum coverage
+	 * @param ws Handle to WorldState
+	 * @return The x coordinate of the vertical line
+	 */
+	public static int getDefendLineX(WorldState ws) {
+		int ourGoalX = ws.getOurGoalCentre().x;
+		return ws.getDirection() == ShootingDirection.LEFT ? ourGoalX - 60 : ourGoalX + 60; 
 	}
 	
 	public static double getDistance(Point a, Point b){

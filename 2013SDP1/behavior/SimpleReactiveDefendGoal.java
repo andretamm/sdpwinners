@@ -46,7 +46,7 @@ public class SimpleReactiveDefendGoal extends GeneralBehavior {
 			}
 			
 			// The position where we will intercept the ball
-			Point target = StrategyHelper.getIntersectWithVerticalLine(ws.getOurGoalCentre().x - 60, ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)), ws.getOppositionAttackerPosition());
+			Point target = StrategyHelper.getIntersectWithVerticalLine(StrategyHelper.getDefendLineX(ws), ws.getOppositionAttackerPosition(), ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)));
 			int targetY = target.y;
 			int targetX = target.x;
 			
