@@ -300,11 +300,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public int getBallX() {
-		return ballX-getPitchTopLeft().x;
+		return ballX;
 	}
 
 	public int getBallY() {
-		return ballY-getPitchTopLeft().y;
+		return ballY;
 	}
 	
 	
@@ -351,18 +351,9 @@ public class WorldState implements VisionInterface {
 	public void setRobotY(Robot r, int y) {
 		robotPosition.get(r).y = y;
 	}
-	
-
-	int getBallXVision() {
-		return ballX;
-	}
 
 	public void setBallX(int ballX) {
 		this.ballX = ballX;
-	}
-
-	int getBallYVision() {
-		return ballY;
 	}
 
 	public void setBallY(int ballY) {
@@ -575,15 +566,11 @@ public class WorldState implements VisionInterface {
 		Point centre = getOppositionGoalCentre();
 		return new Point((int) centre.getX(), (int) (centre.getY()+goalHeight));
 	}
-
-	public Point getBallPoint() {
-		return getBallP();
-	}
 	
 	/**
 	 * Gets the Point with the ball x,y coordinates
 	 */
-	public Point getBallP() {
+	public Point getBallPoint() {
 		return new Point(ballX, ballY);
 	}
 	

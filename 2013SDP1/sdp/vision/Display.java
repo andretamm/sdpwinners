@@ -71,8 +71,8 @@ public class Display {
          * 0 and 480 are the boundaries of the field for the y value.
          */
         
-		graphics.drawLine(0, (int) ws.getBallYVision(), 640, (int) ws.getBallYVision());
-		graphics.drawLine((int) ws.getBallXVision(), 0, (int) ws.getBallXVision(), 480);
+		graphics.drawLine(0, (int) ws.getBallY(), 640, (int) ws.getBallY());
+		graphics.drawLine((int) ws.getBallX(), 0, (int) ws.getBallX(), 480);
 		
 		
 		/* Display markers for the quadrants */ 
@@ -122,7 +122,7 @@ public class Display {
 				graphics.drawLine((int) ws.getRobotX(r), (int) ws.getRobotY(r), x2, y2);
 		}
 		
-		graphics.drawOval((int) ws.getBallXVision() - WorldState.ballRadius, (int) ws.getBallYVision() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
+		graphics.drawOval((int) ws.getBallX() - WorldState.ballRadius, (int) ws.getBallY() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
 
 		// WHY CLAUDIU???? 
 		// This draws all the grey points for a given robot in either black (blue robots) or white (yellow robots) 
@@ -217,7 +217,7 @@ public class Display {
 					graphics.fillOval(goalIntersectPoint.x - 4, goalIntersectPoint.y - 4, 8, 8);
 				}
 			} else {
-				Point goalIntersectPoint = StrategyHelper.getIntersectWithOurGoal(ws.getBallVelocity(), ws.getBallP(), ws);
+				Point goalIntersectPoint = StrategyHelper.getIntersectWithOurGoal(ws.getBallVelocity(), ws.getBallPoint(), ws);
 				if (goalIntersectPoint != null) {
 					// Ball will intersect with goal if it keeps moving in this direction
 					graphics.setColor(Color.GREEN);

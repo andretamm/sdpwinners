@@ -317,7 +317,7 @@ public class ImageProcessor {
                 	//No points left after filtering
                 	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
                 		//System.out.println("Assumming ball is where it was 1");
-                		pitch.setBallPosition(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
+                		pitch.setBallPosition(new Point(worldState.getBallX(), worldState.getBallY()));
                 	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
                 		//System.out.println("Assumming ball is moving with us 1");
                 		//TODO Alter for Attacker Robot
@@ -332,7 +332,7 @@ public class ImageProcessor {
 			} catch (Exception e2) {
             	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
             		//System.out.println("Assumming ball is where it was 2");
-            		pitch.setBallPosition(new Point(worldState.getBallXVision(), worldState.getBallYVision()));
+            		pitch.setBallPosition(new Point(worldState.getBallX(), worldState.getBallY()));
             	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
             		//System.out.println("Assumming ball is moving with us 2: " + (int) (worldState.getOurXVision() + lineFromUs.getX()) + " " + (int) (worldState.getOurYVision() + lineFromUs.getY()));
             		pitch.setBallPosition(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
