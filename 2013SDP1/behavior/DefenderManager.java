@@ -1,5 +1,6 @@
 package behavior;
 
+import behavior.friendlydefender.SimpleReactiveDefendGoal;
 import lejos.robotics.subsumption.Behavior;
 import ourcommunication.Server;
 import sdp.vision.WorldState;

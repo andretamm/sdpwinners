@@ -196,7 +196,7 @@ public class StrategyHelper {
 	 * @return The (x,y) coordinates of the intersection point, 
 	 * 		   null if doesn't intersect with either of the walls
 	 */
-	public static Point intersectsWithWalls(Point2D.Double vector, Point origin, WorldState worldstate) {
+	public static Point getIntersectsWithWalls(Point2D.Double vector, Point origin, WorldState worldstate) {
 		int topWall = worldstate.getPitchTopLeft().y;
 		int bottomWall = worldstate.getPitchBottomLeft().y;
 		

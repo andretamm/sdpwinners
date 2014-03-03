@@ -194,7 +194,7 @@ public class Display {
 		if (StrategyHelper.magnitude(ws.getBallVelocity()) > 0.01) {
 			// Draw the position on the wall where the ball will hit it if it keeps
 			// moving in the same direction
-			Point wallHitPosition = StrategyHelper.intersectsWithWalls(ws.getBallVelocity(), new Point(ws.ballX, ws.ballY), ws);
+			Point wallHitPosition = StrategyHelper.getIntersectsWithWalls(ws.getBallVelocity(), new Point(ws.ballX, ws.ballY), ws);
 			
 			if (wallHitPosition != null) {
 				graphics.setColor(Color.GREEN);

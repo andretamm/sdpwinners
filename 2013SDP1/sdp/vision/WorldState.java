@@ -913,4 +913,19 @@ public class WorldState implements VisionInterface {
 		}
 	}
 	
+	
+	/**
+	 * Checks if a point is in the pitch
+	 * @param p Point to check
+	 * @return True for in the pitch, False for out of the pitch
+	 */
+	public boolean inPitch(Point p) {
+		if (p.y < getPitchBottomRight().y && p.y > getPitchTopLeft().y &&
+				p.x < getPitchTopRight().x && p.x > getPitchTopLeft().x) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 }
