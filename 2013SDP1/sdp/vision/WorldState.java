@@ -17,6 +17,7 @@ public class WorldState implements VisionInterface {
 	public Point andresPoint = new Point(0,0);
 	
 	public static final int HISTORY_LENGTH = 5;
+	public static final int ORIENTATION_HISTORY_LENGTH = 2;
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour ourColour;
@@ -87,6 +88,7 @@ public class WorldState implements VisionInterface {
 	private RobotMap<Point2D.Double> robotVelocity;
 	// MILA add here
 	// RobotMap<Double[]> ....
+	private RobotMap<Double[]> robotOrientationHistory;
 	
 
 	private boolean removeShadows = false;
@@ -222,6 +224,7 @@ public class WorldState implements VisionInterface {
 		this.robotHistory = new RobotMap<Point[]>();
 		this.robotVelocity = new RobotMap<Point2D.Double>();
 		this.robotTimestamps = new RobotMap<long[]>();	
+		this.robotOrientationHistory = new RobotMap<Double[]>();
 		// MILA add here
 		// new robotmap
 		
@@ -236,6 +239,8 @@ public class WorldState implements VisionInterface {
 			// TODO MAKE SURE THESE ARE RIGHT AND MAKE SENSE
 			Point[] history = new Point[HISTORY_LENGTH];
 			long[] timestamps = new long[HISTORY_LENGTH];
+			Double[] orientationHistory = new Double[ORIENTATION_HISTORY_LENGTH];
+				
 			// MILA
 			
 			for (int i = 0; (i < HISTORY_LENGTH); i++) {
@@ -244,8 +249,14 @@ public class WorldState implements VisionInterface {
 				// MILA
 			}
 			
+			for (int i = 0; (i < ORIENTATION_HISTORY_LENGTH); i++) {
+				orientationHistory[i] = 0.0;
+				// MILA
+			}
+			
 			robotHistory.put(r, history);
 			robotTimestamps.put(r, timestamps);
+			robotOrientationHistory.put(r, orientationHistory);
 			// MILA
 		}
 		
@@ -823,6 +834,14 @@ public class WorldState implements VisionInterface {
 	
 	public void setRobotHistory(Robot r, Point[] history) {
 		robotHistory.put(r, history);
+	}
+	
+	public Double[] getRobotOrientationHistory(Robot r) {
+		return robotOrientationHistory.get(r);
+	}
+	
+	public void setRobotOrientationHistory(Robot r, Double[] orientationHistory) {
+		robotOrientationHistory.put(r, orientationHistory);
 	}
 	
 	

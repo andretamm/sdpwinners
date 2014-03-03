@@ -87,8 +87,9 @@ public class Orientation {
 //        	System.out.println(x0 + " " + y0 + " | " + greyCentreX + " " + greyCentreY);
 //        }
         
-        // double orientation = getAngle(greyCentre, plateCentre);
+        double orientation = getAngle(greyCentre, plateCentre);
         // robotOrientationHistory.get(r) -> from worldstate
+        Double[] robotOrientationHistory = worldState.getRobotOrientationHistory(new Robot(rColour, rType));
         // double averagedOrientation = mean of (orientation, history[0-5]) (try 2-3??)
         // Update the history with our new angle that is NORMAL orientation, not the averaged one
         // return averaged...
