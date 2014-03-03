@@ -190,8 +190,7 @@ public class Display {
 		}
 		
 		// Only check ball prediction positions if the ball is moving with at least some minimum speed
-		// This threshhold has been experimentally set to 0.01 :P
-		if (StrategyHelper.magnitude(ws.getBallVelocity()) > 0.01) {
+		if (ws.ballIsMoving()) {
 			// Draw the position on the wall where the ball will hit it if it keeps
 			// moving in the same direction
 			Point wallHitPosition = StrategyHelper.getIntersectsWithWalls(ws.getBallVelocity(), new Point(ws.ballX, ws.ballY), ws);

@@ -3,6 +3,7 @@ package sdp.vision;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+import behavior.StrategyHelper;
 import common.Robot;
 import common.RobotMap;
 import constants.Quadrant;
@@ -913,19 +914,40 @@ public class WorldState implements VisionInterface {
 		}
 	}
 	
-	
 	/**
-	 * Checks if a point is in the pitch
+	 * Checks if a point is on the pitch
 	 * @param p Point to check
-	 * @return True for in the pitch, False for out of the pitch
+	 * @return True for on the pitch, False for out of the pitch
 	 */
-	public boolean inPitch(Point p) {
+	public boolean onPitch(Point p) {
 		if (p.y < getPitchBottomRight().y && p.y > getPitchTopLeft().y &&
 				p.x < getPitchTopRight().x && p.x > getPitchTopLeft().x) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Checks if the ball is moving (at a 'reasonable' speed). Note that
+	 * this can return False if the ball is moving, but rather slowly. If you
+	 * want to have more exact control over what to define as 'moving', then
+	 * use ballIsMoving(double threshold)
+	 * @return True if the ball is moving at a reasonable speed, False if still or moving slowly
+	 */
+	public boolean ballIsMoving() {
+		return ballIsMoving(0.02);
+	}
+	
+	/**
+	 * Checks if the ball's velocity vector has magnitude less than the given
+	 * threshold.
+	 * @see ballIsMoving()
+	 * @param threshold
+	 * @return True if the ball is moving more than the threshold, False otherwise
+	 */
+	public boolean ballIsMoving(double threshold) {
+		return StrategyHelper.magnitude(getBallVelocity()) > threshold && onPitch(getBallPoint());
 	}
 	
 }

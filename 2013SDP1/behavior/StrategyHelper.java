@@ -292,7 +292,13 @@ public class StrategyHelper {
 		return Math.sqrt(Math.pow(Math.abs(a.x - b.x),2) + Math.pow(Math.abs(a.y - b.y),2));
 	}
 	
-	public static boolean hasBall(Robot r, WorldState ws){
+	/**
+	 * Checks if the given robot has a ball
+	 * @param r Robot to check
+	 * @param ws Handle to WorldState
+	 * @return True if the robot has the ball, False otherwise
+	 */
+	public static boolean hasBall(Robot r, WorldState ws) {
 		//Verify difference between Orientation Angle & Robot-to-Ball angle
 		double orientationAngle = ws.getRobotOrientation(r.type, r.colour);
 		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallPoint());
@@ -311,5 +317,22 @@ public class StrategyHelper {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Find out which robot has the ball
+	 * @param ws Handle to WorldState
+	 * @return Robot that has the ball or null if nobody has the ball
+	 */
+	public static Robot getRobotWithBall(WorldState ws) {
+		for (Robot r: Robot.listAll()) {
+			if (hasBall(r, ws)) {
+				// This robot has the ball :o
+				return r;
+			}
+		}
+		
+		// Nobody has the ball :p
+		return null;
 	}
 }

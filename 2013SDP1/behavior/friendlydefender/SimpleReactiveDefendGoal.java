@@ -63,7 +63,7 @@ public class SimpleReactiveDefendGoal extends GeneralBehavior {
 			// Check if it intersects with our defending line
 			Point target = StrategyHelper.getIntersectWithVerticalLine(defendX, ballOrigin, ballVector);
 			
-			if (target == null || !ws.inPitch(target)) {
+			if (target == null || !ws.onPitch(target)) {
 				// Doesn't intersect with the defending line
 				// Check if intersects after a wall bounce
 				ballOrigin = StrategyHelper.getIntersectsWithWalls(ballVector, ballOrigin, ws);
