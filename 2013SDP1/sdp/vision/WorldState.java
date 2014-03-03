@@ -836,13 +836,25 @@ public class WorldState implements VisionInterface {
 		robotHistory.put(r, history);
 	}
 	
+	public Double[] getRobotOrientationHistory(RobotColour colour, RobotType type) {
+		return getRobotOrientationHistory(new Robot(colour, type));
+	}
+	
 	public Double[] getRobotOrientationHistory(Robot r) {
 		return robotOrientationHistory.get(r);
 	}
 	
-	public void setRobotOrientationHistory(Robot r, Double[] orientationHistory) {
-		robotOrientationHistory.put(r, orientationHistory);
+	public void setRobotOrientationHistory(Robot r, Double[] history) {
+		robotOrientationHistory.put(r, history);
 	}
+	
+//	public Double[] getRobotOrientationHistory(Robot r) {
+//		return robotOrientationHistory.get(r);
+//	}
+//	
+//	public void setRobotOrientationHistory(Robot r, Double[] orientationHistory) {
+//		robotOrientationHistory.put(r, orientationHistory);
+//	}
 	
 	
 	public double getAimingAngle() {
