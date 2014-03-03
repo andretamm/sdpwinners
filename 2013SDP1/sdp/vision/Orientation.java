@@ -88,12 +88,25 @@ public class Orientation {
 //        }
         
         double orientation = getAngle(greyCentre, plateCentre);
-        // robotOrientationHistory.get(r) -> from worldstate
-        Double[] robotOrientationHistory = worldState.getRobotOrientationHistory(new Robot(rColour, rType));
+        java.lang.Double[] robotOrientationHistory = worldState.getRobotOrientationHistory(rColour, rType);
+        
+        for (int i=0; i<robotOrientationHistory.length-1; i++) {
+        	robotOrientationHistory[i] = robotOrientationHistory[i+1];
+        }
+        robotOrientationHistory[robotOrientationHistory.length-1] = orientation;
+        worldState.setRobotOrientationHistory(new Robot(rColour, rType), robotOrientationHistory);
+        
+        double averagedOrientation = 0;
+        
+        for (double o : robotOrientationHistory) {
+        	averagedOrientation = averagedOrientation + o;
+        }
+        
+        averagedOrientation = averagedOrientation / (robotOrientationHistory.length);
         // double averagedOrientation = mean of (orientation, history[0-5]) (try 2-3??)
         // Update the history with our new angle that is NORMAL orientation, not the averaged one
         // return averaged...
-        return getAngle(greyCentre, plateCentre);
+        return averagedOrientation;
 	}
 	
 	
