@@ -13,7 +13,7 @@ import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
 	public static final double ANGLE_ERROR = 0.15; //15
-	public static final double DISTANCE_ERROR = 2;
+	public static final double DISTANCE_ERROR = 20;
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
@@ -102,6 +102,8 @@ public abstract class GeneralBehavior implements Behavior {
 			} else {
 				s.send(type, RobotCommand.CW);
 			}
+			
+			isRotating = true;
 		}
 	}
 	
@@ -142,11 +144,16 @@ public abstract class GeneralBehavior implements Behavior {
 			}
 		}
 		
+		stopMovement();
+		
 		// Now move to target point
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR + 20) {
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
 			s.send(type, direction);
+			isMoving = true;
 			return false;
 		}
+		
+		stopMovement();
 		
 		// We're there!
 		return true;
@@ -167,19 +174,34 @@ public abstract class GeneralBehavior implements Behavior {
 			return false;
 		}
 		
+		stopMovement();
+		
 		// Move forward until we get there
-		// TODO figure out what 20 should be
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR + 20) {
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
 			s.send(type, RobotCommand.FORWARD);
+			isMoving = true;
 			return false;
 		}
 		
-		// We're there, so chill
-		s.send(type, RobotCommand.STOP);
+		stopMovement();
+		
+		// We're there!
 		return true;
 	}
 	
 	
+	/**
+	 * Stops moving if we're rotating or moving. Call this after every
+	 * change from rotation to movement or vice versa!!!
+	 */
+	private void stopMovement() {
+		if (isMoving || isRotating) {
+			s.send(type, RobotCommand.STOP);
+			isMoving = false;
+			isRotating = false;
+		}
+	}
+
 	/**
 	 * Goes to the ball.
 	 * @return True if we're at the ball, ready for grabbing. False if we're still getting there.
