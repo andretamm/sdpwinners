@@ -22,6 +22,7 @@ public class ThresholdsState implements Serializable {
 	// colour and False otherwise
 	EnumMap<Colours, Boolean> debug;
 	
+	private int pitchNum;
 	/**
 	 * 
 	 */
@@ -69,5 +70,15 @@ public class ThresholdsState implements Serializable {
 	public void setDebug(Colours c, boolean value) {
 		debug.put(c, value);
 	}
+
+	public void setPitchNum(int pitchNum) {
+		this.pitchNum = pitchNum;
+	}
+
+	public int getPitchNum() {
+		return pitchNum;
+	}
+	
+	
 	
 }

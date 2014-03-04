@@ -1,15 +1,15 @@
 package sdp.vision.ui;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,7 +28,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import sdp.vision.ObjectThresholdState;
-import sdp.vision.PitchConstants;
 import sdp.vision.QuadrantThresholdsState;
 import sdp.vision.ThresholdsState;
 import sdp.vision.Vision;
@@ -48,11 +47,6 @@ import constants.ShootingDirection;
 public class VisionGUI implements ChangeListener {
 
 	/*
-	 * A PitchConstants class used to load/save constants for the pitch.
-	 */
-	private PitchConstants pitchConstants;
-
-	/*
 	 * The thresholds state class stores the current state of the thresholds.
 	 */
 	private ThresholdsState thresholdsState;
@@ -67,11 +61,14 @@ public class VisionGUI implements ChangeListener {
 	 * The current quadrant thresholding values we're changing
 	 */
 	private Quadrant q;
-	
-	/* 
-	 * Mouse click for calibrating thresholds
+
+	// In calibration mode
+	private boolean calibrationMode = false;
+
+	/*
+	 * The vision!
 	 */
-	private MouseClick mouseClick;
+	private Vision vision;
 
 	/* The main frame holding the Control GUI. */
 	private JFrame frame;
@@ -160,9 +157,10 @@ public class VisionGUI implements ChangeListener {
 	private RangeSlider q2;
 	private RangeSlider q3;
 	private RangeSlider q4;
-	
+
 	/* Calibrate button */
 	private JButton calibrate;
+	private Point pixelClicked;
 
 	/**
 	 * Default constructor.
@@ -177,17 +175,15 @@ public class VisionGUI implements ChangeListener {
 	 *            A PitchConstants object to allow saving/loading of data.
 	 */
 	public VisionGUI(ThresholdsState thresholdsState, WorldState worldState,
-			PitchConstants pitchConstants, Vision vision) {
+			Vision vision) {
 
 		/* All three state objects must not be null. */
 		assert (thresholdsState != null);
 		assert (worldState != null);
-		assert (pitchConstants != null);
 
 		this.thresholdsState = thresholdsState;
 		this.worldState = worldState;
-		this.pitchConstants = pitchConstants;
-		this.mouseClick = mouseClick;
+		this.vision = vision;
 	}
 
 	/**
@@ -198,6 +194,101 @@ public class VisionGUI implements ChangeListener {
 
 		frame = new JFrame("Control GUI");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		vision.getWindowFrame().getComponent(0).addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (calibrationMode) {
+					pixelClicked = arg0.getPoint();
+//					System.out.println(pixelClicked);
+					calibrationMode = false;
+					
+					System.out.println("Pixel Clicked:" + pixelClicked.x + " " + pixelClicked.y);
+					
+					BufferedImage screenCapture = vision.getFrameImage();
+					int colour = screenCapture.getRGB(pixelClicked.x, pixelClicked.y);
+
+					int  red = (colour & 0x00ff0000) >> 16;
+					int  green = (colour & 0x0000ff00) >> 8;
+					int  blue = colour & 0x000000ff;
+					
+					System.out.println("R: " + red + " G: " + green + " B: " + blue);
+					
+					int index = tabPane.getSelectedIndex();
+					
+					Colours c = null;
+					switch (index) {
+					case (1):
+						c = Colours.RED;
+					break;
+					case (2):
+						c = Colours.BLUE;
+					break;
+					case (3):
+						c = Colours.YELLOW;
+					break;
+					case (4):
+						c = Colours.GRAY;
+					break;
+					case (5):
+						c = Colours.GREEN;
+					break;
+					}
+					ObjectThresholdState ots = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(c);
+					ots.set_r_low(red-10);
+					ots.set_r_high(red+10);
+					ots.set_g_low(green-10);
+					ots.set_g_high(green+10);
+					ots.set_b_low(blue-10);
+					ots.set_b_high(blue+10);
+					
+					float[] hsv = new float[3];
+					Color.RGBtoHSB(red, green, blue, hsv);
+					ots.set_h_low(hsv[0]);
+					ots.set_h_high(hsv[0]);
+					ots.set_s_low(hsv[1]);
+					ots.set_s_high(hsv[1]);
+					ots.set_v_low(hsv[2]);
+					ots.set_v_high(hsv[2]);
+					
+					ots.set_rb_low(red-blue - 20);
+					ots.set_rb_high(red-blue + 20);
+					ots.set_gb_low(green-blue-20);
+					ots.set_gb_high( green-blue+20);
+					ots.set_rg_low(red-green-20);
+					ots.set_rg_high(red-green+20);
+					
+					reloadSliderDefaults();
+					
+//					Graphics g = screenCapture.getGraphics();
+//					g.setColor(Color.BLUE);
+//					
+//					g.fillOval(pixelClicked.x, pixelClicked.y, 1, 1);
+//					JFrame frame = new JFrame();
+//					frame.getContentPane().setLayout(new FlowLayout());
+//					frame.getContentPane().add(new JLabel(new ImageIcon(screenCapture)));
+//					frame.pack();
+//					frame.setVisible(true);
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+		});
 
 		frame.setLayout(new FlowLayout());
 
@@ -249,10 +340,12 @@ public class VisionGUI implements ChangeListener {
 		quadrant2.addMouseListener(quadrantRadioButtonClickListener);
 		quadrant3.addMouseListener(quadrantRadioButtonClickListener);
 		quadrant4.addMouseListener(quadrantRadioButtonClickListener);
-		
-		calibrate = new JButton("Calibrate now!");
-		bluePanel.add(calibrate);
-				
+
+		calibrate = new JButton("Calibrate!");
+		frame.add(calibrate);
+
+		MouseListener calibrateButtonClickListener = new CalibrateButtonClickListener();
+		calibrate.addMouseListener(calibrateButtonClickListener);
 
 		/* The main (default) tab */
 		setUpMainPanel();
@@ -285,42 +378,41 @@ public class VisionGUI implements ChangeListener {
 		 * Fires off an initial pass through the ChangeListener method, to
 		 * initialise all of the default values.
 		 */
-//		pitchConstants.loadConstants("./constants/pitch" + worldState.getPitch());
+		// pitchConstants.loadConstants("./constants/pitch" +
+		// worldState.getPitch());
 		this.stateChanged(null);
-		
-		// Andre's hack - need to do this to make the lines and overlays appear on screen
+
+		// Andre's hack - need to do this to make the lines and overlays appear
+		// on screen
 		pitch_1.doClick();
 		pitch_0.doClick();
+
 	}
-	
-	//TODO
-//	/**
-//	 * Listener for the calibrate button
-//	 */
-//	class calibrateButtonClickListener implements MouseListener {
-//
-//		@Override
-//		public void mouseClicked(MouseEvent e) {
-//			Point a = e.getPoint();
-//			System.out.println(a);
-//		}
-//			
-//		@Override
-//		public void mouseEntered(MouseEvent e) {}
-//
-//		@Override
-//		public void mouseExited(MouseEvent e) {}
-//
-//		@Override
-//		public void mousePressed(MouseEvent e) {}
-//		
-//		// After we have clicked on a Quadrant button, update state
-//		@Override
-//		public void mouseReleased(MouseEvent e) {
-//			
-//			
-//		}
-//	}
+
+	class CalibrateButtonClickListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			calibrationMode = true;
+		}
+
+	}
 
 	/**
 	 * Listener for the radio buttons for switching quadrants
@@ -328,17 +420,21 @@ public class VisionGUI implements ChangeListener {
 	class QuadrantRadioButtonClickListener implements MouseListener {
 
 		@Override
-		public void mouseClicked(MouseEvent e) {}
+		public void mouseClicked(MouseEvent e) {
+		}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+		}
 
 		@Override
-		public void mouseExited(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {
+		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {}
-		
+		public void mousePressed(MouseEvent e) {
+		}
+
 		// After we have clicked on a Quadrant button, update state
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -368,7 +464,7 @@ public class VisionGUI implements ChangeListener {
 			int pitchNum = (pitch_0.isSelected()) ? 0 : 1;
 			if (worldState.getPitch() != pitchNum) {
 				worldState.setPitch(pitchNum);
-				pitchConstants.setPitchNum(pitchNum);
+				thresholdsState.setPitchNum(pitchNum);
 				reloadSliderDefaults();
 			}
 		}
@@ -443,9 +539,9 @@ public class VisionGUI implements ChangeListener {
 						|| result == JOptionPane.CANCEL_OPTION)
 					return;
 
-				try {
-					FileWriter writer = new FileWriter(new File(
-							"constants/pitch" + pitchNum));
+//				try {
+//					FileWriter writer = new FileWriter(new File(
+//							"constants/pitch" + pitchNum));
 
 					/*
 					 * We need to rewrite the pitch dimensions. TODO: This
@@ -453,31 +549,31 @@ public class VisionGUI implements ChangeListener {
 					 * unsupported as they will overwrite the pitch dimensions
 					 * incorrectly.
 					 */
-					writer.write(String.valueOf(pitchConstants.topBuffer)
-							+ "\n");
-					writer.write(String.valueOf(pitchConstants.bottomBuffer)
-							+ "\n");
-					writer.write(String.valueOf(pitchConstants.leftBuffer)
-							+ "\n");
-					writer.write(String.valueOf(pitchConstants.rightBuffer)
-							+ "\n");
+//					writer.write(String.valueOf(pitchConstants.topBuffer)
+//							+ "\n");
+//					writer.write(String.valueOf(pitchConstants.bottomBuffer)
+//							+ "\n");
+//					writer.write(String.valueOf(pitchConstants.leftBuffer)
+//							+ "\n");
+//					writer.write(String.valueOf(pitchConstants.rightBuffer)
+//							+ "\n");
 
 					/* Write pitch quadrant X values to constants */
-					writer.write(String.valueOf(q1.getValue()) + "\n");
-					writer.write(String.valueOf(q1.getUpperValue()) + "\n");
-					writer.write(String.valueOf(q2.getValue()) + "\n");
-					writer.write(String.valueOf(q2.getUpperValue()) + "\n");
-					writer.write(String.valueOf(q3.getValue()) + "\n");
-					writer.write(String.valueOf(q3.getUpperValue()) + "\n");
-					writer.write(String.valueOf(q4.getValue()) + "\n");
-					writer.write(String.valueOf(q4.getUpperValue()) + "\n");
+//					writer.write(String.valueOf(q1.getValue()) + "\n");
+//					writer.write(String.valueOf(q1.getUpperValue()) + "\n");
+//					writer.write(String.valueOf(q2.getValue()) + "\n");
+//					writer.write(String.valueOf(q2.getUpperValue()) + "\n");
+//					writer.write(String.valueOf(q3.getValue()) + "\n");
+//					writer.write(String.valueOf(q3.getUpperValue()) + "\n");
+//					writer.write(String.valueOf(q4.getValue()) + "\n");
+//					writer.write(String.valueOf(q4.getUpperValue()) + "\n");
 
-					writer.flush();
-					writer.close();
-
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+//					writer.flush();
+//					writer.close();
+//
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
 
 				try {
 					FileOutputStream fileOut = new FileOutputStream(
@@ -596,7 +692,6 @@ public class VisionGUI implements ChangeListener {
 		//
 		quadrant1.setSelected(true);
 		q = Quadrant.Q1;
-		
 
 		/* Pitch choice */
 		JPanel pitch_panel = new JPanel();
@@ -705,10 +800,14 @@ public class VisionGUI implements ChangeListener {
 		/* Red - Green. */
 		JPanel ball_rg_panel = new JPanel();
 		JLabel ball_rg_label = new JLabel("Red - Green:");
-		ball_rg = setUpSlider(-255, 255, thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.RED).get_rg_low(), thresholdsState
-				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_rg_high(), 20, 100);
+		ball_rg = setUpSlider(
+				-255,
+				255,
+				thresholdsState.getQuadrantThresholds(q)
+						.getObjectThresholds(Colours.RED).get_rg_low(),
+				thresholdsState.getQuadrantThresholds(q)
+						.getObjectThresholds(Colours.RED).get_rg_high(), 20,
+				100);
 		ball_rg_panel.add(ball_rg_label);
 		ball_rg_panel.add(ball_rg);
 		ballPanel.add(ball_rg_panel);
@@ -716,10 +815,14 @@ public class VisionGUI implements ChangeListener {
 		/* Red - Blue. */
 		JPanel ball_rb_panel = new JPanel();
 		JLabel ball_rb_label = new JLabel("Red - Blue");
-		ball_rb = setUpSlider(-255, 255, thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.RED).get_rb_low(), thresholdsState
-				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_rb_high(), 20, 100);
+		ball_rb = setUpSlider(
+				-255,
+				255,
+				thresholdsState.getQuadrantThresholds(q)
+						.getObjectThresholds(Colours.RED).get_rb_low(),
+				thresholdsState.getQuadrantThresholds(q)
+						.getObjectThresholds(Colours.RED).get_rb_high(), 20,
+				100);
 		ball_rb_panel.add(ball_rb_label);
 		ball_rb_panel.add(ball_rb);
 		ballPanel.add(ball_rb_panel);
@@ -727,10 +830,14 @@ public class VisionGUI implements ChangeListener {
 		/* Green - Blue */
 		JPanel ball_gb_panel = new JPanel();
 		JLabel ball_gb_label = new JLabel("Green - Blue");
-		ball_gb = setUpSlider(-255, 255, thresholdsState.getQuadrantThresholds(q)
-				.getObjectThresholds(Colours.RED).get_gb_low(), thresholdsState
-				.getQuadrantThresholds(q).getObjectThresholds(Colours.RED)
-				.get_gb_high(), 20, 100);
+		ball_gb = setUpSlider(
+				-255,
+				255,
+				thresholdsState.getQuadrantThresholds(q)
+						.getObjectThresholds(Colours.RED).get_gb_low(),
+				thresholdsState.getQuadrantThresholds(q)
+						.getObjectThresholds(Colours.RED).get_gb_high(), 20,
+				100);
 		ball_gb_panel.add(ball_gb_label);
 		ball_gb_panel.add(ball_gb);
 		ballPanel.add(ball_gb_panel);
@@ -747,12 +854,12 @@ public class VisionGUI implements ChangeListener {
 		ball_gb.addChangeListener(this);
 
 	}
-	
+
 	/**
 	 * Sets up the sliders for the thresholding of the blue robot.
 	 */
 	private void setUpBlueSliders() {
-		
+
 		/* Red. */
 		JPanel blue_r_panel = new JPanel();
 		JLabel blue_r_label = new JLabel("Red:");
@@ -852,7 +959,8 @@ public class VisionGUI implements ChangeListener {
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.BLUE).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.BLUE).get_rg_high(), 20, 100);
+						.getObjectThresholds(Colours.BLUE).get_rg_high(), 20,
+				100);
 		blue_rg_panel.add(blue_rg_label);
 		blue_rg_panel.add(blue_rg);
 		bluePanel.add(blue_rg_panel);
@@ -866,7 +974,8 @@ public class VisionGUI implements ChangeListener {
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.BLUE).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.BLUE).get_rg_high(), 20, 100);
+						.getObjectThresholds(Colours.BLUE).get_rg_high(), 20,
+				100);
 		blue_rb_panel.add(blue_rb_label);
 		blue_rb_panel.add(blue_rb);
 		bluePanel.add(blue_rb_panel);
@@ -880,7 +989,8 @@ public class VisionGUI implements ChangeListener {
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.BLUE).get_gb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.BLUE).get_gb_high(), 20, 100);
+						.getObjectThresholds(Colours.BLUE).get_gb_high(), 20,
+				100);
 		blue_gb_panel.add(blue_gb_label);
 		blue_gb_panel.add(blue_gb);
 		bluePanel.add(blue_gb_panel);
@@ -1140,7 +1250,8 @@ public class VisionGUI implements ChangeListener {
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GRAY).get_rg_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GRAY).get_rg_high(), 20, 100);
+						.getObjectThresholds(Colours.GRAY).get_rg_high(), 20,
+				100);
 		grey_rg_panel.add(grey_rg_label);
 		grey_rg_panel.add(grey_rg);
 		greyPanel.add(grey_rg_panel);
@@ -1154,7 +1265,8 @@ public class VisionGUI implements ChangeListener {
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GRAY).get_rb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GRAY).get_rb_high(), 20, 100);
+						.getObjectThresholds(Colours.GRAY).get_rb_high(), 20,
+				100);
 		grey_rb_panel.add(grey_rb_label);
 		grey_rb_panel.add(grey_rb);
 		greyPanel.add(grey_rb_panel);
@@ -1168,7 +1280,8 @@ public class VisionGUI implements ChangeListener {
 				thresholdsState.getQuadrantThresholds(q)
 						.getObjectThresholds(Colours.GRAY).get_gb_low(),
 				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GRAY).get_gb_high(), 20, 100);
+						.getObjectThresholds(Colours.GRAY).get_gb_high(), 20,
+				100);
 		grey_gb_panel.add(grey_gb_label);
 		grey_gb_panel.add(grey_gb);
 		greyPanel.add(grey_gb_panel);
@@ -1288,13 +1401,10 @@ public class VisionGUI implements ChangeListener {
 		/* Red Green. */
 		JPanel green_rg_panel = new JPanel();
 		JLabel green_rg_label = new JLabel("Red - Green:");
-		green_rg = setUpSlider(
-				-255,
-				255,
-				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_rg_low(),
-				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_rg_high(), 20, 100);
+		green_rg = setUpSlider(-255, 255, thresholdsState
+				.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN)
+				.get_rg_low(), thresholdsState.getQuadrantThresholds(q)
+				.getObjectThresholds(Colours.GREEN).get_rg_high(), 20, 100);
 		green_rg_panel.add(green_rg_label);
 		green_rg_panel.add(green_rg);
 		greenPanel.add(green_rg_panel);
@@ -1302,13 +1412,10 @@ public class VisionGUI implements ChangeListener {
 		/* Red Blue. */
 		JPanel green_rb_panel = new JPanel();
 		JLabel green_rb_label = new JLabel("Red - Blue");
-		green_rb = setUpSlider(
-				-255,
-				255,
-				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_rb_low(),
-				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_rb_high(), 20, 100);
+		green_rb = setUpSlider(-255, 255, thresholdsState
+				.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN)
+				.get_rb_low(), thresholdsState.getQuadrantThresholds(q)
+				.getObjectThresholds(Colours.GREEN).get_rb_high(), 20, 100);
 		green_rb_panel.add(green_rb_label);
 		green_rb_panel.add(green_rb);
 		greenPanel.add(green_rb_panel);
@@ -1316,13 +1423,10 @@ public class VisionGUI implements ChangeListener {
 		/* Green Blue */
 		JPanel green_gb_panel = new JPanel();
 		JLabel green_gb_label = new JLabel("Green - Blue");
-		green_gb = setUpSlider(
-				-255,
-				255,
-				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_gb_low(),
-				thresholdsState.getQuadrantThresholds(q)
-						.getObjectThresholds(Colours.GREEN).get_gb_high(), 20, 100);
+		green_gb = setUpSlider(-255, 255, thresholdsState
+				.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN)
+				.get_gb_low(), thresholdsState.getQuadrantThresholds(q)
+				.getObjectThresholds(Colours.GREEN).get_gb_high(), 20, 100);
 		green_gb_panel.add(green_gb_label);
 		green_gb_panel.add(green_gb);
 		greenPanel.add(green_gb_panel);
@@ -1341,73 +1445,88 @@ public class VisionGUI implements ChangeListener {
 
 	public void setUpQuadrantSliders() {
 		/* Quadrant1 */
+		QuadrantThresholdsState quadrant1 = thresholdsState.getQuadrantThresholds(Quadrant.Q1);
 		JPanel q1_panel = new JPanel();
 		JLabel q1_label = new JLabel("q1:");
-		q1 = setUpSlider(0, 640, pitchConstants.q1_low, pitchConstants.q1_high,
+		q1 = setUpSlider(0, 640, quadrant1.getLowX(), quadrant1.getHighX(),
 				20, 100);
 		q1_panel.add(q1_label);
 		q1_panel.add(q1);
 		quadrantPanel.add(q1_panel);
-		q1.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				worldState.setQ1LowX(q1.getValue());
-				worldState.setQ1HighX(q1.getUpperValue());
-			}
-		});
+		q1.addChangeListener(this);
+		
+//		q1.addChangeListener(new ChangeListener() {
+//			@Override
+//			public void stateChanged(ChangeEvent arg0) {
+//				worldState.setQ1LowX(q1.getValue());
+//				quadrant1.setLowX(q1.getValue());
+//				worldState.setQ1HighX(q1.getUpperValue());
+//				quadrant1.setHighX(q1.getUpperValue());
+//			}
+//		});
 
 		/* Quadrant2 */
+		QuadrantThresholdsState quadrant2 = thresholdsState.getQuadrantThresholds(Quadrant.Q2);
 		JPanel q2_panel = new JPanel();
 		JLabel q2_label = new JLabel("q2:");
-		q2 = setUpSlider(0, 640, pitchConstants.q2_low, pitchConstants.q2_high,
+		q2 = setUpSlider(0, 640, quadrant2.getLowX(), quadrant2.getHighX(),
 				20, 100);
 		q2_panel.add(q2_label);
 		q2_panel.add(q2);
 		quadrantPanel.add(q2_panel);
-		q2.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				worldState.setQ2LowX(q2.getValue());
-				worldState.setQ2HighX(q2.getUpperValue());
-			}
-		});
+		q2.addChangeListener(this);
+//		q2.addChangeListener(new ChangeListener() {
+//
+//			@Override
+//			public void stateChanged(ChangeEvent arg0) {
+//				worldState.setQ2LowX(q2.getValue());
+//				quadrant2.setLowX(q2.getValue());
+//				worldState.setQ2HighX(q2.getUpperValue());
+//				quadrant2.setHighX(q2.getUpperValue());
+//			}
+//		});
 
 		/* Quadrant3 */
+		QuadrantThresholdsState quadrant3 = thresholdsState.getQuadrantThresholds(Quadrant.Q3);
 		JPanel q3_panel = new JPanel();
 		JLabel q3_label = new JLabel("q3:");
-		q3 = setUpSlider(0, 640, pitchConstants.q3_low, pitchConstants.q3_high,
+		q3 = setUpSlider(0, 640, quadrant3.getLowX(), quadrant3.getHighX(),
 				20, 100);
 		q3_panel.add(q3_label);
 		q3_panel.add(q3);
 		quadrantPanel.add(q3_panel);
-		q3.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				worldState.setQ3LowX(q3.getValue());
-				worldState.setQ3HighX(q3.getUpperValue());
-			}
-		});
+		q3.addChangeListener(this);
+//		q3.addChangeListener(new ChangeListener() {
+//
+//			@Override
+//			public void stateChanged(ChangeEvent arg0) {
+//				worldState.setQ3LowX(q3.getValue());
+//				quadrant3.setLowX(q3.getValue());
+//				worldState.setQ3HighX(q3.getUpperValue());
+//				quadrant3.setHighX(q3.getUpperValue());
+//			}
+//		});
 
 		/* Quadrant4 */
+		QuadrantThresholdsState quadrant4 = thresholdsState.getQuadrantThresholds(Quadrant.Q4);
 		JPanel q4_panel = new JPanel();
 		JLabel q4_label = new JLabel("q4:");
-		q4 = setUpSlider(0, 640, pitchConstants.q4_low, pitchConstants.q4_high,
+		q4 = setUpSlider(0, 640, quadrant4.getLowX(), quadrant4.getHighX(),
 				20, 100);
 		q4_panel.add(q4_label);
 		q4_panel.add(q4);
 		quadrantPanel.add(q4_panel);
-
-		q4.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				worldState.setQ4LowX(q4.getValue());
-				worldState.setQ4HighX(q4.getUpperValue());
-			}
-		});
+		q4.addChangeListener(this);
+//		q4.addChangeListener(new ChangeListener() {
+//
+//			@Override
+//			public void stateChanged(ChangeEvent arg0) {
+//				worldState.setQ4LowX(q4.getValue());
+//				quadrant4.setLowX(q4.getValue());
+//				worldState.setQ4HighX(q4.getUpperValue());
+//				quadrant4.setHighX(q4.getUpperValue());
+//			}
+//		});
 	}
 
 	/**
@@ -1444,15 +1563,14 @@ public class VisionGUI implements ChangeListener {
 		return slider;
 
 	}
-	
+
 	private class tabChangeListener implements ChangeListener {
 
 		@Override
 		public void stateChanged(ChangeEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
 	}
 
 	/**
@@ -1711,21 +1829,43 @@ public class VisionGUI implements ChangeListener {
 
 		green.set_gb_low(green_gb.getValue());
 		green.set_gb_high(green_gb.getUpperValue());
+		
+		QuadrantThresholdsState quadrant1 = thresholdsState.getQuadrantThresholds(Quadrant.Q1);
+		QuadrantThresholdsState quadrant2 = thresholdsState.getQuadrantThresholds(Quadrant.Q2);
+		QuadrantThresholdsState quadrant3 = thresholdsState.getQuadrantThresholds(Quadrant.Q3);
+		QuadrantThresholdsState quadrant4 = thresholdsState.getQuadrantThresholds(Quadrant.Q4);
 
+		quadrant1.setLowX(q1.getValue());
+		quadrant1.setLowX(q1.getUpperValue());
+		quadrant2.setLowX(q2.getValue());
+		quadrant2.setLowX(q2.getUpperValue());
+		quadrant3.setLowX(q3.getValue());
+		quadrant3.setLowX(q3.getUpperValue());
+		quadrant4.setLowX(q4.getValue());
+		quadrant4.setLowX(q4.getUpperValue());
+		
+		worldState.setQ1LowX(q1.getValue());
+		worldState.setQ1HighX(q1.getUpperValue());
+		worldState.setQ2LowX(q2.getValue());
+		worldState.setQ2HighX(q2.getUpperValue());
+		worldState.setQ3LowX(q3.getValue());
+		worldState.setQ3HighX(q3.getUpperValue());
+		worldState.setQ4LowX(q4.getValue());
+		worldState.setQ4HighX(q4.getUpperValue());
 		// Reloads the slider values from ThresholdState
 		reloadSliderDefaults();
 	}
 
 	private boolean updatingValues = false;
-	
+
 	/**
 	 * Reloads the default values for the sliders from the PitchConstants file.
 	 */
 	public void reloadSliderDefaults() {
 		// Set the global flag to notify that nobody else should be
 		// messing with the slider values while we're updating them
-		updatingValues = true;		
-		
+		updatingValues = true;
+
 		ObjectThresholdState ball = thresholdsState.getQuadrantThresholds(q)
 				.getObjectThresholds(Colours.RED);
 
@@ -1814,11 +1954,17 @@ public class VisionGUI implements ChangeListener {
 		setSliderVals(green_gb, green.get_gb_low(), green.get_gb_high());
 
 		/* Quadrant slider */
-		setSliderVals(q1, pitchConstants.q1_low, pitchConstants.q1_high);
-		setSliderVals(q2, pitchConstants.q2_low, pitchConstants.q2_high);
-		setSliderVals(q3, pitchConstants.q3_low, pitchConstants.q3_high);
-		setSliderVals(q4, pitchConstants.q4_low, pitchConstants.q4_high);
-		
+		//TODO
+		QuadrantThresholdsState quadrant1 = thresholdsState.getQuadrantThresholds(Quadrant.Q1);
+		QuadrantThresholdsState quadrant2 = thresholdsState.getQuadrantThresholds(Quadrant.Q2);
+		QuadrantThresholdsState quadrant3 = thresholdsState.getQuadrantThresholds(Quadrant.Q3);
+		QuadrantThresholdsState quadrant4 = thresholdsState.getQuadrantThresholds(Quadrant.Q4);
+
+		setSliderVals(q1, quadrant1.getLowX(), quadrant1.getHighX());
+		setSliderVals(q2, quadrant2.getLowX(), quadrant2.getHighX());
+		setSliderVals(q3, quadrant3.getLowX(), quadrant3.getHighX());
+		setSliderVals(q4, quadrant4.getLowX(), quadrant4.getHighX());
+
 		// Done updating, other methods can do whatever they want now
 		updatingValues = false;
 	}
