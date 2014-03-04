@@ -1,6 +1,6 @@
 package behavior;
 
-import behavior.friendlydefender.SimpleReactiveDefendGoal;
+import behavior.friendlydefender.DefenderProtectGoal;
 import lejos.robotics.subsumption.Behavior;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
@@ -18,7 +18,7 @@ public class DefenderManager extends behavior.Manager {
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 		// Add behaviors in ascending order of priority
-		behaviorList[0] = new SimpleReactiveDefendGoal(getWorldState(), getRobotType(), getServer());
+		behaviorList[0] = new DefenderProtectGoal(getWorldState(), getRobotType(), getServer());
 
 		return behaviorList;
 	}

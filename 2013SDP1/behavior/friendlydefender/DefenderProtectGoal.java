@@ -15,9 +15,9 @@ import constants.RobotType;
  * Tries to go to the position where the opponent would kick the ball
  * based on the orientation of their attacker robot.
  */
-public class SimpleReactiveDefendGoal extends GeneralBehavior {
+public class DefenderProtectGoal extends GeneralBehavior {
 
-	public SimpleReactiveDefendGoal(WorldState ws, RobotType type, Server s) {
+	public DefenderProtectGoal(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 
@@ -28,26 +28,9 @@ public class SimpleReactiveDefendGoal extends GeneralBehavior {
 		}
 		
 		try {
-//			System.out.println("Defender in action");
-			
-			//Get the robot coordinates
-			int x = ws.getRobotX(robot());
-			int y = ws.getRobotY(robot());
-			
-//			// Rotate to 90'			
-//			if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR)) {
-//				isRotating = true;
-//				d("Rotating down");
-//				rotateTo(C.DOWN);
-//				return;
-//			}
-//			
-//			// Finished rotating
-//			if (isRotating) {
-//				d("Stop rotating");
-//				isRotating = false;
-//				s.send(type, RobotCommand.STOP);
-//			}
+			/*-------------------------------------*/
+			/* Decide which blocking method to use */
+			/*-------------------------------------*/
 			
 			/* Decide what to use as a vector modelling the ball movement */
 			Point2D.Double ballVector = null;
@@ -81,7 +64,10 @@ public class SimpleReactiveDefendGoal extends GeneralBehavior {
 				target = new Point(defendX, ws.getBallY());
 			}
 			
-			// We finally know where we need to be!
+			/*-------------------------------------*/
+			/* Finally know where we need to be !  */
+			/*-------------------------------------*/
+			
 			// Quickly go there :))
 			quickGoTo(target);
 			

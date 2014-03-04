@@ -77,23 +77,25 @@ public class WorldState implements VisionInterface {
 	private long[] ballTimeStamps;
 	private Point2D.Double ballVelocity;
 	
-	
-	// refactor
-	private Point ourDefenderVelocity;
-	private Point ourAttackerVelocity;
-	// end
-	
 	private RobotMap<Point[]> robotHistory;
 	private RobotMap<Point2D.Double> robotVelocity;
-	// MILA add here
-	// RobotMap<Double[]> ....
 	private RobotMap<Double[]> robotOrientationHistory;
 	private RobotMap<Boolean> robotGrabbedBall;
-	
 
 	private boolean removeShadows = false;
-
+	
+	/*---------------------------------------------*/
+	/*   Variables for the strategy system         */
+	/*---------------------------------------------*/
+	/** If the defender is making a pass to the attacker */
+	boolean doingPass;
+	
+	/** Where the attacker should go to catch the pass */
+	Point attackerPassPosition;
+	
+	/*---------------------------------------------*/
 	/* Getter and Setter methods for the quadrants */
+	/*---------------------------------------------*/
 	public int getQ1LowX(){
 		return q1LowX;
 	}
@@ -265,8 +267,6 @@ public class WorldState implements VisionInterface {
 		this.ballVelocity = new Point2D.Double(1,0);
 		this.ballHistory = new Point[5];
 		this.ballTimeStamps = new long[5];
-		this.ourDefenderVelocity = new Point(0,0);
-		this.ourAttackerVelocity = new Point(0,0);
 		
 		this.oppositionDefenderVelocity = new Point(0,0);
 		this.oppositionAttackerVelocity = new Point(0,0);
@@ -277,6 +277,9 @@ public class WorldState implements VisionInterface {
 			this.ballTimeStamps[i] = 1;
 		}
 		
+		// Initialise strategy variables
+		this.doingPass = false;
+		this.attackerPassPosition = null;
 	}
 
 	public boolean getShowDrawables() {
@@ -630,15 +633,6 @@ public class WorldState implements VisionInterface {
 	public Point[] getBallHistory() {
 		return ballHistory;
 	}
-
-	public Point getOurDefenderVelocity() {
-		return ourDefenderVelocity;
-	}
-	
-	public Point getOurAttackerVelocity() {
-		return ourAttackerVelocity;
-	}
-
 	
 	/**
 	 * Get our robot
@@ -682,22 +676,6 @@ public class WorldState implements VisionInterface {
 
 	public void setBallHistory(Point[] bh) {
 		this.ballHistory=bh;
-	}
-
-	public void setOurDefenderVelocity(Point ov) {
-		this.ourDefenderVelocity=ov;
-	}
-	
-	public void setOurAttackerVelocity(Point ov) {
-		this.ourAttackerVelocity=ov;
-	}
-
-	public void setOppositionDefenderVelocity(Point opv) {
-		this.oppositionDefenderVelocity=opv;
-	}
-	
-	public void setOppositionAttackerVelocity(Point opv) {
-		this.oppositionAttackerVelocity=opv;
 	}
 	
 	public void setBallTimes(long[] bt) {
@@ -798,12 +776,23 @@ public class WorldState implements VisionInterface {
 		}
 	}
 	
+	/**
+	 * Returns the point in the middle of the quadrant
+	 * @param q Quadrant we want
+	 * @return Point(x,y)
+	 */
+	public Point getQuadrantMiddlePoint(Quadrant q) {
+		int quadrantMiddleX = (getQuadrantX(q, QuadrantX.LOW) + getQuadrantX(q, QuadrantX.HIGH)) / 2 ;
+		int quadrantMiddleY = (getPitchTopLeft().y + getPitchBottomRight().y) / 2;
+		
+		return new Point(quadrantMiddleX, quadrantMiddleY);
+	}
 	
+	// Velocities
 	public Point2D.Double getBallVelocity() {
 		return ballVelocity;
 	}
-
-	// Velocities
+	
 	public Point2D.Double getRobotVelocity(RobotColour colour, RobotType type) {
 		return getRobotVelocity(new Robot(colour, type));
 	}
