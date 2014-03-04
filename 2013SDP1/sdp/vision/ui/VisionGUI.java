@@ -370,7 +370,8 @@ public class VisionGUI implements ChangeListener {
 
 		frame.add(tabPane);
 
-		frame.pack();
+		//frame.pack();
+		frame.setSize(350, 540);
 		frame.setLocation(640, 0);
 		frame.setVisible(true);
 
