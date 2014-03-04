@@ -83,8 +83,19 @@ public class WorldState implements VisionInterface {
 	private RobotMap<Boolean> robotGrabbedBall;
 
 	private boolean removeShadows = false;
-
+	
+	/*---------------------------------------------*/
+	/*   Variables for the strategy system         */
+	/*---------------------------------------------*/
+	/** If the defender is making a pass to the attacker */
+	boolean doingPass;
+	
+	/** Where the attacker should go to catch the pass */
+	Point attackerPassPosition;
+	
+	/*---------------------------------------------*/
 	/* Getter and Setter methods for the quadrants */
+	/*---------------------------------------------*/
 	public int getQ1LowX(){
 		return q1LowX;
 	}
@@ -266,6 +277,9 @@ public class WorldState implements VisionInterface {
 			this.ballTimeStamps[i] = 1;
 		}
 		
+		// Initialise strategy variables
+		this.doingPass = false;
+		this.attackerPassPosition = null;
 	}
 
 	public boolean getShowDrawables() {
