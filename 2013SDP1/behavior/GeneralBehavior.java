@@ -34,7 +34,7 @@ public abstract class GeneralBehavior implements Behavior {
 	
 	public void d(String s) {
 		if (DEBUG) {
-			System.out.println(s);
+			System.out.println(type + " :" + s);
 		}
 	}
 	
