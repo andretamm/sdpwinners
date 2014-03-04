@@ -78,15 +78,8 @@ public class WorldState implements VisionInterface {
 	private Point2D.Double ballVelocity;
 	
 	
-	// refactor
-	private Point ourDefenderVelocity;
-	private Point ourAttackerVelocity;
-	// end
-	
 	private RobotMap<Point[]> robotHistory;
 	private RobotMap<Point2D.Double> robotVelocity;
-	// MILA add here
-	// RobotMap<Double[]> ....
 	private RobotMap<Double[]> robotOrientationHistory;
 	private RobotMap<Boolean> robotGrabbedBall;
 	
@@ -682,22 +675,6 @@ public class WorldState implements VisionInterface {
 
 	public void setBallHistory(Point[] bh) {
 		this.ballHistory=bh;
-	}
-
-	public void setOurDefenderVelocity(Point ov) {
-		this.ourDefenderVelocity=ov;
-	}
-	
-	public void setOurAttackerVelocity(Point ov) {
-		this.ourAttackerVelocity=ov;
-	}
-
-	public void setOppositionDefenderVelocity(Point opv) {
-		this.oppositionDefenderVelocity=opv;
-	}
-	
-	public void setOppositionAttackerVelocity(Point opv) {
-		this.oppositionAttackerVelocity=opv;
 	}
 	
 	public void setBallTimes(long[] bt) {
