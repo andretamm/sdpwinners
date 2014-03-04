@@ -776,12 +776,23 @@ public class WorldState implements VisionInterface {
 		}
 	}
 	
+	/**
+	 * Returns the point in the middle of the quadrant
+	 * @param q Quadrant we want
+	 * @return Point(x,y)
+	 */
+	public Point getQuadrantMiddlePoint(Quadrant q) {
+		int quadrantMiddleX = (getQuadrantX(q, QuadrantX.LOW) + getQuadrantX(q, QuadrantX.HIGH)) / 2 ;
+		int quadrantMiddleY = (getPitchTopLeft().y + getPitchBottomRight().y) / 2;
+		
+		return new Point(quadrantMiddleX, quadrantMiddleY);
+	}
 	
+	// Velocities
 	public Point2D.Double getBallVelocity() {
 		return ballVelocity;
 	}
-
-	// Velocities
+	
 	public Point2D.Double getRobotVelocity(RobotColour colour, RobotType type) {
 		return getRobotVelocity(new Robot(colour, type));
 	}
