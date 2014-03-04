@@ -13,6 +13,8 @@ import constants.Colours;
 
 public class QuadrantThresholdsState implements Serializable {
 
+	private int lowX = 0;
+	private int highX = 50;
 	/**
 	 * 
 	 */
@@ -36,5 +38,22 @@ public class QuadrantThresholdsState implements Serializable {
 	public ObjectThresholdState getObjectThresholds(Colours c){
 		return quadrantThresholds.get(c);
 	}
+	
+	public int getLowX(){
+		return lowX;
+	}
+	
+	public void setLowX(int value){
+		lowX = value;
+	}
+	
+	public int getHighX(){
+		return highX;
+	}
+	
+	public void setHighX(int value){
+		highX = value;
+	}
+	
 	
 }

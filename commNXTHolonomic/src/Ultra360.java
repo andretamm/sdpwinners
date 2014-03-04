@@ -44,9 +44,9 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		rotationSpeed = (byte)60; 
+		rotationSpeed = (byte) 60; //60 
 		// Default moving speed
-		speed = (byte) 70;
+		speed = (byte) 90; //70
 		
 		// Init motors
 		rotator = Motor.C;
@@ -102,7 +102,7 @@ public class Ultra360 {
 	}
 		
 	//Rotate anti-clockwise until Andre stops you
-	public void rotateAniClockwise() {
+	public void rotateAntiClockwise() {
 		//WEST Wheel
 		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,rotationSpeed); 
@@ -248,6 +248,13 @@ public class Ultra360 {
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
 		grabber.rotateTo(20);
+	}
+	
+	//Reset the grabber to its opening positions
+	public void openGrabber() {
+		grabber.setSpeed(800);
+		grabber.setAcceleration(10000);
+		grabber.rotateTo(0);
 	}
 	
 	//Kick the ball in a straight direction. This will reset the grabber to open.

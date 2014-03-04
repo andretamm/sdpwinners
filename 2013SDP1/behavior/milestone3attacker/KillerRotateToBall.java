@@ -44,7 +44,7 @@ public class KillerRotateToBall extends GeneralBehavior {
 		double orientation = Orientation.getAngle(robot, ball);
 
 		return (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR) &&
-				!ws.haveBall());
+				!ws.getRobotGrabbedBall(robot()));
 	}
 
 }

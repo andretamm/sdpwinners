@@ -1,6 +1,7 @@
 package sdp.vision;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import constants.RobotType;
+import behavior.StrategyHelper;
 
 import au.edu.jcu.v4l4j.CaptureCallback;
 import au.edu.jcu.v4l4j.DeviceInfo;
@@ -31,18 +34,19 @@ public class Vision extends WindowAdapter {
         
         private VideoDevice videoDev;
         private JLabel label;
-        private JFrame windowFrame;
+        private static JFrame windowFrame;
         private FrameGrabber frameGrabber;
         private int width, height;
         private WorldState worldState;
         private BufferedImage frameImage = null;
+        private static BufferedImage originalFrameImage = null;
         private ImageProcessor imageProcessor = null;
         private long before = 0;
         private long after = 0;
         
-        public Vision(WorldState worldState, ThresholdsState ts, PitchConstants pitchConstants) throws V4L4JException {
+        public Vision(WorldState worldState, ThresholdsState ts, JFrame windowFrame) throws V4L4JException {
 			this("/dev/video0", 640, 480, 0, V4L4JConstants.STANDARD_PAL,
-					80, worldState, ts, pitchConstants);
+					80, worldState, ts, windowFrame);
         }
         
         /**
@@ -69,7 +73,7 @@ public class Vision extends WindowAdapter {
          */
         public Vision(String videoDevice, int width, int height, int channel,
                         int videoStandard, int compressionQuality, WorldState worldState,
-                        ThresholdsState ts, PitchConstants pitchConstants)
+                        ThresholdsState ts, JFrame windowFrame)
                         throws V4L4JException {
 
                 /* Set the state fields. */
@@ -82,6 +86,7 @@ public class Vision extends WindowAdapter {
                 /* Initialise the GUI that displays the video feed. */
                 initFrameGrabber(videoDevice, width, height, channel, videoStandard,
                                 compressionQuality);
+                Vision.windowFrame = windowFrame;
                 initGUI();
         }
 
@@ -129,6 +134,7 @@ public class Vision extends WindowAdapter {
 
                         public void nextFrame(VideoFrame frame) {
                                 frameImage = frame.getBufferedImage();
+                                originalFrameImage = frame.getBufferedImage();
 
                                 /* Display the FPS that the vision system is running at. */
                                 after = System.currentTimeMillis();
@@ -158,6 +164,20 @@ public class Vision extends WindowAdapter {
                                         worldState.updateCounter();
                                         label.getGraphics().drawImage(frameImage, 0, 0, width, height, null);
                                 }
+                                
+                                /*
+                                boolean hasBall = StrategyHelper.hasBall(worldState.getOpposition(RobotType.ATTACKER),worldState);
+                                if(hasBall)
+                                	System.out.println("YES BALL");
+                                else
+                                	System.out.println("NO BALL");
+                                */
+                                
+                                boolean isPathClear = StrategyHelper.isPathClear(worldState.getOur(RobotType.DEFENDER), 0, worldState);
+                                if(isPathClear)
+                                	System.out.println("CLEAR PATH");
+                                else
+                                	System.out.println("NOT CLEAR PATH!");
 
                                 frame.recycle();
                                 
@@ -180,13 +200,14 @@ public class Vision extends WindowAdapter {
          * Creates the graphical interface components and initialises them
          */
         private void initGUI() {
-                windowFrame = new JFrame("Vision Window");
+                
                 label = new JLabel();
                 windowFrame.getContentPane().add(label);
                 windowFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 windowFrame.addWindowListener(this);
                 windowFrame.setVisible(true);
                 windowFrame.setSize(width, height);
+                
         }
 
         /**
@@ -216,5 +237,8 @@ public class Vision extends WindowAdapter {
         
         public JFrame getWindowFrame() {
         	return windowFrame;
+        }
+        public BufferedImage getFrameImage(){
+        	return originalFrameImage;
         }
 }

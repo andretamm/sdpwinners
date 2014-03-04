@@ -71,8 +71,8 @@ public class Display {
          * 0 and 480 are the boundaries of the field for the y value.
          */
         
-		graphics.drawLine(0, (int) ws.getBallYVision(), 640, (int) ws.getBallYVision());
-		graphics.drawLine((int) ws.getBallXVision(), 0, (int) ws.getBallXVision(), 480);
+		graphics.drawLine(0, (int) ws.getBallY(), 640, (int) ws.getBallY());
+		graphics.drawLine((int) ws.getBallX(), 0, (int) ws.getBallX(), 480);
 		
 		
 		/* Display markers for the quadrants */ 
@@ -122,7 +122,7 @@ public class Display {
 				graphics.drawLine((int) ws.getRobotX(r), (int) ws.getRobotY(r), x2, y2);
 		}
 		
-		graphics.drawOval((int) ws.getBallXVision() - WorldState.ballRadius, (int) ws.getBallYVision() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
+		graphics.drawOval((int) ws.getBallX() - WorldState.ballRadius, (int) ws.getBallY() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
 
 		// WHY CLAUDIU???? 
 		// This draws all the grey points for a given robot in either black (blue robots) or white (yellow robots) 
@@ -183,22 +183,17 @@ public class Display {
 //		}
 		
 		// Predict a point on the line in front of our goal
-		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(ws.getOurGoalCentre().x - 60, ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)), ws.getOppositionAttackerPosition());
+		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(StrategyHelper.getDefendLineX(ws), ws.getOppositionAttackerPosition(), ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)));
 		if (defendPos != null) {
-//			System.out.println("Opposition: " + ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER)).x + " " + ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER)).y);
-//			System.out.println("Opposition: " + ws.getOppositionAttackerPosition().x + " " + ws.getOppositionAttackerPosition().y);
-//			System.out.println(ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)).x + " " + ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)).y);
-//			System.out.println(defendPos.x + " " + defendPos.y);
 			graphics.setColor(Color.ORANGE);
 			graphics.fillOval(defendPos.x - 3, defendPos.y - 3, 6, 6);
 		}
 		
 		// Only check ball prediction positions if the ball is moving with at least some minimum speed
-		// This threshhold has been experimentally set to 0.01 :P
-		if (StrategyHelper.magnitude(ws.getBallVelocity()) > 0.01) {
+		if (ws.ballIsMoving()) {
 			// Draw the position on the wall where the ball will hit it if it keeps
 			// moving in the same direction
-			Point wallHitPosition = StrategyHelper.intersectsWithWalls(ws.getBallVelocity(), new Point(ws.ballX, ws.ballY), ws);
+			Point wallHitPosition = StrategyHelper.getIntersectsWithWalls(ws.getBallVelocity(), new Point(ws.ballX, ws.ballY), ws);
 			
 			if (wallHitPosition != null) {
 				graphics.setColor(Color.GREEN);
@@ -217,18 +212,14 @@ public class Display {
 					graphics.fillOval(goalIntersectPoint.x - 4, goalIntersectPoint.y - 4, 8, 8);
 				}
 			} else {
-				Point goalIntersectPoint = StrategyHelper.getIntersectWithOurGoal(ws.getBallVelocity(), ws.getBallP(), ws);
+				Point goalIntersectPoint = StrategyHelper.getIntersectWithOurGoal(ws.getBallVelocity(), ws.getBallPoint(), ws);
 				if (goalIntersectPoint != null) {
 					// Ball will intersect with goal if it keeps moving in this direction
 					graphics.setColor(Color.GREEN);
 					graphics.fillOval(goalIntersectPoint.x - 4, goalIntersectPoint.y - 4, 8, 8);
 				}
 			}
-			
-			
 		}
-		
-		
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

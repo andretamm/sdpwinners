@@ -22,6 +22,13 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
+		
+		// Stop this madness if we didn't actually grab the ball <.<
+//		if (!StrategyHelper.hasBall(robot(), ws)) {
+//			ws.setRobotGrabbedBall(robot(), false);
+//			s.send(type, RobotCommand.OPEN_GRABBER);
+//			return;
+//		}
 
 		Point robot = ws.getRobotPoint(robot());
 		Point goal = ws.getOppositionGoalCentre();
@@ -39,17 +46,16 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		}
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		ws.setHaveBall(false);
+		// No longer have the ball
+		ws.setRobotGrabbedBall(robot(), false);
 		s.send(type, RobotCommand.KICK);
 		
+		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 	/** 
@@ -58,7 +64,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		return ws.haveBall();
+		return ws.getRobotGrabbedBall(robot());
 	}
 
 }

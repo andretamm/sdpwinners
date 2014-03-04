@@ -4,6 +4,10 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import common.Robot;
+import constants.C;
+import constants.ShootingDirection;
+import constants.RobotColour;
+import constants.RobotType;
 
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
@@ -146,7 +150,7 @@ public class StrategyHelper {
 	 * @param vector E.g. a velocity vector
 	 * @return The (x,y) coordinates of the intersection point, or null if doesn't intersect
 	 */
-	public static Point getIntersectWithVerticalLine(int x, Point2D.Double vector, Point origin) {
+	public static Point getIntersectWithVerticalLine(int x, Point origin, Point2D.Double vector) {
 		Point intersect = null;
 		
 		//   o   ball
@@ -164,7 +168,7 @@ public class StrategyHelper {
 			
 			return intersect;
 		} else {
-			// Won't even hit this wall, not to mention the goal :DDD
+			// Won't hit this vertical line
 			return null;
 		}
 	}
@@ -195,7 +199,7 @@ public class StrategyHelper {
 	 * @return The (x,y) coordinates of the intersection point, 
 	 * 		   null if doesn't intersect with either of the walls
 	 */
-	public static Point intersectsWithWalls(Point2D.Double vector, Point origin, WorldState worldstate) {
+	public static Point getIntersectsWithWalls(Point2D.Double vector, Point origin, WorldState worldstate) {
 		int topWall = worldstate.getPitchTopLeft().y;
 		int bottomWall = worldstate.getPitchBottomLeft().y;
 		
@@ -246,28 +250,142 @@ public class StrategyHelper {
 		return Math.abs(x - target) <= error;
 	}
 	
+	
+	/**
+	 * Gets the angle that is 180 degrees from the original angle. Need
+	 * to use radians!
+	 * E.g. angleComplement(270') = 90'  
+	 * @return The angle complement
+	 */
+	public static double angleComplement(double angle) {
+		double newAngle = angle + C.A180;
+		return newAngle < C.A360 ? newAngle : newAngle - C.A360;
+	}
+	
+	/**
+	 * Find the shortest angle between the origin and target.
+	 * @param origin Starting angle
+	 * @param target End angle
+	 * @return The angle difference with + for a CW turn and - for a CCW turn
+	 */
+	public static double angleDiff(double origin, double target) {
+		double turnAngle = target - origin;
+		
+		if (turnAngle > C.A180) {
+			turnAngle -= C.A360;
+		}
+		if (turnAngle < - C.A180) {
+			turnAngle += C.A360;
+		}
+		
+		return turnAngle;
+	}
+	
+	/**
+	 * The vertical line where we want the defender robot to be for maximum coverage
+	 * @param ws Handle to WorldState
+	 * @return The x coordinate of the vertical line
+	 */
+	public static int getDefendLineX(WorldState ws) {
+		int ourGoalX = ws.getOurGoalCentre().x;
+		return ws.getDirection() == ShootingDirection.LEFT ? ourGoalX - 60 : ourGoalX + 60; 
+	}
+	
 	public static double getDistance(Point a, Point b){
 		return Math.sqrt(Math.pow(Math.abs(a.x - b.x),2) + Math.pow(Math.abs(a.y - b.y),2));
 	}
 	
+	public static double pointToLineDistance(Point A, Point B, Point P) {
+		//Calculates distance between point P & line created by points A & B
+		double normalLength = Math.sqrt((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y));
+		return Math.abs((P.x-A.x)*(B.y-A.y)-(P.y-A.y)*(B.x-A.x))/normalLength;
+	}
+	
+	/**
+	 * Checks if the given robot has a ball
+	 * @param r Robot to check
+	 * @param ws Handle to WorldState
+	 * @return True if the robot has the ball, False otherwise
+	 */
 	public static boolean hasBall(Robot r, WorldState ws){
 		//Verify difference between Orientation Angle & Robot-to-Ball angle
 		double orientationAngle = ws.getRobotOrientation(r.type, r.colour);
-		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallP());
+		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallPoint());
 
-		double difference = Math.abs(orientationAngle - robotToBallAngle);		
+		double difference = Math.abs(StrategyHelper.angleDiff(orientationAngle,robotToBallAngle));		
 
 
-		if(difference <= 0.15){
+		if(difference <= GeneralBehavior.ANGLE_ERROR){
 			// TODO figure out good value
 			//Verify distance between Robot & Ball
-			double distance = getDistance(ws.getRobotPoint(r), ws.getBallP());
+			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
-			if (distance <= 40){
+			if (distance <= 30){
+				System.out.println(distance);
 				// TODO figure out actual value
 				return true;
 			}
 		}
 		return false;
+	}
+
+	
+	/**
+	 * Find out which robot has the ball
+	 * @param ws Handle to WorldState
+	 * @return Robot that has the ball or null if nobody has the ball
+	 */
+	public static Robot getRobotWithBall(WorldState ws) {
+		for (Robot r: Robot.listAll()) {
+			if (hasBall(r, ws)) {
+				// This robot has the ball :o
+				return r;
+			}
+		}
+		
+		// Nobody has the ball :p
+		return null;
+	}
+
+	/**
+	 * Determine weather robot 'r's pass/shot will pass the intercepter or not
+	 * @param r Robot that is trying to pass/shoot
+	 * @param a Angle at which robot is trying to pass/shoot at
+	 * @param ws Handle to WorldState
+	 * @param k Distance from shooting/passing robot to intercepter robot
+	 * @param beta Angle between (shooting_Robot-intercepter_Robot) line & shooting/passing angle 'a'
+	 * @param opponentPoint Position of intercepter Robot
+	 * @param distance Distance between intercepter robot & line created by shooting angle
+	 * @param distanceThresh Threshold for distance
+	 * @return True if passing/shooting path is clear; False otherwise
+	 */
+	public static boolean isPathClear(Robot r, double a, WorldState ws){
+		Point opponentPoint;
+		double distanceThresh = 50;
+		
+		//Determine opponent Robot that might intercept our pass/shot
+		if(r.colour == RobotColour.BLUE){
+			if(r.type == RobotType.DEFENDER)
+				opponentPoint = ws.getRobotXY(RobotColour.YELLOW, RobotType.ATTACKER);
+			else
+				opponentPoint = ws.getRobotXY(RobotColour.YELLOW, RobotType.DEFENDER);
+		}
+		else{
+			if(r.type == RobotType.DEFENDER)
+				opponentPoint = ws.getRobotXY(RobotColour.BLUE, RobotType.ATTACKER);
+			else
+				opponentPoint = ws.getRobotXY(RobotColour.BLUE, RobotType.DEFENDER);
+		}
+		
+		double k = getDistance(ws.getRobotPoint(r), opponentPoint);
+		double beta = Math.abs(StrategyHelper.angleDiff(a, Orientation.getAngle(ws.getRobotPoint(r), opponentPoint)));
+		double distance = k * Math.sin(beta);
+		
+		System.out.println(distance);
+		
+		if(distance <= distanceThresh)
+			return false;
+		
+		return true;
 	}
 }

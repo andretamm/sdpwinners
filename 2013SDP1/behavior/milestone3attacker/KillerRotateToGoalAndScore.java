@@ -48,7 +48,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		return ws.haveBall();
+		return ws.getRobotGrabbedBall(robot());
 	}
 
 }

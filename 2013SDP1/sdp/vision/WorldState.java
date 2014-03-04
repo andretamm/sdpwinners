@@ -3,6 +3,7 @@ package sdp.vision;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+import behavior.StrategyHelper;
 import common.Robot;
 import common.RobotMap;
 import constants.Quadrant;
@@ -17,9 +18,10 @@ public class WorldState implements VisionInterface {
 	public Point andresPoint = new Point(0,0);
 	
 	public static final int HISTORY_LENGTH = 5;
+	public static final int ORIENTATION_HISTORY_LENGTH = 2;
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
-	private RobotColour colour;
+	private RobotColour ourColour;
 	private int pitch; // 0 = main, 1 = side room
 
 	// Variables for calculating the velocity and location of the robots and ball
@@ -67,8 +69,6 @@ public class WorldState implements VisionInterface {
 	public static final int ballRadius = 12;
 	public static final int plateRadius = 15;
 
-	private boolean haveBall = false;
-
 	public static double cmToPixels = 0.38;
 
 	//TODO Alter history and velocity for two robots
@@ -87,6 +87,8 @@ public class WorldState implements VisionInterface {
 	private RobotMap<Point2D.Double> robotVelocity;
 	// MILA add here
 	// RobotMap<Double[]> ....
+	private RobotMap<Double[]> robotOrientationHistory;
+	private RobotMap<Boolean> robotGrabbedBall;
 	
 
 	private boolean removeShadows = false;
@@ -210,7 +212,7 @@ public class WorldState implements VisionInterface {
 
 		/* control properties */
 		this.direction = ShootingDirection.RIGHT;
-		this.colour = RobotColour.YELLOW;
+		this.ourColour = RobotColour.YELLOW;
 		this.pitch = 0;
 
 		//TODO Alter object properties for velocities, history
@@ -222,9 +224,8 @@ public class WorldState implements VisionInterface {
 		this.robotHistory = new RobotMap<Point[]>();
 		this.robotVelocity = new RobotMap<Point2D.Double>();
 		this.robotTimestamps = new RobotMap<long[]>();	
-		// MILA add here
-		// new robotmap
-		
+		this.robotOrientationHistory = new RobotMap<Double[]>();
+		this.robotGrabbedBall = new RobotMap<Boolean>(false);
 		
 		// Set default values for all the robots
 		for (Robot r: Robot.listAll()) {
@@ -236,17 +237,20 @@ public class WorldState implements VisionInterface {
 			// TODO MAKE SURE THESE ARE RIGHT AND MAKE SENSE
 			Point[] history = new Point[HISTORY_LENGTH];
 			long[] timestamps = new long[HISTORY_LENGTH];
-			// MILA
-			
+			Double[] orientationHistory = new Double[ORIENTATION_HISTORY_LENGTH];
+				
 			for (int i = 0; (i < HISTORY_LENGTH); i++) {
 				history[i] = new Point(1,1);
 				timestamps[1] = 1;
-				// MILA
+			}
+			
+			for (int i = 0; (i < ORIENTATION_HISTORY_LENGTH); i++) {
+				orientationHistory[i] = 0.0;
 			}
 			
 			robotHistory.put(r, history);
 			robotTimestamps.put(r, timestamps);
-			// MILA
+			robotOrientationHistory.put(r, orientationHistory);
 		}
 		
 		this.ballX = 0;
@@ -300,11 +304,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public int getBallX() {
-		return ballX-getPitchTopLeft().x;
+		return ballX;
 	}
 
 	public int getBallY() {
-		return ballY-getPitchTopLeft().y;
+		return ballY;
 	}
 	
 	
@@ -351,18 +355,9 @@ public class WorldState implements VisionInterface {
 	public void setRobotY(Robot r, int y) {
 		robotPosition.get(r).y = y;
 	}
-	
-
-	int getBallXVision() {
-		return ballX;
-	}
 
 	public void setBallX(int ballX) {
 		this.ballX = ballX;
-	}
-
-	int getBallYVision() {
-		return ballY;
 	}
 
 	public void setBallY(int ballY) {
@@ -383,11 +378,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public RobotColour getColour() {
-		return colour;
+		return ourColour;
 	}
 
 	public void setColour(RobotColour colour) {
-		this.colour = colour;
+		this.ourColour = colour;
 	}
 
 	public int getPitch() {
@@ -433,19 +428,19 @@ public class WorldState implements VisionInterface {
 	//TODO fix getters for X and Y Vision for two robots
 
 	int getOurDefenderXVision(){
-		return getRobotX(new Robot(colour, RobotType.DEFENDER));
+		return getRobotX(new Robot(ourColour, RobotType.DEFENDER));
 	}
 
 	int getOurDefenderYVision(){
-		return getRobotY(new Robot(colour, RobotType.DEFENDER));
+		return getRobotY(new Robot(ourColour, RobotType.DEFENDER));
 	}
 	
 	int getOurAttackerXVision(){
-		return getRobotX(new Robot(colour, RobotType.ATTACKER));
+		return getRobotX(new Robot(ourColour, RobotType.ATTACKER));
 	}
 
 	int getOurAttackerYVision(){
-		return getRobotY(new Robot(colour, RobotType.ATTACKER));
+		return getRobotY(new Robot(ourColour, RobotType.ATTACKER));
 	}
 
 	public int getOurDefenderX(){
@@ -465,11 +460,11 @@ public class WorldState implements VisionInterface {
 	}
 
 	public double getOurDefenderOrientation() {
-		return robotOrientation.get(new Robot(colour, RobotType.DEFENDER));
+		return robotOrientation.get(new Robot(ourColour, RobotType.DEFENDER));
 	}
 	
 	public double getOurAttackerOrientation() {
-		return robotOrientation.get(new Robot(colour, RobotType.ATTACKER));
+		return robotOrientation.get(new Robot(ourColour, RobotType.ATTACKER));
 	}
 
 	public double getOppositionDefenderOrientation() {
@@ -575,16 +570,37 @@ public class WorldState implements VisionInterface {
 		Point centre = getOppositionGoalCentre();
 		return new Point((int) centre.getX(), (int) (centre.getY()+goalHeight));
 	}
-
-	public Point getBallPoint() {
-		return getBallP();
-	}
 	
 	/**
 	 * Gets the Point with the ball x,y coordinates
 	 */
-	public Point getBallP() {
+	public Point getBallPoint() {
 		return new Point(ballX, ballY);
+	}
+	
+	/**
+	 * Get the quadrant the ball is currently in
+	 * @return The Quadrant or null if the ball is not on the pitch
+	 */
+	public Quadrant getBallQuadrant() {
+		// Check if we're out the y values of the pitch
+		if (!(ballY >= getPitchTopLeft().y && ballY <= getPitchBottomRight().y)) {
+			return null;
+		}
+		
+		// Manually check x values of all quadrants		
+		if (ballX >= q1LowX && ballX <= q1HighX) {
+			return Quadrant.Q1;
+		} else if (ballX >= q2LowX && ballX <= q2HighX) {
+			return Quadrant.Q2;
+		} else if (ballX >= q3LowX && ballX <= q3HighX) {
+			return Quadrant.Q3;
+		} else if (ballX >= q4LowX && ballX <= q4HighX) {
+			return Quadrant.Q4;
+		} 
+		
+		// Ball must not be on the pitch
+		return null;
 	}
 
 	public Point getOurDefenderPosition(){
@@ -629,7 +645,7 @@ public class WorldState implements VisionInterface {
 	 * @param type Type of robot
 	 */
 	public Robot getOur(RobotType type) {
-		return new Robot(colour, type);
+		return new Robot(ourColour, type);
 	}
 	
 	/**
@@ -696,7 +712,7 @@ public class WorldState implements VisionInterface {
 	 * @return The default location of the off-pitch robot
 	 */
 	Point getDefaultPoint(RobotColour robot) {
-		if (robot==colour) {
+		if (robot==ourColour) {
 			// if the robot is ours, just make the best on pitch guess
 			return new Point((int) (getPitchTopLeft().getX()+getOurDefenderPosition().getX()), (int) (getPitchTopLeft().getY()+getOurDefenderPosition().getY()));
 		} else {
@@ -713,7 +729,7 @@ public class WorldState implements VisionInterface {
 	 * @return Colour of the opposition
 	 */
 	private RobotColour getOppositionColour() {
-		return colour == RobotColour.YELLOW ? RobotColour.BLUE : RobotColour.YELLOW;
+		return ourColour == RobotColour.YELLOW ? RobotColour.BLUE : RobotColour.YELLOW;
 	}
 	
 	int getOppositionDefenderXVision(){
@@ -813,6 +829,26 @@ public class WorldState implements VisionInterface {
 		robotHistory.put(r, history);
 	}
 	
+	public Double[] getRobotOrientationHistory(RobotColour colour, RobotType type) {
+		return getRobotOrientationHistory(new Robot(colour, type));
+	}
+	
+	public Double[] getRobotOrientationHistory(Robot r) {
+		return robotOrientationHistory.get(r);
+	}
+	
+	public void setRobotOrientationHistory(Robot r, Double[] history) {
+		robotOrientationHistory.put(r, history);
+	}
+	
+//	public Double[] getRobotOrientationHistory(Robot r) {
+//		return robotOrientationHistory.get(r);
+//	}
+//	
+//	public void setRobotOrientationHistory(Robot r, Double[] orientationHistory) {
+//		robotOrientationHistory.put(r, orientationHistory);
+//	}
+	
 	
 	public double getAimingAngle() {
 		// TODO Auto-generated method stub
@@ -820,12 +856,102 @@ public class WorldState implements VisionInterface {
 		return 0;
 	}
 
-	public boolean haveBall() {
-		return haveBall;
+	/**
+	 * Find the Quadrant the robot is in
+	 * @param robot The robot to check
+	 */
+	public Quadrant getRobotQuadrant(Robot robot) {
+		if (robot.colour == ourColour) {
+			// Our robot
+			if (direction == ShootingDirection.LEFT) {
+				// Shooting left
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q4;
+				} else {
+					return Quadrant.Q2;
+				}
+			} else {
+				// Shooting right
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q1;
+				} else {
+					return Quadrant.Q3;
+				}
+			}
+		} else {
+			// Opponent's robot
+			if (direction == ShootingDirection.LEFT) {
+				// Shooting left
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q1;
+				} else {
+					return Quadrant.Q3;
+				}
+			} else {
+				// Shooting right
+				if (robot.type == RobotType.DEFENDER) {
+					return Quadrant.Q4;
+				} else {
+					return Quadrant.Q2;
+				}
+			}
+		}
 	}
 	
-	public void setHaveBall(boolean haveBall) {
-		this.haveBall = haveBall;
+	/**
+	 * Checks if a point is on the pitch
+	 * @param p Point to check
+	 * @return True for on the pitch, False for out of the pitch
+	 */
+	public boolean onPitch(Point p) {
+		if (p.y < getPitchBottomRight().y && p.y > getPitchTopLeft().y &&
+				p.x < getPitchTopRight().x && p.x > getPitchTopLeft().x) {
+			return true;
+		} else {
+			return false;
+		}
 	}
+	
+	/**
+	 * Checks if the ball is moving (at a 'reasonable' speed). Note that
+	 * this can return False if the ball is moving, but rather slowly. If you
+	 * want to have more exact control over what to define as 'moving', then
+	 * use ballIsMoving(double threshold)
+	 * @return True if the ball is moving at a reasonable speed, False if still or moving slowly
+	 */
+	public boolean ballIsMoving() {
+		return ballIsMoving(0.02);
+	}
+	
+	/**
+	 * Checks if the ball's velocity vector has magnitude less than the given
+	 * threshold.
+	 * @see ballIsMoving()
+	 * @param threshold
+	 * @return True if the ball is moving more than the threshold, False otherwise
+	 */
+	public boolean ballIsMoving(double threshold) {
+		return StrategyHelper.magnitude(getBallVelocity()) > threshold && onPitch(getBallPoint());
+	}
+
+	/**
+	 * This method only works with our robots! Make sure to call
+	 * setRobotGrabbedBall when we get the ball or this will be useless
+	 * @return True if the robot has the ball in the grabber, False otherwise
+	 */
+	public boolean getRobotGrabbedBall(Robot r) {
+		return robotGrabbedBall.get(r);
+	}
+
+	/**
+	 * Set whether the robot has the ball in the grabber or not. This
+	 * should only be used with our robots.
+	 * @param robotGrabbedBall
+	 */
+	public void setRobotGrabbedBall(Robot r, boolean hasGrabbed) {
+		this.robotGrabbedBall.put(r, hasGrabbed);
+	}
+	
+	
 	
 }

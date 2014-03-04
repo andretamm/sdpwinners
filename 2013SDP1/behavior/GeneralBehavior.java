@@ -12,8 +12,8 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.15; //15
-	public static final double DISTANCE_ERROR = 2;
+	public static final double ANGLE_ERROR = 0.20; //15
+	public static final double DISTANCE_ERROR = 30;
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
@@ -29,6 +29,14 @@ public abstract class GeneralBehavior implements Behavior {
 	protected int rotatingCounter = 0;
 	protected int stopCounter = 0;
 	protected int btCounter = 0;
+	
+	private static boolean DEBUG = true;
+	
+	public void d(String s) {
+		if (DEBUG) {
+			System.out.println(s);
+		}
+	}
 	
 	public GeneralBehavior(WorldState ws, RobotType type, Server s) {
 		this.ws = ws;
@@ -83,34 +91,93 @@ public abstract class GeneralBehavior implements Behavior {
 	/* ------------------------------------- */
 	
 	/**
-	 * Rotates the robot to the specified angle
+	 * Rotates the robot to the specified angle. Does nothing if already
+	 * facing the right direction
 	 * @param angle The angle (in rad) the robot will be facing by the end
 	 * @author Andre
 	 */
 	public void rotateTo(double angle) {
-		// Find the complement angle, aka the angle 180deg 
-		// from the angle we want to turn to
-		double angleComplement = angle + C.A180;
-		if (angleComplement > C.A360) {
-			angleComplement -= C.A360;
-		}
-
-		// Now rotate to the correct angle
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
 		
-		double turnAngle = angle - orientation;
-		if (turnAngle > C.A180) {
-			turnAngle -= C.A360;
+		// Check if we need to rotate at all
+		if (Math.abs(StrategyHelper.angleDiff(orientation, angle)) > ANGLE_ERROR) {
+			// Find the quickest angle to rotate towards our target
+			double turnAngle = StrategyHelper.angleDiff(orientation, angle);
+			
+			// Now rotate
+			if (turnAngle < 0) {
+				s.send(type, RobotCommand.CCW);
+			} else {
+				s.send(type, RobotCommand.CW);
+			}
+			d("rotating");
+			isRotating = true;
 		}
-		if (turnAngle < - C.A180) {
-			turnAngle += C.A360;
+	}
+	
+	/**
+	 * Takes the robot to the specified point. Rotates to the closest for driving
+	 * straight towards the point (either forward or backward). Then
+	 * drives forward/backward to reach the point. If you want to turn towards the target
+	 * and then move, use goTo() instead.
+	 * @param target Target point.
+	 * @return True if we have reached the target, False otherwise
+	 */
+	public boolean quickGoTo(Point target) {
+		
+		Point robot = ws.getRobotPoint(robot());
+		double orientation = ws.getRobotOrientation(robot());
+		double targetAngle = Orientation.getAngle(robot, target);
+		double targetAngleComplement = StrategyHelper.angleComplement(targetAngle);
+
+		int direction; 
+//		d(orientation + " " + targetAngle + " " + targetAngleComplement);
+//		d(Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) + " " + Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement)));
+//		d("Robot pos: "+ robot);
+//		d("Target: " + target);
+		if (StrategyHelper.getDistance(robot, target) <= DISTANCE_ERROR) {
+//			d("already close enough, stopping");
+			stopMovement();
+			return true;
+		}
+
+		if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) 
+		    < Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement))) {
+			// Closer to go to targetAngle
+//			d("closer to go to angle");
+			direction = RobotCommand.FORWARD;
+			
+			if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) > ANGLE_ERROR) {
+				// Still need to rotate
+				rotateTo(targetAngle);
+				return false;
+			}
+		} else {
+			// Closer to go to the complement and then move backward
+//			d("closer to go to complement");
+			direction = RobotCommand.BACK;
+			
+			if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement)) > ANGLE_ERROR) {
+				// Still need to rotate
+				rotateTo(targetAngleComplement);
+				return false;
+			}
 		}
 		
-		if (turnAngle < 0) {
-			s.send(type, RobotCommand.CCW);
-		} else {
-			s.send(type, RobotCommand.CW);
+		stopRotating();
+		
+		// Now move to target point
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+			d("Moving in direction " + direction);
+			s.send(type, direction);
+			isMoving = true;
+			return false;
 		}
+		
+		stopMovement();
+		
+		// We're there!
+		return true;
 	}
 	
 	/**
@@ -128,19 +195,41 @@ public abstract class GeneralBehavior implements Behavior {
 			return false;
 		}
 		
+		stopRotating();
+		
 		// Move forward until we get there
-		// TODO figure out what 20 should be
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR + 20) {
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
 			s.send(type, RobotCommand.FORWARD);
+			isMoving = true;
 			return false;
 		}
 		
-		// We're there, so chill
-		s.send(type, RobotCommand.STOP);
+		stopMovement();
+		
+		// We're there!
 		return true;
 	}
 	
 	
+	/**
+	 * Stops moving if we're rotating or moving. Call this after every
+	 * change from rotation to movement or vice versa!!!
+	 */
+	private void stopMovement() {
+		if (isMoving || isRotating) {
+			s.send(type, RobotCommand.STOP);
+			isMoving = false;
+			isRotating = false;
+		}
+	}
+	
+	private void stopRotating() {
+		if (isRotating) {
+			s.send(type, RobotCommand.STOP);
+			isRotating = false;
+		}
+	}
+
 	/**
 	 * Goes to the ball.
 	 * @return True if we're at the ball, ready for grabbing. False if we're still getting there.

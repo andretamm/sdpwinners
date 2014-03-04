@@ -21,21 +21,23 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		d("going to ball");
+		
 		if (goToBall()) {
 			// We're at the ball, so grab it
 			System.out.println("GRABBING");
 			s.send(type, RobotCommand.GRAB);
-			ws.setHaveBall(true);
+			ws.setRobotGrabbedBall(robot(), true);
 		}
 	}
 
 	/** 
-	 * Triggers if we do NOT have the ball
+	 * Triggers if we do NOT have the ball AND the ball is in our quadrant on the pitch
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()
 	 */
 	@Override
 	public boolean takeControl() {
-		return (!ws.haveBall());
+		return !ws.getRobotGrabbedBall(robot()) && ws.onPitch(ws.getBallPoint()) && ws.getBallQuadrant() == ws.getRobotQuadrant(robot());
 	}
 
 }
