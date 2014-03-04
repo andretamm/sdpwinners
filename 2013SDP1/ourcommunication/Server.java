@@ -150,8 +150,10 @@ public class Server {
 		if (angleDiff > 0) {
 			angle = 360 - (int)Math.toDegrees(angleDiff);	
 		} else if (angleDiff < 0) {
-			angle = (int)Math.toDegrees(angleDiff);
+			angle = (int)Math.toDegrees(angleDiff) ;
 		}
+		
+		angle = Math.abs(angle);
 		
 		if (type == RobotType.DEFENDER) {
 			defenderRobot.sendToRobot(8);
