@@ -1836,13 +1836,13 @@ public class VisionGUI implements ChangeListener {
 		QuadrantThresholdsState quadrant4 = thresholdsState.getQuadrantThresholds(Quadrant.Q4);
 
 		quadrant1.setLowX(q1.getValue());
-		quadrant1.setLowX(q1.getUpperValue());
+		quadrant1.setHighX(q1.getUpperValue());
 		quadrant2.setLowX(q2.getValue());
-		quadrant2.setLowX(q2.getUpperValue());
+		quadrant2.setHighX(q2.getUpperValue());
 		quadrant3.setLowX(q3.getValue());
-		quadrant3.setLowX(q3.getUpperValue());
+		quadrant3.setHighX(q3.getUpperValue());
 		quadrant4.setLowX(q4.getValue());
-		quadrant4.setLowX(q4.getUpperValue());
+		quadrant4.setHighX(q4.getUpperValue());
 		
 		worldState.setQ1LowX(q1.getValue());
 		worldState.setQ1HighX(q1.getUpperValue());
