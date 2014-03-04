@@ -34,19 +34,20 @@ public class SimpleReactiveDefendGoal extends GeneralBehavior {
 			int x = ws.getRobotX(robot());
 			int y = ws.getRobotY(robot());
 			
-			// Rotate to 90'			
-			if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR)) {
-				isRotating = true;
-//				System.out.println("Rotating");
-				rotateTo(C.DOWN);
-				return;
-			}
-			
-			// Finished rotating
-			if (isRotating) {
-				isRotating = false;
-				s.send(type, RobotCommand.STOP);
-			}
+//			// Rotate to 90'			
+//			if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), C.DOWN, ANGLE_ERROR)) {
+//				isRotating = true;
+//				d("Rotating down");
+//				rotateTo(C.DOWN);
+//				return;
+//			}
+//			
+//			// Finished rotating
+//			if (isRotating) {
+//				d("Stop rotating");
+//				isRotating = false;
+//				s.send(type, RobotCommand.STOP);
+//			}
 			
 			/* Decide what to use as a vector modelling the ball movement */
 			Point2D.Double ballVector = null;

@@ -12,8 +12,8 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.15; //15
-	public static final double DISTANCE_ERROR = 20;
+	public static final double ANGLE_ERROR = 0.20; //15
+	public static final double DISTANCE_ERROR = 30;
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
@@ -29,6 +29,14 @@ public abstract class GeneralBehavior implements Behavior {
 	protected int rotatingCounter = 0;
 	protected int stopCounter = 0;
 	protected int btCounter = 0;
+	
+	private static boolean DEBUG = true;
+	
+	public void d(String s) {
+		if (DEBUG) {
+			System.out.println(s);
+		}
+	}
 	
 	public GeneralBehavior(WorldState ws, RobotType type, Server s) {
 		this.ws = ws;
@@ -92,7 +100,7 @@ public abstract class GeneralBehavior implements Behavior {
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
 		
 		// Check if we need to rotate at all
-		if (StrategyHelper.angleDiff(orientation, angle) > ANGLE_ERROR) {
+		if (Math.abs(StrategyHelper.angleDiff(orientation, angle)) > ANGLE_ERROR) {
 			// Find the quickest angle to rotate towards our target
 			double turnAngle = StrategyHelper.angleDiff(orientation, angle);
 			
@@ -102,7 +110,7 @@ public abstract class GeneralBehavior implements Behavior {
 			} else {
 				s.send(type, RobotCommand.CW);
 			}
-			
+			d("rotating");
 			isRotating = true;
 		}
 	}
@@ -116,38 +124,51 @@ public abstract class GeneralBehavior implements Behavior {
 	 * @return True if we have reached the target, False otherwise
 	 */
 	public boolean quickGoTo(Point target) {
+		
 		Point robot = ws.getRobotPoint(robot());
 		double orientation = ws.getRobotOrientation(robot());
 		double targetAngle = Orientation.getAngle(robot, target);
 		double targetAngleComplement = StrategyHelper.angleComplement(targetAngle);
-		
+
 		int direction; 
-		
+//		d(orientation + " " + targetAngle + " " + targetAngleComplement);
+//		d(Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) + " " + Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement)));
+//		d("Robot pos: "+ robot);
+//		d("Target: " + target);
+		if (StrategyHelper.getDistance(robot, target) <= DISTANCE_ERROR) {
+//			d("already close enough, stopping");
+			stopMovement();
+			return true;
+		}
+
 		if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) 
 		    < Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement))) {
 			// Closer to go to targetAngle
+//			d("closer to go to angle");
 			direction = RobotCommand.FORWARD;
 			
-			if (StrategyHelper.angleDiff(orientation, targetAngle) > ANGLE_ERROR) {
+			if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) > ANGLE_ERROR) {
 				// Still need to rotate
 				rotateTo(targetAngle);
 				return false;
 			}
 		} else {
 			// Closer to go to the complement and then move backward
+//			d("closer to go to complement");
 			direction = RobotCommand.BACK;
 			
-			if (StrategyHelper.angleDiff(orientation, targetAngleComplement) > ANGLE_ERROR) {
+			if (Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement)) > ANGLE_ERROR) {
 				// Still need to rotate
 				rotateTo(targetAngleComplement);
 				return false;
 			}
 		}
 		
-		stopMovement();
+		stopRotating();
 		
 		// Now move to target point
 		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+			d("Moving in direction " + direction);
 			s.send(type, direction);
 			isMoving = true;
 			return false;
@@ -174,7 +195,7 @@ public abstract class GeneralBehavior implements Behavior {
 			return false;
 		}
 		
-		stopMovement();
+		stopRotating();
 		
 		// Move forward until we get there
 		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
@@ -198,6 +219,13 @@ public abstract class GeneralBehavior implements Behavior {
 		if (isMoving || isRotating) {
 			s.send(type, RobotCommand.STOP);
 			isMoving = false;
+			isRotating = false;
+		}
+	}
+	
+	private void stopRotating() {
+		if (isRotating) {
+			s.send(type, RobotCommand.STOP);
 			isRotating = false;
 		}
 	}

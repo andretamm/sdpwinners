@@ -11,17 +11,17 @@ import sdp.vision.WorldState;
  * Server that controls connections to the robots
  */
 public class Server {
-	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
-	private static final String DEFENDER_NXT_NAME = "NXT";
+//	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
+//	private static final String DEFENDER_NXT_NAME = "NXT";
 
-//		private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
-//	private static final String DEFENDER_NXT_NAME = "4s";
+	private static final String DEFENDER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
+	private static final String DEFENDER_NXT_NAME = "4s";
 	
-//	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
-//	private static final String ATTACKER_NXT_NAME = "4s";
+	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0A:07:1D";
+	private static final String ATTACKER_NXT_NAME = "4s";
 	
-	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
-	private static final String ATTACKER_NXT_NAME = "NXT";
+//	private static final String ATTACKER_NXT_MAC_ADDRESS = "00:16:53:0D:53:3E";
+//	private static final String ATTACKER_NXT_NAME = "NXT";
 	
 	private static BluetoothCommunication defenderRobot;
 	private static BluetoothCommunication attackerRobot;
@@ -115,9 +115,9 @@ public class Server {
 	public void send(RobotType type, int command) {
 		// Only send command if it is different from the last one
 		// we sent
+		
 		if (previousCommand.get(type) != command) {
 			previousCommand.put(type, command);
-			System.out.println("Sending " + command);
 			if (type == RobotType.DEFENDER) {
 				defenderRobot.sendToRobot(command);
 			} else if (type == RobotType.ATTACKER) {

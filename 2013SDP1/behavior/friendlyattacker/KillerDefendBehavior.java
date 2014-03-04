@@ -4,6 +4,7 @@ package behavior.friendlyattacker;
 import java.awt.Point;
 
 import behavior.GeneralBehavior;
+import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
 import constants.Quadrant;
@@ -28,8 +29,15 @@ public class KillerDefendBehavior extends GeneralBehavior {
 		int quadrantMiddleX = (ws.getQuadrantX(q, QuadrantX.LOW) + ws.getQuadrantX(q, QuadrantX.HIGH)) / 2 ;
 		Point target = new Point(quadrantMiddleX, ws.getBallY());
 		
-		// Doesn't care about what way we're facing
-		quickGoTo(target);
+		if (!ws.onPitch(target)) {
+			// Ball not on pitch, go to centre of our quadrant
+			target = new Point(quadrantMiddleX, ws.getOurGoalCentre().y);
+		}
+		
+		// Doesn't care about what way we're facing, stop when there
+		if (quickGoTo(target)) {
+			s.send(type, RobotCommand.STOP);
+		}
 		
 		// TODO use time to rotate to 270'
 	}
