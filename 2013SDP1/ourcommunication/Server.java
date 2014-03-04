@@ -3,9 +3,10 @@ package ourcommunication;
 import java.io.IOException;
 import java.util.EnumMap;
 
-import constants.RobotType;
+import behavior.StrategyHelper;
 
 import sdp.vision.WorldState;
+import constants.RobotType;
 
 /**
  * Server that controls connections to the robots
@@ -133,7 +134,25 @@ public class Server {
 	 * @param type Defender or attacker
 	 * @param angle to rotate to
 	 */
-	public void sendDiagonalMovement(RobotType type, int angle) {
+	public void sendDiagonalMovement(RobotType type, int angleToGo) {
+		// Create the angle that is send to the NXT
+		int angle = 0;
+		
+		// Get the robot's orientation from the Vision System.
+		int angleRobotIsFacing = (int)Math.toDegrees(ws.getRobotOrientation(type, ws.getColour()));
+		
+		// Get the orientation of the robot's zero
+		int robotZero = (angleRobotIsFacing + 90) % 360;
+		
+		// Get the difference between the robot zero and the angle we want to go to
+		double angleDiff = StrategyHelper.angleDiff(Math.toRadians(robotZero), Math.toRadians(angleToGo));
+		
+		if (angleDiff > 0) {
+			angle = 360 - (int)Math.toDegrees(angleDiff);	
+		} else if (angleDiff < 0) {
+			angle = (int)Math.toDegrees(angleDiff);
+		}
+		
 		if (type == RobotType.DEFENDER) {
 			defenderRobot.sendToRobot(8);
 			
