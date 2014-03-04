@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import sdp.vision.ui.MouseClick;
+import constants.RobotType;
+import behavior.StrategyHelper;
 
 import au.edu.jcu.v4l4j.CaptureCallback;
 import au.edu.jcu.v4l4j.DeviceInfo;
@@ -161,6 +163,20 @@ public class Vision extends WindowAdapter {
                                         worldState.updateCounter();
                                         label.getGraphics().drawImage(frameImage, 0, 0, width, height, null);
                                 }
+                                
+                                /*
+                                boolean hasBall = StrategyHelper.hasBall(worldState.getOpposition(RobotType.ATTACKER),worldState);
+                                if(hasBall)
+                                	System.out.println("YES BALL");
+                                else
+                                	System.out.println("NO BALL");
+                                */
+                                
+                                boolean isPathClear = StrategyHelper.isPathClear(worldState.getOur(RobotType.DEFENDER), 0, worldState);
+                                if(isPathClear)
+                                	System.out.println("CLEAR PATH");
+                                else
+                                	System.out.println("NOT CLEAR PATH!");
 
                                 frame.recycle();
                                 

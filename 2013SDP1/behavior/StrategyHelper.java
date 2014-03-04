@@ -6,6 +6,9 @@ import java.awt.geom.Point2D;
 import common.Robot;
 import constants.C;
 import constants.ShootingDirection;
+import constants.RobotColour;
+import constants.RobotType;
+
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 
@@ -292,13 +295,19 @@ public class StrategyHelper {
 		return Math.sqrt(Math.pow(Math.abs(a.x - b.x),2) + Math.pow(Math.abs(a.y - b.y),2));
 	}
 	
+	public static double pointToLineDistance(Point A, Point B, Point P) {
+		//Calculates distance between point P & line created by points A & B
+		double normalLength = Math.sqrt((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y));
+		return Math.abs((P.x-A.x)*(B.y-A.y)-(P.y-A.y)*(B.x-A.x))/normalLength;
+	}
+	
 	/**
 	 * Checks if the given robot has a ball
 	 * @param r Robot to check
 	 * @param ws Handle to WorldState
 	 * @return True if the robot has the ball, False otherwise
 	 */
-	public static boolean hasBall(Robot r, WorldState ws) {
+	public static boolean hasBall(Robot r, WorldState ws){
 		//Verify difference between Orientation Angle & Robot-to-Ball angle
 		double orientationAngle = ws.getRobotOrientation(r.type, r.colour);
 		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallPoint());
@@ -318,6 +327,7 @@ public class StrategyHelper {
 		}
 		return false;
 	}
+
 	
 	/**
 	 * Find out which robot has the ball
@@ -334,5 +344,47 @@ public class StrategyHelper {
 		
 		// Nobody has the ball :p
 		return null;
+	}
+
+	/**
+	 * Determine weather robot 'r's pass/shot will pass the intercepter or not
+	 * @param r Robot that is trying to pass/shoot
+	 * @param a Angle at which robot is trying to pass/shoot at
+	 * @param ws Handle to WorldState
+	 * @param k Distance from shooting/passing robot to intercepter robot
+	 * @param beta Angle between (shooting_Robot-intercepter_Robot) line & shooting/passing angle 'a'
+	 * @param opponentPoint Position of intercepter Robot
+	 * @param distance Distance between intercepter robot & line created by shooting angle
+	 * @param distanceThresh Threshold for distance
+	 * @return True if passing/shooting path is clear; False otherwise
+	 */
+	public static boolean isPathClear(Robot r, double a, WorldState ws){
+		Point opponentPoint;
+		double distanceThresh = 50;
+		
+		//Determine opponent Robot that might intercept our pass/shot
+		if(r.colour == RobotColour.BLUE){
+			if(r.type == RobotType.DEFENDER)
+				opponentPoint = ws.getRobotXY(RobotColour.YELLOW, RobotType.ATTACKER);
+			else
+				opponentPoint = ws.getRobotXY(RobotColour.YELLOW, RobotType.DEFENDER);
+		}
+		else{
+			if(r.type == RobotType.DEFENDER)
+				opponentPoint = ws.getRobotXY(RobotColour.BLUE, RobotType.ATTACKER);
+			else
+				opponentPoint = ws.getRobotXY(RobotColour.BLUE, RobotType.DEFENDER);
+		}
+		
+		double k = getDistance(ws.getRobotPoint(r), opponentPoint);
+		double beta = Math.abs(StrategyHelper.angleDiff(a, Orientation.getAngle(ws.getRobotPoint(r), opponentPoint)));
+		double distance = k * Math.sin(beta);
+		
+		System.out.println(distance);
+		
+		if(distance <= distanceThresh)
+			return false;
+		
+		return true;
 	}
 }
