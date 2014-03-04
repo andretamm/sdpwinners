@@ -1455,15 +1455,6 @@ public class VisionGUI implements ChangeListener {
 		quadrantPanel.add(q1_panel);
 		q1.addChangeListener(this);
 		
-//		q1.addChangeListener(new ChangeListener() {
-//			@Override
-//			public void stateChanged(ChangeEvent arg0) {
-//				worldState.setQ1LowX(q1.getValue());
-//				quadrant1.setLowX(q1.getValue());
-//				worldState.setQ1HighX(q1.getUpperValue());
-//				quadrant1.setHighX(q1.getUpperValue());
-//			}
-//		});
 
 		/* Quadrant2 */
 		QuadrantThresholdsState quadrant2 = thresholdsState.getQuadrantThresholds(Quadrant.Q2);
@@ -1475,16 +1466,7 @@ public class VisionGUI implements ChangeListener {
 		q2_panel.add(q2);
 		quadrantPanel.add(q2_panel);
 		q2.addChangeListener(this);
-//		q2.addChangeListener(new ChangeListener() {
-//
-//			@Override
-//			public void stateChanged(ChangeEvent arg0) {
-//				worldState.setQ2LowX(q2.getValue());
-//				quadrant2.setLowX(q2.getValue());
-//				worldState.setQ2HighX(q2.getUpperValue());
-//				quadrant2.setHighX(q2.getUpperValue());
-//			}
-//		});
+
 
 		/* Quadrant3 */
 		QuadrantThresholdsState quadrant3 = thresholdsState.getQuadrantThresholds(Quadrant.Q3);
@@ -1496,16 +1478,7 @@ public class VisionGUI implements ChangeListener {
 		q3_panel.add(q3);
 		quadrantPanel.add(q3_panel);
 		q3.addChangeListener(this);
-//		q3.addChangeListener(new ChangeListener() {
-//
-//			@Override
-//			public void stateChanged(ChangeEvent arg0) {
-//				worldState.setQ3LowX(q3.getValue());
-//				quadrant3.setLowX(q3.getValue());
-//				worldState.setQ3HighX(q3.getUpperValue());
-//				quadrant3.setHighX(q3.getUpperValue());
-//			}
-//		});
+
 
 		/* Quadrant4 */
 		QuadrantThresholdsState quadrant4 = thresholdsState.getQuadrantThresholds(Quadrant.Q4);
@@ -1517,16 +1490,7 @@ public class VisionGUI implements ChangeListener {
 		q4_panel.add(q4);
 		quadrantPanel.add(q4_panel);
 		q4.addChangeListener(this);
-//		q4.addChangeListener(new ChangeListener() {
-//
-//			@Override
-//			public void stateChanged(ChangeEvent arg0) {
-//				worldState.setQ4LowX(q4.getValue());
-//				quadrant4.setLowX(q4.getValue());
-//				worldState.setQ4HighX(q4.getUpperValue());
-//				quadrant4.setHighX(q4.getUpperValue());
-//			}
-//		});
+
 	}
 
 	/**
@@ -1844,6 +1808,7 @@ public class VisionGUI implements ChangeListener {
 		quadrant4.setLowX(q4.getValue());
 		quadrant4.setHighX(q4.getUpperValue());
 		
+		//This is annoying:
 		worldState.setQ1LowX(q1.getValue());
 		worldState.setQ1HighX(q1.getUpperValue());
 		worldState.setQ2LowX(q2.getValue());
@@ -1959,7 +1924,12 @@ public class VisionGUI implements ChangeListener {
 		QuadrantThresholdsState quadrant2 = thresholdsState.getQuadrantThresholds(Quadrant.Q2);
 		QuadrantThresholdsState quadrant3 = thresholdsState.getQuadrantThresholds(Quadrant.Q3);
 		QuadrantThresholdsState quadrant4 = thresholdsState.getQuadrantThresholds(Quadrant.Q4);
-
+		
+		//		setSliderVals(q1, 0, 50);
+		//		setSliderVals(q2, 0, 50);
+		//		setSliderVals(q3, 0, 50);
+		//		setSliderVals(q4, 0, 50);
+		
 		setSliderVals(q1, quadrant1.getLowX(), quadrant1.getHighX());
 		setSliderVals(q2, quadrant2.getLowX(), quadrant2.getHighX());
 		setSliderVals(q3, quadrant3.getLowX(), quadrant3.getHighX());
