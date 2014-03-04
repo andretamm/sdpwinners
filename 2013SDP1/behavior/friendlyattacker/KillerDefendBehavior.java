@@ -30,6 +30,8 @@ public class KillerDefendBehavior extends GeneralBehavior {
 		
 		// Doesn't care about what way we're facing
 		quickGoTo(target);
+		
+		// TODO use time to rotate to 270'
 	}
 
 	/** 

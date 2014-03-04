@@ -94,7 +94,7 @@ public class Server {
 				System.out.println();
 				
 				if (equals) {
-					ws.setHaveBall(true);
+					ws.setRobotGrabbedBall(ws.getOur(type), true);
 					break;
 				}
 			} catch (IOException e) {

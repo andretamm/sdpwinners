@@ -26,7 +26,7 @@ public class KillerCatchBall extends GeneralBehavior {
 		
 		s.send(type, RobotCommand.GRAB);
 		
-		ws.setHaveBall(true); // UGLY FILTHY HACK
+		ws.setRobotGrabbedBall(robot(), true);
 		s.receiveHaveBall(RobotType.ATTACKER);
 	}
 
@@ -43,6 +43,6 @@ public class KillerCatchBall extends GeneralBehavior {
 //		System.out.println("catch ball " + StrategyHelper.inRange(ws.getRobotOrientation(r.type, r.colour), orientation, ANGLE_ERROR));
 //		System.out.println(ws.getRobotOrientation(r.type, r.colour) - orientation);
 		return (StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR) &&
-				!ws.haveBall());
+				!ws.getRobotGrabbedBall(robot()));
 	}
 }

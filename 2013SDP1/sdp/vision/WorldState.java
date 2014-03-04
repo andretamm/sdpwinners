@@ -69,8 +69,6 @@ public class WorldState implements VisionInterface {
 	public static final int ballRadius = 12;
 	public static final int plateRadius = 15;
 
-	private boolean haveBall = false;
-
 	public static double cmToPixels = 0.38;
 
 	//TODO Alter history and velocity for two robots
@@ -90,6 +88,7 @@ public class WorldState implements VisionInterface {
 	// MILA add here
 	// RobotMap<Double[]> ....
 	private RobotMap<Double[]> robotOrientationHistory;
+	private RobotMap<Boolean> robotGrabbedBall;
 	
 
 	private boolean removeShadows = false;
@@ -226,9 +225,7 @@ public class WorldState implements VisionInterface {
 		this.robotVelocity = new RobotMap<Point2D.Double>();
 		this.robotTimestamps = new RobotMap<long[]>();	
 		this.robotOrientationHistory = new RobotMap<Double[]>();
-		// MILA add here
-		// new robotmap
-		
+		this.robotGrabbedBall = new RobotMap<Boolean>(false);
 		
 		// Set default values for all the robots
 		for (Robot r: Robot.listAll()) {
@@ -242,23 +239,18 @@ public class WorldState implements VisionInterface {
 			long[] timestamps = new long[HISTORY_LENGTH];
 			Double[] orientationHistory = new Double[ORIENTATION_HISTORY_LENGTH];
 				
-			// MILA
-			
 			for (int i = 0; (i < HISTORY_LENGTH); i++) {
 				history[i] = new Point(1,1);
 				timestamps[1] = 1;
-				// MILA
 			}
 			
 			for (int i = 0; (i < ORIENTATION_HISTORY_LENGTH); i++) {
 				orientationHistory[i] = 0.0;
-				// MILA
 			}
 			
 			robotHistory.put(r, history);
 			robotTimestamps.put(r, timestamps);
 			robotOrientationHistory.put(r, orientationHistory);
-			// MILA
 		}
 		
 		this.ballX = 0;
@@ -864,14 +856,6 @@ public class WorldState implements VisionInterface {
 		return 0;
 	}
 
-	public boolean haveBall() {
-		return haveBall;
-	}
-	
-	public void setHaveBall(boolean haveBall) {
-		this.haveBall = haveBall;
-	}
-
 	/**
 	 * Find the Quadrant the robot is in
 	 * @param robot The robot to check
@@ -949,5 +933,25 @@ public class WorldState implements VisionInterface {
 	public boolean ballIsMoving(double threshold) {
 		return StrategyHelper.magnitude(getBallVelocity()) > threshold && onPitch(getBallPoint());
 	}
+
+	/**
+	 * This method only works with our robots! Make sure to call
+	 * setRobotGrabbedBall when we get the ball or this will be useless
+	 * @return True if the robot has the ball in the grabber, False otherwise
+	 */
+	public boolean getRobotGrabbedBall(Robot r) {
+		return robotGrabbedBall.get(r);
+	}
+
+	/**
+	 * Set whether the robot has the ball in the grabber or not. This
+	 * should only be used with our robots.
+	 * @param robotGrabbedBall
+	 */
+	public void setRobotGrabbedBall(Robot r, boolean hasGrabbed) {
+		this.robotGrabbedBall.put(r, hasGrabbed);
+	}
+	
+	
 	
 }

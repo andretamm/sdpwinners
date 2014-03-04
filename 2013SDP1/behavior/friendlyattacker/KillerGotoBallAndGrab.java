@@ -25,7 +25,7 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 			// We're at the ball, so grab it
 			System.out.println("GRABBING");
 			s.send(type, RobotCommand.GRAB);
-			ws.setHaveBall(true);
+			ws.setRobotGrabbedBall(robot(), true);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		return (!ws.haveBall());
+		return !ws.getRobotGrabbedBall(robot());
 	}
 
 }
