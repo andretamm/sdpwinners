@@ -68,6 +68,9 @@ public class DefenderProtectGoal extends GeneralBehavior {
 				target = new Point(defendX, ws.getBallY());
 			}
 			
+			// Don't go past the goal!
+			target.y = Math.min(Math.max(target.y, ws.getOurGoalTop().y + 5), ws.getOurGoalBottom().y - 5);
+			
 			/*-------------------------------------*/
 			/* Finally know where we need to be !  */
 			/*-------------------------------------*/
@@ -76,7 +79,7 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			if (quickGoTo(target)) {
 				stop();
 			}
-			
+
 			// TODO - We should use this time to rotate to 270 degrees if we're already there!!!!
 			
 		} catch (Exception e) {

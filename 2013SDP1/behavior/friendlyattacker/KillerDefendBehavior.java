@@ -39,7 +39,7 @@ public class KillerDefendBehavior extends GeneralBehavior {
 //			s.send(type, RobotCommand.STOP);
 //		}
 		
-		if (goDiagonallyTo(target)) {
+		if (quickGoTo(target)) {
 			stop();
 		}
 		

@@ -141,7 +141,7 @@ public class Server {
 	 */
 	public void sendDiagonalMovement(RobotType type, int angleToGo) {
 		if (previousCommand.get(type) == 8) {
-			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 5) {
+			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 3) {
 				// Angle no change enough, do nothing lol
 				return;
 			}

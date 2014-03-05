@@ -13,4 +13,5 @@ public class C {
 	public static final double LEFT = Math.PI;
 	public static final double DOWN = Math.PI * 3 / 2.0;
 	public static final double RIGHT = 0;
+	public static final double A15 = Math.PI / 12.0;
 }

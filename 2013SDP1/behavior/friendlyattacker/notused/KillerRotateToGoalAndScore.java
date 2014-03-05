@@ -1,4 +1,4 @@
-package behavior.friendlyattacker;
+package behavior.friendlyattacker.notused;
 
 import java.awt.Point;
 
@@ -10,9 +10,9 @@ import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
-public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
+public class KillerRotateToGoalAndScore extends GeneralBehavior {
 
-	public KillerMoveLeftKickToBottomGoalAndScore(WorldState ws, RobotType type, Server s) {
+	public KillerRotateToGoalAndScore(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 
@@ -22,7 +22,7 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
-		System.out.println(ws.getRobotPoint(robot()));
+		
 		// Stop this madness if we didn't actually grab the ball <.<
 //		if (!StrategyHelper.hasBall(robot(), ws)) {
 //			ws.setRobotGrabbedBall(robot(), false);
@@ -30,51 +30,25 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 //			return;
 //		}
 
-		int optimalYValue = 130;
 		Point robot = ws.getRobotPoint(robot());
-		Point goal = new Point(ws.getOppositionGoalCentre().x, ws.getRobotY(robot()));
+		Point goal = ws.getOppositionGoalCentre();
 		double orientation = Orientation.getAngle(robot, goal);
 		
-		/*
-		 * Rotate until horizontal with the opposition's goal
-		 */
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
 			rotateTo(orientation);
 			isRotating = true;
 			return;
 		}
 		
-		stopRotating();
-		
-		/*
-		 * Aim at the right. i.e. at the bottom of the opposition's goal
-		 */
-		if(!isAimingRight){
-			aimRight();
-		}
-		
-		/*
-		 * Continue to move left until it reaches the optimal y coordinate
-		 */
-		if (!StrategyHelper.inRange(ws.getRobotPoint(robot()).y, optimalYValue, DISTANCE_ERROR)) {
-			moveLeft();
-			return;
-		}
-		
-		if(isMoving){
+		if (isRotating) {
 			s.send(type, RobotCommand.STOP);
-			isMoving = false;
+			isRotating = false;
 		}
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		// No longer have the ball
-		s.send(type, RobotCommand.KICK);
 		ws.setRobotGrabbedBall(robot(), false);
-		
-		/*
-		 * Reset the aiming of the robot to the centre (i.e. NORTH)
-		 */
-		aimReset();
+		s.send(type, RobotCommand.KICK);
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {

@@ -55,6 +55,9 @@ public class Display {
 	}
 	
 	public static void markers(ThresholdsState ts, BufferedImage img, PitchPoints op, WorldState ws) {
+		
+//		System.out.println("ball magnitude: " + StrategyHelper.magnitude(ws.getBallVelocity()));
+		
 		Graphics graphics = img.getGraphics();
 
 		//draw pitch bounds
@@ -83,7 +86,6 @@ public class Display {
 
 		
 		graphics.setColor(Color.red);
-		
 		
 		/*graphics.fillOval((int) op.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER).getX() - WorldState.plateRadius,
 						  (int) op.getRobotPosition(RobotColour.BLUE, RobotType.DEFENDER).getY() - WorldState.plateRadius, 
@@ -186,6 +188,7 @@ public class Display {
 		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(StrategyHelper.getDefendLineX(ws), ws.getOppositionAttackerPosition(), ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)));
 		if (defendPos != null) {
 			graphics.setColor(Color.ORANGE);
+			defendPos.y = Math.min(Math.max(defendPos.y, ws.getOurGoalTop().y + 5), ws.getOurGoalBottom().y - 5);
 			graphics.fillOval(defendPos.x - 3, defendPos.y - 3, 6, 6);
 		}
 		

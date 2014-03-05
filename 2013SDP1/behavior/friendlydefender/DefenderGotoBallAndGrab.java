@@ -44,6 +44,6 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 		return (!ws.getRobotGrabbedBall(robot()) && 
 				 ws.onPitch(ws.getBallPoint()) && 
 				 ws.getBallQuadrant() == ws.getRobotQuadrant(robot()) &&
-			    !ws.ballIsMoving(20));
+			    !ws.ballIsMoving(0.05));
 	}
 }

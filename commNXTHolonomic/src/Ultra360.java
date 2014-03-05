@@ -25,7 +25,7 @@ public class Ultra360 {
 	private byte off;
 	
 	// Used to tune the maximum speed for the diagonal movement
-	static double MAXIMUMSPEED = 100;
+	static double MAXIMUMSPEED = 70;
 	
 	//Actual robot speed
 	public byte forwardSpeed;
@@ -49,8 +49,8 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 50; //60 
-		slowRotationSpeed = (byte) 30;
+		fastRotationSpeed = (byte) 45; //50 60 
+		slowRotationSpeed = (byte) 45; 
 		
 		// Default moving speed
 		forwardSpeed = (byte) 90; //70

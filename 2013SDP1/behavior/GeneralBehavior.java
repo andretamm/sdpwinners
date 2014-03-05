@@ -12,8 +12,8 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.25; //15
-	public static final double DISTANCE_ERROR = 30;
+	public static final double ANGLE_ERROR = 0.20; //15
+	public static final double DISTANCE_ERROR = 25; //30
 	
 	protected boolean isActive = false;
 	protected WorldState ws;
@@ -98,7 +98,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * @param angle The angle (in rad) the robot will be facing by the end
 	 * @author Andre
 	 */
-	public void rotateTo(double angle) {
+	public boolean rotateTo(double angle) {
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
 		
 		// Find the quickest angle to rotate towards our target
@@ -124,7 +124,11 @@ public abstract class GeneralBehavior implements Behavior {
 			
 			d("rotating");
 			isRotating = true;
+			
+			return false;
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -137,17 +141,19 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	public boolean quickGoTo(Point target) {
 		
+		Point safeTarget = StrategyHelper.safePoint(ws, robot(), target);
+		
 		Point robot = ws.getRobotPoint(robot());
 		double orientation = ws.getRobotOrientation(robot());
-		double targetAngle = Orientation.getAngle(robot, target);
+		double targetAngle = Orientation.getAngle(robot, safeTarget);
 		double targetAngleComplement = StrategyHelper.angleComplement(targetAngle);
 
 		int direction; 
 //		d(orientation + " " + targetAngle + " " + targetAngleComplement);
 //		d(Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) + " " + Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement)));
 //		d("Robot pos: "+ robot);
-		d("Target: " + target);
-		if (StrategyHelper.getDistance(robot, target) <= DISTANCE_ERROR) {
+		d("Target: " + safeTarget);
+		if (StrategyHelper.getDistance(robot, safeTarget) <= DISTANCE_ERROR) {
 			// Already close enough, don't do anything
 //			d("already close enough, stopping");
 			return true;
@@ -179,7 +185,7 @@ public abstract class GeneralBehavior implements Behavior {
 		stopRotating();
 		
 		// Now move to target point
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+		if (StrategyHelper.getDistance(robot, safeTarget) > DISTANCE_ERROR) {
 			d("Moving in direction " + direction);
 			s.send(type, direction);
 			isMoving = true;
@@ -194,13 +200,16 @@ public abstract class GeneralBehavior implements Behavior {
 	
 	/**
 	 * Takes the robot to the specified point. Rotates to the correct angle, then drives forward.
-	 * @param target Target point.
+	 * @param safeTarget Target point.
 	 * @return True if we have reached the target, False otherwise
 	 */
 	public boolean goTo(Point target) {
 		// Correct the angle
 		Point robot = ws.getRobotPoint(robot());
-		double orientation = Orientation.getAngle(robot, target);
+		Point safeTarget = StrategyHelper.safePoint(ws, robot(), target);
+		
+		double orientation = Orientation.getAngle(robot, safeTarget);
+		 
 		
 		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
 			rotateTo(orientation);
@@ -210,7 +219,7 @@ public abstract class GeneralBehavior implements Behavior {
 		stopRotating();
 		
 		// Move forward until we get there
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+		if (StrategyHelper.getDistance(robot, safeTarget) > DISTANCE_ERROR) {
 			s.send(type, RobotCommand.FORWARD);
 			isMoving = true;
 			return false;
@@ -227,7 +236,7 @@ public abstract class GeneralBehavior implements Behavior {
 		Point robot = ws.getRobotPoint(robot());
 		double orientation = Orientation.getAngle(robot, target);
 		
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 10) {
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 12) {
 			isMoving = true;
 			s.sendDiagonalMovement(type, (int) Math.toDegrees(orientation));
 			return false;

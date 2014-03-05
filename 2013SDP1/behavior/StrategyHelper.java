@@ -294,7 +294,7 @@ public class StrategyHelper {
 	 */
 	public static int getDefendLineX(WorldState ws) {
 		int ourGoalX = ws.getOurGoalCentre().x;
-		return ws.getDirection() == ShootingDirection.LEFT ? ourGoalX - 60 : ourGoalX + 60; 
+		return ws.getDirection() == ShootingDirection.LEFT ? ourGoalX - 37 : ourGoalX + 40; 
 	}
 	
 	public static double getDistance(Point a, Point b){
@@ -326,7 +326,7 @@ public class StrategyHelper {
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
-			if (distance <= 28) {
+			if (distance <= 32) {
 				System.out.println(distance);
 				// TODO figure out actual value
 				return true;

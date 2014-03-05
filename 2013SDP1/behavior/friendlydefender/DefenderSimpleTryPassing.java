@@ -3,17 +3,20 @@ package behavior.friendlydefender;
 import java.awt.Point;
 
 import behavior.GeneralBehavior;
+import behavior.Strategy;
 import behavior.StrategyHelper;
 import ourcommunication.RobotCommand;
 import ourcommunication.Server;
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
+import constants.C;
 import constants.Quadrant;
 import constants.RobotType;
+import constants.ShootingDirection;
 
-public class DefenderMakePass extends GeneralBehavior {
+public class DefenderSimpleTryPassing extends GeneralBehavior {
 
-	public DefenderMakePass(WorldState ws, RobotType type, Server s) {
+	public DefenderSimpleTryPassing(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 
@@ -29,34 +32,6 @@ public class DefenderMakePass extends GeneralBehavior {
 //			s.send(type, RobotCommand.OPEN_GRABBER);
 //			return;
 //		}
-		
-		// Global flag to let the attacker know we're doing a pass.
-		// NB - the attacker is responsible for setting this to false when he realises
-		// the pass isn't happening any more!
-		ws.setDoingPass(true);
-		ws.setAttackerPassPosition(ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(ws.getOur(RobotType.ATTACKER))));
-		
-		/*-----------------------------------------------*/
-		/* Make robot go to the middle of the quadrant   */
-		/*-----------------------------------------------*/	
-		Point middlePoint = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
-		
-//		if (!quickGoTo(middlePoint)) {
-//			// not there yet
-//			return;
-//		}
-		
-		if (quickGoTo(middlePoint)) {
-			// not there yet
-			return;
-		}
-		
-		// Don't need to move any more!
-		if (isMoving) {
-			stop();
-		}
-		
-		// We're there!
 		
 		/*-----------------------------------------------*/
 		/* Decide which way to shoot                     */
@@ -106,6 +81,7 @@ public class DefenderMakePass extends GeneralBehavior {
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.KICK);
 		ws.setRobotGrabbedBall(robot(), false);
+		Strategy.defenderReadyForPass = false;
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
@@ -117,11 +93,12 @@ public class DefenderMakePass extends GeneralBehavior {
 
 	/** 
 	 * Triggers if we have the ball
+	 * NB - this has to be lower priority than GetInPositionForPass!!!
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()
 	 */
 	@Override
 	public boolean takeControl() {
-		return ws.getRobotGrabbedBall(robot());
+		return Strategy.defenderReadyForPass;
 	}
 
 }

@@ -19,6 +19,9 @@ public class Strategy {
 	Manager defender;
 	Manager attacker;
 	
+	public static boolean defenderReadyForPass = false;
+	public static boolean attackerReadyForKick = false;
+	
 	public Strategy(WorldState ws, Server server) {
 		this.ws = ws;
 		this.server = server;
