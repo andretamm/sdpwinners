@@ -223,7 +223,10 @@ public abstract class GeneralBehavior implements Behavior {
 		}
 	}
 	
-	private void stopRotating() {
+	/**
+	 * Stops rotating if we're currently rotating.
+	 */
+	protected void stopRotating() {
 		if (isRotating) {
 			s.send(type, RobotCommand.STOP);
 			isRotating = false;

@@ -27,6 +27,9 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		// Not doing a pass
+		ws.setDoingPass(false);
+		
 		try {
 			/*-------------------------------------*/
 			/* Decide which blocking method to use */
@@ -40,7 +43,11 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			ballVector = ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER));
 			ballOrigin = ws.getOppositionAttackerPosition();
 			
-			/* Find the position where we will intercept the ball */
+			/*-------------------------------------*/
+			/* Figure out where we need to be      */
+			/* to intercept the ball               */
+			/*-------------------------------------*/
+			
 			// Our defend line
 			int defendX = StrategyHelper.getDefendLineX(ws);
 

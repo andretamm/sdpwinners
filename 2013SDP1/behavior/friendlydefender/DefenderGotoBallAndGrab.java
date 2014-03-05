@@ -20,6 +20,9 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		// Attacker shouldn't get ready until we've grabbed the ball
+		ws.setDoingPass(false);
+		
 		d("going to ball");
 		
 		if (goToBall()) {
