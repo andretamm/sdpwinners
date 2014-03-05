@@ -32,35 +32,31 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 
 		int optimalYValue = 344;
 		Point robot = ws.getRobotPoint(robot());
-		Point goal = new Point(ws.getRobotY(robot()),ws.getOppositionGoalCentre().x);
+		Point goal = new Point(ws.getOppositionGoalCentre().x, ws.getRobotY(robot()));
 		double orientation = Orientation.getAngle(robot, goal);
 		
 		/*
 		 * Rotate until horizontal with the opposition's goal
 		 */
-		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
+		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
 			rotateTo(orientation);
 			isRotating = true;
 			return;
 		}
 		
-		if (isRotating) {
-			s.send(type, RobotCommand.STOP);
-			isRotating = false;
-		}
+		stopRotating();
 		
 		/*
 		 * Aim at the right. i.e. at the bottom of the opposition's goal
 		 */
 		if(!isAimingRight){
 			aimRight();
-			s.send(type, RobotCommand.AIM_RIGHT);
 		}
 		
 		/*
 		 * Continue to move left until it reaches the optimal y coordinate
 		 */
-		if (!(ws.getRobotPoint(robot()).y == optimalYValue)){
+		if (!StrategyHelper.inRange(ws.getRobotPoint(robot()).y, optimalYValue, DISTANCE_ERROR)) {
 			moveLeft();
 			return;
 		}
@@ -69,7 +65,6 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 			s.send(type, RobotCommand.STOP);
 			isMoving = false;
 		}
-		
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		// No longer have the ball
@@ -80,7 +75,6 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		 * Reset the aiming of the robot to the centre (i.e. NORTH)
 		 */
 		aimReset();
-		s.send(type, RobotCommand.AIM_RESET);
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {

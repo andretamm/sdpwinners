@@ -34,7 +34,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		Point goal = ws.getOppositionGoalCentre();
 		double orientation = Orientation.getAngle(robot, goal);
 		
-		if (!StrategyHelper.inRange(ws.getRobotOrientation(robot()), orientation, ANGLE_ERROR)) {
+		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
 			rotateTo(orientation);
 			isRotating = true;
 			return;
