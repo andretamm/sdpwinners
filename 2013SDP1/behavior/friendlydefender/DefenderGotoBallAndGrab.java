@@ -15,6 +15,7 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 
 	@Override
 	public void action() {
+		d("going to ball and grabbing");
 		
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
@@ -43,6 +44,6 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 		return (!ws.getRobotGrabbedBall(robot()) && 
 				 ws.onPitch(ws.getBallPoint()) && 
 				 ws.getBallQuadrant() == ws.getRobotQuadrant(robot()) &&
-			    !ws.ballIsMoving());
+			    !ws.ballIsMoving(20));
 	}
 }

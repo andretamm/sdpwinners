@@ -47,7 +47,7 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		rotationSpeed = (byte) 60; //60 
+		rotationSpeed = (byte) 50; //60 
 		// Default moving speed
 		speed = (byte) 90; //70
 		
@@ -271,20 +271,20 @@ public class Ultra360 {
 	//THESE FOLLOWING METHODS RUNS ON THE KICKER PART OF THE MAX ROBOT//
 	//****************************************************************//
 	
-	public static void closeGrabber() {
+	public void closeGrabber() {
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
 		grabber.rotateTo(20);
 	}
 	
-	public static void openGrabber() {
+	public void openGrabber() {
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
 		grabber.rotateTo(-10);
 	}
 	
 	//Kick the ball in a straight direction. This will reset the grabber to open.
-	public static void kick() {
+	public void kick() {
 		kicker.resetTachoCount();
 		kicker.setSpeed(1000);
 		kicker.setAcceleration(14000);

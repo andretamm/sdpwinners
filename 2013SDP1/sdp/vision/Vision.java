@@ -173,11 +173,11 @@ public class Vision extends WindowAdapter {
                                 	System.out.println("NO BALL");
                                 */
                                 
-                                boolean isPathClear = StrategyHelper.isPathClear(worldState.getOur(RobotType.DEFENDER), 0, worldState);
+                                /*boolean isPathClear = StrategyHelper.isPathClear(worldState.getOur(RobotType.DEFENDER), 0, worldState);
                                 if(isPathClear)
                                 	System.out.println("CLEAR PATH");
                                 else
-                                	System.out.println("NOT CLEAR PATH!");
+                                	System.out.println("NOT CLEAR PATH!");*/
 
                                 frame.recycle();
                                 

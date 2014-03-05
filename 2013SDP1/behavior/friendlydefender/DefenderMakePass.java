@@ -69,8 +69,10 @@ public class DefenderMakePass extends GeneralBehavior {
 		opponentDistances[1] = StrategyHelper.getOpponentDistanceFromPath(robot(), Orientation.getAngle(robot, targets[1]), ws);
 		
 		if (opponentDistances[0] < opponentDistances[1]) {
+			d("Picked target 1");
 			target = targets[1];
 		} else {
+			d("Picked target 0");
 			target = targets[0];
 		}
 		
@@ -91,9 +93,9 @@ public class DefenderMakePass extends GeneralBehavior {
 		/*-----------------------------------------------*/
 		
 		// No longer have the ball after kick
-		ws.setRobotGrabbedBall(robot(), false);
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.KICK);
+		ws.setRobotGrabbedBall(robot(), false);
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {

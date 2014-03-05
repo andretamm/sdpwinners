@@ -12,7 +12,7 @@ import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {
-	public static final double ANGLE_ERROR = 0.20; //15
+	public static final double ANGLE_ERROR = 0.25; //15
 	public static final double DISTANCE_ERROR = 30;
 	
 	protected boolean isActive = false;
@@ -136,10 +136,10 @@ public abstract class GeneralBehavior implements Behavior {
 //		d(orientation + " " + targetAngle + " " + targetAngleComplement);
 //		d(Math.abs(StrategyHelper.angleDiff(orientation, targetAngle)) + " " + Math.abs(StrategyHelper.angleDiff(orientation, targetAngleComplement)));
 //		d("Robot pos: "+ robot);
-//		d("Target: " + target);
+		d("Target: " + target);
 		if (StrategyHelper.getDistance(robot, target) <= DISTANCE_ERROR) {
+			// Already close enough, don't do anything
 //			d("already close enough, stopping");
-			stopMovement();
 			return true;
 		}
 
@@ -275,10 +275,18 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	private void stopMovement() {
 		if (isMoving || isRotating) {
-			s.send(type, RobotCommand.STOP);
+			stop();
 			isMoving = false;
 			isRotating = false;
 		}
+	}
+	
+	/**
+	 * Sends the STOP command
+	 */
+	protected void stop() {
+		d("Stopping");
+		s.send(type, RobotCommand.STOP);
 	}
 	
 	/**
@@ -286,7 +294,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	protected void stopRotating() {
 		if (isRotating) {
-			s.send(type, RobotCommand.STOP);
+			stop();
 			isRotating = false;
 		}
 	}

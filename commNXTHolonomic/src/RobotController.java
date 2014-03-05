@@ -94,4 +94,18 @@ public class RobotController {
 	public void kickRight() {
 		ULTRA.kickRight();
 	}
+
+	public void aimLeft() {
+		ULTRA.aimLeft();
+		
+	}
+
+	public void aimRight() {
+		ULTRA.aimRight();
+	}
+
+	public void aimReset() {
+		ULTRA.aimReset();
+		
+	}
 }

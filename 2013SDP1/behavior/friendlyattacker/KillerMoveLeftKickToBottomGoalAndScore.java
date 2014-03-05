@@ -22,7 +22,7 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
-		
+		System.out.println(ws.getRobotPoint(robot()));
 		// Stop this madness if we didn't actually grab the ball <.<
 //		if (!StrategyHelper.hasBall(robot(), ws)) {
 //			ws.setRobotGrabbedBall(robot(), false);
@@ -30,7 +30,7 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 //			return;
 //		}
 
-		int optimalYValue = 344;
+		int optimalYValue = 130;
 		Point robot = ws.getRobotPoint(robot());
 		Point goal = new Point(ws.getOppositionGoalCentre().x, ws.getRobotY(robot()));
 		double orientation = Orientation.getAngle(robot, goal);

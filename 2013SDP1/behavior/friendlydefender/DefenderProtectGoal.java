@@ -73,7 +73,9 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/*-------------------------------------*/
 			
 			// Quickly go there :))
-			quickGoTo(target);
+			if (quickGoTo(target)) {
+				stop();
+			}
 			
 			// TODO - We should use this time to rotate to 270 degrees if we're already there!!!!
 			

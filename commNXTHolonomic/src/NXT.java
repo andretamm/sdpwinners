@@ -64,6 +64,15 @@ public class NXT {
 					case 15:
 						robot.kickRight();
 						break;
+					case 16:
+						robot.aimLeft();
+						break;
+					case 17:
+						robot.aimRight();
+						break;
+					case 18:
+						robot.aimReset();
+						break;
 					default:
 						robot.chill();
 				}

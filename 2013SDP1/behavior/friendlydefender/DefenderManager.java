@@ -1,6 +1,6 @@
-package behavior;
+package behavior.friendlydefender;
 
-import behavior.friendlydefender.DefenderProtectGoal;
+import behavior.Manager;
 import lejos.robotics.subsumption.Behavior;
 import ourcommunication.Server;
 import sdp.vision.WorldState;
@@ -14,11 +14,14 @@ public class DefenderManager extends behavior.Manager {
 	
 	@Override
 	public Behavior[] getAllBehaviors() {
-		int numOfBehaviors = 1;
+		int numOfBehaviors = 3;
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 		// Add behaviors in ascending order of priority
 		behaviorList[0] = new DefenderProtectGoal(getWorldState(), getRobotType(), getServer());
+		behaviorList[1] = new DefenderMakePass(getWorldState(), getRobotType(), getServer());
+		behaviorList[2] = new DefenderGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
+		
 
 		return behaviorList;
 	}
