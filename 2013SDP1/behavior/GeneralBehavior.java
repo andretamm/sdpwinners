@@ -229,6 +229,20 @@ public abstract class GeneralBehavior implements Behavior {
 	}
 	
 	/**
+	 * Kick left. Do NOT call more than once. Kthnx
+	 */
+	public void kickLeft() {
+		s.send(type, RobotCommand.KICK_LEFT);
+	}
+	
+	/**
+	 * Kick right. Do NOT call more than once. Kthnx
+	 */
+	public void kickRight() {
+		s.send(type, RobotCommand.KICK_RIGHT);
+	}
+	
+	/**
 	 * Stops moving if we're rotating or moving. Call this after every
 	 * change from rotation to movement or vice versa!!!
 	 */
