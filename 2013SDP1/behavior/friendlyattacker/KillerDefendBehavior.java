@@ -35,8 +35,12 @@ public class KillerDefendBehavior extends GeneralBehavior {
 		}
 		
 		// Doesn't care about what way we're facing, stop when there
-		if (quickGoTo(target)) {
-			s.send(type, RobotCommand.STOP);
+//		if (quickGoTo(target)) {
+//			s.send(type, RobotCommand.STOP);
+//		}
+		
+		if (goDiagonallyTo(target)) {
+			stop();
 		}
 		
 		// TODO use time to rotate to 270'

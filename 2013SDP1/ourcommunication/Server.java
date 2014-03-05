@@ -28,6 +28,7 @@ public class Server {
 	private static BluetoothCommunication attackerRobot;
 	
 	private EnumMap<RobotType, Integer> previousCommand;
+	private EnumMap<RobotType, Integer> previousAngle;
 	
 	private WorldState ws;
 	
@@ -42,6 +43,10 @@ public class Server {
 		previousCommand = new EnumMap<RobotType, Integer>(RobotType.class);
 		previousCommand.put(RobotType.DEFENDER, RobotCommand.NO_COMMAND);
 		previousCommand.put(RobotType.ATTACKER, RobotCommand.NO_COMMAND);
+		
+		previousAngle = new EnumMap<RobotType, Integer>(RobotType.class);
+		previousAngle.put(RobotType.DEFENDER, 0);
+		previousAngle.put(RobotType.ATTACKER, 0);
 	}
 	
 	/**
@@ -127,7 +132,7 @@ public class Server {
 		}
 	}
 	
-	/*
+	/**
 	 * Send a command to the robot to move diagonally. The method
 	 * choppes an angle and send it to the NXT.
 	 * 
@@ -135,6 +140,16 @@ public class Server {
 	 * @param angle to rotate to
 	 */
 	public void sendDiagonalMovement(RobotType type, int angleToGo) {
+		if (previousCommand.get(type) == 8) {
+			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 5) {
+				// Angle no change enough, do nothing lol
+				return;
+			}
+		}
+		
+		previousCommand.put(type, 8);
+		previousAngle.put(type, angleToGo);
+		
 		// Create the angle that is send to the NXT
 		int angle = 0;
 		
@@ -152,6 +167,8 @@ public class Server {
 		} else if (angleDiff < 0) {
 			angle = (int)Math.toDegrees(angleDiff) ;
 		}
+		
+		System.out.println(angleToGo + " " + angle);
 		
 		angle = Math.abs(angle);
 		

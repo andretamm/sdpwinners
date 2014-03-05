@@ -101,17 +101,27 @@ public abstract class GeneralBehavior implements Behavior {
 	public void rotateTo(double angle) {
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
 		
+		// Find the quickest angle to rotate towards our target
+		double turnAngle = StrategyHelper.angleDiff(orientation, angle);
+		
 		// Check if we need to rotate at all
-		if (Math.abs(StrategyHelper.angleDiff(orientation, angle)) > ANGLE_ERROR) {
-			// Find the quickest angle to rotate towards our target
-			double turnAngle = StrategyHelper.angleDiff(orientation, angle);
-			
-			// Now rotate
-			if (turnAngle < 0) {
-				s.send(type, RobotCommand.CCW);
+		if (Math.abs(turnAngle) > ANGLE_ERROR) {
+			if (turnAngle > C.A30) {
+				// Rotate fast if more than 30' away
+				if (turnAngle < 0) {
+					s.send(type, RobotCommand.CCW);
+				} else {
+					s.send(type, RobotCommand.CW);
+				}
 			} else {
-				s.send(type, RobotCommand.CW);
+				// Rotate slow if less than 30' away
+				if (turnAngle < 0) {
+					s.send(type, RobotCommand.SLOW_CCW);
+				} else {
+					s.send(type, RobotCommand.SLOW_CW);
+				}
 			}
+			
 			d("rotating");
 			isRotating = true;
 		}
@@ -211,6 +221,22 @@ public abstract class GeneralBehavior implements Behavior {
 		// We're there!
 		return true;
 	}
+	
+	public boolean goDiagonallyTo(Point target) {
+		// Correct the angle
+		Point robot = ws.getRobotPoint(robot());
+		double orientation = Orientation.getAngle(robot, target);
+		
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 10) {
+			isMoving = true;
+			s.sendDiagonalMovement(type, (int) Math.toDegrees(orientation));
+			return false;
+		}
+		
+		// We're there!
+		return true;
+	}
+	
 	
 	/**
 	 * Move the robot left. Note that this is relative

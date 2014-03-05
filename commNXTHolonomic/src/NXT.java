@@ -73,6 +73,12 @@ public class NXT {
 					case 18:
 						robot.aimReset();
 						break;
+					case 19:
+						robot.slowCW();
+						break;
+					case 20:
+						robot.slowCCW();
+						break;
 					default:
 						robot.chill();
 				}

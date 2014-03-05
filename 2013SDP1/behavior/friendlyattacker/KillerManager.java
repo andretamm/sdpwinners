@@ -13,12 +13,13 @@ public class KillerManager extends behavior.Manager {
 	
 	@Override
 	public Behavior[] getAllBehaviors() {
-		int numOfBehaviors = 3;
+		int numOfBehaviors = 4;
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 //		// Add behaviors in ascending order of priority
-//		behaviorList[2] = new KillerRotateToGoalAndScore(getWorldState(), getRobotType(), getServer());
-		behaviorList[2] = new KillerMoveLeftKickToBottomGoalAndScore(getWorldState(), getRobotType(), getServer());
+		behaviorList[3] = new KillerGetPass(getWorldState(), getRobotType(), getServer());
+		behaviorList[2] = new KillerRotateToGoalAndScore(getWorldState(), getRobotType(), getServer());
+//		behaviorList[2] = new KillerMoveLeftKickToBottomGoalAndScore(getWorldState(), getRobotType(), getServer());
 		behaviorList[1] = new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
 		behaviorList[0] = new KillerDefendBehavior(getWorldState(), getRobotType(), getServer());
 		

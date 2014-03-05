@@ -326,7 +326,7 @@ public class StrategyHelper {
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
-			if (distance <= 30) {
+			if (distance <= 28) {
 				System.out.println(distance);
 				// TODO figure out actual value
 				return true;
