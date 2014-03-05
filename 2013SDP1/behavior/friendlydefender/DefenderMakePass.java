@@ -30,6 +30,9 @@ public class DefenderMakePass extends GeneralBehavior {
 //			return;
 //		}
 		
+		// Global flag to let the attacker know we're doing a pass.
+		// NB - the attacker is responsible for setting this to false when he realises
+		// the pass isn't happening any more!
 		ws.setDoingPass(true);
 		ws.setAttackerPassPosition(ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(ws.getOur(RobotType.ATTACKER))));
 		
