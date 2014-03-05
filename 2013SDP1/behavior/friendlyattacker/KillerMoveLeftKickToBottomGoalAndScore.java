@@ -68,8 +68,8 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		// No longer have the ball
-		ws.setRobotGrabbedBall(robot(), false);
 		s.send(type, RobotCommand.KICK);
+		ws.setRobotGrabbedBall(robot(), false);
 		
 		/*
 		 * Reset the aiming of the robot to the centre (i.e. NORTH)

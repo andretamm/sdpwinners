@@ -25,7 +25,7 @@ public class Ultra360 {
 	private byte off;
 	
 	// Used to tune the maximum speed for the diagonal movement
-	static double MAXIMUMSPEED = 127;
+	static double MAXIMUMSPEED = 100;
 	
 	//Actual robot speed
 	public byte speed;
