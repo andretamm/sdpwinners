@@ -16,4 +16,6 @@ public class RobotCommand{
 	public static final int AIM_LEFT = 16;
 	public static final int AIM_RIGHT = 17;
 	public static final int AIM_RESET = 18;
+	public static final int SLOW_CW = 19;
+	public static final int SLOW_CCW = 20;
 }
