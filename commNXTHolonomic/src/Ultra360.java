@@ -5,12 +5,12 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 
 /*              ** Forwards facing wheels **		*/
-//			0x01 (I2C - Port 1) - WEST Wheel		//
-//			0x07 (I2C - Port 4) - EAST Wheel		//
+//			0x01 (I2C - Port 1) - EAST Wheel		//
+//			0x07 (I2C - Port 4) - WEST Wheel		//
 
 /*				** Side Ways Facing Wheels **		*/
-//			0x03 (I2C - Port 2) - NORTH Wheel       //
-//			0x05 (I2C - Port 3) - SOUTH Wheel       //
+//			0x03 (I2C - Port 2) -  SOUTH Wheel       //
+//			0x05 (I2C - Port 3) - NORTH Wheel       //
 
 
 public class Ultra360 {
@@ -87,16 +87,16 @@ public class Ultra360 {
 		}
 		long degToTime = (long) Math.rint(degrees*8.3); // Based on the current speed of rotation
 
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
 		I2Csensor.sendData(0x02,rotationSpeed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
 		I2Csensor.sendData(0x08,rotationSpeed); 
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
 		I2Csensor.sendData(0x04,rotationSpeed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
 		I2Csensor.sendData(0x06,rotationSpeed); 
 		//This function is made up out of a product of the time and speed.
@@ -108,16 +108,16 @@ public class Ultra360 {
 	
 	//Rotate clockwise until Andre stops you
 	public void rotateClockwise() {
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
 		I2Csensor.sendData(0x02,rotationSpeed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
 		I2Csensor.sendData(0x08,rotationSpeed); 
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
 		I2Csensor.sendData(0x04,rotationSpeed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
 		I2Csensor.sendData(0x06,rotationSpeed); 
 		
@@ -125,16 +125,16 @@ public class Ultra360 {
 		
 	//Rotate anti-clockwise until Andre stops you
 	public void rotateAntiClockwise() {
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,rotationSpeed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,forward); 
 		I2Csensor.sendData(0x08,rotationSpeed); 
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,backward); 
 		I2Csensor.sendData(0x04,rotationSpeed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,backward); 
 		I2Csensor.sendData(0x06,rotationSpeed); 
 		
@@ -144,104 +144,104 @@ public class Ultra360 {
 	
 	//Drives the robot forward at a given speed between 0 - 255
 	public void forward(int speed){
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,(byte) speed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
 		I2Csensor.sendData(0x08,(byte) speed);
 	}
 	
 	//Drives the robot backward at a given speed between 0 - 255
 	public void backward(int speed){
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
 		I2Csensor.sendData(0x02,(byte) speed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,forward); 
 		I2Csensor.sendData(0x08,(byte) speed);
 	}
 
 	//Drives the robot leftwards at a given speed between 0 - 255
 	public void goLeft(int speed){
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,backward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
 	
 	//Drives the robot rightwards at a given speed between 0 - 255
 	public void goRight(int speed){
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,backward); 
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
 	
 	//Diagonally drives the robot North-Eastwards at a given speed between 0-255
 	public void northWest(int speed){
-		//WEST Wheel 
+		//EAST Wheel 
 		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,(byte) speed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
 		I2Csensor.sendData(0x08,(byte) speed);
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,backward); 
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
 	
 	//Diagonally drives the robot South-Eastwards at a given speed between 0-255
 	public void southWest(int speed){
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
 		I2Csensor.sendData(0x02,(byte) speed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,forward); 
 		I2Csensor.sendData(0x08,(byte) speed);
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,backward); 
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
 	
 	//Diagonally drives the robot South-Westwards at a given speed between 0-255
 	public void southEast(int speed){
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
 		I2Csensor.sendData(0x02,(byte) speed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,forward); 
 		I2Csensor.sendData(0x08,(byte) speed);
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,backward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
 	
 	//Diagonally drives the robot North-Westwards at a given speed between 0-255
 	public void northEast(int speed){
-		//WEST Wheel
+		//EAST Wheel
 		I2Csensor.sendData(0x01,forward); 
 		I2Csensor.sendData(0x02,(byte) speed); 
-		//EAST Wheel
+		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
 		I2Csensor.sendData(0x08,(byte) speed);
-		//NORTH Wheel
+		//SOUTH Wheel
 		I2Csensor.sendData(0x03,backward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
-		//SOUTH Wheel
+		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
@@ -289,15 +289,16 @@ public class Ultra360 {
 	public void kick() {
 		kicker.resetTachoCount();
 		kicker.setSpeed(1000);
+		kicker.setAcceleration(14000);
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
 		grabber.rotateTo(0);
-		kicker.rotate(-90);
-		kicker.rotate(90);
+		kicker.rotate(-30);
+		kicker.rotate(30);
 	}
 	
 	//Rotates the rotator 25 degrees left and kicks the ball.
-	public void kickRight() {
+	public void kickLeft() {
 		rotator.rotateTo(25); 
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		kick();
@@ -307,7 +308,7 @@ public class Ultra360 {
 	}
 	
 	//Rotates the rotator 25 degrees right and kicks the ball.
-	public void kickLeft() {
+	public void kickRight() {
 		rotator.rotateTo(-25); 
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		kick();
@@ -317,7 +318,7 @@ public class Ultra360 {
 	
 	//This is to reset the rotator angle and align it straight again.
 	public void aimReset() {
-		rotator.rotateTo(3);
+		rotator.rotateTo(0);
 	}
 
 
