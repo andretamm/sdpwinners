@@ -9,4 +9,8 @@ public class RobotCommand{
 	public static final int KICK = 6;
 	public static final int GRAB = 10;
 	public static final int OPEN_GRABBER = 11;
+	public static final int MOVE_LEFT = 12;
+	public static final int MOVE_RIGHT = 13;
+	public static final int KICK_LEFT = 14;
+	public static final int KICK_RIGHT = 15;
 }

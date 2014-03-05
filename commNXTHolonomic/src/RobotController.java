@@ -27,7 +27,7 @@ public class RobotController {
 	public void kick() {
 		// Wait for the ball in the grabber to stabilise
 		try {
-			Thread.sleep(100);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {}
 		ULTRA.kick();
 	}
@@ -75,5 +75,23 @@ public class RobotController {
 	
 	public void openGrabber() {
 		ULTRA.openGrabber();
+	}
+
+	public void goLeft() {
+		ULTRA.stop();
+		ULTRA.goLeft(ULTRA.speed);
+	}
+
+	public void goRight() {
+		ULTRA.stop();
+		ULTRA.goRight(ULTRA.speed);
+	}
+
+	public void kickLeft() {
+		ULTRA.kickLeft();
+	}
+
+	public void kickRight() {
+		ULTRA.kickRight();
 	}
 }

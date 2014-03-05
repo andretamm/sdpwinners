@@ -210,6 +210,23 @@ public abstract class GeneralBehavior implements Behavior {
 		return true;
 	}
 	
+	/**
+	 * Move the robot left. Note that this is relative
+	 * to the robot, not the vision system!
+	 */
+	public void moveLeft() {
+		isMoving = true;
+		s.send(type, RobotCommand.MOVE_LEFT);
+	}
+	
+	/**
+	 * Move the robot right. Note that this is relative
+	 * to the robot, not the vision system!
+	 */
+	public void moveRight() {
+		isMoving = true;
+		s.send(type, RobotCommand.MOVE_RIGHT);
+	}
 	
 	/**
 	 * Stops moving if we're rotating or moving. Call this after every
