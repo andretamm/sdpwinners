@@ -27,9 +27,6 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
-		// Not doing a pass
-		ws.setDoingPass(false);
-		
 		try {
 			/*-------------------------------------*/
 			/* Decide which blocking method to use */
