@@ -24,6 +24,8 @@ public abstract class GeneralBehavior implements Behavior {
 	protected boolean isMoving = false;
 	protected boolean isMovingUp = false;
 	protected boolean isMovingDown = false;
+	protected boolean isAimingLeft = false;
+	protected boolean isAimingRight = false;
 	protected int movingCounter = 0;
 	protected int sentCounter = 0;
 	protected int rotatingCounter = 0;
@@ -240,6 +242,31 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	public void kickRight() {
 		s.send(type, RobotCommand.KICK_RIGHT);
+	}
+	
+	/**
+	 * Aim left. Do NOT call more than once.
+	 */
+	public void aimLeft() {
+		s.send(type, RobotCommand.AIM_LEFT);
+		isAimingLeft = true;
+	}
+	
+	/**
+	 * Aim right. Do NOT call more than once.
+	 */
+	public void aimRight() {
+		s.send(type, RobotCommand.AIM_RIGHT);
+		isAimingRight = true;
+	}
+	
+	/**
+	 * Reset the aim to its original position.
+	 */
+	public void aimReset() {
+		s.send(type, RobotCommand.AIM_RESET);
+		isAimingLeft = false;
+		isAimingRight = false;
 	}
 	
 	/**

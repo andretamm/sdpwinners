@@ -13,4 +13,7 @@ public class RobotCommand{
 	public static final int MOVE_RIGHT = 13;
 	public static final int KICK_LEFT = 14;
 	public static final int KICK_RIGHT = 15;
+	public static final int AIM_LEFT = 16;
+	public static final int AIM_RIGHT = 17;
+	public static final int AIM_RESET = 18;
 }
