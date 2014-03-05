@@ -5,6 +5,8 @@ import java.awt.geom.Point2D;
 
 import common.Robot;
 import constants.C;
+import constants.Quadrant;
+import constants.QuadrantX;
 import constants.ShootingDirection;
 import constants.RobotColour;
 import constants.RobotType;
@@ -15,6 +17,10 @@ import sdp.vision.WorldState;
 public class StrategyHelper {
 	
 	public static final double ROBOT_SAFETY_DISTANCE = 40;
+	/* 
+	 * The safe distance from the quadrant x value
+	 */
+	public static final int DISTANCE_FROM_QUADRANTX = 20;
 	
 	/**
 	 * Normalises the vector to have length one.
@@ -402,5 +408,37 @@ public class StrategyHelper {
 		double distance = k * Math.sin(beta);
 		
 		return distance;
+	}
+	
+	/**
+	 * How close to an object can we get before we risk going over the quadrant x value
+	 * @param ws Handle to WorldState
+	 * @param r Robot going towards a point
+	 * @param object A point in which the robot is trying to get to
+	 * @return Closest point it can reach without going over the quadrant x value
+	 */
+	public static Point safePoint(WorldState ws, Robot r, Point object){
+		int xObject = object.x;
+		int yObject = object.y;
+		Quadrant q = ws.getRobotQuadrant(r);
+		
+		int quadrantXLow = ws.getQuadrantX(q, QuadrantX.LOW);
+		int quadrantXHigh = ws.getQuadrantX(q, QuadrantX.HIGH);
+		
+		int distanceFromLow = Math.abs(xObject - quadrantXLow);
+		int distanceFromHigh = Math.abs(xObject - quadrantXHigh);
+		
+		if (distanceFromLow > DISTANCE_FROM_QUADRANTX && distanceFromHigh > DISTANCE_FROM_QUADRANTX){
+			return object;
+		}
+		
+		QuadrantX closestQuadrantX = (distanceFromLow > distanceFromHigh ? QuadrantX.HIGH : QuadrantX.LOW);
+		
+		if(closestQuadrantX == QuadrantX.LOW){
+			return new Point(quadrantXLow + DISTANCE_FROM_QUADRANTX, yObject);
+		} else {
+			return new Point(quadrantXHigh - DISTANCE_FROM_QUADRANTX, yObject);
+		}
+		
 	}
 }
