@@ -162,8 +162,8 @@ public class Ultra360 {
 		I2Csensor.sendData(0x08,(byte) speed);
 	}
 
-	//Drives the robot leftwards at a given speed between 0 - 255
-	public void goLeft(int speed){
+	//Drives the robot rightwards at a given speed between 0 - 255
+	public void goRight(int speed){
 		//SOUTH Wheel
 		I2Csensor.sendData(0x03,backward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
@@ -172,8 +172,8 @@ public class Ultra360 {
 		I2Csensor.sendData(0x06,(byte) speed);
 	}
 	
-	//Drives the robot rightwards at a given speed between 0 - 255
-	public void goRight(int speed){
+	//Drives the robot leftwards at a given speed between 0 - 255
+	public void goLeft(int speed){
 		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
 		I2Csensor.sendData(0x04,(byte) speed); 
