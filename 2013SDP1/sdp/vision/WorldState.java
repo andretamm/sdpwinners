@@ -940,7 +940,27 @@ public class WorldState implements VisionInterface {
 	public void setRobotGrabbedBall(Robot r, boolean hasGrabbed) {
 		this.robotGrabbedBall.put(r, hasGrabbed);
 	}
+
 	
 	
+	/*-----------------------------------------------*/
+	/* Strategy methods                              */
+	/*-----------------------------------------------*/
+	
+	public boolean getDoingPass() {
+		return doingPass;
+	}
+
+	public void setDoingPass(boolean doingPass) {
+		this.doingPass = doingPass;
+	}
+
+	public Point getAttackerPassPosition() {
+		return attackerPassPosition;
+	}
+
+	public void setAttackerPassPosition(Point attackerPassPosition) {
+		this.attackerPassPosition = attackerPassPosition;
+	}
 	
 }

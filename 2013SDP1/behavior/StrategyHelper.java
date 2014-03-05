@@ -352,16 +352,31 @@ public class StrategyHelper {
 	 * @param r Robot that is trying to pass/shoot
 	 * @param a Angle at which robot is trying to pass/shoot at
 	 * @param ws Handle to WorldState
-	 * @param k Distance from shooting/passing robot to intercepter robot
-	 * @param beta Angle between (shooting_Robot-intercepter_Robot) line & shooting/passing angle 'a'
-	 * @param opponentPoint Position of intercepter Robot
-	 * @param distance Distance between intercepter robot & line created by shooting angle
-	 * @param distanceThresh Threshold for distance
+
 	 * @return True if passing/shooting path is clear; False otherwise
 	 */
-	public static boolean isPathClear(Robot r, double a, WorldState ws){
-		Point opponentPoint;
+	public static boolean isPathClear(Robot r, double a, WorldState ws) {
 		double distanceThresh = 50;
+		double distance = getOpponentDistanceFromPath(r, a, ws);
+		
+		if(distance <= distanceThresh)
+			return false;
+		
+		return true;
+	}
+	
+	/**
+	 * How far the opponent robot is from the line defined by our robot's position and
+	 * a given shooting angle. Will only consider the opposing attacker if using our
+	 * defender and opposing defender if using our attacker.
+	 * @param r Robot making the shot
+	 * @param angle Angle of the shot
+	 * @param ws Handle to WorldState
+	 * @return Distance of the opponent from the shooting line
+	 */
+	public static double getOpponentDistanceFromPath(Robot r, double angle, WorldState ws) {
+		// Position of intercepter Robot
+		Point opponentPoint;
 		
 		//Determine opponent Robot that might intercept our pass/shot
 		if(r.colour == RobotColour.BLUE){
@@ -377,15 +392,15 @@ public class StrategyHelper {
 				opponentPoint = ws.getRobotXY(RobotColour.BLUE, RobotType.DEFENDER);
 		}
 		
+		// Distance from shooting/passing robot to intercepter robot
 		double k = getDistance(ws.getRobotPoint(r), opponentPoint);
-		double beta = Math.abs(StrategyHelper.angleDiff(a, Orientation.getAngle(ws.getRobotPoint(r), opponentPoint)));
+		
+		// Angle between (shooting_Robot-intercepter_Robot) line & shooting/passing angle 'a'
+		double beta = Math.abs(StrategyHelper.angleDiff(angle, Orientation.getAngle(ws.getRobotPoint(r), opponentPoint)));
+		
+		// Distance between intercepter robot & line created by shooting angle
 		double distance = k * Math.sin(beta);
 		
-		System.out.println(distance);
-		
-		if(distance <= distanceThresh)
-			return false;
-		
-		return true;
+		return distance;
 	}
 }
