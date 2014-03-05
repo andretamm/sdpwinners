@@ -432,9 +432,7 @@ public class StrategyHelper {
 			return object;
 		}
 		
-		QuadrantX closestQuadrantX = (distanceFromLow > distanceFromHigh ? QuadrantX.HIGH : QuadrantX.LOW);
-		
-		if(closestQuadrantX == QuadrantX.LOW){
+		if(distanceFromLow < distanceFromHigh){
 			return new Point(quadrantXLow + DISTANCE_FROM_QUADRANTX, yObject);
 		} else {
 			return new Point(quadrantXHigh - DISTANCE_FROM_QUADRANTX, yObject);
