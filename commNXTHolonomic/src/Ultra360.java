@@ -316,6 +316,14 @@ public class Ultra360 {
 		aimReset();
 	}
 	
+	//Rotate the front of the MaxBot
+	public void aimRight() {
+		rotator.rotateTo(-25); 		
+	}
+	public void aimLeft() {
+		rotator.rotateTo(25); 		
+	}
+	
 	//This is to reset the rotator angle and align it straight again.
 	public void aimReset() {
 		rotator.rotateTo(0);
