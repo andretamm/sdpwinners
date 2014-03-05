@@ -103,7 +103,7 @@ public class Orientation {
         	averagedOrientation = averagedOrientation + orientationValue;
         }
         averagedOrientation = averagedOrientation / (robotOrientationHistory.length);
-        
+
         return averagedOrientation;
 	}
 	

@@ -12,6 +12,7 @@ public class RobotController {
 	
 	public volatile int previousCommand = 1;
 	public volatile int command = 3;
+	public volatile int angle = 0;
 	
 	public RobotController() {
 		kicker = Motor.C;

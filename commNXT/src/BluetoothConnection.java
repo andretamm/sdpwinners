@@ -25,7 +25,24 @@ public class BluetoothConnection extends Thread {
     			robot.command = 3;
     			establishConnection();
     	    	sendReadySignal();
-    		} else {
+    		}
+    	    if (i == 8) {
+    	    	// Single the robot to move diagonally with a given angle
+    			// Get the next three values and create the angle.
+    			int p,j,k;
+    			/* Receive three integers and build the angle  */
+    			p = receiveIntSignal();
+    			j = receiveIntSignal();
+    			k = receiveIntSignal();
+    			
+    			int angle = p + 10*j + 100*k;
+    			
+    			// Set the command and angle to move to the given angle
+    			robot.angle   = angle;	
+    	    	robot.command = 8;
+    	    	
+    	    }
+    		else {
     			// Pass on command to robot
     			robot.command = i;
     		}
@@ -93,4 +110,6 @@ public class BluetoothConnection extends Thread {
 		return i;
     	
     }
+    
+    
 }

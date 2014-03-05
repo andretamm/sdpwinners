@@ -15,8 +15,7 @@ public class NXT {
     	// Wait for commands from the bluetoothconnection
     	while (true) {
     		int command = robot.command;
-    		
-    		if (command != robot.previousCommand) {
+    		if (command != robot.previousCommand || (command == 8 && robot.angle != robot.previousAngle)) {
     			// Only do smth if we got a new command
 	    		switch (command) {
 					case 0:
@@ -41,6 +40,11 @@ public class NXT {
 						robot.chill();
 						robot.kick();
 						break;
+					case 8:
+						System.out.println("Moving Diagonally");
+						System.out.println("angle: " + robot.angle);
+						robot.goDiagonally(robot.angle);
+						break;
 					case 10:
 						robot.chill();
 						robot.grab();
@@ -53,6 +57,7 @@ public class NXT {
 				}
 	    		
 	    		robot.previousCommand = command;
+	    		robot.previousAngle   = robot.angle;
     		}
     	}
     }

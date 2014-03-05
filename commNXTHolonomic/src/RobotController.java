@@ -11,9 +11,17 @@ public class RobotController {
 	
 	public volatile int previousCommand = 1;
 	public volatile int command = 3;
+	public volatile int previousAngle = 0;
+	public volatile int angle = 0;
+
 	
 	public RobotController() {
 		ULTRA = new Ultra360();
+	}
+	
+	public void goDiagonally(int angle){
+		// Go diagonally at an given angle
+		ULTRA.moveDiagonally(angle);
 	}
 	
 	public void kick() {
