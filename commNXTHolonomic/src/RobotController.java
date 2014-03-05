@@ -35,25 +35,25 @@ public class RobotController {
 	public void forward() {
 //		System.out.println("Going forward");
 		ULTRA.stop();
-		ULTRA.forward(ULTRA.speed);
+		ULTRA.forward(ULTRA.forwardSpeed);
 	}
 	
 	public void backward() {
 //		System.out.println("Going backward");
 		ULTRA.stop();
-		ULTRA.backward(ULTRA.speed);
+		ULTRA.backward(ULTRA.forwardSpeed);
 	}
 	
 	public void turnCW() {
 //		System.out.println("Turning clockwise");
 		ULTRA.stop();
-		ULTRA.rotateClockwise();
+		ULTRA.rotateClockwise(ULTRA.fastRotationSpeed);
 	}
 	
 	public void turnCCW() {
 //		System.out.println("Turning counterclockwise");
 		ULTRA.stop();
-		ULTRA.rotateAntiClockwise();
+		ULTRA.rotateAntiClockwise(ULTRA.fastRotationSpeed);
 	}
 	
 	public void chill() {
@@ -79,12 +79,12 @@ public class RobotController {
 
 	public void goLeft() {
 		ULTRA.stop();
-		ULTRA.goLeft(ULTRA.speed);
+		ULTRA.goLeft(ULTRA.forwardSpeed);
 	}
 
 	public void goRight() {
 		ULTRA.stop();
-		ULTRA.goRight(ULTRA.speed);
+		ULTRA.goRight(ULTRA.forwardSpeed);
 	}
 
 	public void kickLeft() {
@@ -107,5 +107,13 @@ public class RobotController {
 	public void aimReset() {
 		ULTRA.aimReset();
 		
+	}
+
+	public void slowCW() {
+		ULTRA.rotateClockwise(ULTRA.slowRotationSpeed);
+	}
+
+	public void slowCCW() {
+		ULTRA.rotateAntiClockwise(ULTRA.slowRotationSpeed);
 	}
 }

@@ -28,9 +28,11 @@ public class Ultra360 {
 	static double MAXIMUMSPEED = 100;
 	
 	//Actual robot speed
-	public byte speed;
+	public byte forwardSpeed;
+	
 	//Rotation speed for the wheels
-	public byte rotationSpeed;
+	public byte fastRotationSpeed;
+	public byte slowRotationSpeed;
 	
 	//Set Up the front part of the robot. This is used for the kicker part of the robot.
 	private NXTRegulatedMotor rotator;
@@ -47,9 +49,11 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		rotationSpeed = (byte) 50; //60 
+		fastRotationSpeed = (byte) 50; //60 
+		slowRotationSpeed = (byte) 30;
+		
 		// Default moving speed
-		speed = (byte) 90; //70
+		forwardSpeed = (byte) 90; //70
 		
 		// Init motors
 		rotator = Motor.C;
@@ -60,19 +64,19 @@ public class Ultra360 {
 	public void moveDiagonally(int angle){
 		byte[] speeds = diagonalSpeeds(angle);
 		//EAST Wheel
-		System.out.println(speeds[0] + " " + speeds[1]);
+//		System.out.println(speeds[0] + " " + speeds[1]);
 		I2Csensor.sendData(0x01,speeds[0]); 
 		I2Csensor.sendData(0x02,speeds[1]); 
 		//SOUTH Wheel
-		System.out.println(speeds[2] + " " + speeds[3]);
+//		System.out.println(speeds[2] + " " + speeds[3]);
 		I2Csensor.sendData(0x03,speeds[2]); 
 		I2Csensor.sendData(0x04,speeds[3]);
 		//NORTH Wheel
-		System.out.println(speeds[4] + " " + speeds[5]);
+//		System.out.println(speeds[4] + " " + speeds[5]);
 		I2Csensor.sendData(0x05,speeds[4]); 
 		I2Csensor.sendData(0x06,speeds[5]); 
 		//WEST Wheel
-		System.out.println(speeds[6] + " " + speeds[7]);
+//		System.out.println(speeds[6] + " " + speeds[7]);
 		I2Csensor.sendData(0x07,speeds[6]); 
 		I2Csensor.sendData(0x08,speeds[7]);
 	}
@@ -89,16 +93,16 @@ public class Ultra360 {
 
 		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
-		I2Csensor.sendData(0x02,rotationSpeed); 
+		I2Csensor.sendData(0x02,fastRotationSpeed); 
 		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
-		I2Csensor.sendData(0x08,rotationSpeed); 
+		I2Csensor.sendData(0x08,fastRotationSpeed); 
 		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
-		I2Csensor.sendData(0x04,rotationSpeed); 
+		I2Csensor.sendData(0x04,fastRotationSpeed); 
 		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
-		I2Csensor.sendData(0x06,rotationSpeed); 
+		I2Csensor.sendData(0x06,fastRotationSpeed); 
 		//This function is made up out of a product of the time and speed.
 		//This sleep is needed to get the rotation right.
 		Thread.sleep(degToTime);
@@ -107,36 +111,36 @@ public class Ultra360 {
 	}
 	
 	//Rotate clockwise until Andre stops you
-	public void rotateClockwise() {
+	public void rotateClockwise(byte speed) {
 		//EAST Wheel
 		I2Csensor.sendData(0x01,backward); 
-		I2Csensor.sendData(0x02,rotationSpeed); 
+		I2Csensor.sendData(0x02,speed); 
 		//WEST Wheel
 		I2Csensor.sendData(0x07,backward); 
-		I2Csensor.sendData(0x08,rotationSpeed); 
+		I2Csensor.sendData(0x08,speed); 
 		//SOUTH Wheel
 		I2Csensor.sendData(0x03,forward); 
-		I2Csensor.sendData(0x04,rotationSpeed); 
+		I2Csensor.sendData(0x04,speed); 
 		//NORTH Wheel
 		I2Csensor.sendData(0x05,forward); 
-		I2Csensor.sendData(0x06,rotationSpeed); 
+		I2Csensor.sendData(0x06,speed); 
 		
 	}
 		
 	//Rotate anti-clockwise until Andre stops you
-	public void rotateAntiClockwise() {
+	public void rotateAntiClockwise(byte speed) {
 		//EAST Wheel
 		I2Csensor.sendData(0x01,forward); 
-		I2Csensor.sendData(0x02,rotationSpeed); 
+		I2Csensor.sendData(0x02,speed); 
 		//WEST Wheel
 		I2Csensor.sendData(0x07,forward); 
-		I2Csensor.sendData(0x08,rotationSpeed); 
+		I2Csensor.sendData(0x08,speed); 
 		//SOUTH Wheel
 		I2Csensor.sendData(0x03,backward); 
-		I2Csensor.sendData(0x04,rotationSpeed); 
+		I2Csensor.sendData(0x04,speed); 
 		//NORTH Wheel
 		I2Csensor.sendData(0x05,backward); 
-		I2Csensor.sendData(0x06,rotationSpeed); 
+		I2Csensor.sendData(0x06,speed); 
 		
 	}
 	
