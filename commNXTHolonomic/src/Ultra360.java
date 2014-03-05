@@ -271,22 +271,20 @@ public class Ultra360 {
 	//THESE FOLLOWING METHODS RUNS ON THE KICKER PART OF THE MAX ROBOT//
 	//****************************************************************//
 	
-	//Close the grabber when the ball is with in reach
-	public void closeGrabber() {
+	public static void closeGrabber() {
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
 		grabber.rotateTo(20);
 	}
-
-	//Reset the grabber to its opening positions
-	public void openGrabber() {
+	
+	public static void openGrabber() {
 		grabber.setSpeed(800);
 		grabber.setAcceleration(10000);
-		grabber.rotateTo(0);
+		grabber.rotateTo(-10);
 	}
 	
 	//Kick the ball in a straight direction. This will reset the grabber to open.
-	public void kick() {
+	public static void kick() {
 		kicker.resetTachoCount();
 		kicker.setSpeed(1000);
 		kicker.setAcceleration(14000);
@@ -314,6 +312,14 @@ public class Ultra360 {
 		kick();
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		aimReset();
+	}
+	
+	//Rotate the front of the MaxBot
+	public void aimRight() {
+		rotator.rotateTo(-25); 		
+	}
+	public void aimLeft() {
+		rotator.rotateTo(25); 		
 	}
 	
 	//This is to reset the rotator angle and align it straight again.
