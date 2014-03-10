@@ -13,7 +13,7 @@ import lejos.robotics.subsumption.Behavior;
  * @author Andre
  *
  */
-public class Manager {
+public abstract class Manager {
 	
 	private AndreArbitrator arbitrator;
 	private WorldState ws;
@@ -61,27 +61,9 @@ public class Manager {
 	 * 
 	 * @return All behaviors in ascending order of priority 
 	 */
-	public Behavior[] getAllBehaviors() {
-		// TODO - all the commented out code here should work once we
-		// start running this on the PC. leJOS doesn't seem to like
-		// converting ArrayLists to arrays, so doing this by hand
-		
-//		ArrayList<Behavior> behaviorList = new ArrayList<Behavior>();
-		
-		int numOfBehaviors = 1;
-		Behavior[] behaviorList = new Behavior[numOfBehaviors];
-		
-		// Add behaviors in ascending order of priority
-//		behaviorList.add(new Milestone1());
-//		behaviorList.add(new Milestone2());
-//		behaviorList[0] = new Milestone1();
-//		behaviorList[1] = new Milestone2();
-		behaviorList[0] = new SimpleDefendGoal(ws, type, s);
-		
-//		return behaviorList.toArray(new Behavior[0]);
-		return behaviorList;
-	}
+	public abstract Behavior[] getAllBehaviors();
 
+	
 	public WorldState getWorldState() {
 		return ws;
 	}
