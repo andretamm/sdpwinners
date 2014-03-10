@@ -11,7 +11,6 @@ import constants.Colours;
 import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
-import sdp.strategy.KickFrom;
 
 /**
  * Based off group 5 2012 code, with large pieces of group 7 2012.
@@ -38,9 +37,6 @@ public class ImageProcessor {
                 
                 //create the background subtracter
                 bgSub = new BackgroundSubtraction();
-                //TODO Alter for two robots Attacker
-                lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurDefenderPosition());
-                lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionDefenderPosition());
         }
         
         /**
@@ -305,43 +301,15 @@ public class ImageProcessor {
         	try {
         		// Get the position of the ball
 				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
+				
+				// Filter out rest of points and find mean again
                 Position.ballFilterPoints(pitch.getPoints(Colours.RED), pitch.getBallPosition());
-                
-                try {
-                	//TODO Alter for Attacker Robot
-                	worldState.setBallVisible(true);
-    				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
-                    lineFromUs = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOurDefenderPosition());
-                    lineFromOpponent = KickFrom.subtractPoints(worldState.getBallPoint(), worldState.getOppositionDefenderPosition());
-                } catch (Exception e2) {
-                	//No points left after filtering
-                	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
-                		//System.out.println("Assumming ball is where it was 1");
-                		pitch.setBallPosition(new Point(worldState.getBallX(), worldState.getBallY()));
-                	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
-                		//System.out.println("Assumming ball is moving with us 1");
-                		//TODO Alter for Attacker Robot
-                		pitch.setBallPosition(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
-                	} else if (KickFrom.distanceFromOrigin(lineFromOpponent) <= LINE) {
-                		//System.out.println("Assumming ball is moving with them 1");
-                		//TODO Alter for Attacker Robot
-                		pitch.setBallPosition(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
-                	}
-                	worldState.setBallVisible(false);
-                }
+            	worldState.setBallVisible(true);
+				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
+
 			} catch (Exception e2) {
-            	if (KickFrom.distanceFromOrigin(lineFromUs) > LINE && KickFrom.distanceFromOrigin(lineFromOpponent) > LINE) {
-            		//System.out.println("Assumming ball is where it was 2");
-            		pitch.setBallPosition(new Point(worldState.getBallX(), worldState.getBallY()));
-            	} else if (KickFrom.distanceFromOrigin(lineFromUs) <= LINE) {
-            		//System.out.println("Assumming ball is moving with us 2: " + (int) (worldState.getOurXVision() + lineFromUs.getX()) + " " + (int) (worldState.getOurYVision() + lineFromUs.getY()));
-            		pitch.setBallPosition(new Point( (int) (worldState.getOurDefenderXVision() + lineFromUs.getX()), (int) (worldState.getOurDefenderYVision() + lineFromUs.getY())));
-            		//TODO Alter for Attacker Robot
-            	} else if (KickFrom.distanceFromOrigin(lineFromOpponent) <= LINE) {
-            		//System.out.println("Assumming ball is moving with them 2");
-            		//TODO Alter for Attacker Robot
-            		pitch.setBallPosition(new Point( (int) (worldState.getOppositionDefenderXVision() + lineFromOpponent.getX()), (int) (worldState.getOppositionDefenderYVision() + lineFromOpponent.getY())));
-            	}
+				// Either filtered out points or no red points to be found, set default position
+				pitch.setBallPosition(new Point(1,1));
             	worldState.setBallVisible(false);
 			}
         }
