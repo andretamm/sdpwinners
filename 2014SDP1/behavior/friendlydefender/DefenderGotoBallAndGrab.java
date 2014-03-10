@@ -4,7 +4,7 @@ package behavior.friendlydefender;
 import behavior.GeneralBehavior;
 import ourcommunication.RobotCommand;
 import ourcommunication.Server;
-import sdp.vision.WorldState;
+import vision.WorldState;
 import constants.RobotType;
 
 public class DefenderGotoBallAndGrab extends GeneralBehavior {

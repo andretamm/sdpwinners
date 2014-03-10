@@ -7,8 +7,8 @@ import ourcommunication.Server;
 import common.Robot;
 import constants.C;
 import constants.RobotType;
-import sdp.vision.Orientation;
-import sdp.vision.WorldState;
+import vision.Orientation;
+import vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 public abstract class GeneralBehavior implements Behavior {

@@ -10,9 +10,8 @@ import constants.QuadrantX;
 import constants.ShootingDirection;
 import constants.RobotColour;
 import constants.RobotType;
-
-import sdp.vision.Orientation;
-import sdp.vision.WorldState;
+import vision.Orientation;
+import vision.WorldState;
 
 public class StrategyHelper {
 	

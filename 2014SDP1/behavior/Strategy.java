@@ -2,7 +2,7 @@ package behavior;
 
 import constants.RobotType;
 import ourcommunication.Server;
-import sdp.vision.WorldState;
+import vision.WorldState;
 
 /**
  * Controls the strategies running on the robots. Has methods

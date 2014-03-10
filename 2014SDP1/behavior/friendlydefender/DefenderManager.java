@@ -3,7 +3,7 @@ package behavior.friendlydefender;
 import behavior.Manager;
 import lejos.robotics.subsumption.Behavior;
 import ourcommunication.Server;
-import sdp.vision.WorldState;
+import vision.WorldState;
 import constants.RobotType;
 
 public class DefenderManager extends behavior.Manager {

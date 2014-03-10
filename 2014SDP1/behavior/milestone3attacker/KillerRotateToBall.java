@@ -5,8 +5,8 @@ import java.awt.Point;
 import behavior.GeneralBehavior;
 import behavior.StrategyHelper;
 import ourcommunication.Server;
-import sdp.vision.Orientation;
-import sdp.vision.WorldState;
+import vision.Orientation;
+import vision.WorldState;
 import constants.RobotType;
 
 public class KillerRotateToBall extends GeneralBehavior {

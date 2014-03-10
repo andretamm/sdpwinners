@@ -1,9 +1,8 @@
 package behavior;
 
 import constants.RobotType;
-
 import ourcommunication.Server;
-import sdp.vision.WorldState;
+import vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 /**

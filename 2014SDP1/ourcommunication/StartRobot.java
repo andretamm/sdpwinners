@@ -1,8 +1,8 @@
 package ourcommunication;
 
-import sdp.gui.MainWindow;
-import sdp.vision.RunVision;
-import sdp.vision.WorldState;
+import gui.MainWindow;
+import vision.RunVision;
+import vision.WorldState;
 import behavior.Strategy;
 
 public class StartRobot {
