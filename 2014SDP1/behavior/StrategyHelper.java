@@ -13,10 +13,22 @@ import constants.RobotType;
 import vision.Orientation;
 import vision.WorldState;
 
+/**
+ * Loads of methods to help with robot strategy planning. Everything
+ * from vector manipulation to finding intersection points between
+ * vectors & goals to calculating safe points for the robots to go to. 
+ * 
+ * @author Andre
+ */
 public class StrategyHelper {
 	
+	/**
+	 * Safe distance from a ball so we don't hit it when trying to move
+	 * e.g. behind it 
+	 */
 	public static final double ROBOT_SAFETY_DISTANCE = 40;
-	/* 
+	
+	/**
 	 * The safe distance from the quadrant x value
 	 */
 	public static final int DISTANCE_FROM_QUADRANTX = 20;
@@ -178,23 +190,6 @@ public class StrategyHelper {
 		}
 	}
 
-//	/**
-//	 * Find where the given grounded vector will intersect with our goal.
-//	 * @param vector The vector applied to the origin point (e.g. velocity vector)
-//	 * @param origin The origin (grounding) point for the vector
-//	 * @param ws Handle to the WorldState
-//	 * @return Point of intersection or null if it won't hit our goal
-//	 */
-//	public static Point interceptionPoint(Point2D.Double vector, Point origin, WorldState ws) {
-//		// The x coordinate of our goal
-//		int x = ws.getOurGoalCentre().x;
-//		
-//		// Find intersection point of line with our goal
-//		Point intersection = getIntersectWithOurGoal(vector, origin, ws);
-//		
-//		return intersection;
-//	}
-	
 	/**
 	 * Find the point where the given grounded vector will collide with
 	 * one of the horizontal walls

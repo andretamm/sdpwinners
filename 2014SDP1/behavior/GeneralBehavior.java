@@ -11,6 +11,19 @@ import vision.Orientation;
 import vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
+/**
+ * General Behavior class. To create a behavior you must first set
+ * the conditions for when the behavior triggers through takeControl()
+ * and then the actions the behavior does through action().
+ * 
+ * You can think of action() as running in a big loop, if the takeControl()
+ * conditions are still true, then action() will be run again and again until
+ * takeControl() stops being true. So the implementer should make sure that
+ * action() does small computations and exits quickly so it can be called
+ * again.
+ * 
+ * @author Andre
+ */
 public abstract class GeneralBehavior implements Behavior {
 	public static final double ANGLE_ERROR = 0.20; //15
 	public static final double DISTANCE_ERROR = 25; //30
@@ -20,20 +33,26 @@ public abstract class GeneralBehavior implements Behavior {
 	protected RobotType type;
 	protected Server s;
 	
+	// Variables for keeping track of the state of the robot
+	// NB - these are behavior-specific, if you switch behaviors
+	// then these will not carry on!!
 	protected boolean isRotating = false;
 	protected boolean isMoving = false;
 	protected boolean isMovingUp = false;
 	protected boolean isMovingDown = false;
 	protected boolean isAimingLeft = false;
 	protected boolean isAimingRight = false;
-	protected int movingCounter = 0;
-	protected int sentCounter = 0;
-	protected int rotatingCounter = 0;
-	protected int stopCounter = 0;
-	protected int btCounter = 0;
 	
+	
+	/**
+	 * Whether to print debug statements 
+	 */
 	private static boolean DEBUG = true;
 	
+	/**
+	 * Prints a debug statement only if the DEBUG flag is set
+	 * @param s Message to print
+	 */
 	public void d(String s) {
 		if (DEBUG) {
 			System.out.println(type + " :" + s);
@@ -55,6 +74,10 @@ public abstract class GeneralBehavior implements Behavior {
 	public void suppress() {
 		setInActive();
 	}
+	
+	/* ------------------------------------- */
+	/* --- Getters and Setters           --- */
+	/* ------------------------------------- */
 	
 	public RobotType getType() {
 		return type;

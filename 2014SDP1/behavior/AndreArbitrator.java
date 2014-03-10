@@ -2,6 +2,13 @@ package behavior;
 
 import lejos.robotics.subsumption.Behavior;
 
+/**
+ * Arbitrator that picks which behavior to use and runs the winner. Gets a 
+ * list of behaviors from the Behavior manager and keeps on picking
+ * Behaviors until it is told to stop. 
+ * @author Andre
+ *
+ */
 public class AndreArbitrator {
 	private Behavior[] behaviors;
 	private boolean active;
@@ -10,6 +17,9 @@ public class AndreArbitrator {
 		this.behaviors = behaviors;
 	}
 	
+	/**
+	 * Start picking and running behaviors
+	 */
 	public void start() {
 		active = true;
 		
@@ -18,20 +28,23 @@ public class AndreArbitrator {
 			
 			if (winner != null) {
 				winner.action();
-			}
-			
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} else {
+				System.err.println("ERROR - couldn't pick a behavior, no conditions were met!!");
 			}
 		}
 	}
 	
+	/**
+	 * Stop running any more behaviors
+	 */
 	public void stop() {
 		active = false;
 	}
 	
+	/**
+	 * Picks the Behavior to run. 
+	 * @return The Behavior that should be executed
+	 */
 	private Behavior arbitrate() {
 		// Loop through all behaviors, starting with the highest priority one
 		for (int i = behaviors.length - 1; i >= 0; i--) {
