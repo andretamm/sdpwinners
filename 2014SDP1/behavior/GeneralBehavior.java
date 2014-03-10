@@ -2,9 +2,9 @@ package behavior;
 
 import java.awt.Point;
 
-import ourcommunication.RobotCommand;
-import ourcommunication.Server;
 import common.Robot;
+import communication.RobotCommand;
+import communication.Server;
 import constants.C;
 import constants.RobotType;
 import vision.Orientation;

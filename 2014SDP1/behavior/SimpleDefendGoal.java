@@ -1,7 +1,8 @@
 package behavior;
 
-import ourcommunication.RobotCommand;
-import ourcommunication.Server;
+import communication.RobotCommand;
+import communication.Server;
+
 import vision.WorldState;
 import constants.C;
 import constants.RobotType;

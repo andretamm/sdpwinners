@@ -1,7 +1,8 @@
 package behavior.friendlyattacker;
 
+import communication.Server;
+
 import lejos.robotics.subsumption.Behavior;
-import ourcommunication.Server;
 import vision.WorldState;
 import constants.RobotType;
 

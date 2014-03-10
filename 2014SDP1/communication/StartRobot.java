@@ -1,4 +1,4 @@
-package ourcommunication;
+package communication;
 
 import gui.MainWindow;
 import vision.RunVision;

@@ -1,4 +1,4 @@
-package ourcommunication;
+package communication;
 public class RobotCommand{
 	public static final int NO_COMMAND = -1;
 	public static final int CW = 4;

@@ -2,11 +2,12 @@ package behavior.friendlyattacker.diagonal;
 
 import java.awt.Point;
 
+import communication.RobotCommand;
+import communication.Server;
+
 import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
-import ourcommunication.RobotCommand;
-import ourcommunication.Server;
 import vision.Orientation;
 import vision.WorldState;
 import constants.C;

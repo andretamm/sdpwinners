@@ -3,9 +3,10 @@ package behavior.friendlyattacker;
 
 import java.awt.Point;
 
+import communication.RobotCommand;
+import communication.Server;
+
 import behavior.GeneralBehavior;
-import ourcommunication.RobotCommand;
-import ourcommunication.Server;
 import vision.WorldState;
 import constants.Quadrant;
 import constants.QuadrantX;

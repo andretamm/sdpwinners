@@ -14,10 +14,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import communication.Server;
+
 import behavior.friendlyattacker.KillerManager;
 import behavior.friendlydefender.DefenderManager;
 import constants.RobotType;
-import ourcommunication.Server;
 import vision.Drawable;
 import vision.WorldState;
 

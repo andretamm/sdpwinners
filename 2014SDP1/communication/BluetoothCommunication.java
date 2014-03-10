@@ -1,4 +1,4 @@
-package ourcommunication;
+package communication;
 
 
 import java.io.IOException;

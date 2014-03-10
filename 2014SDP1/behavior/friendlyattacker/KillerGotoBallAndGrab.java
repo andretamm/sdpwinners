@@ -1,9 +1,10 @@
 package behavior.friendlyattacker;
 
 
+import communication.RobotCommand;
+import communication.Server;
+
 import behavior.GeneralBehavior;
-import ourcommunication.RobotCommand;
-import ourcommunication.Server;
 import vision.WorldState;
 import constants.RobotType;
 

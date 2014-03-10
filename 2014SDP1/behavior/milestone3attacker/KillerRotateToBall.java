@@ -2,9 +2,10 @@ package behavior.milestone3attacker;
 
 import java.awt.Point;
 
+import communication.Server;
+
 import behavior.GeneralBehavior;
 import behavior.StrategyHelper;
-import ourcommunication.Server;
 import vision.Orientation;
 import vision.WorldState;
 import constants.RobotType;

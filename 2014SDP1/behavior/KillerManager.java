@@ -1,10 +1,11 @@
 package behavior;
 
+import communication.Server;
+
 import behavior.milestone3attacker.KillerCatchBall;
 import behavior.milestone3attacker.KillerRotateToBall;
 import behavior.milestone3attacker.KillerRotateToGoalAndScore;
 import lejos.robotics.subsumption.Behavior;
-import ourcommunication.Server;
 import vision.WorldState;
 import constants.RobotType;
 
