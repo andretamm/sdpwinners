@@ -118,16 +118,21 @@ public class Server {
 	 * @param command Command byte
 	 */
 	public void send(RobotType type, int command) {
-		// Only send command if it is different from the last one
-		// we sent
+		// Pick right robot channel
+		BluetoothCommunication robot;
 		
-		if (previousCommand.get(type) != command) {
+		if (type == RobotType.DEFENDER) {
+			robot = defenderRobot;
+		} else {
+			robot = attackerRobot;
+		}
+
+		// Only send command if it is different from the last one
+		// we sent and the robot is actually connected
+		if (previousCommand.get(type) != command &&
+			robot.isConnected()) {
 			previousCommand.put(type, command);
-			if (type == RobotType.DEFENDER) {
-				defenderRobot.sendToRobot(command);
-			} else if (type == RobotType.ATTACKER) {
-				attackerRobot.sendToRobot(command);
-			}
+			robot.sendToRobot(command);
 		}
 	}
 	
