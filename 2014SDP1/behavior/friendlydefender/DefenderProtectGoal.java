@@ -58,9 +58,19 @@ public class DefenderProtectGoal extends GeneralBehavior {
 				ballOrigin = StrategyHelper.getIntersectsWithWalls(ballVector, ballOrigin, ws);
 				
 				if (ballOrigin != null) {
-					// Hits a wall, find defending point after wall collision
+					// Will hit a wall, see what happens afterwards
 					ballVector = StrategyHelper.collideWithHorizontalWall(ballVector);
-					target = StrategyHelper.getIntersectWithVerticalLine(defendX, ballOrigin, ballVector);
+					
+					// Only defend if it'll actually hit our goal
+					Point goalIntersect = StrategyHelper.getIntersectWithOurGoal(ballVector, ballOrigin, ws);
+					
+					if (goalIntersect != null) {
+						// Find defending point after wall collision
+						target = StrategyHelper.getIntersectWithVerticalLine(defendX, ballOrigin, ballVector);
+					} else {
+						// TODO - Find where they COULD hit the goal and try to intercept that
+						StrategyHelper.findGoalTopDefendPosition(ws);
+					}
 				}
 			}
 			

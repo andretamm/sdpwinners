@@ -108,11 +108,12 @@ public class Server {
 		}
 		System.out.println("OMGOMGOMGOMG WE HAVE THE BALL");
 	}
-	
+
 	/**
 	 * Sends a command to the robot. Doesn't send the command
-	 * if the last command we sent was the same command. This 
-	 * helps prevent overspamming the robot with commands.
+	 * if the last command we sent was the same command or if
+	 * the robot isn't connected. This helps prevent overspamming 
+	 * the robot with commands.
 	 * 
 	 * @param type Defender or attacker
 	 * @param command Command byte
@@ -120,7 +121,7 @@ public class Server {
 	public void send(RobotType type, int command) {
 		// Pick right robot channel
 		BluetoothCommunication robot;
-		
+
 		if (type == RobotType.DEFENDER) {
 			robot = defenderRobot;
 		} else {

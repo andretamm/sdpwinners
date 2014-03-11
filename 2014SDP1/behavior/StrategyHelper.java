@@ -433,4 +433,49 @@ public class StrategyHelper {
 		}
 		
 	}
+
+	public static Point findGoalTopDefendPosition(WorldState ws) {
+		Point attacker = ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER));
+		
+		// Distance of robot from pitch bottom
+		int lP = ws.getPitchBottomLeft().y - attacker.y;
+		
+		// Distance from goal top to bottom of pitch
+		int l = ws.getPitchBottomLeft().y - ws.getOurGoalTop().y;
+		
+		// Distance of robot from goal
+		int k = ws.getPitchBottomLeft().x - attacker.x;
+		
+		// Distance from goal where ball will hit the wall 
+		double s = (double) (k * l) / (lP + l);
+		
+		// Distance from goal to defend point
+		int aP = getDefendLineX(ws) - ws.getPitchBottomLeft().x;
+		
+		// Distance from goal top to our defend point y wise
+		int lPPP = (int) Math.abs(l * aP / s);
+		
+		return new Point(getDefendLineX(ws), ws.getOurGoalTop().y + lPPP);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

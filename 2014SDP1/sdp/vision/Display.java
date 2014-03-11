@@ -59,6 +59,8 @@ public class Display {
 		
 //		System.out.println("ball magnitude: " + StrategyHelper.magnitude(ws.getBallVelocity()));
 		
+		
+		
 		Graphics graphics = img.getGraphics();
 
 		//draw pitch bounds
@@ -67,6 +69,10 @@ public class Display {
 //		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
 //		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
 //		
+		// Point where we would have to be to stop them hitting our top goal
+		Point topDefend = StrategyHelper.findGoalTopDefendPosition(ws);
+		graphics.fillOval(topDefend.x - 3, topDefend.y - 3, 6, 6);
+//		System.out.println(topDefend.x + " " + topDefend.y);
 		
         graphics.setColor(Color.blue);
         
