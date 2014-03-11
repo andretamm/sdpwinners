@@ -5,7 +5,7 @@ import communication.RobotCommand;
 import communication.Server;
 
 import behavior.GeneralBehavior;
-import vision.WorldState;
+import sdp.vision.WorldState;
 import constants.RobotType;
 
 public class KillerGotoBallAndGrab extends GeneralBehavior {

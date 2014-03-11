@@ -7,7 +7,7 @@ import communication.RobotCommand;
 import communication.Server;
 
 import behavior.GeneralBehavior;
-import vision.WorldState;
+import sdp.vision.WorldState;
 import constants.Quadrant;
 import constants.QuadrantX;
 import constants.RobotType;

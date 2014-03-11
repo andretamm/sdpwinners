@@ -8,8 +8,8 @@ import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
-import vision.Orientation;
-import vision.WorldState;
+import sdp.vision.Orientation;
+import sdp.vision.WorldState;
 import constants.RobotType;
 
 public class KillerSimpleKickBallToGoal extends GeneralBehavior {

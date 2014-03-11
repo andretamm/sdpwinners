@@ -7,8 +7,8 @@ import communication.RobotCommand;
 import communication.Server;
 import constants.C;
 import constants.RobotType;
-import vision.Orientation;
-import vision.WorldState;
+import sdp.vision.Orientation;
+import sdp.vision.WorldState;
 import lejos.robotics.subsumption.Behavior;
 
 /**

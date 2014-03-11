@@ -19,8 +19,8 @@ import communication.Server;
 import behavior.friendlyattacker.KillerManager;
 import behavior.friendlydefender.DefenderManager;
 import constants.RobotType;
-import vision.Drawable;
-import vision.WorldState;
+import sdp.vision.Drawable;
+import sdp.vision.WorldState;
 
 /**
  * Control window to run a robot

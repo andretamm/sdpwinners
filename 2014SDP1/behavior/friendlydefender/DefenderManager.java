@@ -4,7 +4,7 @@ import communication.Server;
 
 import behavior.Manager;
 import lejos.robotics.subsumption.Behavior;
-import vision.WorldState;
+import sdp.vision.WorldState;
 import constants.RobotType;
 
 public class DefenderManager extends behavior.Manager {

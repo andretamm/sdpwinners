@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 
 import behavior.StrategyHelper;
-import vision.WorldState;
+import sdp.vision.WorldState;
 import constants.RobotType;
 
 /**

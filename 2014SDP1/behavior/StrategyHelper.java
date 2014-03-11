@@ -10,8 +10,8 @@ import constants.QuadrantX;
 import constants.ShootingDirection;
 import constants.RobotColour;
 import constants.RobotType;
-import vision.Orientation;
-import vision.WorldState;
+import sdp.vision.Orientation;
+import sdp.vision.WorldState;
 
 /**
  * Loads of methods to help with robot strategy planning. Everything

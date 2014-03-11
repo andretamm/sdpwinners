@@ -3,7 +3,7 @@ package behavior.friendlyattacker;
 import communication.Server;
 
 import lejos.robotics.subsumption.Behavior;
-import vision.WorldState;
+import sdp.vision.WorldState;
 import constants.RobotType;
 
 public class KillerManager extends behavior.Manager {

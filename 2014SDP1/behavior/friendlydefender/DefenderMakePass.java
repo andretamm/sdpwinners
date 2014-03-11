@@ -7,8 +7,8 @@ import communication.Server;
 
 import behavior.GeneralBehavior;
 import behavior.StrategyHelper;
-import vision.Orientation;
-import vision.WorldState;
+import sdp.vision.Orientation;
+import sdp.vision.WorldState;
 import constants.Quadrant;
 import constants.RobotType;
 

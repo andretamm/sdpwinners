@@ -8,7 +8,7 @@ import communication.Server;
 
 import behavior.GeneralBehavior;
 import behavior.StrategyHelper;
-import vision.WorldState;
+import sdp.vision.WorldState;
 import constants.C;
 import constants.RobotType;
 
