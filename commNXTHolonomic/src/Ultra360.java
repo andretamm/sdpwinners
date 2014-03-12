@@ -260,6 +260,25 @@ public class Ultra360 {
 		I2Csensor.sendData(0x05,(byte)3); 
 		I2Csensor.sendData(0x07,(byte)3); 
 		//make the I2C safe again and idiot proof
+		Thread.sleep(80); //the best time I could get to make it stop faster
+		I2Csensor.sendData(0x01,stop);
+		I2Csensor.sendData(0x02,stop);
+		I2Csensor.sendData(0x03,stop);
+		I2Csensor.sendData(0x04,stop);
+		I2Csensor.sendData(0x05,stop);
+		I2Csensor.sendData(0x06,stop);
+		I2Csensor.sendData(0x07,stop);
+		I2Csensor.sendData(0x08,stop);
+	}
+	
+	//if all else fails, here is the old way of stopping
+	public void oldStop(){
+		//stop dead, I am not making a constant for this for added safety.
+		I2Csensor.sendData(0x01,(byte)3); 
+		I2Csensor.sendData(0x03,(byte)3); 
+		I2Csensor.sendData(0x05,(byte)3); 
+		I2Csensor.sendData(0x07,(byte)3); 
+		//make the I2C safe again and idiot proof
 		I2Csensor.sendData(0x01,off); 
 		I2Csensor.sendData(0x02,off);
 		I2Csensor.sendData(0x03,off);
