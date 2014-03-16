@@ -69,10 +69,13 @@ public class Display {
 //		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
 //		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
 //		
-		// Point where we would have to be to stop them hitting our top goal
+		// Point where we would have to be to stop them hitting the top/bottom of our goal
 		Point topDefend = StrategyHelper.findGoalTopDefendPosition(ws);
+		Point bottomDefend = StrategyHelper.findGoalBottomDefendPosition(ws);
+		graphics.setColor(Color.BLACK);
 		graphics.fillOval(topDefend.x - 3, topDefend.y - 3, 6, 6);
-//		System.out.println(topDefend.x + " " + topDefend.y);
+		graphics.setColor(Color.WHITE);
+		graphics.fillOval(bottomDefend.x - 3, bottomDefend.y - 3, 6, 6);
 		
         graphics.setColor(Color.blue);
         

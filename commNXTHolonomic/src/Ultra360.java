@@ -49,11 +49,11 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 45; //50 60 
-		slowRotationSpeed = (byte) 45; 
+		fastRotationSpeed = (byte) 50; //50 60 
+		slowRotationSpeed = (byte) 50; 
 		
 		// Default moving speed
-		forwardSpeed = (byte) 90; //70
+		forwardSpeed = (byte) 100; //70
 		
 		// Init motors
 		rotator = Motor.C;
@@ -260,15 +260,19 @@ public class Ultra360 {
 		I2Csensor.sendData(0x05,(byte)3); 
 		I2Csensor.sendData(0x07,(byte)3); 
 		//make the I2C safe again and idiot proof
-		Thread.sleep(80); //the best time I could get to make it stop faster
-		I2Csensor.sendData(0x01,stop);
-		I2Csensor.sendData(0x02,stop);
-		I2Csensor.sendData(0x03,stop);
-		I2Csensor.sendData(0x04,stop);
-		I2Csensor.sendData(0x05,stop);
-		I2Csensor.sendData(0x06,stop);
-		I2Csensor.sendData(0x07,stop);
-		I2Csensor.sendData(0x08,stop);
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} //the best time I could get to make it stop faster
+		I2Csensor.sendData(0x01,(byte)0);
+		I2Csensor.sendData(0x02,(byte)0);
+		I2Csensor.sendData(0x03,(byte)0);
+		I2Csensor.sendData(0x04,(byte)0);
+		I2Csensor.sendData(0x05,(byte)0);
+		I2Csensor.sendData(0x06,(byte)0);
+		I2Csensor.sendData(0x07,(byte)0);
+		I2Csensor.sendData(0x08,(byte)0);
 	}
 	
 	//if all else fails, here is the old way of stopping

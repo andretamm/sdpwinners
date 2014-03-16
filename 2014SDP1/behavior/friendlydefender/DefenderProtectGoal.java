@@ -70,6 +70,16 @@ public class DefenderProtectGoal extends GeneralBehavior {
 					} else {
 						// TODO - Find where they COULD hit the goal and try to intercept that
 						StrategyHelper.findGoalTopDefendPosition(ws);
+						
+						double oppositionOrientation = ws.getRobotOrientation(ws.getOpposition(RobotType.ATTACKER));
+						
+						if (StrategyHelper.angleDiff(oppositionOrientation, C.A270) < C.A90) {
+							// They're aiming UP, try to protect kick to BOTTOM goal
+							target = StrategyHelper.findGoalBottomDefendPosition(ws);
+						} else {
+							// They're aiming DOWN, try to protect kick to TOP goal
+							target = StrategyHelper.findGoalTopDefendPosition(ws);
+						}
 					}
 				}
 			}
