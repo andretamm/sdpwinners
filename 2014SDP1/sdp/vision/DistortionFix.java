@@ -15,6 +15,8 @@ import java.awt.Point;
 
 public class DistortionFix {
 	
+	private static final double distCameraPitch = 270;
+	private static final Point cameraPos = new Point(323,211);
 	private static int width = 640;
 	private static int height = 480;
 	private static final double barrelCorrectionX = -0.016;	
@@ -83,4 +85,27 @@ public class DistortionFix {
     	// System.out.println("New Pixel: (" + pixi + ", " + pixj + ")");
     	return new Point(pixi, pixj);
     	}
+    
+    /**
+     * 
+     * @param p1 Point to fix
+     * @return The corrected Point
+     */
+    public static Point perspectiveFix(int height, Point p1){
+    	double distanceFix;
+    	double distanceFromCamera = Math.sqrt(Position.sqrdEuclidDist(cameraPos.x, cameraPos.y, p1.x, p1.y));
+    	distanceFix = (height*distanceFromCamera)/distCameraPitch;
+    	
+    	double angle = 0.0;
+    	try {
+			angle = Position.angleTo(cameraPos, p1);
+		} catch (NoAngleException e) {
+			e.printStackTrace();
+		}
+    	
+		int x = (int)((distanceFromCamera - distanceFix)*Math.cos(angle));
+		int y = (int)((distanceFromCamera - distanceFix)*Math.sin(angle));
+		
+		return (new Point(x,y));
+    }
 }
