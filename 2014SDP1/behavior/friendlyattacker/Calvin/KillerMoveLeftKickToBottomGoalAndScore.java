@@ -41,7 +41,7 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		 */
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
 			rotateTo(orientation);
-			isRotating = true;
+			state().isRotating = true;
 			return;
 		}
 		
@@ -50,7 +50,7 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		/*
 		 * Aim at the right. i.e. at the bottom of the opposition's goal
 		 */
-		if(!isAimingRight){
+		if(!state().isAimingRight){
 			aimRight();
 		}
 		
@@ -62,9 +62,9 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 			return;
 		}
 		
-		if(isMoving){
+		if(state().isMoving){
 			s.send(type, RobotCommand.STOP);
-			isMoving = false;
+			state().isMoving = false;
 		}
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");

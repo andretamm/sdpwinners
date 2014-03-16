@@ -62,8 +62,8 @@ public class DefenderSimpleGetInPositionForPass extends GeneralBehavior {
 		}
 		
 		// Don't need to move any more!
-		if (isMoving) {
-			isMoving = false;
+		if (state().isMoving) {
+			state().isMoving = false;
 			stop();
 		}
 		

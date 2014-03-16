@@ -1,5 +1,6 @@
 package behavior;
 
+import common.Robot;
 import communication.Server;
 
 import constants.RobotType;
@@ -20,12 +21,26 @@ public class Strategy {
 	Manager defender;
 	Manager attacker;
 	
+	public static RobotState defenderState;
+	public static RobotState attackerState;
+	
 	public static boolean defenderReadyForPass = false;
 	public static boolean attackerReadyForKick = false;
 	
 	public Strategy(WorldState ws, Server server) {
 		this.ws = ws;
 		this.server = server;
+		
+		defenderState = new RobotState();
+		attackerState = new RobotState();
+	}
+	
+	public static RobotState state(RobotType type) {
+		if (type == RobotType.ATTACKER) {
+			return attackerState;
+		} else {
+			return defenderState;		
+		}
 	}
 	
 	/**

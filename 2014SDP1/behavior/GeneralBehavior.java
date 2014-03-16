@@ -33,17 +33,6 @@ public abstract class GeneralBehavior implements Behavior {
 	protected RobotType type;
 	protected Server s;
 	
-	// Variables for keeping track of the state of the robot
-	// NB - these are behavior-specific, if you switch behaviors
-	// then these will not carry on!!
-	protected boolean isRotating = false;
-	protected boolean isMoving = false;
-	protected boolean isMovingUp = false;
-	protected boolean isMovingDown = false;
-	protected boolean isAimingLeft = false;
-	protected boolean isAimingRight = false;
-	
-	
 	/**
 	 * Whether to print debug statements 
 	 */
@@ -111,6 +100,13 @@ public abstract class GeneralBehavior implements Behavior {
 		return ws.getOur(type);
 	}
 	
+	/**
+	 * Gets the state for this robot
+	 */
+	public RobotState state() {
+		return Strategy.state(type);
+	}
+	
 	/* ------------------------------------- */
 	/* --- General robot control helpers --- */
 	/* ------------------------------------- */
@@ -146,7 +142,7 @@ public abstract class GeneralBehavior implements Behavior {
 			}
 			
 			d("rotating");
-			isRotating = true;
+			state().isRotating = true;
 			
 			return false;
 		}
@@ -211,7 +207,7 @@ public abstract class GeneralBehavior implements Behavior {
 		if (StrategyHelper.getDistance(robot, safeTarget) > DISTANCE_ERROR) {
 			d("Moving in direction " + direction);
 			s.send(type, direction);
-			isMoving = true;
+			state().isMoving = true;
 			return false;
 		}
 		
@@ -244,7 +240,7 @@ public abstract class GeneralBehavior implements Behavior {
 		// Move forward until we get there
 		if (StrategyHelper.getDistance(robot, safeTarget) > DISTANCE_ERROR) {
 			s.send(type, RobotCommand.FORWARD);
-			isMoving = true;
+			state().isMoving = true;
 			return false;
 		}
 		
@@ -260,7 +256,7 @@ public abstract class GeneralBehavior implements Behavior {
 		double orientation = Orientation.getAngle(robot, target);
 		
 		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 12) {
-			isMoving = true;
+			state().isMoving = true;
 			s.sendDiagonalMovement(type, (int) Math.toDegrees(orientation));
 			return false;
 		}
@@ -275,7 +271,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * to the robot, not the vision system!
 	 */
 	public void moveLeft() {
-		isMoving = true;
+		state().isMoving = true;
 		s.send(type, RobotCommand.MOVE_LEFT);
 	}
 	
@@ -284,7 +280,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * to the robot, not the vision system!
 	 */
 	public void moveRight() {
-		isMoving = true;
+		state().isMoving = true;
 		s.send(type, RobotCommand.MOVE_RIGHT);
 	}
 	
@@ -307,7 +303,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	public void aimLeft() {
 		s.send(type, RobotCommand.AIM_LEFT);
-		isAimingLeft = true;
+		state().isAimingLeft = true;
 	}
 	
 	/**
@@ -315,7 +311,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	public void aimRight() {
 		s.send(type, RobotCommand.AIM_RIGHT);
-		isAimingRight = true;
+		state().isAimingRight = true;
 	}
 	
 	/**
@@ -323,8 +319,8 @@ public abstract class GeneralBehavior implements Behavior {
 	 */
 	public void aimReset() {
 		s.send(type, RobotCommand.AIM_RESET);
-		isAimingLeft = false;
-		isAimingRight = false;
+		state().isAimingLeft = false;
+		state().isAimingRight = false;
 	}
 	
 	/**
@@ -332,10 +328,10 @@ public abstract class GeneralBehavior implements Behavior {
 	 * change from rotation to movement or vice versa!!!
 	 */
 	private void stopMovement() {
-		if (isMoving || isRotating) {
+		if (state().isMoving || state().isRotating) {
 			stop();
-			isMoving = false;
-			isRotating = false;
+			state().isMoving = false;
+			state().isRotating = false;
 		}
 	}
 	
@@ -351,9 +347,9 @@ public abstract class GeneralBehavior implements Behavior {
 	 * Stops rotating if we're currently rotating.
 	 */
 	protected void stopRotating() {
-		if (isRotating) {
+		if (state().isRotating) {
 			stop();
-			isRotating = false;
+			state().isRotating = false;
 		}
 	}
 
