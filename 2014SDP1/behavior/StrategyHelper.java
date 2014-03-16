@@ -302,33 +302,45 @@ public class StrategyHelper {
 	}
 	
 	/**
-	 * Checks if the given robot has a ball
+	 * Checks if the given robot has a ball. Uses default values for the angle error and
+	 * distance and calls the other hasBall() with these values.
+	 * 
+	 * @see behavior.StrategyHelper#hasBall(Robot, WorldState, double, double)
 	 * @param r Robot to check
 	 * @param ws Handle to WorldState
 	 * @return True if the robot has the ball, False otherwise
 	 */
 	public static boolean hasBall(Robot r, WorldState ws){
+		return hasBall(r, ws, 32, GeneralBehavior.ANGLE_ERROR);
+	}
+	
+	/**
+	 * Checks if the given robot has a ball.
+	 * 
+	 * @param r Robot to check
+	 * @param ws Handle to WorldState
+	 * @param distanceError What is the max acceptable distance of the ball from the robot
+	 * @param angleError What is the max acceptable angle diff between the robot's orientation and
+	 * 					 a line from the robot to the ball
+	 * @return True if the robot has the ball, False otherwise
+	 */
+	public static boolean hasBall(Robot r, WorldState ws, double distanceError, double angleError){
 		//Verify difference between Orientation Angle & Robot-to-Ball angle
 		double orientationAngle = ws.getRobotOrientation(r.type, r.colour);
 		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallPoint());
 
 		double difference = Math.abs(StrategyHelper.angleDiff(orientationAngle,robotToBallAngle));		
 
-
-		if(difference <= GeneralBehavior.ANGLE_ERROR){
-			// TODO figure out good value
+		if(difference <= angleError){
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
-			if (distance <= 32) {
-				System.out.println(distance);
-				// TODO figure out actual value
+			if (distance <= distanceError) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 	
 	/**
 	 * Find out which robot has the ball
