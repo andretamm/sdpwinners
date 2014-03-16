@@ -32,18 +32,8 @@ public class KillerSimpleGetInPositionForKick extends GeneralBehavior {
 		// Use a slightly bigger error margin than usual :)
 		if (!StrategyHelper.hasBall(robot(), ws, 37, ANGLE_ERROR * 1.5)) {
 			ws.setRobotGrabbedBall(robot(), false);
-			
-			double orientationAngle = ws.getRobotOrientation(robot());
-			double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(robot()), ws.getBallPoint());
 
-			double difference = Math.abs(StrategyHelper.angleDiff(orientationAngle,robotToBallAngle));		
-
-			double distance = StrategyHelper.getDistance(ws.getRobotPoint(robot()), ws.getBallPoint());
-			
-			System.out.println("DON'T HAVE BALL ANY MORE!!! " + difference + " " + distance);
-			
 			s.send(type, RobotCommand.OPEN_GRABBER);
-			s.forceSend(type, RobotCommand.OPEN_GRABBER);
 			s.forceSend(type, RobotCommand.OPEN_GRABBER);
 			return;
 		}

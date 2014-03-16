@@ -28,6 +28,13 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		// If the ball has just left our quadrant, try opening the grabbers just in case
+		if (state().grabberState != 0) {
+			s.send(type, RobotCommand.OPEN_GRABBER);
+			s.forceSend(type, RobotCommand.OPEN_GRABBER);
+			state().grabberState = 0;
+		}
+
 		try {
 			/*-------------------------------------*/
 			/* Decide which blocking method to use */
