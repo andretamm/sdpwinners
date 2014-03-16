@@ -25,7 +25,7 @@ public class Ultra360 {
 	private byte off;
 	
 	// Used to tune the maximum speed for the diagonal movement
-	static double MAXIMUMSPEED = 70;
+	static double MAXIMUMSPEED = 90;
 	
 	//Actual robot speed
 	public byte forwardSpeed;
@@ -49,8 +49,8 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 45; //50 60 
-		slowRotationSpeed = (byte) 45; 
+		fastRotationSpeed = (byte) 60; //50 60 
+		slowRotationSpeed = (byte) 60; 
 		
 		// Default moving speed
 		forwardSpeed = (byte) 90; //70
@@ -64,19 +64,19 @@ public class Ultra360 {
 	public void moveDiagonally(int angle){
 		byte[] speeds = diagonalSpeeds(angle);
 		//EAST Wheel
-//		System.out.println(speeds[0] + " " + speeds[1]);
+		System.out.println(speeds[0] + " " + speeds[1] + " EAST") ;
 		I2Csensor.sendData(0x01,speeds[0]); 
 		I2Csensor.sendData(0x02,speeds[1]); 
 		//SOUTH Wheel
-//		System.out.println(speeds[2] + " " + speeds[3]);
+		System.out.println(speeds[2] + " " + speeds[3] + " SOUTH");
 		I2Csensor.sendData(0x03,speeds[2]); 
 		I2Csensor.sendData(0x04,speeds[3]);
 		//NORTH Wheel
-//		System.out.println(speeds[4] + " " + speeds[5]);
+		System.out.println(speeds[4] + " " + speeds[5] + " NORTH");
 		I2Csensor.sendData(0x05,speeds[4]); 
 		I2Csensor.sendData(0x06,speeds[5]); 
 		//WEST Wheel
-//		System.out.println(speeds[6] + " " + speeds[7]);
+		System.out.println(speeds[6] + " " + speeds[7] + " WEST");
 		I2Csensor.sendData(0x07,speeds[6]); 
 		I2Csensor.sendData(0x08,speeds[7]);
 	}

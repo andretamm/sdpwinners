@@ -30,7 +30,27 @@ public class WorldState implements VisionInterface {
 
 	public int ballX;
 	public int ballY;
+	
+	// Defender goDiagonallyTo target
+	private int defenderGoDiagonallyToX = 0;
+	private int defenderGoDiagonallyToY = 0;
+	
+	public int getDefenderGoDiagonallyToX() {
+		return defenderGoDiagonallyToX;
+	}
 
+	public void setDefenderGoDiagonallyToX(int defenderGoDiagonallyToX) {
+		this.defenderGoDiagonallyToX = defenderGoDiagonallyToX;
+	}
+
+	public int getDefenderGoDiagonallyToY() {
+		return defenderGoDiagonallyToY;
+	}
+
+	public void setDefenderGoDiagonallyToY(int defenderGoDiagonallyToY) {
+		this.defenderGoDiagonallyToY = defenderGoDiagonallyToY;
+	}
+	
 	private RobotMap<Double> robotOrientation; // Orientations of all the robots
 	private RobotMap<Point2D.Double> robotOrientationVector; // Orientation as a vector
 

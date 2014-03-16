@@ -67,7 +67,8 @@ public class Display {
 //		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
 //		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
 //		
-		
+		graphics.setColor(Color.cyan);
+		graphics.drawLine(ws.getRobotX(ws.getOur(RobotType.DEFENDER)), ws.getRobotY(ws.getOur(RobotType.DEFENDER)), ws.getDefenderGoDiagonallyToX(),  ws.getDefenderGoDiagonallyToY());
         graphics.setColor(Color.blue);
         
         /* The intersections of these two lines, defines the ball location. 
