@@ -13,4 +13,6 @@ public class RobotState {
 	public boolean isMovingDown = false;
 	public boolean isAimingLeft = false;
 	public boolean isAimingRight = false;
+	
+	public int grabberState = 0;
 }

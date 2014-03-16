@@ -23,7 +23,7 @@ public class KillerManager extends behavior.Manager {
 		behaviorList[2] = new KillerSimpleGetInPositionForKick(getWorldState(), getRobotType(), getServer());
 		behaviorList[3] = new KillerSimpleKickBallToGoal(getWorldState(), getRobotType(), getServer());
 		behaviorList[1] = new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
-		behaviorList[0] = new KillerDefendBehavior(getWorldState(), getRobotType(), getServer());
+		behaviorList[0] = new KillerBlockDefender(getWorldState(), getRobotType(), getServer());
 //		behaviorList[4] = new KillerGetPass(getWorldState(), getRobotType(), getServer());
 		
 //		behaviorList[2] = new KillerGetInPositionForKick(getWorldState(), getRobotType(), getServer());

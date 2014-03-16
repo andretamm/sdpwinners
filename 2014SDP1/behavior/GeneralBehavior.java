@@ -324,10 +324,13 @@ public abstract class GeneralBehavior implements Behavior {
 	}
 	
 	/**
-	 * Stops moving if we're rotating or moving. Call this after every
-	 * change from rotation to movement or vice versa!!!
+	 * Stops if we're rotating or moving. Calling this all
+	 * the time can be DANGEROUS, use this ONLY if you know that your
+	 * behavior is done with ALL movement and rotations, otherwise
+	 * you probably want something specific to state().isMoving or
+	 * state().isRotating.
 	 */
-	private void stopMovement() {
+	protected void stopMovement() {
 		if (state().isMoving || state().isRotating) {
 			stop();
 			state().isMoving = false;

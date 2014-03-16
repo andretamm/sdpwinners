@@ -138,6 +138,31 @@ public class Server {
 	}
 	
 	/**
+	 * Sends a command to the robot. Always sends it, no
+	 * matter what. ONLY USE THIS IN EXTREME SITUATIONS.
+	 * Use send() instead for normal commands.
+	 * 
+	 * @param type Defender or attacker
+	 * @param command Command byte
+	 */
+	public void forceSend(RobotType type, int command) {
+		// Pick right robot channel
+		BluetoothCommunication robot;
+
+		if (type == RobotType.DEFENDER) {
+			robot = defenderRobot;
+		} else {
+			robot = attackerRobot;
+		}
+
+		// Only send command if robot is actually connected
+		if (robot.isConnected()) {
+			previousCommand.put(type, command);
+			robot.sendToRobot(command);
+		}
+	}
+	
+	/**
 	 * Send a command to the robot to move diagonally. The method
 	 * choppes an angle and send it to the NXT.
 	 * 

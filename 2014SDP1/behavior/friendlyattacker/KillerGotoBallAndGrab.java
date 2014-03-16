@@ -24,11 +24,24 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 		
 		d("going to ball");
 		
+
+		state().grabberState = 1;
+//		if (state().grabberState > 0) {
+//			s.send(type, RobotCommand.OPEN_GRABBER);
+//			state().grabberState--;
+//		}
+		
 		if (goToBall()) {
 			// We're at the ball, so grab it
 			System.out.println("GRABBING");
 			s.send(type, RobotCommand.GRAB);
 			ws.setRobotGrabbedBall(robot(), true);
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

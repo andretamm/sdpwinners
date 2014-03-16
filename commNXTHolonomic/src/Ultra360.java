@@ -261,7 +261,7 @@ public class Ultra360 {
 		I2Csensor.sendData(0x07,(byte)3); 
 		//make the I2C safe again and idiot proof
 		try {
-			Thread.sleep(20);
+			Thread.sleep(80);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} //the best time I could get to make it stop faster
