@@ -25,7 +25,7 @@ public class Ultra360 {
 	private byte off;
 	
 	// Used to tune the maximum speed for the diagonal movement
-	static double MAXIMUMSPEED = 100;
+	static double MAXIMUMSPEED = 70;
 	
 	//Actual robot speed
 	public byte forwardSpeed;
@@ -49,11 +49,11 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 50; //60 
-		slowRotationSpeed = (byte) 30;
+		fastRotationSpeed = (byte) 50; //50 60 
+		slowRotationSpeed = (byte) 50; 
 		
 		// Default moving speed
-		forwardSpeed = (byte) 90; //70
+		forwardSpeed = (byte) 100; //70
 		
 		// Init motors
 		rotator = Motor.C;
@@ -254,6 +254,29 @@ public class Ultra360 {
 	//This is the method to call whenever you want to stop the robot in a SAFE manner.
 	//For the best performance, call this method after any movement, before calling another direction method.
 	public void stop(){
+		//stop dead, I am not making a constant for this for added safety.
+		I2Csensor.sendData(0x01,(byte)3); 
+		I2Csensor.sendData(0x03,(byte)3); 
+		I2Csensor.sendData(0x05,(byte)3); 
+		I2Csensor.sendData(0x07,(byte)3); 
+		//make the I2C safe again and idiot proof
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} //the best time I could get to make it stop faster
+		I2Csensor.sendData(0x01,(byte)0);
+		I2Csensor.sendData(0x02,(byte)0);
+		I2Csensor.sendData(0x03,(byte)0);
+		I2Csensor.sendData(0x04,(byte)0);
+		I2Csensor.sendData(0x05,(byte)0);
+		I2Csensor.sendData(0x06,(byte)0);
+		I2Csensor.sendData(0x07,(byte)0);
+		I2Csensor.sendData(0x08,(byte)0);
+	}
+	
+	//if all else fails, here is the old way of stopping
+	public void oldStop(){
 		//stop dead, I am not making a constant for this for added safety.
 		I2Csensor.sendData(0x01,(byte)3); 
 		I2Csensor.sendData(0x03,(byte)3); 
