@@ -251,6 +251,10 @@ public abstract class GeneralBehavior implements Behavior {
 	}
 	
 	public boolean goDiagonallyTo(Point target) {
+		// Set the point for the vision system
+		ws.setDefenderGoDiagonallyToX(target.x);
+		ws.setDefenderGoDiagonallyToY(target.y);
+		
 		// Correct the angle
 		Point robot = ws.getRobotPoint(robot());
 		double orientation = Orientation.getAngle(robot, target);

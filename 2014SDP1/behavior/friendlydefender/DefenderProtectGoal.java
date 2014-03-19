@@ -104,7 +104,7 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/*-------------------------------------*/
 			
 			// Quickly go there :))
-			if (quickGoTo(target)) {
+			if (goDiagonallyTo(target)) {
 				stop();
 			}
 

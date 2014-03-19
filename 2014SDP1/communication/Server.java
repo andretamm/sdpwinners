@@ -183,7 +183,7 @@ public class Server {
 		previousCommand.put(type, 8);
 		previousAngle.put(type, angleToGo);
 		
-		// Create the angle that is send to the NXT
+		 // Create the angle that is send to the NXT
 		int angle = 0;
 		
 		// Get the robot's orientation from the Vision System.
@@ -201,42 +201,28 @@ public class Server {
 			angle = (int)Math.toDegrees(angleDiff) ;
 		}
 		
-		System.out.println(angleToGo + " " + angle);
+		System.out.println(angleToGo + " " + Math.abs(angle));
 		
 		angle = Math.abs(angle);
 		
+		// Represent the angle as two bytes
+		byte[] angleArray = new byte[2];
+		
+		// Mask all but the lower eight bits.
+		angleArray[0] = (byte) (angle & 0xFF);
+		
+		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
+		angleArray[1] = (byte) ((angle >> 8) & 0xFF);
+		
 		if (type == RobotType.DEFENDER) {
 			defenderRobot.sendToRobot(8);
-			
-			if (angle > 99){
-				while (angle > 0) {
-					defenderRobot.sendToRobot(angle % 10);
-					angle = angle / 10;
-				}
-			} else if (angle <= 99){
-				while (angle > 0) {
-					
-					defenderRobot.sendToRobot(angle % 10);
-					angle = angle / 10;
-				}
-				defenderRobot.sendToRobot(0);
-			}
+			defenderRobot.sendToRobot(angleArray[0]);
+			defenderRobot.sendToRobot(angleArray[1]);
 			
 		} else if (type == RobotType.ATTACKER) {
 			attackerRobot.sendToRobot(8);
-			
-			if (angle > 99){
-				while (angle > 0) {
-					attackerRobot.sendToRobot(angle % 10);
-					angle = angle / 10;
-				}
-			} else if (angle <= 99){
-				while (angle > 0) {
-					attackerRobot.sendToRobot(angle % 10);
-					angle = angle / 10;
-				}
-				attackerRobot.sendToRobot(0);
-			}
+			attackerRobot.sendToRobot(angleArray[0]);
+			attackerRobot.sendToRobot(angleArray[1]);
 		}
 	}
 

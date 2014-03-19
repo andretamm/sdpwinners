@@ -69,6 +69,7 @@ public class Display {
 //		int height = (int) (ws.getOuterPitchBottomRight().getY()-ws.getOuterPitchTopLeft().getY());
 //		graphics.drawRect((int) ws.getOuterPitchTopLeft().getX(), (int) ws.getOuterPitchTopLeft().getY(), width, height);
 //		
+
 		// Point where we would have to be to stop them hitting the top/bottom of our goal
 		Point topDefend = StrategyHelper.findGoalTopDefendPosition(ws);
 		Point bottomDefend = StrategyHelper.findGoalBottomDefendPosition(ws);
@@ -78,6 +79,10 @@ public class Display {
 		graphics.fillOval(bottomDefend.x - 3, bottomDefend.y - 3, 6, 6);
 		
 		
+
+		graphics.setColor(Color.cyan);
+		graphics.drawLine(ws.getRobotX(ws.getOur(RobotType.DEFENDER)), ws.getRobotY(ws.getOur(RobotType.DEFENDER)), ws.getDefenderGoDiagonallyToX(),  ws.getDefenderGoDiagonallyToY());
+
         graphics.setColor(Color.blue);
         
         /* The intersections of these two lines, defines the ball location. 
