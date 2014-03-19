@@ -361,7 +361,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * @return True if we're at the ball, ready for grabbing. False if we're still getting there.
 	 */
 	public boolean goToBall() {
-		if (StrategyHelper.hasBall(robot(), ws)) {
+		if (StrategyHelper.hasBall(robot(), ws, 37, GeneralBehavior.ANGLE_ERROR)) {
 			System.out.println("BALL IS IN RANGE FOR KICK!");
 			return true;
 		} else {

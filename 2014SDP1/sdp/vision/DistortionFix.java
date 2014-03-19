@@ -1,8 +1,12 @@
 package sdp.vision;
 
 
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
+
+import behavior.Strategy;
+import behavior.StrategyHelper;
 
 /**
  * Class to remove barrel distortion from bufferedimages
@@ -107,5 +111,37 @@ public class DistortionFix {
 		int y = (int)((distanceFromCamera - distanceFix)*Math.sin(angle));
 		
 		return (new Point(x,y));
+    }
+
+    public static Point AndrePerspectiveFix(Point p) {
+    	/* Side-view of the perspective fix
+    	 * 
+    	 * camera
+    	 *   |\
+    	 *   | \
+    	 *   | _\_
+    	 *   | | \|
+    	 *   | |  \
+    	 *   | |  |\
+    	 *   @--x---y
+    	 *      <----
+    	 *      
+    	 * Top view of the perspective fix
+    	 *   @ -------- x ----- y
+    	 * camera     robot   vision (where the vision says the robot is)
+    	 *              <--------
+    	 *          errorCorrectionVector
+    	 */
+    	double distFromCentre = StrategyHelper.getDistance(cameraPos, p);
+    	Point2D.Double vector = StrategyHelper.normaliseVector(new Point2D.Double(cameraPos.x - p.x, cameraPos.y - p.y));
+    	double robotHeight = 20;
+
+    	double error = robotHeight * distFromCentre / distCameraPitch;
+
+    	Point2D.Double errorCorrectionVector = StrategyHelper.multiplyVector(vector, error);
+
+    	Point result = StrategyHelper.addVectorToPoint(errorCorrectionVector, p);
+
+    	return result;
     }
 }

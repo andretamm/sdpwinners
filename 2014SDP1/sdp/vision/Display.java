@@ -77,6 +77,7 @@ public class Display {
 		graphics.setColor(Color.WHITE);
 		graphics.fillOval(bottomDefend.x - 3, bottomDefend.y - 3, 6, 6);
 		
+		
         graphics.setColor(Color.blue);
         
         /* The intersections of these two lines, defines the ball location. 
@@ -129,11 +130,21 @@ public class Display {
 		graphics.setColor(new Color(0xFF00FF00));
 		
 		for (Robot r: Robot.listAll()) {
-				int x2=(int) (ws.getRobotX(r)+50*Math.cos(ws.getRobotOrientation(r.type, r.colour)));
-				int y2=(int) (ws.getRobotY(r)+50*Math.sin(ws.getRobotOrientation(r.type, r.colour)));
-				graphics.drawLine((int) ws.getRobotX(r), (int) ws.getRobotY(r), x2, y2);
+			// Orientation with the distortion fix :)
+			Point robotPoint;
+//			Point robotPoint = DistortionFix.AndrePerspectiveFix(ws.getRobotPoint(r)); 
+
+//			int x2=(int) (robotPoint.x + 50*Math.cos(ws.getRobotOrientation(r)));
+//			int y2=(int) (robotPoint.y + 50*Math.sin(ws.getRobotOrientation(r)));
+//			graphics.drawLine(robotPoint.x, robotPoint.y, x2, y2);
+
+			// Orientation WITHOUT the distortion fix
+			robotPoint = ws.getRobotPoint(r);
+			int x2=(int) (robotPoint.x + 50*Math.cos(ws.getRobotOrientation(r)));
+			int y2=(int) (robotPoint.y + 50*Math.sin(ws.getRobotOrientation(r)));
+			graphics.drawLine(robotPoint.x, robotPoint.y, x2, y2);
 		}
-		
+
 		graphics.drawOval((int) ws.getBallX() - WorldState.ballRadius, (int) ws.getBallY() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
 
 		// WHY CLAUDIU???? 
@@ -233,6 +244,24 @@ public class Display {
 				}
 			}
 		}
+		
+//		// Point after distortion fix
+//		Point defDistorted = null;
+//		defDistorted = DistortionFix.barrelCorrected(ws.getRobotPoint(ws.getOur(RobotType.DEFENDER)));
+//		defDistorted = ws.getRobotPoint(ws.getOur(RobotType.DEFENDER));
+//		
+//		System.out.println(defDistorted.x + " " + defDistorted.y);
+//		Point defDistorted2 = DistortionFix.perspectiveFix(20, defDistorted);
+//		Point andreDistorted = DistortionFix.AndrePerspectiveFix(defDistorted);
+//		
+//		graphics.setColor(Color.BLUE);
+//		graphics.fillOval(defDistorted.x - 3, defDistorted.y - 3, 6, 6);
+//		
+//		System.out.println(defDistorted2.x + " " + defDistorted2.y);
+//		System.out.println(andreDistorted.x + " " + andreDistorted.y);
+//		
+//		graphics.setColor(Color.RED);
+//		graphics.fillOval(andreDistorted.x - 3, andreDistorted.y - 3, 6, 6);
 	}
 
 	public static void renderDrawables(WorldState ws, BufferedImage image) {

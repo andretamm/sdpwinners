@@ -130,10 +130,13 @@ public class Server {
 
 		// Only send command if it is different from the last one
 		// we sent and the robot is actually connected
-		if (previousCommand.get(type) != command &&
-			robot.isConnected()) {
-			previousCommand.put(type, command);
-			robot.sendToRobot(command);
+		if (previousCommand.get(type) != command) {
+			if(robot.isConnected()) {
+				previousCommand.put(type, command);
+				robot.sendToRobot(command);
+			} else {
+				System.out.println(type + " is not connected, not sending command");
+			}
 		}
 	}
 	
