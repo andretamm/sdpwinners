@@ -26,7 +26,7 @@ public class Server {
 	private static BluetoothCommunication defenderRobot;
 	private static BluetoothCommunication attackerRobot;
 	
-	private EnumMap<RobotType, Integer> previousCommand;
+	public static EnumMap<RobotType, Integer> previousCommand;
 	private EnumMap<RobotType, Integer> previousAngle;
 	
 	private WorldState ws;
@@ -120,6 +120,7 @@ public class Server {
 	 */
 	public void send(RobotType type, int command) {
 		// Pick right robot channel
+		
 		BluetoothCommunication robot;
 
 		if (type == RobotType.DEFENDER) {
