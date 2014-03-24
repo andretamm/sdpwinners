@@ -302,33 +302,45 @@ public class StrategyHelper {
 	}
 	
 	/**
-	 * Checks if the given robot has a ball
+	 * Checks if the given robot has a ball. Uses default values for the angle error and
+	 * distance and calls the other hasBall() with these values.
+	 * 
+	 * @see behavior.StrategyHelper#hasBall(Robot, WorldState, double, double)
 	 * @param r Robot to check
 	 * @param ws Handle to WorldState
 	 * @return True if the robot has the ball, False otherwise
 	 */
 	public static boolean hasBall(Robot r, WorldState ws){
+		return hasBall(r, ws, 32, GeneralBehavior.ANGLE_ERROR);
+	}
+	
+	/**
+	 * Checks if the given robot has a ball.
+	 * 
+	 * @param r Robot to check
+	 * @param ws Handle to WorldState
+	 * @param distanceError What is the max acceptable distance of the ball from the robot
+	 * @param angleError What is the max acceptable angle diff between the robot's orientation and
+	 * 					 a line from the robot to the ball
+	 * @return True if the robot has the ball, False otherwise
+	 */
+	public static boolean hasBall(Robot r, WorldState ws, double distanceError, double angleError){
 		//Verify difference between Orientation Angle & Robot-to-Ball angle
 		double orientationAngle = ws.getRobotOrientation(r.type, r.colour);
 		double robotToBallAngle = Orientation.getAngle(ws.getRobotPoint(r), ws.getBallPoint());
 
 		double difference = Math.abs(StrategyHelper.angleDiff(orientationAngle,robotToBallAngle));		
 
-
-		if(difference <= GeneralBehavior.ANGLE_ERROR){
-			// TODO figure out good value
+		if(difference <= angleError){
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
-			if (distance <= 32) {
-				System.out.println(distance);
-				// TODO figure out actual value
+			if (distance <= distanceError) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 	
 	/**
 	 * Find out which robot has the ball
@@ -434,29 +446,86 @@ public class StrategyHelper {
 		
 	}
 
+	/**
+	 * If the opponent were to make a kick that would end up at the top of our goal
+	 * (from their current position with a wall kick at the bottom), 
+	 * where would we have to be to block it.
+	 * @param ws Handle to worldstate
+	 * @return Position for blocking
+	 */
 	public static Point findGoalTopDefendPosition(WorldState ws) {
 		Point attacker = ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER));
 		
+		// Bottom of the pitch
+		Point pitchBottom;
+		
+		if (ws.getDirection() == ShootingDirection.LEFT) {
+			pitchBottom = ws.getPitchBottomRight();
+		} else {
+			pitchBottom = ws.getPitchBottomLeft();
+		}
+		
 		// Distance of robot from pitch bottom
-		int lP = ws.getPitchBottomLeft().y - attacker.y;
+		double lP = Math.abs(pitchBottom.y - attacker.y);
 		
 		// Distance from goal top to bottom of pitch
-		int l = ws.getPitchBottomLeft().y - ws.getOurGoalTop().y;
+		double l = Math.abs(pitchBottom.y - ws.getOurGoalTop().y);
 		
 		// Distance of robot from goal
-		int k = ws.getPitchBottomLeft().x - attacker.x;
+		double k = Math.abs(pitchBottom.x - attacker.x);
 		
 		// Distance from goal where ball will hit the wall 
 		double s = (double) (k * l) / (lP + l);
 		
 		// Distance from goal to defend point
-		int aP = getDefendLineX(ws) - ws.getPitchBottomLeft().x;
+		double aP = Math.abs(getDefendLineX(ws) - pitchBottom.x);
 		
 		// Distance from goal top to our defend point y wise
 		int lPPP = (int) Math.abs(l * aP / s);
 		
 		return new Point(getDefendLineX(ws), ws.getOurGoalTop().y + lPPP);
 	}
+	
+	/**
+	 * If the opponent were to make a kick that would end up at the bottom of our goal
+	 * (from their current position from a wall kick from the top), 
+	 * where would we have to be to block it.
+	 * @param ws Handle to worldstate
+	 * @return Position for blocking
+	 */
+	public static Point findGoalBottomDefendPosition(WorldState ws) {
+		Point attacker = ws.getRobotPoint(ws.getOpposition(RobotType.ATTACKER));
+		
+		// Top of the pitch
+		Point pitchTop;
+		
+		if (ws.getDirection() == ShootingDirection.LEFT) {
+			pitchTop = ws.getPitchTopRight();
+		} else {
+			pitchTop = ws.getPitchTopLeft();
+		}
+		
+		// Distance of robot from pitch bottom
+		double lP = Math.abs(pitchTop.y - attacker.y);
+		
+		// Distance from goal bottom to bottom of pitch
+		double l = Math.abs(pitchTop.y - ws.getOurGoalBottom().y);
+		
+		// Distance of robot from goal
+		double k = Math.abs(pitchTop.x - attacker.x);
+		
+		// Distance from goal where ball will hit the wall 
+		double s = (double) (k * l) / (lP + l);
+		
+		// Distance from goal to defend point
+		double aP = Math.abs(getDefendLineX(ws) - pitchTop.x);
+		
+		// Distance from goal top to our defend point y wise
+		int lPPP = (int) Math.abs(l * aP / s);
+		
+		return new Point(getDefendLineX(ws), ws.getOurGoalBottom().y - lPPP);
+	}
+
 }
 
 

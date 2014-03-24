@@ -67,13 +67,13 @@ public class KillerKickBallToGoal extends GeneralBehavior {
 		
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
 			rotateTo(orientation);
-			isRotating = true;
+			state().isRotating = true;
 			return;
 		}
 		
-		if (isRotating) {
+		if (state().isRotating) {
 			s.send(type, RobotCommand.STOP);
-			isRotating = false;
+			state().isRotating = false;
 		}
 		
 		// Ready for a kick!

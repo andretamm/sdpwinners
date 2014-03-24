@@ -28,6 +28,13 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		// If the ball has just left our quadrant, try opening the grabbers just in case
+		if (state().grabberState != 0) {
+			s.send(type, RobotCommand.OPEN_GRABBER);
+			s.forceSend(type, RobotCommand.OPEN_GRABBER);
+			state().grabberState = 0;
+		}
+
 		try {
 			/*-------------------------------------*/
 			/* Decide which blocking method to use */
@@ -70,6 +77,16 @@ public class DefenderProtectGoal extends GeneralBehavior {
 					} else {
 						// TODO - Find where they COULD hit the goal and try to intercept that
 						StrategyHelper.findGoalTopDefendPosition(ws);
+						
+						double oppositionOrientation = ws.getRobotOrientation(ws.getOpposition(RobotType.ATTACKER));
+						
+						if (StrategyHelper.angleDiff(oppositionOrientation, C.A270) < C.A90) {
+							// They're aiming UP, try to protect kick to BOTTOM goal
+							target = StrategyHelper.findGoalBottomDefendPosition(ws);
+						} else {
+							// They're aiming DOWN, try to protect kick to TOP goal
+							target = StrategyHelper.findGoalTopDefendPosition(ws);
+						}
 					}
 				}
 			}
@@ -87,7 +104,7 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/*-------------------------------------*/
 			
 			// Quickly go there :))
-			if (quickGoTo(target)) {
+			if (goDiagonallyTo(target)) {
 				stop();
 			}
 

@@ -31,6 +31,13 @@ public class AndreArbitrator {
 			} else {
 				System.err.println("ERROR - couldn't pick a behavior, no conditions were met!!");
 			}
+			
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

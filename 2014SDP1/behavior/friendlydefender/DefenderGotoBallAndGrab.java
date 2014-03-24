@@ -18,6 +18,9 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 	public void action() {
 		d("going to ball and grabbing");
 		
+		// Mark the grabber as being possibly closed
+		state().grabberState = 1;
+		
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
@@ -27,7 +30,7 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 		if (goToBall()) {
 			// We're at the ball, so grab it
 			System.out.println("GRABBING");
-			s.send(type, RobotCommand.GRAB);
+			s.send(type, RobotCommand.CLOSE_GRABBER);
 			ws.setRobotGrabbedBall(robot(), true);
 		}
 	}

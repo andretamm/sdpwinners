@@ -53,7 +53,7 @@ public class DefenderMakePass extends GeneralBehavior {
 		}
 		
 		// Don't need to move any more!
-		if (isMoving) {
+		if (state().isMoving) {
 			stop();
 		}
 		

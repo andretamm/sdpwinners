@@ -25,7 +25,7 @@ public class Ultra360 {
 	private byte off;
 	
 	// Used to tune the maximum speed for the diagonal movement
-	static double MAXIMUMSPEED = 70;
+	static double MAXIMUMSPEED = 90;
 	
 	//Actual robot speed
 	public byte forwardSpeed;
@@ -49,11 +49,11 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 45; //50 60 
-		slowRotationSpeed = (byte) 45; 
+		fastRotationSpeed = (byte) 50; //50 60 
+		slowRotationSpeed = (byte) 50; 
 		
 		// Default moving speed
-		forwardSpeed = (byte) 90; //70
+		forwardSpeed = (byte) 100; //70
 		
 		// Init motors
 		rotator = Motor.C;
@@ -64,19 +64,19 @@ public class Ultra360 {
 	public void moveDiagonally(int angle){
 		byte[] speeds = diagonalSpeeds(angle);
 		//EAST Wheel
-//		System.out.println(speeds[0] + " " + speeds[1]);
+		System.out.println(speeds[0] + " " + speeds[1] + " EAST") ;
 		I2Csensor.sendData(0x01,speeds[0]); 
 		I2Csensor.sendData(0x02,speeds[1]); 
 		//SOUTH Wheel
-//		System.out.println(speeds[2] + " " + speeds[3]);
+		System.out.println(speeds[2] + " " + speeds[3] + " SOUTH");
 		I2Csensor.sendData(0x03,speeds[2]); 
 		I2Csensor.sendData(0x04,speeds[3]);
 		//NORTH Wheel
-//		System.out.println(speeds[4] + " " + speeds[5]);
+		System.out.println(speeds[4] + " " + speeds[5] + " NORTH");
 		I2Csensor.sendData(0x05,speeds[4]); 
 		I2Csensor.sendData(0x06,speeds[5]); 
 		//WEST Wheel
-//		System.out.println(speeds[6] + " " + speeds[7]);
+		System.out.println(speeds[6] + " " + speeds[7] + " WEST");
 		I2Csensor.sendData(0x07,speeds[6]); 
 		I2Csensor.sendData(0x08,speeds[7]);
 	}
@@ -260,15 +260,19 @@ public class Ultra360 {
 		I2Csensor.sendData(0x05,(byte)3); 
 		I2Csensor.sendData(0x07,(byte)3); 
 		//make the I2C safe again and idiot proof
-		Thread.sleep(80); //the best time I could get to make it stop faster
-		I2Csensor.sendData(0x01,stop);
-		I2Csensor.sendData(0x02,stop);
-		I2Csensor.sendData(0x03,stop);
-		I2Csensor.sendData(0x04,stop);
-		I2Csensor.sendData(0x05,stop);
-		I2Csensor.sendData(0x06,stop);
-		I2Csensor.sendData(0x07,stop);
-		I2Csensor.sendData(0x08,stop);
+		try {
+			Thread.sleep(80);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} //the best time I could get to make it stop faster
+		I2Csensor.sendData(0x01,(byte)0);
+		I2Csensor.sendData(0x02,(byte)0);
+		I2Csensor.sendData(0x03,(byte)0);
+		I2Csensor.sendData(0x04,(byte)0);
+		I2Csensor.sendData(0x05,(byte)0);
+		I2Csensor.sendData(0x06,(byte)0);
+		I2Csensor.sendData(0x07,(byte)0);
+		I2Csensor.sendData(0x08,(byte)0);
 	}
 	
 	//if all else fails, here is the old way of stopping
@@ -296,8 +300,8 @@ public class Ultra360 {
 	
 	public void closeGrabber() {
 		grabber.setSpeed(800);
-		grabber.setAcceleration(10000);
-		grabber.rotateTo(20);
+                grabber.setAcceleration(10000);
+                grabber.rotateTo(80);
 	}
 	
 	public void openGrabber() {
@@ -306,23 +310,31 @@ public class Ultra360 {
 		grabber.rotateTo(-10);
 	}
 	
-	//Kick the ball in a straight direction. This will reset the grabber to open.
-	public void kick() {
-		kicker.resetTachoCount();
-		kicker.setSpeed(1000);
-		kicker.setAcceleration(14000);
-		grabber.setSpeed(800);
-		grabber.setAcceleration(10000);
-		grabber.rotateTo(0);
-		kicker.rotate(-30);
-		kicker.rotate(30);
-	}
+	/**Kick the ball in a straight direction with the power given in from 0 - 100. 
+	 * Optimal Speed for defender is 20.
+	 * Optimal Speed for attacker is 100.
+	 * After the kick is performed, the grabber will reset to the starting open position.
+         * 
+         * @param speed From 0 - 100 */
+         
+        public static void kick(int speed) {
+		int kickSpeed = speed*10;
+		int accel = speed*140;
+                kicker.resetTachoCount();
+                kicker.setSpeed(kickSpeed);
+                kicker.setAcceleration(accel);
+                grabber.setSpeed(800);
+                grabber.setAcceleration(10000);
+                grabber.rotateTo(0);
+                kicker.rotate(-50);
+                kicker.rotate(50);
+        }
 	
 	//Rotates the rotator 25 degrees left and kicks the ball.
 	public void kickLeft() {
 		rotator.rotateTo(25); 
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-		kick();
+		kick(100);
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		aimReset();
 		
@@ -332,7 +344,7 @@ public class Ultra360 {
 	public void kickRight() {
 		rotator.rotateTo(-25); 
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-		kick();
+		kick(100);
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		aimReset();
 	}

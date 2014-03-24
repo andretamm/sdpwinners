@@ -26,17 +26,11 @@ public class BluetoothConnection extends Thread {
     			establishConnection();
     	    	sendReadySignal();
     		} if (i == 8) {
-    	    	// Single the robot to move diagonally with a given angle
-    			// Get the next three values and create the angle.
-    			int p,j,k;
-    			/* Receive three integers and build the angle  */
-    			p = receiveIntSignal();
-    			j = receiveIntSignal();
-    			k = receiveIntSignal();
+    			byte h = (byte)receiveIntSignal();
+    			byte k = (byte)receiveIntSignal();
     			
-    			int angle = p + 10*j + 100*k;
-    			
-    			// Set the command and angle to move to the given angle
+    			int angle = ((int) h & 0xFF | (int) (k << 8));
+    			System.out.println("Angle is " + angle);
     			robot.angle   = angle;	
     	    	robot.command = 8;
     	    	

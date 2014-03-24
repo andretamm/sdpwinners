@@ -25,6 +25,13 @@ public class KillerDefendBehavior extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		// If the ball has just left our quadrant, try opening the grabbers just in case
+		if (state().grabberState != 0) {
+			s.send(type, RobotCommand.OPEN_GRABBER);
+			s.forceSend(type, RobotCommand.OPEN_GRABBER);
+			state().grabberState = 0;
+		}
+		
 		// Make robot go to the middle of the quadrant
 		Quadrant q = ws.getRobotQuadrant(robot());
 		int quadrantMiddleX = (ws.getQuadrantX(q, QuadrantX.LOW) + ws.getQuadrantX(q, QuadrantX.HIGH)) / 2 ;
@@ -34,11 +41,6 @@ public class KillerDefendBehavior extends GeneralBehavior {
 			// Ball not on pitch, go to centre of our quadrant
 			target = new Point(quadrantMiddleX, ws.getOurGoalCentre().y);
 		}
-		
-		// Doesn't care about what way we're facing, stop when there
-//		if (quickGoTo(target)) {
-//			s.send(type, RobotCommand.STOP);
-//		}
 		
 		if (quickGoTo(target)) {
 			stop();

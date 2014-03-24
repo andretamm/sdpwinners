@@ -117,6 +117,7 @@ public class ImageProcessor {
                     
                     //get orientation of the two robots
                 	allOrientation(pitch);
+                	
                 }
                 else {
                     //threshold all points in image, and collect matches in ObjectPoints op
@@ -145,6 +146,8 @@ public class ImageProcessor {
 //                updateWorldState(pitch, worldState);
 //                //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
 //                updateWorldStateVelocities(worldState);
+                
+                
         }
         
         /**
@@ -160,7 +163,7 @@ public class ImageProcessor {
             
             for (Robot r : Robot.listAll()) {
 //        		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type));
-            	Point position = pp.getRobotPosition(r.colour, r.type);
+            	Point position = DistortionFix.AndrePerspectiveFix(pp.getRobotPosition(r.colour, r.type));
                 ws.setRobotX(r, (int) position.getX());
                 ws.setRobotY(r, (int) position.getY());
                 ws.setRobotOrientation(r.type, r.colour, pp.getRobotOrientation(r.colour, r.type));

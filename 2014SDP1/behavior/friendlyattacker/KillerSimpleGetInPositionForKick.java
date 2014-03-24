@@ -27,12 +27,16 @@ public class KillerSimpleGetInPositionForKick extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		
 		// Stop this madness if we didn't actually grab the ball <.<
-//		if (!StrategyHelper.hasBall(robot(), ws)) {
-//			ws.setRobotGrabbedBall(robot(), false);
-//			s.send(type, RobotCommand.OPEN_GRABBER);
-//			return;
-//		}
+		// Use a slightly bigger error margin than usual :)
+		if (!StrategyHelper.hasBall(robot(), ws, 37, ANGLE_ERROR * 1.5)) {
+			ws.setRobotGrabbedBall(robot(), false);
+
+			s.send(type, RobotCommand.OPEN_GRABBER);
+			s.forceSend(type, RobotCommand.OPEN_GRABBER);
+			return;
+		}
 		
 		/*-----------------------------------------------*/
 		/* Make robot go to the middle of the quadrant   */
@@ -45,8 +49,8 @@ public class KillerSimpleGetInPositionForKick extends GeneralBehavior {
 		}
 		
 		// Don't need to move any more!
-		if (isMoving) {
-			isMoving = false;
+		if (state().isMoving) {
+			state().isMoving = false;
 			stop();
 		}
 		

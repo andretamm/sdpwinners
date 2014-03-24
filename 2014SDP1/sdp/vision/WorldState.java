@@ -30,7 +30,27 @@ public class WorldState implements VisionInterface {
 
 	public int ballX;
 	public int ballY;
+	
+	// Defender goDiagonallyTo target
+	private int defenderGoDiagonallyToX = 0;
+	private int defenderGoDiagonallyToY = 0;
+	
+	public int getDefenderGoDiagonallyToX() {
+		return defenderGoDiagonallyToX;
+	}
 
+	public void setDefenderGoDiagonallyToX(int defenderGoDiagonallyToX) {
+		this.defenderGoDiagonallyToX = defenderGoDiagonallyToX;
+	}
+
+	public int getDefenderGoDiagonallyToY() {
+		return defenderGoDiagonallyToY;
+	}
+
+	public void setDefenderGoDiagonallyToY(int defenderGoDiagonallyToY) {
+		this.defenderGoDiagonallyToY = defenderGoDiagonallyToY;
+	}
+	
 	private RobotMap<Double> robotOrientation; // Orientations of all the robots
 	private RobotMap<Point2D.Double> robotOrientationVector; // Orientation as a vector
 
@@ -46,8 +66,8 @@ public class WorldState implements VisionInterface {
 	private Point outerPitchBottomRight1 = new Point(630, 396);
 
 	//these two are already barrelcorrected
-	private Point pitchTopLeft1 = new Point(60, 76);
-	private Point pitchBottomRight1 = new Point(570, 366);
+	private Point pitchTopLeft1 = new Point(60, 64);
+	private Point pitchBottomRight1 = new Point(570, 353);
 
 	private Point outerPitchTopLeft2 = new Point(5, 68);
 	private Point outerPitchBottomRight2 = new Point(634,400);
