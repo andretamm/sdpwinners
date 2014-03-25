@@ -43,11 +43,17 @@ public class Orientation {
         int totalX = 0;
         int totalY = 0;
         
+        Point colouredCentre = qp.getRobotPosition();
+        
         for (int i = 0; i < greyCircle.size(); i++) {
         	Point p = greyCircle.get(i);
-        	double distanceFromRobotCentre = greenCentre.distance(new Point((int) p.getX(), (int) p.getY()));
+        	double distanceFromGreenPlateCentre = greenCentre.distance(new Point((int) p.getX(), (int) p.getY()));
+        	double distanceFromColouredCentre = colouredCentre.distance(p); 
         	
-        	if (distanceFromRobotCentre <= Thresholder.plateSize - 3) {
+        	// Add this point if it's on the green plate and not too close to the coloured 
+        	// part of the i
+        	if (distanceFromGreenPlateCentre <= Thresholder.plateSize - 3 &&
+        		distanceFromColouredCentre >= 9) {
 	        	totalX += p.getX();
 	            totalY += p.getY();
         	} else {
@@ -67,6 +73,22 @@ public class Orientation {
 				Point greyCenter = Position.findMean(greyCircle);
 				greyCentreX = greyCenter.x;
 				greyCentreY = greyCenter.y;
+				
+				// Remove points too far from the centre of the grey circle
+		        for (int i = 0; i < greyCircle.size(); i++) {
+		        	Point p = greyCircle.get(i);
+		        	double distanceFromGrayCentre = greyCenter.distance(p);
+ 
+		        	if (distanceFromGrayCentre > 3) {
+		        		// Remove grey points too far from the robot's centre
+		        		greyCircle.remove(i);
+		        		i -= 1;
+		        	}
+		        }
+		        
+		        greyCenter = Position.findMean(greyCircle);
+				greyCentreX = greyCenter.x;
+				greyCentreY = greyCenter.y;
 			} catch (Exception e) {
 //				System.err.println("No grey points!");
 			}
@@ -75,6 +97,7 @@ public class Orientation {
         }
         
         Point2D.Double greyCentre = new Point2D.Double(greyCentreX, greyCentreY);
+        
       
         // USE ROBOT'S COORDINATES AS THE CENTRE OF THE GREEN PLATE INSTEAD
         double x0 = 0, y0 = 0;
