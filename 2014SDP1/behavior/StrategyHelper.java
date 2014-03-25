@@ -288,7 +288,7 @@ public class StrategyHelper {
 	 */
 	public static int getDefendLineX(WorldState ws) {
 		int ourGoalX = ws.getOurGoalCentre().x;
-		return ws.getDirection() == ShootingDirection.LEFT ? ourGoalX - 37 : ourGoalX + 40; 
+		return ws.getDirection() == ShootingDirection.LEFT ? ourGoalX - 50 : ourGoalX + 50; 
 	}
 	
 	public static double getDistance(Point a, Point b){
