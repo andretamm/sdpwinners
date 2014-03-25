@@ -32,4 +32,9 @@ public class Robot {
 		this.colour = c;
 		this.type = t;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + colour + " " + type + "]";
+	}
 }
