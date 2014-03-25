@@ -385,8 +385,8 @@ public class VisionGUI implements ChangeListener {
 
 		// Andre's hack - need to do this to make the lines and overlays appear
 		// on screen
-		pitch_1.doClick();
-		pitch_0.doClick();
+//		pitch_1.doClick();
+//		pitch_0.doClick();
 
 	}
 
@@ -537,14 +537,6 @@ public class VisionGUI implements ChangeListener {
 
 				int pitchNum = (pitch_0.isSelected()) ? 0 : 1;
 
-				int result = JOptionPane.showConfirmDialog(frame,
-						"Are you sure you want to save current"
-								+ "constants for pitch " + pitchNum + "?");
-
-				if (result == JOptionPane.NO_OPTION
-						|| result == JOptionPane.CANCEL_OPTION)
-					return;
-
 				saveThresholds(pitchNum);
 
 			}
@@ -563,15 +555,6 @@ public class VisionGUI implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 
 				int pitchNum = (pitch_0.isSelected()) ? 0 : 1;
-
-				int result = JOptionPane.showConfirmDialog(frame,
-						"Are you sure you want to load "
-								+ "pre-saved constants for pitch " + pitchNum
-								+ "?");
-
-				if (result == JOptionPane.NO_OPTION
-						|| result == JOptionPane.CANCEL_OPTION)
-					return;
 
 				loadThresholds(pitchNum);
 				
@@ -604,6 +587,15 @@ public class VisionGUI implements ChangeListener {
 	}
 	
 	private void saveThresholds(int pitchNum) {
+		
+		int result = JOptionPane.showConfirmDialog(frame,
+				"Are you sure you want to save current"
+						+ "constants for pitch " + pitchNum + "?");
+
+		if (result == JOptionPane.NO_OPTION
+				|| result == JOptionPane.CANCEL_OPTION)
+			return;
+		
 		try {
 			FileOutputStream fileOut = new FileOutputStream(
 					"constants/pitchThresholds" + pitchNum + ".ser");
@@ -620,6 +612,15 @@ public class VisionGUI implements ChangeListener {
 	}
 	
 	private void loadThresholds(int pitchNum) {
+		
+		int result = JOptionPane.showConfirmDialog(frame,
+				"Are you sure you want to load "
+						+ "pre-saved constants for pitch " + pitchNum
+						+ "?");
+
+		if (result == JOptionPane.NO_OPTION
+				|| result == JOptionPane.CANCEL_OPTION)
+			return;
 		
 		ThresholdsState newState = new ThresholdsState();
 		
