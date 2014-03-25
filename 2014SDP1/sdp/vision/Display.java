@@ -230,6 +230,7 @@ public class Display {
 			robotPoint = ws.getRobotPoint(r);
 			int x2=(int) (robotPoint.x + 50*Math.cos(ws.getRobotOrientation(r)));
 			int y2=(int) (robotPoint.y + 50*Math.sin(ws.getRobotOrientation(r)));
+			
 			graphics.drawLine(robotPoint.x, robotPoint.y, x2, y2);
 		}
 
@@ -364,6 +365,11 @@ public class Display {
 //		
 //		graphics.setColor(Color.RED);
 //		graphics.fillOval(andreDistorted.x - 3, andreDistorted.y - 3, 6, 6);
+		
+		/*-------------------------------------------------------*/
+        /*  TESTING GROUNDS - do whatever you want here :)       */
+		/*-------------------------------------------------------*/
+		
 	}
 	
 	public static void renderDrawables(WorldState ws, BufferedImage image) {
