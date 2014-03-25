@@ -136,6 +136,7 @@ public class Server {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
 			} else {
+				previousCommand.put(type, command);
 				System.out.println(type + " is not connected, not sending command");
 			}
 		}

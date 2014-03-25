@@ -12,17 +12,91 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
+import javax.activation.CommandInfo;
 import javax.imageio.ImageIO;
 
 import behavior.StrategyHelper;
 import common.Robot;
+import communication.RobotCommand;
+import communication.Server;
 import constants.Colours;
 import constants.Quadrant;
 import constants.RobotColour;
 import constants.RobotType;
 
 public class Display {
+	
+	/** Maps RobotCommands to images corresponding to that command */
+	private static HashMap<Integer, BufferedImage> commandImages;
+
+	private static void initCommandImages() {
+		commandImages = new HashMap<Integer, BufferedImage>();
+		
+		// Commands in order - these need to correspond to the files in
+		// the images array
+		int commands[] = {
+			RobotCommand.FORWARD,
+			RobotCommand.BACK,
+			RobotCommand.STOP,
+			RobotCommand.CW,
+			RobotCommand.CCW,
+			RobotCommand.KICK,
+			RobotCommand.CLOSE_GRABBER,
+			RobotCommand.OPEN_GRABBER,
+			RobotCommand.MOVE_LEFT,
+			RobotCommand.MOVE_RIGHT,
+			RobotCommand.KICK_LEFT,
+			RobotCommand.KICK_RIGHT,
+			RobotCommand.AIM_LEFT,
+			RobotCommand.AIM_RIGHT,
+			RobotCommand.AIM_RESET,
+			RobotCommand.SLOW_CCW,
+			RobotCommand.SLOW_CW
+		};
+		
+		// The names of the image files
+		String images[] = {
+			"arrowUp.png",
+			"arrowDown.png",
+			"stop.png",
+			"cw.png",
+			"ccw.png",
+			"kick.png",
+			"grab.png",
+			"open.png",
+			"arrowLeft.png",
+			"arrowRight.png",
+			"kickLeft.png",
+			"kickRight.png",
+			"aimLeft.png",
+			"aimRight.png",
+			"resetAim.png",
+			"ccwSlow.png",
+			"ccwFast.png"
+		};
+		
+		// Folder where all the images are stored
+		String imageFolder = "sdp/vision/images/";
+		
+		if (commands.length != images.length) {
+			System.err.println("ERROR - Number of commands and command images DOES NOT MATCH");
+			return;
+		}
+		
+		for (int index = 0; index < commands.length; index++) {
+			String imageFile = imageFolder + images[index];
+			
+			// Read in image and store in hashmap
+			try {
+				BufferedImage image = ImageIO.read(new File(imageFile));
+				commandImages.put(commands[index], image);
+			} catch (IOException e) {
+				System.err.println("Couldn't read in image " + imageFile);
+			}
+		}
+	}
 
 	public static void thresholds(BufferedImage img, PitchPoints op, ThresholdsState ts) {
 		
@@ -63,6 +137,10 @@ public class Display {
 	}
 	
 	public static void markers(ThresholdsState ts, BufferedImage img, PitchPoints op, WorldState ws) {
+		
+		if (commandImages == null) {
+			initCommandImages();
+		}
 		
 //		System.out.println("ball magnitude: " + StrategyHelper.magnitude(ws.getBallVelocity()));
 		
@@ -208,304 +286,26 @@ public class Display {
 		// Draw a line from the kicking position to the centre of the opposition's goal
 //		graphics.drawLine(kickPos.x, kickPos.y, ws.getOppositionGoalCentre().x, ws.getOppositionGoalCentre().y);
 		
+        /*-------------------------------------------------------*/
+        /*  Draw Defender's and Attacker's command on the screen */
+		/*-------------------------------------------------------*/
 		
-		/* BALL MOVEMENT PREDICTION DRAWING */
+		for (RobotType type : RobotType.values()) {
+			int command = Server.previousCommand.get(type);
+			BufferedImage image = commandImages.get(command);
+			
+			Point pos = ws.getRobotPoint(ws.getOur(type));
+			
+			if (image != null) {
+				graphics.drawImage(image, pos.x - 20, pos.y - 20, 40, 40, null);
+			} else if (command != RobotCommand.NO_COMMAND) {
+				System.out.println("DISPLAY: Don't have an image for command : " + command);
+			}
+		}		
 		
-//		if (StrategyHelper.hasBall(new Robot(RobotColour.YELLOW, RobotType.ATTACKER), ws)) {
-//			System.out.println("BALL IS IN RANGE FOR KICK!");
-//		}
-		
-		
-		//XXX Drawing our robots' commands
-		
-		/*
-		// This is for testing
-			BufferedImage arrowUp = null;
-	        try {
-	        	arrowUp = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowUp.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowUp, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		*/
-	    
-        // Draw Defender's command
-		if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 1){
-			BufferedImage arrowUp = null;
-	        try {
-	        	arrowUp = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowUp.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowUp, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 2){
-			BufferedImage arrowDown = null;
-	        try {
-	        	arrowDown = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowDown.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowDown, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 3){
-			BufferedImage stop = null;
-	        try {
-	            stop = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/stop.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(stop, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 4){
-			BufferedImage cw = null;
-	        try {
-	            cw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/cw.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(cw, ws.getOurDefenderXVision()-40, ws.getOurDefenderYVision()-40, 75, 75, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 5){
-			BufferedImage ccw = null;
-	        try {
-	            ccw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccw.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(ccw, ws.getOurDefenderXVision()-40, ws.getOurDefenderYVision()-40, 75, 75, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 6){
-			BufferedImage kick = null;
-	        try {
-	            kick = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kick.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(kick, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 10){
-			BufferedImage grab = null;
-	        try {
-	            grab = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/grab.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(grab, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 11){
-			BufferedImage open = null;
-	        try {
-	            open = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/open.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(open, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 12){
-			BufferedImage arrowLeft = null;
-	        try {
-	        	arrowLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowLeft.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowLeft, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 13){
-			BufferedImage arrowRight = null;
-	        try {
-	        	arrowRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowRight.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowRight, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 14){
-			BufferedImage kickLeft = null;
-	        try {
-	        	kickLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickLeft.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(kickLeft, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 15){
-			BufferedImage kickRight = null;
-	        try {
-	        	kickRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickRight.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(kickRight, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 16){
-			BufferedImage aimLeft = null;
-	        try {
-	            aimLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimLeft.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(aimLeft, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 17){
-			BufferedImage aimRight = null;
-	        try {
-	            aimRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimRight.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(aimRight, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 18){
-			BufferedImage resetAim = null;
-	        try {
-	            resetAim = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/resetAim.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(resetAim, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 19){
-			BufferedImage ccwSlow = null;
-	        try {
-	            ccwSlow = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwSlow.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(ccwSlow, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 20){
-			BufferedImage ccwFast = null;
-	        try {
-	        	ccwFast = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwFast.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(ccwFast, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
-		}
-		
-		// Draw Attacker's Command
-		
-		if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 1){
-			BufferedImage arrowUp = null;
-	        try {
-	        	arrowUp = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowUp"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowUp, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 2){
-			BufferedImage arrowDown = null;
-	        try {
-	        	arrowDown = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowDown.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowDown, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 3){
-			BufferedImage stop = null;
-	        try {
-	            stop = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/stop.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(stop, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 4){
-			BufferedImage cw = null;
-	        try {
-	            cw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/cw.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(cw, ws.getOurAttackerXVision()-40, ws.getOurAttackerYVision()-40, 75, 75, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 5){
-			BufferedImage ccw = null;
-	        try {
-	            ccw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccw.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(ccw, ws.getOurAttackerXVision()-40, ws.getOurAttackerYVision()-40, 75, 75, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 6){
-			BufferedImage kick = null;
-	        try {
-	            kick = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kick.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(kick, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 10){
-			BufferedImage grab = null;
-	        try {
-	            grab = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/grab.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(grab, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 11){
-			BufferedImage open = null;
-	        try {
-	            open = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/open.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(open, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 12){
-			BufferedImage arrowLeft = null;
-	        try {
-	        	arrowLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowLeft.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowLeft, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 13){
-			BufferedImage arrowRight = null;
-	        try {
-	        	arrowRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowRight.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(arrowRight, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 14){
-			BufferedImage kickLeft = null;
-	        try {
-	        	kickLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickLeft.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(kickLeft, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 15){
-			BufferedImage kickRight = null;
-	        try {
-	        	kickRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickRight.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(kickRight, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 16){
-			BufferedImage aimLeft = null;
-	        try {
-	            aimLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimLeft.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(aimLeft, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 17){
-			BufferedImage aimRight = null;
-	        try {
-	            aimRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimRight.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(aimRight, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 18){
-			BufferedImage resetAim = null;
-	        try {
-	            resetAim = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/resetAim.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(resetAim, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 19){
-			BufferedImage ccwSlow = null;
-	        try {
-	            ccwSlow = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwSlow.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(ccwSlow, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 20){
-			BufferedImage ccwFast = null;
-	        try {
-	        	ccwFast = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwFast.png"));
-	        } catch (IOException e) {
-	        }
-	        graphics.drawImage(ccwFast, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
-		}
-		
-		//XXX Finished drawing our robots' commands
+		/*-------------------------------------------------------*/
+        /*  Show defense points on screen - using physics engine */
+		/*-------------------------------------------------------*/
 		
 		// Predict a point on the line in front of our goal
 		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(StrategyHelper.getDefendLineX(ws), ws.getOppositionAttackerPosition(), ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)));
