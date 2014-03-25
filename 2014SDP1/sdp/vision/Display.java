@@ -2,11 +2,18 @@ package sdp.vision;
 
 import gui.MainWindow;
 
+import java.awt.*;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import behavior.StrategyHelper;
 import common.Robot;
@@ -58,8 +65,6 @@ public class Display {
 	public static void markers(ThresholdsState ts, BufferedImage img, PitchPoints op, WorldState ws) {
 		
 //		System.out.println("ball magnitude: " + StrategyHelper.magnitude(ws.getBallVelocity()));
-		
-		
 		
 		Graphics graphics = img.getGraphics();
 
@@ -178,7 +183,7 @@ public class Display {
 		Point goalC = ws.getOppositionGoalCentre();
 		graphics.setColor(Color.WHITE);
 		graphics.fillOval((int) goalC.getX() - 10, (int) goalC.getY() - 10, 20, 20);
-		
+
 		// Draw our goal top and bottom
 		graphics.drawOval(ws.getOurGoalTop().x - 2, ws.getOurGoalTop().y - 2, 4, 4);
 		graphics.drawOval(ws.getOurGoalBottom().x - 2, ws.getOurGoalBottom().y - 2, 4, 4);
@@ -209,6 +214,298 @@ public class Display {
 //		if (StrategyHelper.hasBall(new Robot(RobotColour.YELLOW, RobotType.ATTACKER), ws)) {
 //			System.out.println("BALL IS IN RANGE FOR KICK!");
 //		}
+		
+		
+		//XXX Drawing our robots' commands
+		
+		/*
+		// This is for testing
+			BufferedImage arrowUp = null;
+	        try {
+	        	arrowUp = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowUp.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowUp, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		*/
+	    
+        // Draw Defender's command
+		if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 1){
+			BufferedImage arrowUp = null;
+	        try {
+	        	arrowUp = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowUp.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowUp, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 2){
+			BufferedImage arrowDown = null;
+	        try {
+	        	arrowDown = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowDown.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowDown, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 3){
+			BufferedImage stop = null;
+	        try {
+	            stop = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/stop.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(stop, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 4){
+			BufferedImage cw = null;
+	        try {
+	            cw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/cw.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(cw, ws.getOurDefenderXVision()-40, ws.getOurDefenderYVision()-40, 75, 75, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 5){
+			BufferedImage ccw = null;
+	        try {
+	            ccw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccw.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(ccw, ws.getOurDefenderXVision()-40, ws.getOurDefenderYVision()-40, 75, 75, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 6){
+			BufferedImage kick = null;
+	        try {
+	            kick = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kick.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(kick, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 10){
+			BufferedImage grab = null;
+	        try {
+	            grab = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/grab.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(grab, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 11){
+			BufferedImage open = null;
+	        try {
+	            open = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/open.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(open, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 12){
+			BufferedImage arrowLeft = null;
+	        try {
+	        	arrowLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowLeft.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowLeft, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 13){
+			BufferedImage arrowRight = null;
+	        try {
+	        	arrowRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowRight.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowRight, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 14){
+			BufferedImage kickLeft = null;
+	        try {
+	        	kickLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickLeft.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(kickLeft, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 15){
+			BufferedImage kickRight = null;
+	        try {
+	        	kickRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickRight.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(kickRight, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 16){
+			BufferedImage aimLeft = null;
+	        try {
+	            aimLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimLeft.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(aimLeft, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 17){
+			BufferedImage aimRight = null;
+	        try {
+	            aimRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimRight.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(aimRight, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 18){
+			BufferedImage resetAim = null;
+	        try {
+	            resetAim = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/resetAim.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(resetAim, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 19){
+			BufferedImage ccwSlow = null;
+	        try {
+	            ccwSlow = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwSlow.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(ccwSlow, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.DEFENDER) == 20){
+			BufferedImage ccwFast = null;
+	        try {
+	        	ccwFast = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwFast.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(ccwFast, ws.getOurDefenderXVision()-25, ws.getOurDefenderYVision()-25, 50, 50, null);
+		}
+		
+		// Draw Attacker's Command
+		
+		if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 1){
+			BufferedImage arrowUp = null;
+	        try {
+	        	arrowUp = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowUp"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowUp, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 2){
+			BufferedImage arrowDown = null;
+	        try {
+	        	arrowDown = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowDown.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowDown, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 3){
+			BufferedImage stop = null;
+	        try {
+	            stop = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/stop.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(stop, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 4){
+			BufferedImage cw = null;
+	        try {
+	            cw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/cw.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(cw, ws.getOurAttackerXVision()-40, ws.getOurAttackerYVision()-40, 75, 75, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 5){
+			BufferedImage ccw = null;
+	        try {
+	            ccw = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccw.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(ccw, ws.getOurAttackerXVision()-40, ws.getOurAttackerYVision()-40, 75, 75, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 6){
+			BufferedImage kick = null;
+	        try {
+	            kick = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kick.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(kick, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 10){
+			BufferedImage grab = null;
+	        try {
+	            grab = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/grab.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(grab, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 11){
+			BufferedImage open = null;
+	        try {
+	            open = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/open.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(open, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 12){
+			BufferedImage arrowLeft = null;
+	        try {
+	        	arrowLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowLeft.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowLeft, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 13){
+			BufferedImage arrowRight = null;
+	        try {
+	        	arrowRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/arrowRight.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(arrowRight, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 14){
+			BufferedImage kickLeft = null;
+	        try {
+	        	kickLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickLeft.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(kickLeft, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 15){
+			BufferedImage kickRight = null;
+	        try {
+	        	kickRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/kickRight.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(kickRight, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 16){
+			BufferedImage aimLeft = null;
+	        try {
+	            aimLeft = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimLeft.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(aimLeft, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 17){
+			BufferedImage aimRight = null;
+	        try {
+	            aimRight = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/aimRight.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(aimRight, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 18){
+			BufferedImage resetAim = null;
+	        try {
+	            resetAim = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/resetAim.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(resetAim, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 19){
+			BufferedImage ccwSlow = null;
+	        try {
+	            ccwSlow = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwSlow.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(ccwSlow, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		else if (communication.Server.previousCommand.get(RobotType.ATTACKER) == 20){
+			BufferedImage ccwFast = null;
+	        try {
+	        	ccwFast = ImageIO.read(new File("/afs/inf.ed.ac.uk/user/s11/s1132388/Desktop/GIT/sdpwinners/2014SDP1/sdp/vision/images/ccwFast.png"));
+	        } catch (IOException e) {
+	        }
+	        graphics.drawImage(ccwFast, ws.getOurAttackerXVision()-25, ws.getOurAttackerYVision()-25, 50, 50, null);
+		}
+		
+		//XXX Finished drawing our robots' commands
 		
 		// Predict a point on the line in front of our goal
 		Point defendPos = StrategyHelper.getIntersectWithVerticalLine(StrategyHelper.getDefendLineX(ws), ws.getOppositionAttackerPosition(), ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER)));
@@ -268,7 +565,7 @@ public class Display {
 //		graphics.setColor(Color.RED);
 //		graphics.fillOval(andreDistorted.x - 3, andreDistorted.y - 3, 6, 6);
 	}
-
+	
 	public static void renderDrawables(WorldState ws, BufferedImage image) {
 		for ( String key : MainWindow.getDrawables().keySet() ){
 			for ( Drawable d : MainWindow.getDrawables().get(key) ){
