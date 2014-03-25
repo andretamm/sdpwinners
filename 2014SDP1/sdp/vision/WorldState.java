@@ -18,7 +18,9 @@ public class WorldState implements VisionInterface {
 	public Point andresPoint = new Point(0,0);
 	
 	public static final int HISTORY_LENGTH = 5;
-	public static final int ORIENTATION_HISTORY_LENGTH = 2;
+	public static final int ORIENTATION_HISTORY_LENGTH = 2; // Do NOT change this unless you
+															// change how the orientation is average
+															// (that's hard!)
 
 	private ShootingDirection direction; // 0 = right, 1 = left.
 	private RobotColour ourColour;

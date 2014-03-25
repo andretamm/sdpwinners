@@ -385,8 +385,8 @@ public class VisionGUI implements ChangeListener {
 
 		// Andre's hack - need to do this to make the lines and overlays appear
 		// on screen
-		pitch_1.doClick();
-		pitch_0.doClick();
+//		pitch_1.doClick();
+//		pitch_0.doClick();
 
 	}
 
@@ -463,9 +463,14 @@ public class VisionGUI implements ChangeListener {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			int pitchNum = (pitch_0.isSelected()) ? 0 : 1;
+			int previousPitchNum = (pitch_0.isSelected()) ? 1 : 0;
 			if (worldState.getPitch() != pitchNum) {
 				worldState.setPitch(pitchNum);
 				thresholdsState.setPitchNum(pitchNum);
+				
+				saveThresholds(previousPitchNum);
+				loadThresholds(pitchNum);
+				
 				reloadSliderDefaults();
 			}
 		}
@@ -532,63 +537,7 @@ public class VisionGUI implements ChangeListener {
 
 				int pitchNum = (pitch_0.isSelected()) ? 0 : 1;
 
-				int result = JOptionPane.showConfirmDialog(frame,
-						"Are you sure you want to save current"
-								+ "constants for pitch " + pitchNum + "?");
-
-				if (result == JOptionPane.NO_OPTION
-						|| result == JOptionPane.CANCEL_OPTION)
-					return;
-
-//				try {
-//					FileWriter writer = new FileWriter(new File(
-//							"constants/pitch" + pitchNum));
-
-					/*
-					 * We need to rewrite the pitch dimensions. TODO: This
-					 * currently means that crosssaving values is basically
-					 * unsupported as they will overwrite the pitch dimensions
-					 * incorrectly.
-					 */
-//					writer.write(String.valueOf(pitchConstants.topBuffer)
-//							+ "\n");
-//					writer.write(String.valueOf(pitchConstants.bottomBuffer)
-//							+ "\n");
-//					writer.write(String.valueOf(pitchConstants.leftBuffer)
-//							+ "\n");
-//					writer.write(String.valueOf(pitchConstants.rightBuffer)
-//							+ "\n");
-
-					/* Write pitch quadrant X values to constants */
-//					writer.write(String.valueOf(q1.getValue()) + "\n");
-//					writer.write(String.valueOf(q1.getUpperValue()) + "\n");
-//					writer.write(String.valueOf(q2.getValue()) + "\n");
-//					writer.write(String.valueOf(q2.getUpperValue()) + "\n");
-//					writer.write(String.valueOf(q3.getValue()) + "\n");
-//					writer.write(String.valueOf(q3.getUpperValue()) + "\n");
-//					writer.write(String.valueOf(q4.getValue()) + "\n");
-//					writer.write(String.valueOf(q4.getUpperValue()) + "\n");
-
-//					writer.flush();
-//					writer.close();
-//
-//				} catch (IOException e1) {
-//					e1.printStackTrace();
-//				}
-
-				try {
-					FileOutputStream fileOut = new FileOutputStream(
-							"constants/pitchThresholds" + pitchNum + ".ser");
-					ObjectOutputStream out = new ObjectOutputStream(fileOut);
-					out.writeObject(thresholdsState);
-					out.close();
-					fileOut.close();
-					// System.out.printf("Serialized data is saved in /tmp/employee.ser");
-				} catch (IOException i) {
-					i.printStackTrace();
-				}
-
-				System.out.println("Wrote successfully!");
+				saveThresholds(pitchNum);
 
 			}
 		});
@@ -607,38 +556,8 @@ public class VisionGUI implements ChangeListener {
 
 				int pitchNum = (pitch_0.isSelected()) ? 0 : 1;
 
-				int result = JOptionPane.showConfirmDialog(frame,
-						"Are you sure you want to load "
-								+ "pre-saved constants for pitch " + pitchNum
-								+ "?");
-
-				if (result == JOptionPane.NO_OPTION
-						|| result == JOptionPane.CANCEL_OPTION)
-					return;
-
-				ThresholdsState newState = new ThresholdsState();
-
-				try {
-					FileInputStream fileIn = new FileInputStream(
-							"constants/pitchThresholds" + pitchNum + ".ser");
-					ObjectInputStream in = new ObjectInputStream(fileIn);
-					newState = (ThresholdsState) in.readObject();
-					in.close();
-					fileIn.close();
-
-					System.out.println("ThresholdState " + pitchNum
-							+ " was loaded!");
-				} catch (IOException i) {
-					i.printStackTrace();
-				} catch (ClassNotFoundException c)
-
-				{
-					System.out.println("pitchThresholds" + pitchNum
-							+ " class not found");
-					c.printStackTrace();
-				}
-
-				thresholdsState.updateState(newState);
+				loadThresholds(pitchNum);
+				
 				reloadSliderDefaults();
 
 			}
@@ -665,6 +584,67 @@ public class VisionGUI implements ChangeListener {
 		 */
 
 		defaultPanel.add(saveLoadPanel);
+	}
+	
+	private void saveThresholds(int pitchNum) {
+		
+		int result = JOptionPane.showConfirmDialog(frame,
+				"Are you sure you want to save current"
+						+ "constants for pitch " + pitchNum + "?");
+
+		if (result == JOptionPane.NO_OPTION
+				|| result == JOptionPane.CANCEL_OPTION)
+			return;
+		
+		try {
+			FileOutputStream fileOut = new FileOutputStream(
+					"constants/pitchThresholds" + pitchNum + ".ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(thresholdsState);
+			out.close();
+			fileOut.close();
+			// System.out.printf("Serialized data is saved in /tmp/employee.ser");
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
+		
+		System.out.println("Wrote successfully!");
+	}
+	
+	private void loadThresholds(int pitchNum) {
+		
+		int result = JOptionPane.showConfirmDialog(frame,
+				"Are you sure you want to load "
+						+ "pre-saved constants for pitch " + pitchNum
+						+ "?");
+
+		if (result == JOptionPane.NO_OPTION
+				|| result == JOptionPane.CANCEL_OPTION)
+			return;
+		
+		ThresholdsState newState = new ThresholdsState();
+		
+		try {
+			FileInputStream fileIn = new FileInputStream(
+					"constants/pitchThresholds" + pitchNum + ".ser");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			newState = (ThresholdsState) in.readObject();
+			in.close();
+			fileIn.close();
+
+			System.out.println("ThresholdState " + pitchNum
+					+ " was loaded!");
+		} catch (IOException i) {
+			i.printStackTrace();
+		} catch (ClassNotFoundException c)
+
+		{
+			System.out.println("pitchThresholds" + pitchNum
+					+ " class not found");
+			c.printStackTrace();
+		}
+		
+		thresholdsState.updateState(newState);
 	}
 
 	/**

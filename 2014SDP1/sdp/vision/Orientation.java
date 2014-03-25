@@ -6,8 +6,11 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import behavior.StrategyHelper;
+
 import common.Robot;
 
+import constants.C;
 import constants.RobotColour;
 import constants.RobotType;
 
@@ -78,15 +81,11 @@ public class Orientation {
         x0 = qp.getRobotPosition().getX();
         y0 = qp.getRobotPosition().getY();
 
-         
-        
+
         
         Point2D.Double plateCentre = new Point2D.Double(x0, y0);
         worldState.setRobotOrientationVector(new Robot(rColour, rType), new Point2D.Double(plateCentre.x - greyCentre.x, plateCentre.y - greyCentre.y));
-//        if (qp.getrType() == RobotType.DEFENDER && qp.getrColour() == RobotColour.BLUE) {
-//        	System.out.println(x0 + " " + y0 + " | " + greyCentreX + " " + greyCentreY);
-//        }
-        
+
         double orientation = getAngle(greyCentre, plateCentre);
         
         //Insert the new orientation in the orientation history:
@@ -94,19 +93,36 @@ public class Orientation {
         for (int i=0; i<robotOrientationHistory.length-1; i++) {
         	robotOrientationHistory[i] = robotOrientationHistory[i+1];
         }
+
         robotOrientationHistory[robotOrientationHistory.length-1] = orientation;
         worldState.setRobotOrientationHistory(new Robot(rColour, rType), robotOrientationHistory);
         
-        //Get an average orientation based on the contents of the orientation history:
-        double averagedOrientation = 0;
-        for (double orientationValue : robotOrientationHistory) {
-        	averagedOrientation = averagedOrientation + orientationValue;
-        }
-        averagedOrientation = averagedOrientation / (robotOrientationHistory.length);
+        /*------------------------------------------------------*/
+        /* Get an average orientation based on the contents of  */ 
+        /* the orientation history.								*/
+        /*------------------------------------------------------*/
+        
+        // NB - we assume that the length of the history is 2!!! 
+        // If that changes, then this thing BREAKS.
+        double previousOrientation = robotOrientationHistory[0];
 
+        // Find what's the angle difference between the past and current orientation. Half of that
+        // is how much we need to correct the old angle to get the average of the two
+        //
+        // e.g. if old = 350 deg and new = 10 deg, then anglediff is +20 deg, half of which is 10 deg
+        double angleCorrection = StrategyHelper.angleDiff(previousOrientation, orientation) / 2.0;
+        
+        // Add angle correction, then add 2pi to make sure we don't end up with a negative angle 
+        // then take mod 2pi (360 deg) to make 2pi = 0 instead of 2pi and to correct for angles > 2pi
+        double averagedOrientation = (previousOrientation + angleCorrection + C.A360) % C.A360;
+        
+        // ...continuing example from above.. so the averaged angle will be 350 + 10 = 360  degrees
+        // we take the mod as well so 360 % 360 = 0 degrees
+        // (ofc this is actually all in radians not degrees!)
+        
+        // Return averaged value
         return averagedOrientation;
 	}
-	
 	
 	/**
 	 * Finds the angle between the 'from' and 'to' point.
@@ -131,18 +147,18 @@ public class Orientation {
 	        	angle = Math.PI + triangleAngle;	
 	        } else if ((from.getX() <= to.getX()) && (from.getY() >= to.getY())) {
 	        	// Quadrant 4 case
-//	        	System.out.println("4");
 	        	angle = 2*Math.PI - triangleAngle;
 	        } else if ((from.getX() <= to.getX()) && (from.getY() <= to.getY())) {
 	        	// Quadrant 1 case
-//	        	System.out.println("1");
-//	        	System.out.println(from.x + " " + from.y + " | " + to.x + " " + to.y);
 	        	angle = triangleAngle;
+	        } else {
+	        	System.err.println("angle calculation failed");
 	        }
         }        
-        return angle;
+        
+        // Return mod 2pi, so 2pi should be 0 !!!
+        return angle % C.A360;
 	}
-	
 	
 	/**
 	 * Less precise version of getAngle(Point2D.Double, Point2D.Double)
@@ -156,15 +172,25 @@ public class Orientation {
 	 * Test Orientation class methods
 	 */
 	public static void main(String[] args) {
+		/*     c     d
+		 *      \   / 
+		 *        o  - e
+		 *      /   \                         f
+		 *     b     a
+		 */
 		Point2D.Double o = new Point2D.Double(0, 0);
 		Point2D.Double a = new Point2D.Double(1, 1);
 		Point2D.Double b = new Point2D.Double(-1, 1);
 		Point2D.Double c = new Point2D.Double(-1, -1);
 		Point2D.Double d = new Point2D.Double(1, -1);
+		Point2D.Double e = new Point2D.Double(1, 0);
+		Point2D.Double f = new Point2D.Double(200, 1);
 
 		System.out.println(Math.toDegrees(getAngle(o, a))); // 45
 		System.out.println(Math.toDegrees(getAngle(o, b))); // 135
 		System.out.println(Math.toDegrees(getAngle(o, c))); // 225
 		System.out.println(Math.toDegrees(getAngle(o, d))); // 315
+		System.out.println(Math.toDegrees(getAngle(o, e))); // 0
+		System.out.println(Math.toDegrees(getAngle(o, f))); // ??? :D something really small
 	}
 }
