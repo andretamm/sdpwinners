@@ -110,28 +110,28 @@ public class Display {
 		//Debug graphics for the green plates
 		if (ts.getDebug(Colours.GREEN)) {
 			for (int i=0; (i<op.getPoints(Colours.GREEN).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.GREEN).get(i).getX(), (int) op.getPoints(Colours.GREEN).get(i).getY(), 0xFF00FF00);	
+				img.setRGB((int) op.getPoints(Colours.GREEN).get(i).getX(), (int) op.getPoints(Colours.GREEN).get(i).getY(), Color.RED.getRGB());	
 			}					
 		}
 		
 		//Debug graphics for the ball
 		if (ts.getDebug(Colours.RED)) {
 			for (int i=0; (i<op.getPoints(Colours.RED).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.RED).get(i).getX(), (int) op.getPoints(Colours.RED).get(i).getY(), 0xFFFF0000);	
+				img.setRGB((int) op.getPoints(Colours.RED).get(i).getX(), (int) op.getPoints(Colours.RED).get(i).getY(), Color.RED.getRGB());	
 			}					
 		}
 		
 		//Debug graphics for the blue plate
 		if (ts.getDebug(Colours.BLUE)) {
 			for (int i=0; (i<op.getPoints(Colours.BLUE).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.BLUE).get(i).getX(), (int) op.getPoints(Colours.BLUE).get(i).getY(), 0xFF0000FF);	
+				img.setRGB((int) op.getPoints(Colours.BLUE).get(i).getX(), (int) op.getPoints(Colours.BLUE).get(i).getY(), Color.RED.getRGB());	
 			}					
 		}
 		
 		//Debug graphics for the yellow plate
 		if (ts.getDebug(Colours.YELLOW)) {
 			for (int i=0; (i<op.getPoints(Colours.YELLOW).size()); i++) {
-				img.setRGB((int) op.getPoints(Colours.YELLOW).get(i).getX(), (int) op.getPoints(Colours.YELLOW).get(i).getY(), 0xFFFF7538);	
+				img.setRGB((int) op.getPoints(Colours.YELLOW).get(i).getX(), (int) op.getPoints(Colours.YELLOW).get(i).getY(), Color.RED.getRGB());	
 			}					
 		}
 	}
