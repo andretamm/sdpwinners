@@ -201,63 +201,102 @@ public class VisionGUI implements ChangeListener {
 			public void mouseClicked(MouseEvent arg0) {
 				if (calibrationMode) {
 					pixelClicked = arg0.getPoint();
-//					System.out.println(pixelClicked);
 					calibrationMode = false;
 					
 					System.out.println("Pixel Clicked:" + pixelClicked.x + " " + pixelClicked.y);
 					
 					BufferedImage screenCapture = vision.getFrameImage();
+					
+					// Get average of 9 pixels around the pixel we clicked
+					int jRed = 0;
+					int jGreen = 0;
+					int jBlue = 0;
+					
+					float[] jHsv = {0, 0, 0};
+					
+					for (int x = pixelClicked.x - 1; x <= pixelClicked.x + 1; x++) {
+						for (int y = pixelClicked.y - 1; y <= pixelClicked.y + 1; y++) {
+							Color jColour = new Color(screenCapture.getRGB(x, y));
+							
+							jRed += jColour.getRed();
+							jGreen += jColour.getGreen();
+							jBlue += jColour.getBlue();
+							
+							float[] tempHsv = Color.RGBtoHSB(jColour.getRed(), 
+															 jColour.getGreen(), 
+															 jColour.getBlue(), 
+															 null);
+							
+							for (int i = 0; i < jHsv.length; i++) {
+								jHsv[i] += tempHsv[i];
+							}
+							
+						}
+					}
+					
+					// Just the pixel we clicked
 					int colour = screenCapture.getRGB(pixelClicked.x, pixelClicked.y);
-
+										
 					int  red = (colour & 0x00ff0000) >> 16;
 					int  green = (colour & 0x0000ff00) >> 8;
 					int  blue = colour & 0x000000ff;
 					
-					System.out.println("R: " + red + " G: " + green + " B: " + blue);
+					System.out.println("OLD - R: " + red + " G: " + green + " B: " + blue);
+					
+					// Actually use averaged values :))
+					red = jRed / 9;
+					green = jGreen / 9;
+					blue = jBlue / 9;
+					
+					System.out.println("NEW - R: " + red + " G: " + green + " B: " + blue);
+					
 					
 					int index = tabPane.getSelectedIndex();
 					
 					Colours c = null;
 					switch (index) {
-					case (1):
-						c = Colours.RED;
-					break;
-					case (2):
-						c = Colours.BLUE;
-					break;
-					case (3):
-						c = Colours.YELLOW;
-					break;
-					case (4):
-						c = Colours.GRAY;
-					break;
-					case (5):
-						c = Colours.GREEN;
-					break;
+						case (1):
+							c = Colours.RED;
+							break;
+						case (2):
+							c = Colours.BLUE;
+							break;
+						case (3):
+							c = Colours.YELLOW;
+							break;
+						case (4):
+							c = Colours.GRAY;
+							break;
+						case (5):
+							c = Colours.GREEN;
+							break;
 					}
 					ObjectThresholdState ots = thresholdsState.getQuadrantThresholds(q).getObjectThresholds(c);
-					ots.set_r_low(red-10);
-					ots.set_r_high(red+10);
-					ots.set_g_low(green-10);
-					ots.set_g_high(green+10);
-					ots.set_b_low(blue-10);
-					ots.set_b_high(blue+10);
+					ots.set_r_low(red - 30);
+					ots.set_r_high(red + 30);
+					ots.set_g_low(green - 30);
+					ots.set_g_high(green + 30);
+					ots.set_b_low(blue - 30);
+					ots.set_b_high(blue + 30);
 					
+					// Just use full range for hsv values :P
 					float[] hsv = new float[3];
 					Color.RGBtoHSB(red, green, blue, hsv);
-					ots.set_h_low(hsv[0]);
-					ots.set_h_high(hsv[0]);
-					ots.set_s_low(hsv[1]);
-					ots.set_s_high(hsv[1]);
-					ots.set_v_low(hsv[2]);
-					ots.set_v_high(hsv[2]);
 					
-					ots.set_rb_low(red-blue - 20);
-					ots.set_rb_high(red-blue + 20);
-					ots.set_gb_low(green-blue-20);
-					ots.set_gb_high( green-blue+20);
-					ots.set_rg_low(red-green-20);
-					ots.set_rg_high(red-green+20);
+					ots.set_h_low(hsv[0] - 1);
+					ots.set_h_high(hsv[0] + 1);
+					ots.set_s_low(hsv[1] - 1);
+					ots.set_s_high(hsv[1] + 1);
+					ots.set_v_low(hsv[2] - 1);
+					ots.set_v_high(hsv[2] + 1);
+					
+					// colour - colour threshold
+					ots.set_rb_low(red - blue - 40);
+					ots.set_rb_high(red - blue + 40);
+					ots.set_gb_low(green - blue - 40);
+					ots.set_gb_high(green - blue + 40);
+					ots.set_rg_low(red - green - 40);
+					ots.set_rg_high(red - green + 40);
 					
 					reloadSliderDefaults();
 					
