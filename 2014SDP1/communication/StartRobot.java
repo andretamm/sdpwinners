@@ -27,7 +27,7 @@ public class StartRobot {
 		Strategy strategy = new Strategy(worldstate, server);
 		
 		// Start GUI
-		MainWindow mw = new MainWindow(worldstate, server, strategy);
+		new MainWindow(worldstate, server, strategy);
 		
 	}
 }

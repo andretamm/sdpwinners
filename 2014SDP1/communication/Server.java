@@ -176,7 +176,7 @@ public class Server {
 	 * @param angle to rotate to
 	 */
 	public void sendDiagonalMovement(RobotType type, int angleToGo) {
-		if (previousCommand.get(type) == 8) {
+		if (previousCommand.get(type) == RobotCommand.MOVE_DIAGONALLY) {
 			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 3) {
 				// Angle no change enough, do nothing lol
 				return;
@@ -227,7 +227,52 @@ public class Server {
 			attackerRobot.sendToRobot(angleArray[1]);
 		}
 	}
+	
+	/**
+	 * Send a command to the robot to rotate by some specific degrees. The
+	 * degrees to rotate is split into two bytes and is in the range 
+	 * [-180, 180], where a negative angle is a CCW rotation and + is clockwise.
+	 * 
+	 * All angles are relative to the robot's current orientation, so sending 0
+	 * will cause it to do nothing.
+	 * 
+	 * @param type Defender or attacker
+	 * @param degrees The angle to rotate by in DEGREES in range [-180, 180]
+	 */
+	public void sendRotateDegrees(RobotType type, int degrees) {
+		if (previousCommand.get(type) == RobotCommand.ROTATE_ANGLE) {
+			if (degrees < 5) {
+				// Angle not big enough, do nothing lol
+				return;
+			}
+		}
+		
+		previousCommand.put(type, RobotCommand.ROTATE_ANGLE);
+		
+		// Convert degrees to a positive angle
+		// eg 170' stays 170', but -20' becomes 340'
+		int angle = (degrees + 360) % 360;
+		
+		// Represent the angle as two bytes
+		byte[] degreeArray = new byte[2];
+		
+		// Mask all but the lower eight bits.
+		degreeArray[0] = (byte) (angle & 0xFF);
+		
+		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
+		degreeArray[1] = (byte) ((angle >> 8) & 0xFF);
 
+		if (type == RobotType.DEFENDER) {
+			defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+			defenderRobot.sendToRobot(degreeArray[0]);
+			defenderRobot.sendToRobot(degreeArray[1]);
+		} else if (type == RobotType.ATTACKER) {
+			attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+			attackerRobot.sendToRobot(degreeArray[0]);
+			attackerRobot.sendToRobot(degreeArray[1]);
+		}
+	}
+	
 	/**
 	 * Closes the bluetooth connections to both robots
 	 */

@@ -20,4 +20,5 @@ public class RobotCommand{
 	public static final int SLOW_CW = 19;
 	public static final int SLOW_CCW = 20;
 	public static final int SLOW_KICK = 21;
+	public static final int ROTATE_ANGLE = 22;
 }

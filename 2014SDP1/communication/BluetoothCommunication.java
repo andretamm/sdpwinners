@@ -25,7 +25,6 @@ public class BluetoothCommunication {
 	private NXTInfo nxtInfo;
 	private boolean robotReady = false;
 	private boolean connected = false;
-	private int buffer = 0;
 
 	/**
 	 * @param deviceName

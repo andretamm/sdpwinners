@@ -151,6 +151,46 @@ public abstract class GeneralBehavior implements Behavior {
 	}
 	
 	/**
+	 * Rotates the robot BY a specified angle. 
+	 * NOTE - you can't stop this command after you've sent it, the robot will do the
+	 * full rotation before reading in new commands.
+	 * 
+	 * If the angle is very small, then the Server class will refuse to send it. 
+	 * Angle has to be in range [-180, 180], sending 0 would be a non-rotation.
+	 * 
+	 * The robot will automatically STOP after rotating this many degrees, so
+	 * no need to stop manually.
+	 * 
+	 * @param angle The angle (in DEGREES) the robot will rotate by
+	 */
+	public void rotateBy(int angle) {
+		s.sendRotateDegrees(type, angle);
+		state().isRotating = true;
+	}
+	
+	/**
+	 * Rotates the robot (quite quickly) to face a specific target.
+	 * 
+	 * PLEASE READ the javadoc for rotateBy before using this!!!
+	 * 
+	 * NOTE - you can't stop this command after you've sent it, the robot will do the
+	 * full rotation before reading in new commands. 
+	 * 
+	 * @param target
+	 */
+	public void rotateQuickTowards(Point target) {
+		Point robot = ws.getRobotPoint(robot());
+		
+		double currentOrientation = ws.getRobotOrientation(robot());
+		double targetOrientation = Orientation.getAngle(robot, target);
+		
+		// Angle we have to rotate by in DEGREES
+		int angle = (int) Math.toDegrees(StrategyHelper.angleDiff(currentOrientation, targetOrientation));
+		
+		rotateBy(angle);
+	}
+	
+	/**
 	 * Takes the robot to the specified point. Rotates to the closest for driving
 	 * straight towards the point (either forward or backward). Then
 	 * drives forward/backward to reach the point. If you want to turn towards the target

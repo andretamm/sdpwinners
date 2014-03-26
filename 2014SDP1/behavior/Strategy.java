@@ -23,8 +23,8 @@ public class Strategy {
 	public static RobotState defenderState;
 	public static RobotState attackerState;
 	
-	public static boolean defenderReadyForPass = false;
-	public static boolean attackerReadyForKick = false;
+	volatile public static boolean defenderReadyForPass = false;
+	volatile public static boolean attackerReadyForKick = false;
 	
 	public Strategy(WorldState ws, Server server) {
 		this.ws = ws;
