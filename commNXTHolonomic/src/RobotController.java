@@ -114,7 +114,6 @@ public class RobotController {
 
 	public void aimReset() {
 		ULTRA.aimReset();
-		
 	}
 
 	public void slowCW() {

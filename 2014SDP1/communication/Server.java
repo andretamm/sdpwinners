@@ -269,7 +269,7 @@ public class Server {
 	 * @param degrees The angle to rotate by in DEGREES in range [-180, 180]
 	 */
 	public void sendRotateDegrees(RobotType type, int degrees) {
-		if (degrees < 2) {
+		if (Math.abs(degrees) < 2) {
 			// Angle not big enough, do nothing lol
 			return;
 		}

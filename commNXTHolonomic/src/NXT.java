@@ -15,7 +15,10 @@ public class NXT {
     	// Wait for commands from the bluetoothconnection
     	while (true) {
     		int command = robot.command;
-    		if (command != robot.previousCommand || (command == 8 && robot.angle != robot.previousAngle)) {
+    		if (command != robot.previousCommand || 
+    			(command == 8 && robot.angle != robot.previousAngle))
+    		// ANDRE TODO - include SUPFR check in if clause!!
+    			{
     			// Only do smth if we got a new command
 	    		switch (command) {
 					case 0:
