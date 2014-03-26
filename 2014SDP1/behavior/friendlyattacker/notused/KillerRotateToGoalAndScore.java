@@ -49,7 +49,7 @@ public class KillerRotateToGoalAndScore extends GeneralBehavior {
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		// No longer have the ball
 		ws.setRobotGrabbedBall(robot(), false);
-		s.send(type, RobotCommand.KICK);
+		s.send(type, RobotCommand.FAST_KICK);
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {

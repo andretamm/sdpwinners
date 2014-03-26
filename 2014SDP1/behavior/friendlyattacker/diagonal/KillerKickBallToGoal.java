@@ -78,7 +78,7 @@ public class KillerKickBallToGoal extends GeneralBehavior {
 		
 		// Ready for a kick!
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(type, RobotCommand.KICK);
+		s.send(type, RobotCommand.FAST_KICK);
 		
 		// No longer have the ball
 		ws.setRobotGrabbedBall(robot(), false);

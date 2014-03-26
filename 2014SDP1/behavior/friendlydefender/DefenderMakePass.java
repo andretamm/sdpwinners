@@ -105,7 +105,7 @@ public class DefenderMakePass extends GeneralBehavior {
 		
 		// No longer have the ball after kick
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(type, RobotCommand.KICK);
+		s.send(type, RobotCommand.FAST_KICK);
 		ws.setRobotGrabbedBall(robot(), false);
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball

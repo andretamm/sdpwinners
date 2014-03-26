@@ -74,7 +74,7 @@ public class KillerBlockDefender extends GeneralBehavior {
 			target.y = Math.max(ws.getPitchTopLeft().y + 20, Math.min(ws.getPitchBottomLeft().y - 20, target.y));
 		}
 		
-		if (quickGoTo(target)) {
+		if (goDiagonallyTo(target)) {
 			stopMovement();
 		}
 	}

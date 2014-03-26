@@ -26,14 +26,7 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
-		
-		// Stop this madness if we didn't actually grab the ball <.<
-//		if (!StrategyHelper.hasBall(robot(), ws)) {
-//			ws.setRobotGrabbedBall(robot(), false);
-//			s.send(type, RobotCommand.OPEN_GRABBER);
-//			return;
-//		}
-		
+			
 		/*-----------------------------------------------*/
 		/* Decide which way to shoot                     */
 		/*-----------------------------------------------*/
@@ -50,10 +43,10 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 		
 		targets[0] = topWallMiddle;
 		targets[1] = bottomWallMiddle;
-		
+
 		opponentDistances[0] = StrategyHelper.getOpponentDistanceFromPath(robot(), Orientation.getAngle(robot, targets[0]), ws);
 		opponentDistances[1] = StrategyHelper.getOpponentDistanceFromPath(robot(), Orientation.getAngle(robot, targets[1]), ws);
-		
+
 		if (opponentDistances[0] < opponentDistances[1]) {
 			d("Picked target 1");
 			target = targets[1];
@@ -61,9 +54,9 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 			d("Picked target 0");
 			target = targets[0];
 		}
-		
+
 		/*-----------------------------------------------*/
-		/* Rotate to that way                            */
+		/* Rotate that way                               */
 		/*-----------------------------------------------*/
 		double orientation = Orientation.getAngle(robot, target);
 		
@@ -77,16 +70,16 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 		/*-----------------------------------------------*/
 		/* Kick the baby                                 */
 		/*-----------------------------------------------*/
+		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		s.send(type, RobotCommand.SLOW_KICK);
 		
 		// No longer have the ball after kick
-		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(type, RobotCommand.KICK);
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.defenderReadyForPass = false;
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
-			Thread.sleep(100);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -101,5 +94,4 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 	public boolean takeControl() {
 		return Strategy.defenderReadyForPass;
 	}
-
 }

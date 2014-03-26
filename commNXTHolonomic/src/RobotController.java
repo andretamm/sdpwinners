@@ -26,12 +26,20 @@ public class RobotController {
 		ULTRA.moveDiagonally(angle);
 	}
 	
-	public void kick() {
+	public void fastKick() {
 		// Wait for the ball in the grabber to stabilise
 		try {
-			Thread.sleep(200);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {}
-		ULTRA.kick();
+		ULTRA.kick(100);
+	}
+	
+	public void slowKick() {
+		// Wait for the ball in the grabber to stabilise
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {}
+		ULTRA.kick(35);
 	}
 	
 	public void forward() {

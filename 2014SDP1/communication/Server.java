@@ -136,7 +136,8 @@ public class Server {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
 			} else {
-				previousCommand.put(type, command);
+//				Only save previous command if doing debugging of the command images on screen!
+//				previousCommand.put(type, command);
 				System.out.println(type + " is not connected, not sending command");
 			}
 		}
@@ -182,7 +183,7 @@ public class Server {
 			}
 		}
 		
-		previousCommand.put(type, 8);
+		previousCommand.put(type, RobotCommand.MOVE_DIAGONALLY);
 		previousAngle.put(type, angleToGo);
 		
 		 // Create the angle that is send to the NXT
@@ -215,14 +216,13 @@ public class Server {
 		
 		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
 		angleArray[1] = (byte) ((angle >> 8) & 0xFF);
-		
+
 		if (type == RobotType.DEFENDER) {
-			defenderRobot.sendToRobot(8);
+			defenderRobot.sendToRobot(RobotCommand.MOVE_DIAGONALLY);
 			defenderRobot.sendToRobot(angleArray[0]);
 			defenderRobot.sendToRobot(angleArray[1]);
-			
 		} else if (type == RobotType.ATTACKER) {
-			attackerRobot.sendToRobot(8);
+			attackerRobot.sendToRobot(RobotCommand.MOVE_DIAGONALLY);
 			attackerRobot.sendToRobot(angleArray[0]);
 			attackerRobot.sendToRobot(angleArray[1]);
 		}

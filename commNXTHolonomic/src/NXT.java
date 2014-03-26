@@ -38,7 +38,7 @@ public class NXT {
 						break;
 					case 6:
 						robot.chill();
-						robot.kick();
+						robot.fastKick();
 						break;
 					case 8:
 						System.out.println("Moving Diagonally");
@@ -78,6 +78,9 @@ public class NXT {
 						break;
 					case 20:
 						robot.slowCCW();
+						break;
+					case 21:
+						robot.slowKick();
 						break;
 					default:
 						robot.chill();

@@ -80,7 +80,7 @@ public class DefenderTryPassing extends GeneralBehavior {
 		
 		// No longer have the ball after kick
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(type, RobotCommand.KICK);
+		s.send(type, RobotCommand.FAST_KICK);
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.defenderReadyForPass = false;
 		

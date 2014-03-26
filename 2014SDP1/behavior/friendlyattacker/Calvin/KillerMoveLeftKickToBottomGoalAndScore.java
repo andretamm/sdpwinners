@@ -69,7 +69,7 @@ public class KillerMoveLeftKickToBottomGoalAndScore extends GeneralBehavior {
 		
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		// No longer have the ball
-		s.send(type, RobotCommand.KICK);
+		s.send(type, RobotCommand.FAST_KICK);
 		ws.setRobotGrabbedBall(robot(), false);
 		
 		/*

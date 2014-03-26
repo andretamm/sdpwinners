@@ -310,25 +310,25 @@ public class Ultra360 {
 		grabber.rotateTo(-10);
 	}
 	
-	/**Kick the ball in a straight direction with the power given in from 0 - 100. 
+	/**
+	 * Kick the ball in a straight direction with the power given in from 0 - 100. 
 	 * Optimal Speed for defender is 20.
 	 * Optimal Speed for attacker is 100.
 	 * After the kick is performed, the grabber will reset to the starting open position.
-         * 
-         * @param speed From 0 - 100 */
-         
-        public static void kick(int speed) {
+     * 
+     * @param speed From 0 - 100 */
+    public void kick(int speed) {
 		int kickSpeed = speed*10;
 		int accel = speed*140;
-                kicker.resetTachoCount();
-                kicker.setSpeed(kickSpeed);
-                kicker.setAcceleration(accel);
-                grabber.setSpeed(800);
-                grabber.setAcceleration(10000);
-                grabber.rotateTo(0);
-                kicker.rotate(-50);
-                kicker.rotate(50);
-        }
+        kicker.resetTachoCount();
+        kicker.setSpeed(kickSpeed);
+        kicker.setAcceleration(accel);
+        grabber.setSpeed(800);
+        grabber.setAcceleration(10000);
+        grabber.rotateTo(0);
+        kicker.rotate(-50);
+        kicker.rotate(50);
+    }
 	
 	//Rotates the rotator 25 degrees left and kicks the ball.
 	public void kickLeft() {

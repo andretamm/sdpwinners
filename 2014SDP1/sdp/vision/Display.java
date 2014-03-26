@@ -42,7 +42,7 @@ public class Display {
 			RobotCommand.STOP,
 			RobotCommand.CW,
 			RobotCommand.CCW,
-			RobotCommand.KICK,
+			RobotCommand.FAST_KICK,
 			RobotCommand.CLOSE_GRABBER,
 			RobotCommand.OPEN_GRABBER,
 			RobotCommand.MOVE_LEFT,

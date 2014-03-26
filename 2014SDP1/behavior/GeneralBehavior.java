@@ -259,7 +259,7 @@ public abstract class GeneralBehavior implements Behavior {
 		Point robot = ws.getRobotPoint(robot());
 		double orientation = Orientation.getAngle(robot, target);
 		
-		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 12) {
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 5) {
 			state().isMoving = true;
 			s.sendDiagonalMovement(type, (int) Math.toDegrees(orientation));
 			return false;

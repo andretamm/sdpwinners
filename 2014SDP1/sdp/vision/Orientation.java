@@ -68,7 +68,7 @@ public class Orientation {
         if (greyCircle.size() != 0) {
 //	        greyCentreX = totalX / greyCircle.size();
 //	        greyCentreY = totalY / greyCircle.size();
-	               
+
 	        try {
 				Point greyCenter = Position.findMean(greyCircle);
 				greyCentreX = greyCenter.x;

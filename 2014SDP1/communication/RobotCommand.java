@@ -6,7 +6,8 @@ public class RobotCommand{
 	public static final int STOP = 3;
 	public static final int FORWARD = 1;
 	public static final int BACK = 2;
-	public static final int KICK = 6;
+	public static final int FAST_KICK = 6;
+	public static final int MOVE_DIAGONALLY = 8;
 	public static final int CLOSE_GRABBER = 10;
 	public static final int OPEN_GRABBER = 11;
 	public static final int MOVE_LEFT = 12;
@@ -18,4 +19,5 @@ public class RobotCommand{
 	public static final int AIM_RESET = 18;
 	public static final int SLOW_CW = 19;
 	public static final int SLOW_CCW = 20;
+	public static final int SLOW_KICK = 21;
 }

@@ -70,7 +70,7 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 		// Rotate towards target
 		double orientation = Orientation.getAngle(robot, targetPoint);
 		
-		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
+		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR * 1.5) {
 			rotateTo(orientation);
 			state().isRotating = true;
 			return;
@@ -83,7 +83,7 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 		
 		// Ready for a kick!
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(type, RobotCommand.KICK);
+		s.send(type, RobotCommand.FAST_KICK);
 		
 		// No longer have the ball
 		ws.setRobotGrabbedBall(robot(), false);
