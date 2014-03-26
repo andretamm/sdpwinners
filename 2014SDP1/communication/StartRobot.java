@@ -1,6 +1,5 @@
 package communication;
 
-import constants.RobotType;
 import gui.MainWindow;
 import sdp.vision.RunVision;
 import sdp.vision.WorldState;

@@ -2,7 +2,6 @@ package behavior.friendlydefender;
 
 import communication.Server;
 
-import behavior.Manager;
 import lejos.robotics.subsumption.Behavior;
 import sdp.vision.WorldState;
 import constants.RobotType;

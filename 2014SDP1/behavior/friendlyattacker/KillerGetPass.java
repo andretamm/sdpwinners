@@ -10,7 +10,6 @@ import behavior.GeneralBehavior;
 import behavior.StrategyHelper;
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
-import constants.Quadrant;
 import constants.RobotType;
 import constants.ShootingDirection;
 

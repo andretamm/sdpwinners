@@ -1,6 +1,5 @@
 package behavior;
 
-import common.Robot;
 import communication.Server;
 
 import constants.RobotType;

@@ -8,12 +8,8 @@ import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
-import sdp.vision.Orientation;
 import sdp.vision.WorldState;
-import constants.C;
-import constants.Quadrant;
 import constants.RobotType;
-import constants.ShootingDirection;
 
 public class KillerSimpleGetInPositionForKick extends GeneralBehavior {
 

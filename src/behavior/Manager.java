@@ -1,8 +1,5 @@
 package behavior;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 

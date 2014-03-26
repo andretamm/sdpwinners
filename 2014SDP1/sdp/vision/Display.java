@@ -2,19 +2,15 @@ package sdp.vision;
 
 import gui.MainWindow;
 
-import java.awt.*;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.activation.CommandInfo;
 import javax.imageio.ImageIO;
 
 import behavior.StrategyHelper;

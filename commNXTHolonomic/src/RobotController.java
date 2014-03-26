@@ -1,8 +1,4 @@
-import lejos.nxt.Motor;
-import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Sound;
-import lejos.robotics.MirrorMotor;
-import lejos.robotics.navigation.DifferentialPilot;
 
 
 public class RobotController {
