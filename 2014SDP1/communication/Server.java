@@ -240,13 +240,13 @@ public class Server {
 	 * @param degrees The angle to rotate by in DEGREES in range [-180, 180]
 	 */
 	public void sendRotateDegrees(RobotType type, int degrees) {
-		if (previousCommand.get(type) == RobotCommand.ROTATE_ANGLE) {
-			if (degrees < 5) {
-				// Angle not big enough, do nothing lol
-				return;
-			}
+		if (degrees < 2) {
+			// Angle not big enough, do nothing lol
+			return;
 		}
 		
+		// Only save this so we can draw the command on screen.
+		// THIS IS NOT CHECKED ANYWHERE ELSE! (unlike other commands :))
 		previousCommand.put(type, RobotCommand.ROTATE_ANGLE);
 		
 		// Convert degrees to a positive angle
