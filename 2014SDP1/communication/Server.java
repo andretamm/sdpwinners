@@ -28,6 +28,7 @@ public class Server {
 	
 	public static EnumMap<RobotType, Integer> previousCommand;
 	private EnumMap<RobotType, Integer> previousAngle;
+	private EnumMap<RobotType, Long> previousCommandTime;
 	
 	private WorldState ws;
 	
@@ -39,13 +40,17 @@ public class Server {
 		defenderRobot = new BluetoothCommunication(DEFENDER_NXT_NAME, DEFENDER_NXT_MAC_ADDRESS);
 		attackerRobot = new BluetoothCommunication(ATTACKER_NXT_NAME, ATTACKER_NXT_MAC_ADDRESS);
 		
+		// Init maps
 		previousCommand = new EnumMap<RobotType, Integer>(RobotType.class);
-		previousCommand.put(RobotType.DEFENDER, RobotCommand.NO_COMMAND);
-		previousCommand.put(RobotType.ATTACKER, RobotCommand.NO_COMMAND);
-		
 		previousAngle = new EnumMap<RobotType, Integer>(RobotType.class);
-		previousAngle.put(RobotType.DEFENDER, 0);
-		previousAngle.put(RobotType.ATTACKER, 0);
+		previousCommandTime = new EnumMap<RobotType, Long>(RobotType.class);
+		
+		// Store initial values
+		for (RobotType type: RobotType.values()) {
+			previousCommand.put(type, RobotCommand.NO_COMMAND);
+			previousAngle.put(type, 0);
+			previousCommandTime.put(type, (long) 0);
+		}
 	}
 	
 	/**
@@ -128,16 +133,33 @@ public class Server {
 		} else {
 			robot = attackerRobot;
 		}
-
+		
+		long currentTime = System.currentTimeMillis();
+		
 		// Only send command if it is different from the last one
 		// we sent and the robot is actually connected
 		if (previousCommand.get(type) != command) {
 			if(robot.isConnected()) {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
+				
+				// Remember when we sent the command
+				previousCommandTime.put(type, currentTime);
 			} else {
 //				Only save previous command if doing debugging of the command images on screen!
 //				previousCommand.put(type, command);
+				System.out.println(type + " is not connected, not sending command");
+			}
+		} else if (currentTime - previousCommandTime.get(type) > 3000) {
+			// A long time has passed :D Resend the command just in case, also to keep
+			// the link alive
+			if(robot.isConnected()) {
+				previousCommand.put(type, command);
+				robot.sendToRobot(command);
+				
+				// Remember when we sent the command
+				previousCommandTime.put(type, currentTime);
+			} else {
 				System.out.println(type + " is not connected, not sending command");
 			}
 		}
@@ -176,15 +198,22 @@ public class Server {
 	 * @param angle to rotate to
 	 */
 	public void sendDiagonalMovement(RobotType type, int angleToGo) {
+		long currentTime = System.currentTimeMillis();
+		
 		if (previousCommand.get(type) == RobotCommand.MOVE_DIAGONALLY) {
-			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 3) {
+			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 3 &&
+					currentTime - previousCommandTime.get(type) > 3000) {
 				// Angle no change enough, do nothing lol
 				return;
+			} else {
+				// Either angle has changed or there's been a while since
+				// we sent any commands so resend it just in case.
 			}
 		}
 		
 		previousCommand.put(type, RobotCommand.MOVE_DIAGONALLY);
 		previousAngle.put(type, angleToGo);
+		previousCommandTime.put(type, currentTime);
 		
 		 // Create the angle that is send to the NXT
 		int angle = 0;
@@ -248,6 +277,8 @@ public class Server {
 		// Only save this so we can draw the command on screen.
 		// THIS IS NOT CHECKED ANYWHERE ELSE! (unlike other commands :))
 		previousCommand.put(type, RobotCommand.ROTATE_ANGLE);
+		
+		// Do not save previousCommandTime, because this command SHOULD NOT be resent automatically
 		
 		// Convert degrees to a positive angle
 		// eg 170' stays 170', but -20' becomes 340'
