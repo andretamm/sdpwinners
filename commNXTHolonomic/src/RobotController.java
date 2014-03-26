@@ -10,6 +10,8 @@ public class RobotController {
 	public volatile int previousAngle = 0;
 	public volatile int angle = 0;
 
+	public volatile int rotateAngle = 0;
+
 	
 	public RobotController() {
 		ULTRA = new Ultra360();
@@ -121,5 +123,9 @@ public class RobotController {
 
 	public void slowCCW() {
 		ULTRA.rotateAntiClockwise(ULTRA.slowRotationSpeed);
+	}
+
+	public void rotateTo(int rotateAngle) {
+		ULTRA.rotateTo(rotateAngle);
 	}
 }

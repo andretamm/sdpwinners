@@ -82,6 +82,9 @@ public class NXT {
 					case 21:
 						robot.slowKick();
 						break;
+					case 22:
+						robot.rotateTo(robot.rotateAngle);
+						break;
 					default:
 						robot.chill();
 				}

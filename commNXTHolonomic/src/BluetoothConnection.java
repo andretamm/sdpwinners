@@ -25,7 +25,7 @@ public class BluetoothConnection extends Thread {
     			robot.command = 3;
     			establishConnection();
     	    	sendReadySignal();
-    		} if (i == 8) {
+    		} else if (i == 8) {
     			byte h = (byte)receiveIntSignal();
     			byte k = (byte)receiveIntSignal();
     			
@@ -34,8 +34,25 @@ public class BluetoothConnection extends Thread {
     			robot.angle   = angle;	
     	    	robot.command = 8;
     	    	
-    	    }
-    		else {
+    	    } else if (i == 22) {
+    	    	/* Rotate by a specific angle */
+    	    	
+    	    	// Get angle lower 8 bits
+    			byte angle2 = (byte)receiveIntSignal();
+    			// Get angle higher 8 bits
+    			byte angle1 = (byte)receiveIntSignal();
+    			
+    			int angle = ((int) (angle1 << 8) | (int) angle2 & 0xFF);
+    			
+    			// Convert from [0, 360] to [-180, 180]
+    			if (angle > 180) {
+    				angle -= 360;
+    			}
+    			
+    			robot.rotateAngle = angle;	
+    			
+    	    	robot.command = 22;
+    	    } else {
     			// Pass on command to robot
     			robot.command = i;
     		}
