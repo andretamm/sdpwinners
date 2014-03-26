@@ -81,33 +81,56 @@ public class Ultra360 {
 		I2Csensor.sendData(0x08,speeds[7]);
 	}
 	
-	//The rotation function is depended on the rotation speed that is tested for a 360 degree turn.
-	public void rotateTo(int degrees) throws InterruptedException{
-
-		if(degrees < 0){
-			backward = (byte) -backward;
-			forward = (byte) -forward;
-			degrees = -degrees;
+	/**This function takes a number of degrees to rotate, as I have made it from scratch,
+	  * it uses time to know how long it must rotate, according to the speed of the wheels
+	  *
+	  *@param degrees Takes an integer from -360 to 360.
+	  */
+	public void rotateTo(int degrees){
+		
+		byte rotateSpeed = (byte) 200; //Changing this will fuck up the function by the way
+		long degToTime = (long) Math.rint(Math.abs(degrees)*3.5); // Based on the current speed of rotation
+		
+		if(degrees > 0){
+			//EAST Wheel
+			I2Csensor.sendData(0x01,backward); 
+			I2Csensor.sendData(0x02,rotateSpeed); 
+			//WEST Wheel
+			I2Csensor.sendData(0x07,backward); 
+			I2Csensor.sendData(0x08,rotateSpeed); 
+			//SOUTH Wheel
+			I2Csensor.sendData(0x03,forward); 
+			I2Csensor.sendData(0x04,rotateSpeed); 
+			//NORTH Wheel
+			I2Csensor.sendData(0x05,forward); 
+			I2Csensor.sendData(0x06,rotateSpeed); 
+			try {
+				Thread.sleep(degToTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			stop();
 		}
-		long degToTime = (long) Math.rint(degrees*8.3); // Based on the current speed of rotation
-
-		//EAST Wheel
-		I2Csensor.sendData(0x01,backward); 
-		I2Csensor.sendData(0x02,fastRotationSpeed); 
-		//WEST Wheel
-		I2Csensor.sendData(0x07,backward); 
-		I2Csensor.sendData(0x08,fastRotationSpeed); 
-		//SOUTH Wheel
-		I2Csensor.sendData(0x03,forward); 
-		I2Csensor.sendData(0x04,fastRotationSpeed); 
-		//NORTH Wheel
-		I2Csensor.sendData(0x05,forward); 
-		I2Csensor.sendData(0x06,fastRotationSpeed); 
-		//This function is made up out of a product of the time and speed.
-		//This sleep is needed to get the rotation right.
-		Thread.sleep(degToTime);
-		//NOTE THAT THIS STOP IS NEEDED FOR THE ROBOT TO KNOW WHEN TO STOP AFTER THE GIVEN DEGREES
-		stop();
+		else if(degrees <= 0){
+			//EAST Wheel
+			I2Csensor.sendData(0x01,forward); 
+			I2Csensor.sendData(0x02,rotateSpeed); 
+			//WEST Wheel
+			I2Csensor.sendData(0x07,forward); 
+			I2Csensor.sendData(0x08,rotateSpeed); 
+			//SOUTH Wheel
+			I2Csensor.sendData(0x03,backward); 
+			I2Csensor.sendData(0x04,rotateSpeed); 
+			//NORTH Wheel
+			I2Csensor.sendData(0x05,backward); 
+			I2Csensor.sendData(0x06,rotateSpeed); 
+			try {
+				Thread.sleep(degToTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			stop();
+		}
 	}
 	
 	//Rotate clockwise until Andre stops you
