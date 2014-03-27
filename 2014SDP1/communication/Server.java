@@ -30,6 +30,8 @@ public class Server {
 	private EnumMap<RobotType, Integer> previousAngle;
 	private EnumMap<RobotType, Long> previousCommandTime;
 	
+	private EnumMap<RobotType, Integer> previousRotationDirection;
+	
 	private WorldState ws;
 	
 	/**
@@ -44,12 +46,14 @@ public class Server {
 		previousCommand = new EnumMap<RobotType, Integer>(RobotType.class);
 		previousAngle = new EnumMap<RobotType, Integer>(RobotType.class);
 		previousCommandTime = new EnumMap<RobotType, Long>(RobotType.class);
+		previousRotationDirection = new EnumMap<RobotType, Integer>(RobotType.class);
 		
 		// Store initial values
 		for (RobotType type: RobotType.values()) {
 			previousCommand.put(type, RobotCommand.NO_COMMAND);
 			previousAngle.put(type, 0);
 			previousCommandTime.put(type, (long) 0);
+			previousRotationDirection.put(type, 0);
 		}
 	}
 	
@@ -287,11 +291,16 @@ public class Server {
 		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
 		degreeArray[1] = (byte) ((angle >> 8) & 0xFF);
 		
-		// Only resend command if at least 2 seconds have passed since we last sent it
+		// Resend command if at least 2 seconds have passed since we last sent it
 		long currentTime = System.currentTimeMillis();
 		
+		// If the direction has changed then this is a new command
+		// Positive for CW, negative for CCW
+		int direction = degrees >= 0 ? 1 : -1;
+		
 		if (previousCommand.get(type) != RobotCommand.ROTATE_ANGLE ||
-			currentTime - previousCommandTime.get(type) > 2000) {
+			currentTime - previousCommandTime.get(type) > 2000 ||
+			previousRotationDirection.get(type) != direction) {
 			
 			if (type == RobotType.DEFENDER) {
 				defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
@@ -303,9 +312,10 @@ public class Server {
 				attackerRobot.sendToRobot(degreeArray[1]);
 			}
 			
-			// Save command and sent time
+			// Save command, sent time and direction
 			previousCommand.put(type, RobotCommand.ROTATE_ANGLE);			
 			previousCommandTime.put(type, currentTime);
+			previousRotationDirection.put(type, direction);
 		}
 	}
 	

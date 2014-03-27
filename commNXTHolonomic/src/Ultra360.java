@@ -299,7 +299,7 @@ public class Ultra360 {
 	}
 	
 	//if all else fails, here is the old way of stopping
-	public void oldStop(){
+	public void oldStop() {
 		//stop dead, I am not making a constant for this for added safety.
 		I2Csensor.sendData(0x01,(byte)3); 
 		I2Csensor.sendData(0x03,(byte)3); 
