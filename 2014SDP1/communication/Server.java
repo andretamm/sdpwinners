@@ -310,7 +310,9 @@ public class Server {
 	}
 	
 	/**
-	 * Closes the bluetooth connections to both robots
+	 * Closes the bluetooth connections to both robots -
+	 * this DOES NOT cause the robot to think it is disconnected
+	 * though, you need to call disconnectFromRobot() for that
 	 */
 	public void close() {
 		defenderRobot.closeBluetoothConnection();
@@ -321,7 +323,7 @@ public class Server {
 	 * Closes the bluetooth connection to a specific robot
 	 */
 	public void disconnectFromRobot(RobotType type) {
-		getRobot(type).sendToRobot(7);
+		getRobot(type).sendToRobot(RobotCommand.DISCONNECT);
 		getRobot(type).closeBluetoothConnection();
 	}
 

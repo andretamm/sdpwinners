@@ -1,6 +1,7 @@
 package behavior.finalattacker;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import communication.RobotCommand;
 import communication.Server;
@@ -29,36 +30,37 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		
 		Point robot = ws.getRobotPoint(robot());
 		
-		// Get a target to aim for!
-//		if (targetPoint == null) {
-//			// Attack points to try
-//			Point[] attackPoints = new Point[3];
-//			attackPoints[0] = ws.getOppositionGoalTop();
-//			attackPoints[0].y += 10;
-//			attackPoints[1] = ws.getOppositionGoalCentre();
-//			attackPoints[2] = ws.getOppositionGoalBottom();
-//			attackPoints[2].y -= 10;
-//			
-//			
-//			double bestDistance = 1000000;
-//			
-//			for (Point p: attackPoints) {
-//				double shotAngle = Orientation.getAngle(robot, p);
-//				double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
-//				
-//				if (oppositionDistance < bestDistance) {
-//					bestDistance = oppositionDistance;
-//					targetPoint = p;
-//				}
-//			}
-//		}
+		// Get a target to aim for! Try the bottom or top of their goal
+		if (targetPoint == null) {
+			// Attack points to try
+			ArrayList<Point> attackPoints = new ArrayList<Point>();
+			
+			Point possibleAttackPoint = ws.getOppositionGoalTop();
+			possibleAttackPoint.y += 10;
+			attackPoints.add(possibleAttackPoint);
+			
+			possibleAttackPoint = ws.getOppositionGoalBottom();
+			possibleAttackPoint.y -= 10;
+			attackPoints.add(possibleAttackPoint);
+			
+			double bestDistance = 1000000;
+			
+			for (Point p: attackPoints) {
+				double shotAngle = Orientation.getAngle(robot, p);
+				double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
+				
+				if (oppositionDistance < bestDistance) {
+					bestDistance = oppositionDistance;
+					targetPoint = p;
+				}
+			}
+		}
 		
 		if (targetPoint == null) {
 			targetPoint = ws.getOppositionGoalCentre();
 		}
 		
-		
-		// Rotate towards target using Super Ultra Precise Rotation (SUPR)
+		// Rotate towards target using Super Ultra Precise Fast Rotation (SUPFR)
 		rotateQuickTowards(targetPoint);
 		
 		// Wait until we're close enough
@@ -68,7 +70,7 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 			return;
 		}
 		
-		// Robot stops after doing rotating
+		// Robot stops automagically after doing rotating
 		if (state().isRotating) {
 			state().isRotating = false;
 		}
@@ -84,7 +86,7 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
-			Thread.sleep(200);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

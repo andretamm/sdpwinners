@@ -7,6 +7,7 @@ public class RobotCommand{
 	public static final int FORWARD = 1;
 	public static final int BACK = 2;
 	public static final int FAST_KICK = 6;
+	public static final int DISCONNECT = 7;
 	public static final int MOVE_DIAGONALLY = 8;
 	public static final int CLOSE_GRABBER = 10;
 	public static final int OPEN_GRABBER = 11;

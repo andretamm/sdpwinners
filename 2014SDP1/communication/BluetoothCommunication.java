@@ -170,8 +170,17 @@ public class BluetoothCommunication {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
-
+	/**
+	 * Send an array of bytes to a robot
+	 */
+	public void sendBytesToRobot(byte[] commands) {
+		try {
+			out.write(commands);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
