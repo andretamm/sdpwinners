@@ -269,16 +269,10 @@ public class Server {
 	 * @param degrees The angle to rotate by in DEGREES in range [-180, 180]
 	 */
 	public void sendRotateDegrees(RobotType type, int degrees) {
-		if (Math.abs(degrees) < 2) {
+		if (Math.abs(degrees) < 3) {
 			// Angle not big enough, do nothing lol
 			return;
 		}
-		
-		// Only save this so we can draw the command on screen.
-		// THIS IS NOT CHECKED ANYWHERE ELSE! (unlike other commands :))
-		previousCommand.put(type, RobotCommand.ROTATE_ANGLE);
-		
-		// Do not save previousCommandTime, because this command SHOULD NOT be resent automatically
 		
 		// Convert degrees to a positive angle
 		// eg 170' stays 170', but -20' becomes 340'
@@ -292,15 +286,26 @@ public class Server {
 		
 		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
 		degreeArray[1] = (byte) ((angle >> 8) & 0xFF);
-
-		if (type == RobotType.DEFENDER) {
-			defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
-			defenderRobot.sendToRobot(degreeArray[0]);
-			defenderRobot.sendToRobot(degreeArray[1]);
-		} else if (type == RobotType.ATTACKER) {
-			attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
-			attackerRobot.sendToRobot(degreeArray[0]);
-			attackerRobot.sendToRobot(degreeArray[1]);
+		
+		// Only resend command if at least 2 seconds have passed since we last sent it
+		long currentTime = System.currentTimeMillis();
+		
+		if (previousCommand.get(type) != RobotCommand.ROTATE_ANGLE ||
+			currentTime - previousCommandTime.get(type) > 2000) {
+			
+			if (type == RobotType.DEFENDER) {
+				defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+				defenderRobot.sendToRobot(degreeArray[0]);
+				defenderRobot.sendToRobot(degreeArray[1]);
+			} else if (type == RobotType.ATTACKER) {
+				attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+				attackerRobot.sendToRobot(degreeArray[0]);
+				attackerRobot.sendToRobot(degreeArray[1]);
+			}
+			
+			// Save command and sent time
+			previousCommand.put(type, RobotCommand.ROTATE_ANGLE);			
+			previousCommandTime.put(type, currentTime);
 		}
 	}
 	

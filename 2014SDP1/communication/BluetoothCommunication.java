@@ -168,7 +168,6 @@ public class BluetoothCommunication {
 			out.write(command);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

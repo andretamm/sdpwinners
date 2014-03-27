@@ -16,8 +16,9 @@ public class NXT {
     	while (true) {
     		int command = robot.command;
     		if (command != robot.previousCommand || 
-    			(command == 8 && robot.angle != robot.previousAngle))
-    		// ANDRE TODO - include SUPFR check in if clause!!
+    			(command == 8 && robot.angle != robot.previousAngle) ||
+    			(command == 22))
+    		// ANDRE TODO - the case for 22 might need some extra check as well >.>
     			{
     			// Only do smth if we got a new command
 	    		switch (command) {
