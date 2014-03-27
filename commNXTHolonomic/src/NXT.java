@@ -52,9 +52,6 @@ public class NXT {
 						robot.chill();
 						robot.grab();
 						break;
-					case 11:
-						robot.openGrabber();
-						break;
 					case 12:
 						robot.goLeft();
 						break;

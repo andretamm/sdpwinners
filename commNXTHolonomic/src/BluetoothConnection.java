@@ -53,6 +53,8 @@ public class BluetoothConnection extends Thread {
     			robot.rotateAngle = angle;	
 
     	    	robot.command = 22;
+    	    } else if (i == 11) {
+    	    	robot.openGrabber();
     	    } else {
     			// Pass on command to robot
     			robot.command = i;
