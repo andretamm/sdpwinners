@@ -30,38 +30,32 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		
 		Point robot = ws.getRobotPoint(robot());
 		
-		// Get a target to aim for! Try the bottom or top of their goal
+		/* USEFUL FACTS:
+		 * 1) Height of a goal is ~140 pixels
+		 * 2) Distance from a goal top to the middle of the goal is ~70 pixels
+		 * 3) Width of our robot is ~50 pixels
+		 * 4) Distance from our robot's centre to an edge is ~25 pixels
+		 * 
+		 * Using a simplistic model, this would mean that if their robot is
+		 * at least 70 - 25 = 45 pixels away from a goal top/bottom then
+		 * their robot is AT MOST in the middle of their goal. If it's any
+		 * closer than that then making a shot will proooobs fail.
+		 */
+		
+		// Get a target to aim for!
 		if (targetPoint == null) {
-			// Attack points to try
-			ArrayList<Point> attackPoints = new ArrayList<Point>();
+			findTarget();
 			
-			Point possibleAttackPoint = ws.getOppositionGoalTop();
-			possibleAttackPoint.y += 10;
-			attackPoints.add(possibleAttackPoint);
-			
-			possibleAttackPoint = ws.getOppositionGoalBottom();
-			possibleAttackPoint.y -= 10;
-			attackPoints.add(possibleAttackPoint);
-			
-			double bestDistance = 1000000;
-			
-			for (Point p: attackPoints) {
-				double shotAngle = Orientation.getAngle(robot, p);
-				double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
-				
-				if (oppositionDistance < bestDistance) {
-					bestDistance = oppositionDistance;
-					targetPoint = p;
-				}
+			if (targetPoint == null) {
+				targetPoint = ws.getOppositionGoalCentre();
 			}
+			
+			// Rotate towards target using Super Ultra Precise Fast Rotation (SUPFR)
+			rotateQuickTowards(targetPoint);
+			
+			// Increment number of targets tried by one
+			state().attackerNumberOfTargetsTried++;
 		}
-		
-		if (targetPoint == null) {
-			targetPoint = ws.getOppositionGoalCentre();
-		}
-		
-		// Rotate towards target using Super Ultra Precise Fast Rotation (SUPFR)
-		rotateQuickTowards(targetPoint);
 		
 		// Wait until we're close enough
 		double orientation = Orientation.getAngle(robot, targetPoint);
@@ -75,15 +69,30 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 			state().isRotating = false;
 		}
 		
+		// We're close!
+		// See how close the opponent is
+		double shotAngle = ws.getRobotOrientation(robot());
+		double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
+		
+		if (oppositionDistance < 30) {
+			if (state().attackerNumberOfTargetsTried < 4) {
+				// They're too close, try again
+				targetPoint = null;
+				return;
+			} else {
+				// Already tried too many times, just shoot
+			}
+		}
+
 		// Ready for a kick!
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.FAST_KICK);
-		
+
 		// No longer have the ball
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.attackerReadyForKick = false;
 		targetPoint = null;
-		
+
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
 			Thread.sleep(100);
@@ -101,5 +110,36 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		return ws.getRobotGrabbedBall(robot()) &&
 			   Strategy.attackerReadyForKick;
 	}
-
+	
+	
+	/**
+	 * Sets a target that's furthest from our opponent.
+	 * Tries the bottom or top of their goal
+	 */
+	public void findTarget() {
+		Point robot = ws.getRobotPoint(robot());
+		
+		// Attack points to try
+		ArrayList<Point> attackPoints = new ArrayList<Point>();
+		
+		Point possibleAttackPoint = ws.getOppositionGoalTop();
+		possibleAttackPoint.y += 10;
+		attackPoints.add(possibleAttackPoint);
+		
+		possibleAttackPoint = ws.getOppositionGoalBottom();
+		possibleAttackPoint.y -= 10;
+		attackPoints.add(possibleAttackPoint);
+		
+		double bestDistance = 1000000;
+		
+		for (Point p: attackPoints) {
+			double shotAngle = Orientation.getAngle(robot, p);
+			double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
+			
+			if (oppositionDistance < bestDistance) {
+				bestDistance = oppositionDistance;
+				targetPoint = p;
+			}
+		}
+	}
 }
