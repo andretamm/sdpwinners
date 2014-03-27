@@ -1,9 +1,13 @@
 package communication;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.EnumMap;
 
 import behavior.StrategyHelper;
+import sdp.vision.Vision;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
@@ -149,6 +153,10 @@ public class Server {
 				
 				// Remember when we sent the command
 				previousCommandTime.put(type, currentTime);
+				
+				Graphics g = Vision.label.getGraphics();
+				g.setColor(Color.BLUE);
+				g.drawLine(0, 0, 200, 200);
 			} else {
 //				Only save previous command if doing debugging of the command images on screen!
 //				previousCommand.put(type, command);
