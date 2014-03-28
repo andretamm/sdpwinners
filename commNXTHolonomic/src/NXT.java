@@ -10,6 +10,7 @@ public class NXT {
     	robot = new RobotController();
     	
     	Thread receiver = new BluetoothConnection(robot);
+    	receiver.setPriority(Thread.MIN_PRIORITY);
     	receiver.start();
     	
     	// Wait for commands from the bluetoothconnection
@@ -45,8 +46,6 @@ public class NXT {
 						robot.fastKick();
 						break;
 					case 8:
-						System.out.println("Moving Diagonally");
-						System.out.println("angle: " + robot.angle);
 						robot.goDiagonally(robot.angle);
 						break;
 					case 10:
@@ -93,6 +92,12 @@ public class NXT {
 	    		robot.previousCommand = command;
 	    		robot.previousAngle   = robot.angle;
     		}
+    		
+    		try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
     	}
     }
 }

@@ -16,7 +16,7 @@ import javax.swing.JTabbedPane;
 
 import communication.Server;
 
-import behavior.finalattacker.KillerManager;
+import behavior.friendlyattacker.KillerManager;
 import behavior.friendlydefender.DefenderManager;
 import constants.RobotType;
 import sdp.vision.Drawable;

@@ -18,7 +18,7 @@ public class RobotController {
 	}
 	
 	public void goDiagonally(int angle){
-//		ULTRA.oldStop();
+		ULTRA.stop();
 		
 		// Go diagonally at an given angle
 		ULTRA.moveDiagonally(angle);
