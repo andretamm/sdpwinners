@@ -49,7 +49,9 @@ public class Display {
 			RobotCommand.AIM_RIGHT,
 			RobotCommand.AIM_RESET,
 			RobotCommand.SLOW_CCW,
-			RobotCommand.SLOW_CW
+			RobotCommand.SLOW_CW,
+			RobotCommand.SLOW_KICK,
+			RobotCommand.MOVE_DIAGONALLY
 		};
 		
 		// The names of the image files
@@ -60,7 +62,7 @@ public class Display {
 			"cw.png",
 			"ccw.png",
 			"kick.png",
-			"grab.png",
+			"cw.png",
 			"open.png",
 			"arrowLeft.png",
 			"arrowRight.png",
@@ -69,8 +71,10 @@ public class Display {
 			"aimLeft.png",
 			"aimRight.png",
 			"resetAim.png",
-			"ccwSlow.png",
-			"ccwFast.png"
+			"ccw.png",
+			"cw.png",
+			"kick.png",
+			"arrowUp.png"
 		};
 		
 		// Folder where all the images are stored
@@ -91,6 +95,25 @@ public class Display {
 			} catch (IOException e) {
 				System.err.println("Couldn't read in image " + imageFile);
 			}
+		}
+	}
+	
+	/**
+	 * Draws the image for the given command on top of the robot
+	 * @param type
+	 * @param ws
+	 * @param command
+	 */
+	public static void drawCommandImage(RobotType type, WorldState ws, int command) {
+		BufferedImage commandImage = commandImages.get(command);
+		Graphics g = Vision.label.getGraphics();
+		
+		Point pos = ws.getRobotPoint(ws.getOur(type));
+		
+		if (commandImage != null) {
+			g.drawImage(commandImage, pos.x - 20, pos.y - 20, 40, 40, null);
+		} else if (command != RobotCommand.NO_COMMAND) {
+			System.out.println("DISPLAY: Don't have an image for command : " + command);
 		}
 	}
 

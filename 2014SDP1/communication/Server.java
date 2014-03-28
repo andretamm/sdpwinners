@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 
 import behavior.StrategyHelper;
+import sdp.vision.Display;
 import sdp.vision.Vision;
 import sdp.vision.WorldState;
 import constants.RobotType;
@@ -150,13 +151,10 @@ public class Server {
 			if(robot.isConnected()) {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
+				Display.drawCommandImage(type, ws, command);
 				
 				// Remember when we sent the command
 				previousCommandTime.put(type, currentTime);
-				
-				Graphics g = Vision.label.getGraphics();
-				g.setColor(Color.BLUE);
-				g.drawLine(0, 0, 200, 200);
 			} else {
 //				Only save previous command if doing debugging of the command images on screen!
 //				previousCommand.put(type, command);
@@ -168,6 +166,7 @@ public class Server {
 			if(robot.isConnected()) {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
+				Display.drawCommandImage(type, ws, command);
 				
 				// Remember when we sent the command
 				previousCommandTime.put(type, currentTime);
