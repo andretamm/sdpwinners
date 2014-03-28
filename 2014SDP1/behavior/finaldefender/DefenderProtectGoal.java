@@ -7,10 +7,12 @@ import communication.RobotCommand;
 import communication.Server;
 
 import behavior.GeneralBehavior;
+import behavior.Strategy;
 import behavior.StrategyHelper;
 import sdp.vision.WorldState;
 import constants.C;
 import constants.RobotType;
+import constants.ShootingDirection;
 
 /**
  * Tries to go to the position where the opponent would kick the ball
@@ -44,9 +46,23 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			Point2D.Double ballVector = null;
 			Point ballOrigin = null;
 			
-			// The opponent's orientation by default
-			ballVector = ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER));
-			ballOrigin = ws.getOppositionAttackerPosition();
+			if (StrategyHelper.hasBall(ws.getOpposition(RobotType.ATTACKER), ws, 35, ANGLE_ERROR * 1.2)) {
+				// They have the ball, defo use their attacker's orientation
+				Strategy.opAttackerHadBall = true;
+				ballVector = ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER));
+				ballOrigin = ws.getOppositionAttackerPosition();
+			} else if (Strategy.opAttackerHadBall &&
+					   ((ws.getBallVelocity().x > 3 && ws.getDirection() == ShootingDirection.LEFT) ||
+					    (ws.getBallVelocity().x < -3 && ws.getDirection() == ShootingDirection.RIGHT))) {
+				// They just had the ball and now it's headed towards our goal, better try blocking the ball!
+				ballVector = ws.getBallVelocity();
+				ballOrigin = ws.getBallPoint();
+			} else {
+				// They don't have the ball (or they lost it), but block them any way just in case
+				Strategy.opAttackerHadBall = false;
+				ballVector = ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER));
+				ballOrigin = ws.getOppositionAttackerPosition();
+			}
 			
 			/*-------------------------------------*/
 			/* Figure out where we need to be      */
@@ -75,9 +91,6 @@ public class DefenderProtectGoal extends GeneralBehavior {
 						// Find defending point after wall collision
 						target = StrategyHelper.getIntersectWithVerticalLine(defendX, ballOrigin, ballVector);
 					} else {
-						// TODO - Find where they COULD hit the goal and try to intercept that
-						StrategyHelper.findGoalTopDefendPosition(ws);
-						
 						double oppositionOrientation = ws.getRobotOrientation(ws.getOpposition(RobotType.ATTACKER));
 						
 						if (StrategyHelper.angleDiff(oppositionOrientation, C.A270) < C.A90) {
@@ -106,6 +119,9 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			// Quickly go there :))
 			if (goDiagonallyTo(target)) {
 				stop();
+			} else {
+				// Not there yet
+				return;
 			}
 
 			// TODO - We should use this time to rotate to 270 degrees if we're already there!!!!
