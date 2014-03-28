@@ -25,7 +25,7 @@ public class Ultra360 {
 	private byte off;
 	
 	// Used to tune the maximum speed for the diagonal movement
-	static double MAXIMUMSPEED = 120;
+	static double MAXIMUMSPEED = 70;
 	
 	//Actual robot speed
 	public byte forwardSpeed;
@@ -63,22 +63,23 @@ public class Ultra360 {
 	
 	public void moveDiagonally(int angle){
 		byte[] speeds = diagonalSpeeds(angle);
+		byte correction = 60;
 		//EAST Wheel
 		System.out.println(speeds[0] + " " + speeds[1] + " EAST") ;
 		I2Csensor.sendData(0x01,speeds[0]); 
-		I2Csensor.sendData(0x02,speeds[1]); 
+		I2Csensor.sendData(0x02,(byte)(speeds[1] + correction)); 
 		//SOUTH Wheel
 		System.out.println(speeds[2] + " " + speeds[3] + " SOUTH");
 		I2Csensor.sendData(0x03,speeds[2]); 
-		I2Csensor.sendData(0x04,speeds[3]);
+		I2Csensor.sendData(0x04,(byte)(speeds[3] + correction));
 		//NORTH Wheel
 		System.out.println(speeds[4] + " " + speeds[5] + " NORTH");
 		I2Csensor.sendData(0x05,speeds[4]); 
-		I2Csensor.sendData(0x06,speeds[5]); 
+		I2Csensor.sendData(0x06,(byte)(speeds[5] + correction)); 
 		//WEST Wheel
 		System.out.println(speeds[6] + " " + speeds[7] + " WEST");
 		I2Csensor.sendData(0x07,speeds[6]); 
-		I2Csensor.sendData(0x08,speeds[7]);
+		I2Csensor.sendData(0x08,(byte)(speeds[7] + correction));
 	}
 	
 	/**This function takes a number of degrees to rotate, as I have made it from scratch,
@@ -391,96 +392,111 @@ public class Ultra360 {
 	//author Konstantin
 	//****************************************************************//
 	/*
-	 * Given an angle in radians the method return an byte array consisting of
-	 * the speeds and directions for all of the motors
+	 * Given an angle in radians or degrees the method return an byte array consisting of
+	 * the speeds and directions for all of the motors.
+	 * 
+	 * @return array - [EAST direction, EAST speed, SOUTH direction, SOUTH speed, NORTH direction, NORTH speed, WEST direction, WEST speed]
 	 */
-
+	
 	public static byte[] diagonalSpeeds(double mMoveDirection) {
-		// Array that contains [EAST Direction, EAST Speed, SOUTH Direction, SOUTH Speed, NORTH Direction, NORTH Speed, WEST Direction, WEST Speed]
-	    int EAST = 0;
+		/* Scale the maximum speed in relation to sine and cosine, so the 
+		 * resultant force from the wheels drives the robot in the direction
+		 * we want.
+		 */
+	    
+		/* 
+		 * Indexes used for the speedAndDirection array.
+		 */
+		int EAST = 0;
 		int NORTH = 1;
 		int WEST = 2;
 		int SOUTH = 3;
 	
-		
+		/* 
+		 * This array will hold the calculated speeds and directions for the different wheels
+		 */
 		byte[] speedAndDirection = new byte[8];
 		
+		/* Initialize the array with zeros */
 		for (int i = 0; i < 8; i++){
 			speedAndDirection[i] = 0;
 		}
-		// Get the sin and cos of the movement direction
+		
+		/*
+		 *  Get the sin and cos of the movement direction
+		 */
 		mMoveDirection = Math.toRadians(mMoveDirection);
 
 		final double cosDirection = Math.cos(mMoveDirection);
 		final double sinDirection = Math.sin(mMoveDirection);
 
-		//System.out.println("cosDirection = " + cosDirection);
-		//System.out.println("sinDirection = " + sinDirection);
-
+		/*  North and South provide force in the x-axis.
+		 *  East and West provide force in the y-axis.
+		 *  
+		 *  Therefore the speed of the North and the South will be scaled
+		 *  to the values of the cosine, and for the other two, they will 
+		 *  be scaled to the sine of the angle */
+		
+		/* Here we set the values of the corresponding wheels to the sine or cosine */
+		
 		double[] motorSpeed = new double[4];
-		double maxSpeed = 0;
+		motorSpeed[EAST]  = sinDirection;
+		motorSpeed[NORTH] = cosDirection;
+		motorSpeed[WEST]  = sinDirection;
+		motorSpeed[SOUTH] = cosDirection;
+		
+		/* Check which wheels will be moving faster */
+		double maxSpeed = Math.max(Math.abs(cosDirection), Math.abs(sinDirection));
 
-		for (int i = 0; i < 4; ++i) {
-			double angle = Math.PI;
 
-			/*
-			 * 0 -> 0x01 - EAST 1 -> 0x03 - NORTH 2 -> 0x07 - WEST 3 -> 0x05 -> SOUTH
-			 * 
-			 */
-			if (i == EAST) {
-				motorSpeed[i] = 0;
-				motorSpeed[i] += 0 * cosDirection + 1.0 * sinDirection;
-			}
-
-			if (i == NORTH) {
-				motorSpeed[i] = 0;
-				motorSpeed[i] += 1.0 * cosDirection + 0 * sinDirection;
-			}
-
-			if (i == WEST) {
-				motorSpeed[i] = 0;
-				motorSpeed[i] += 0 * cosDirection + 1.0 * sinDirection;
-			}
-
-			if (i == SOUTH) {
-				motorSpeed[i] = 0;
-				motorSpeed[i] += 1.0 * cosDirection +  0 * sinDirection;
-			}
-			
-			maxSpeed = Math.max(Math.abs(motorSpeed[i]), maxSpeed);
-		}
-
+		/* This calculates the actual speed value send to the speed register.
+		 * By dividing by the maxSpeed we ensure that two of the wheels
+		 * with the highest weight from cos/sin will be running at the max speed.
+		 */
 		for (int i = 0; i < motorSpeed.length; ++i) {
 			motorSpeed[i] *= MAXIMUMSPEED / maxSpeed;
 		}
 
+		/* Set the speed for each to the minimum between the MAX actual speed and calculated one */
 		for (int i = 0; i < 4; ++i) {
 			motorSpeed[i] = Math.min(MAXIMUMSPEED,
 					(int) Math.round(motorSpeed[i]));
 		}
 
 		
+		/* This sets the speeds and direction in the array that is returned,
+		 * the method returnDirection takes a speed and a wheel direction and
+		 * returns the direction wheel need to move. Because I2C uses a direction
+		 * we pass the speed as an absolute value. */
+		
 		// 0x01 (I2C - Port 1) - EAST Wheel
-		speedAndDirection[1] =  (byte)Math.abs(motorSpeed[0]);
-		speedAndDirection[0] =  (byte)returnDirection(motorSpeed[0], EAST);
+		speedAndDirection[1] =  (byte)Math.abs(motorSpeed[EAST]);
+		speedAndDirection[0] =  (byte)returnDirection(motorSpeed[EAST], EAST);
 		
 		// 0x03 (I2C - Port 2) - SOUTH Wheel
-		speedAndDirection[3] =  (byte)Math.abs(motorSpeed[3]);
-		speedAndDirection[2] =  (byte)returnDirection(motorSpeed[3], SOUTH);
+		speedAndDirection[3] =  (byte)Math.abs(motorSpeed[SOUTH]);
+		speedAndDirection[2] =  (byte)returnDirection(motorSpeed[SOUTH], SOUTH);
 		
 		// 0x05 (I2C - Port 3) - NORTH Wheel
-		speedAndDirection[5] =  (byte)Math.abs(motorSpeed[1]);
-		speedAndDirection[4] =  (byte)returnDirection(motorSpeed[1], NORTH);
+		speedAndDirection[5] =  (byte)Math.abs(motorSpeed[NORTH]);
+		speedAndDirection[4] =  (byte)returnDirection(motorSpeed[NORTH], NORTH);
 		
 		// 0x07 (I2C - Port 4) - WEST Wheel
-		speedAndDirection[7] =  (byte)Math.abs(motorSpeed[2]);
-		speedAndDirection[6] =  (byte)returnDirection(motorSpeed[2], WEST);
+		speedAndDirection[7] =  (byte)Math.abs(motorSpeed[WEST]);
+		speedAndDirection[6] =  (byte)returnDirection(motorSpeed[WEST], WEST);
 
 	return speedAndDirection;
 
 	}
 
+
+	/* 
+	 * This method sets the direction in relation to the wheels 
+	 * direction, and the speed. The values are specific for our
+	 * wheel, because our wheels directions are scrambled.
+	 */
 	public static int returnDirection(double motorSpeed, int motor) {
+		
 		// Array that contains [EAST Direction, EAST Speed, SOUTH Direction, SOUTH Speed, NORTH Direction, NORTH Speed, WEST Direction, WEST Speed]
 		int EAST = 0;
 		int SOUTH = 1;
