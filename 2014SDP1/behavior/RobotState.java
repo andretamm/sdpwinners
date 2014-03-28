@@ -14,6 +14,9 @@ public class RobotState {
 	public boolean isAimingLeft = false;
 	public boolean isAimingRight = false;
 	
+	/** How many different targets has the attacker tried */
+	public int attackerNumberOfTargetsTried = 0;
+	
 	/**
 	 * Different states for the grabber of this robot.
 	 * 0 - opened (or so we think <.<)

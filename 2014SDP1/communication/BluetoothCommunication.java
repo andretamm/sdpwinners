@@ -168,11 +168,19 @@ public class BluetoothCommunication {
 			out.write(command);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 	
-
+	/**
+	 * Send an array of bytes to a robot
+	 */
+	public void sendBytesToRobot(byte[] commands) {
+		try {
+			out.write(commands);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

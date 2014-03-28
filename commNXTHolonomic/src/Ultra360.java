@@ -300,7 +300,7 @@ public class Ultra360 {
 	}
 	
 	//if all else fails, here is the old way of stopping
-	public void oldStop(){
+	public void oldStop() {
 		//stop dead, I am not making a constant for this for added safety.
 		I2Csensor.sendData(0x01,(byte)3); 
 		I2Csensor.sendData(0x03,(byte)3); 
@@ -375,15 +375,15 @@ public class Ultra360 {
 	
 	//Rotate the front of the MaxBot
 	public void aimRight() {
-		rotator.rotateTo(-25); 		
+		rotator.rotateTo(-25, true); 		
 	}
 	public void aimLeft() {
-		rotator.rotateTo(25); 		
+		rotator.rotateTo(25, true); 		
 	}
 	
 	//This is to reset the rotator angle and align it straight again.
 	public void aimReset() {
-		rotator.rotateTo(0);
+		rotator.rotateTo(0, true);
 	}
 
 

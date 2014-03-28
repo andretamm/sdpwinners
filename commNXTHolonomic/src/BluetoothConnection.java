@@ -55,7 +55,21 @@ public class BluetoothConnection extends Thread {
     	    	robot.command = 22;
     	    } else if (i == 11) {
     	    	robot.openGrabber();
-    	    } else {
+    	    } else if (i == 16) {
+    	    	// Aiming can be done independently from movement
+    	    	robot.aimLeft();
+    	    } else if (i == 17) {
+    	    	// Aiming can be done independently from movement
+    	    	robot.aimRight();
+    	    } else if (i == 18) {
+    	    	// Aiming can be done independently from movement
+    	    	robot.aimReset();
+    	    } else if (i == 6) {
+    	    	// Kicking is independent as well
+    	    	robot.chill();
+				robot.fastKick();
+    	    }
+    	    else {
     			// Pass on command to robot
     			robot.command = i;
     		}

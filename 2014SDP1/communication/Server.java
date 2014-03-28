@@ -1,9 +1,14 @@
 package communication;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.EnumMap;
 
 import behavior.StrategyHelper;
+import sdp.vision.Display;
+import sdp.vision.Vision;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
@@ -30,6 +35,8 @@ public class Server {
 	private EnumMap<RobotType, Integer> previousAngle;
 	private EnumMap<RobotType, Long> previousCommandTime;
 	
+	private EnumMap<RobotType, Integer> previousRotationDirection;
+	
 	private WorldState ws;
 	
 	/**
@@ -44,12 +51,14 @@ public class Server {
 		previousCommand = new EnumMap<RobotType, Integer>(RobotType.class);
 		previousAngle = new EnumMap<RobotType, Integer>(RobotType.class);
 		previousCommandTime = new EnumMap<RobotType, Long>(RobotType.class);
+		previousRotationDirection = new EnumMap<RobotType, Integer>(RobotType.class);
 		
 		// Store initial values
 		for (RobotType type: RobotType.values()) {
 			previousCommand.put(type, RobotCommand.NO_COMMAND);
 			previousAngle.put(type, 0);
 			previousCommandTime.put(type, (long) 0);
+			previousRotationDirection.put(type, 0);
 		}
 	}
 	
@@ -142,6 +151,7 @@ public class Server {
 			if(robot.isConnected()) {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
+				Display.drawCommandImage(type, ws, command);
 				
 				// Remember when we sent the command
 				previousCommandTime.put(type, currentTime);
@@ -156,6 +166,7 @@ public class Server {
 			if(robot.isConnected()) {
 				previousCommand.put(type, command);
 				robot.sendToRobot(command);
+				Display.drawCommandImage(type, ws, command);
 				
 				// Remember when we sent the command
 				previousCommandTime.put(type, currentTime);
@@ -267,18 +278,15 @@ public class Server {
 	 * 
 	 * @param type Defender or attacker
 	 * @param degrees The angle to rotate by in DEGREES in range [-180, 180]
+	 * @param forced If True then the command will ALWAYS get sent - only use this when you are
+	 * REALLY sure that you will only send this command once and that your command will NOT be
+	 * sent in time if this is false. In 99% cases this should be False.
 	 */
-	public void sendRotateDegrees(RobotType type, int degrees) {
-		if (Math.abs(degrees) < 2) {
+	public void sendRotateDegrees(RobotType type, int degrees, boolean forced) {
+		if (Math.abs(degrees) < 3) {
 			// Angle not big enough, do nothing lol
 			return;
 		}
-		
-		// Only save this so we can draw the command on screen.
-		// THIS IS NOT CHECKED ANYWHERE ELSE! (unlike other commands :))
-		previousCommand.put(type, RobotCommand.ROTATE_ANGLE);
-		
-		// Do not save previousCommandTime, because this command SHOULD NOT be resent automatically
 		
 		// Convert degrees to a positive angle
 		// eg 170' stays 170', but -20' becomes 340'
@@ -292,20 +300,40 @@ public class Server {
 		
 		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
 		degreeArray[1] = (byte) ((angle >> 8) & 0xFF);
-
-		if (type == RobotType.DEFENDER) {
-			defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
-			defenderRobot.sendToRobot(degreeArray[0]);
-			defenderRobot.sendToRobot(degreeArray[1]);
-		} else if (type == RobotType.ATTACKER) {
-			attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
-			attackerRobot.sendToRobot(degreeArray[0]);
-			attackerRobot.sendToRobot(degreeArray[1]);
+		
+		// Resend command if at least 2 seconds have passed since we last sent it
+		long currentTime = System.currentTimeMillis();
+		
+		// If the direction has changed then this is a new command
+		// Positive for CW, negative for CCW
+		int direction = degrees >= 0 ? 1 : -1;
+		
+		if (previousCommand.get(type) != RobotCommand.ROTATE_ANGLE ||
+			currentTime - previousCommandTime.get(type) > 2000 ||
+			previousRotationDirection.get(type) != direction ||
+			forced) {
+			
+			if (type == RobotType.DEFENDER) {
+				defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+				defenderRobot.sendToRobot(degreeArray[0]);
+				defenderRobot.sendToRobot(degreeArray[1]);
+			} else if (type == RobotType.ATTACKER) {
+				attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+				attackerRobot.sendToRobot(degreeArray[0]);
+				attackerRobot.sendToRobot(degreeArray[1]);
+			}
+			
+			// Save command, sent time and direction
+			previousCommand.put(type, RobotCommand.ROTATE_ANGLE);			
+			previousCommandTime.put(type, currentTime);
+			previousRotationDirection.put(type, direction);
 		}
 	}
 	
 	/**
-	 * Closes the bluetooth connections to both robots
+	 * Closes the bluetooth connections to both robots -
+	 * this DOES NOT cause the robot to think it is disconnected
+	 * though, you need to call disconnectFromRobot() for that
 	 */
 	public void close() {
 		defenderRobot.closeBluetoothConnection();
@@ -316,7 +344,7 @@ public class Server {
 	 * Closes the bluetooth connection to a specific robot
 	 */
 	public void disconnectFromRobot(RobotType type) {
-		getRobot(type).sendToRobot(7);
+		getRobot(type).sendToRobot(RobotCommand.DISCONNECT);
 		getRobot(type).closeBluetoothConnection();
 	}
 

@@ -164,7 +164,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * @param angle The angle (in DEGREES) the robot will rotate by
 	 */
 	public void rotateBy(int angle) {
-		s.sendRotateDegrees(type, angle);
+		s.sendRotateDegrees(type, angle, false);
 		state().isRotating = true;
 	}
 	

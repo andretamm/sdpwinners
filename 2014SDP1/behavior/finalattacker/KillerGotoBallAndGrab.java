@@ -22,6 +22,9 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		// This is the start of the offensive phase, initialise variable for future use
+		state().attackerNumberOfTargetsTried = 0;
+		
 		d("going to ball");
 		
 		// Mark the grabber as being potentially closed

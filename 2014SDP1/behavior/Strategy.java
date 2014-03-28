@@ -26,6 +26,16 @@ public class Strategy {
 	volatile public static boolean defenderReadyForPass = false;
 	volatile public static boolean attackerReadyForKick = false;
 	
+	/**
+	 * This checks if we saw the oppositions attacker have the ball 
+	 * _at some point_ now. Used to check whether we might be trying
+	 * to protect the goal from a ball being kicked from their robot.
+	 * 
+	 * This should be set to false straight away when we're sure the opponent
+	 * does not have the ball any more.
+	 */
+	volatile public static boolean opAttackerHadBall = false;
+	
 	public Strategy(WorldState ws, Server server) {
 		this.ws = ws;
 		this.server = server;

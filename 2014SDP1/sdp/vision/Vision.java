@@ -29,7 +29,7 @@ import au.edu.jcu.v4l4j.exceptions.V4L4JException;
 public class Vision extends WindowAdapter {
         
         private VideoDevice videoDev;
-        private JLabel label;
+        public static JLabel label;
         private static JFrame windowFrame;
         private FrameGrabber frameGrabber;
         private int width, height;
