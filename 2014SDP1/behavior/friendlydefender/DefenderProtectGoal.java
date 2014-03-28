@@ -11,6 +11,7 @@ import behavior.StrategyHelper;
 import sdp.vision.WorldState;
 import constants.C;
 import constants.RobotType;
+import constants.ShootingDirection;
 
 /**
  * Tries to go to the position where the opponent would kick the ball
@@ -34,7 +35,20 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			s.forceSend(type, RobotCommand.OPEN_GRABBER);
 			state().grabberState = 0;
 		}
+		
+		/*-------------------------------------*/
+		/* Defender calibration points         */
+		/*-------------------------------------*/
+		// We always try going towards one of these, that will stop us from 
+		// making unnecessarily jerky movements.
+		Point topPoint = new Point(ws.getOurGoalTop());
+		topPoint.y += 10;
+		topPoint.x = StrategyHelper.getDefendLineX(ws);
 
+		Point bottomPoint = new Point(ws.getOurGoalBottom());
+		bottomPoint.y -= 10;
+		bottomPoint.x = StrategyHelper.getDefendLineX(ws);
+		
 		try {
 			/*-------------------------------------*/
 			/* Decide which blocking method to use */
@@ -97,11 +111,13 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			}
 			
 			// Don't go past the goal!
-			target.y = Math.min(Math.max(target.y, ws.getOurGoalTop().y + 5), ws.getOurGoalBottom().y - 5);
+			target.y = Math.min(Math.max(target.y, ws.getOurGoalTop().y + 10), ws.getOurGoalBottom().y - 10);
 			
 			/*-------------------------------------*/
 			/* Finally know where we need to be !  */
 			/*-------------------------------------*/
+			// Actually use calibration points when deciding where to go to
+			// TODO Andre will finish this tomorrow :))))
 			
 			// Quickly go there :))
 			if (goDiagonallyTo(target)) {

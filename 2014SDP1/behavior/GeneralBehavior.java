@@ -386,7 +386,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * Sends the STOP command
 	 */
 	protected void stop() {
-		d("Stopping");
+//		d("Stopping");
 		s.send(type, RobotCommand.STOP);
 	}
 	

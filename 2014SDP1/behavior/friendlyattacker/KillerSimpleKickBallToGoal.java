@@ -80,7 +80,7 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 			state().isRotating = true;
 			return;
 		}
-		
+
 		if (state().isRotating) {
 			s.send(type, RobotCommand.STOP);
 			state().isRotating = false;
