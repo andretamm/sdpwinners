@@ -10,6 +10,7 @@ import behavior.StrategyHelper;
 import sdp.vision.Display;
 import sdp.vision.Vision;
 import sdp.vision.WorldState;
+import constants.C;
 import constants.RobotType;
 
 /**
@@ -158,7 +159,7 @@ public class Server {
 			} else {
 //				Only save previous command if doing debugging of the command images on screen!
 //				previousCommand.put(type, command);
-				System.out.println(type + " is not connected, not sending command");
+//				System.out.println(type + " is not connected, not sending command");
 			}
 		} else if (currentTime - previousCommandTime.get(type) > 3000) {
 			// A long time has passed :D Resend the command just in case, also to keep
@@ -171,7 +172,7 @@ public class Server {
 				// Remember when we sent the command
 				previousCommandTime.put(type, currentTime);
 			} else {
-				System.out.println(type + " is not connected, not sending command");
+//				System.out.println(type + " is not connected, not sending command");
 			}
 		}
 	}
@@ -212,8 +213,8 @@ public class Server {
 		long currentTime = System.currentTimeMillis();
 		
 		if (previousCommand.get(type) == RobotCommand.MOVE_DIAGONALLY) {
-			if ((Math.abs(previousAngle.get(type) - angleToGo)) < 3 &&
-					currentTime - previousCommandTime.get(type) > 3000) {
+			if (Math.abs(StrategyHelper.angleDiff(Math.toRadians(previousAngle.get(type)), Math.toRadians(angleToGo))) < C.A10 &&
+				currentTime - previousCommandTime.get(type) < 1500) {
 				// Angle no change enough, do nothing lol
 				return;
 			} else {
