@@ -12,6 +12,7 @@ import behavior.StrategyHelper;
 import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 import constants.RobotType;
+import constants.ShootingDirection;
 
 public class KillerFASTKickBallToGoal extends GeneralBehavior {
 	
@@ -27,6 +28,10 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
+		
+		/*-----------------------------------------------*/
+		/* Figure out where to shoot                     */
+		/*-----------------------------------------------*/
 		
 		Point robot = ws.getRobotPoint(robot());
 		
@@ -69,6 +74,9 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 			state().isRotating = false;
 		}
 		
+		/*-----------------------------------------------*/
+		/* Quick check if the kick is feasible           */
+		/*-----------------------------------------------*/
 		// We're close!
 		// See how close the opponent is
 		double shotAngle = ws.getRobotOrientation(robot());
@@ -83,16 +91,51 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 				// Already tried too many times, just shoot
 			}
 		}
-
-		// Ready for a kick!
+		
+		/*-----------------------------------------------*/
+		/* Ready for a kick!!                            */
+		/*-----------------------------------------------*/
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.FAST_KICK);
-
+		
+		
+		/*-----------------------------------------------*/
+		/* Make a 'misleading' rotation ;)               */
+		/*-----------------------------------------------*/
+	
+		// Main idea is to rotate away from where we actually shot -
+		// if the opposition is tracking our orientation, then we might
+		// fool them to follow our orientation instead of blocking the
+		// ball that's already heading toward their goal
+		int fakeRotationDegrees = 45;
+		
+		if (targetPoint.y > ws.getOppositionGoalCentre().y) {
+			// Point is down, should rotate up
+			if (ws.getDirection() == ShootingDirection.LEFT) {
+				// Rotate right
+			} else {
+				// Rotate left
+				fakeRotationDegrees *= -1; 
+			}
+		} else {
+			// Point is up, should rotate down
+			if (ws.getDirection() == ShootingDirection.LEFT) {
+				// Rotate left
+				fakeRotationDegrees *= -1; 
+			} else {
+				// Rotate right
+			}
+		}
+		
+		// Do the 'misleading' rotation :) - send this as 'forced' because we might
+		// have previously rotated the same way as well.
+		s.sendRotateDegrees(type, fakeRotationDegrees, true);
+		
 		// No longer have the ball
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.attackerReadyForKick = false;
 		targetPoint = null;
-
+		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
 			Thread.sleep(100);
@@ -101,6 +144,7 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		}
 	}
 
+	
 	/** 
 	 * Triggers if we have the ball and are in position for a kick
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()

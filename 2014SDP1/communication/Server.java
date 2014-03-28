@@ -278,8 +278,11 @@ public class Server {
 	 * 
 	 * @param type Defender or attacker
 	 * @param degrees The angle to rotate by in DEGREES in range [-180, 180]
+	 * @param forced If True then the command will ALWAYS get sent - only use this when you are
+	 * REALLY sure that you will only send this command once and that your command will NOT be
+	 * sent in time if this is false. In 99% cases this should be False.
 	 */
-	public void sendRotateDegrees(RobotType type, int degrees) {
+	public void sendRotateDegrees(RobotType type, int degrees, boolean forced) {
 		if (Math.abs(degrees) < 3) {
 			// Angle not big enough, do nothing lol
 			return;
@@ -307,7 +310,8 @@ public class Server {
 		
 		if (previousCommand.get(type) != RobotCommand.ROTATE_ANGLE ||
 			currentTime - previousCommandTime.get(type) > 2000 ||
-			previousRotationDirection.get(type) != direction) {
+			previousRotationDirection.get(type) != direction ||
+			forced) {
 			
 			if (type == RobotType.DEFENDER) {
 				defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
