@@ -11,6 +11,9 @@ public class RobotController {
 	public volatile int angle = 0;
 
 	public volatile int rotateAngle = 0;
+	
+	public volatile long commandTime = 0;
+	public volatile long previousCommandTime = 0;
 
 	
 	public RobotController() {

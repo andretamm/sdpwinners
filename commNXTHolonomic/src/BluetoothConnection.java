@@ -43,13 +43,13 @@ public class BluetoothConnection extends Thread {
     			byte angle1 = (byte)receiveIntSignal();
 
     			int angle = ((int) (angle1 << 8) | (int) angle2 & 0xFF);
-    			System.out.println("RotateTo:\n" + angle);
+    			
     			// Convert from [0, 360] to [-180, 180]
     			if (angle > 180) {
     				angle -= 360;
     			}
-    			System.out.println(angle);
     			
+    			robot.commandTime = System.currentTimeMillis();
     			robot.rotateAngle = angle;	
 
     	    	robot.command = 22;
