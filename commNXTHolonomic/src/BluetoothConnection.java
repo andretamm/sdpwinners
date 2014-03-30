@@ -70,6 +70,14 @@ public class BluetoothConnection extends Thread {
     	    	// Kicking is independent as well
     	    	robot.chill();
 				robot.fastKick();
+    	    } else if (i == 23) {
+    	    	// Kick then rotate LEFT
+    	    	robot.fastKick();
+    	    	robot.rotateTo(-45);
+    	    } else if (i == 24) {
+    	    	// Kick then rotate RIGHT
+    	    	robot.fastKick();
+    	    	robot.rotateTo(45);
     	    }
     	    else {
     			// Pass on command to robot
