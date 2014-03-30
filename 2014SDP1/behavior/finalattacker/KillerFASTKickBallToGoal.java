@@ -74,6 +74,13 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 			state().isRotating = false;
 		}
 		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		/*-----------------------------------------------*/
 		/* Quick check if the kick is feasible           */
 		/*-----------------------------------------------*/
@@ -81,8 +88,8 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		// See how close the opponent is
 		double shotAngle = ws.getRobotOrientation(robot());
 		double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
-		
-		if (oppositionDistance < 30) {
+		System.out.println("Opp distance: " + oppositionDistance);
+		if (oppositionDistance < 60) {
 			if (state().attackerNumberOfTargetsTried < 4) {
 				// They're too close, try again
 				targetPoint = null;
@@ -98,6 +105,12 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.FAST_KICK);
 		
+//		try {
+//			Thread.sleep(50);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		
 		/*-----------------------------------------------*/
 		/* Make a 'misleading' rotation ;)               */
@@ -135,6 +148,13 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.attackerReadyForKick = false;
 		targetPoint = null;
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
@@ -174,13 +194,14 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		possibleAttackPoint.y -= 10;
 		attackPoints.add(possibleAttackPoint);
 		
-		double bestDistance = 1000000;
+		double bestDistance = 0;
 		
 		for (Point p: attackPoints) {
 			double shotAngle = Orientation.getAngle(robot, p);
 			double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
 			
-			if (oppositionDistance < bestDistance) {
+			System.out.println("Point " + p.toString() + " distance: " + oppositionDistance);
+			if (oppositionDistance > bestDistance) {
 				bestDistance = oppositionDistance;
 				targetPoint = p;
 			}
