@@ -17,11 +17,11 @@ public class NXT {
     	while (true) {
     		long commandTime = robot.commandTime;
     		int command = robot.command;
+    		int angle = robot.angle;
     		
     		if (command != robot.previousCommand || 
-    			(command == 8 && robot.angle != robot.previousAngle) ||
-    			(command == 22 && robot.previousCommandTime != robot.commandTime))
-    			{
+    			(command == 8 && robot.previousAngle != angle) ||
+    			(command == 22 && robot.previousCommandTime != commandTime)) {
     			// Only do smth if we got a new command
 	    		switch (command) {
 					case 0:
@@ -48,6 +48,7 @@ public class NXT {
 						break;
 					case 8:
 						robot.goDiagonally(robot.angle);
+						robot.previousAngle = angle;
 						break;
 					case 10:
 						robot.chill();
@@ -96,7 +97,7 @@ public class NXT {
 				}
 	    		
 	    		robot.previousCommand = command;
-	    		robot.previousAngle   = robot.angle;
+	    		
     		}
     		
     		try {

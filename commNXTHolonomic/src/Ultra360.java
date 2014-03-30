@@ -402,7 +402,7 @@ public class Ultra360 {
 	
 	//This is to reset the rotator angle and align it straight again.
 	public void aimReset() {
-		rotator.rotateTo(0, true);
+		rotator.rotateTo(0);
 		rotator.resetTachoCount();
 	}
 	
