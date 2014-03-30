@@ -74,13 +74,6 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 			state().isRotating = false;
 		}
 		
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		/*-----------------------------------------------*/
 		/* Quick check if the kick is feasible           */
 		/*-----------------------------------------------*/
@@ -102,25 +95,14 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		/*-----------------------------------------------*/
 		/* Ready for a kick!!                            */
 		/*-----------------------------------------------*/
-		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		s.send(type, RobotCommand.FAST_KICK);
 		
-//		try {
-//			Thread.sleep(50);
-//		} catch (InterruptedException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		
-		/*-----------------------------------------------*/
-		/* Make a 'misleading' rotation ;)               */
-		/*-----------------------------------------------*/
+		/* Also make a 'misleading' rotation ;)          */
 	
 		// Main idea is to rotate away from where we actually shot -
 		// if the opposition is tracking our orientation, then we might
 		// fool them to follow our orientation instead of blocking the
 		// ball that's already heading toward their goal
-		int fakeRotationDegrees = 45;
+		boolean fakeRotationRight = true;
 		
 		if (targetPoint.y > ws.getOppositionGoalCentre().y) {
 			// Point is down, should rotate up
@@ -128,37 +110,37 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 				// Rotate right
 			} else {
 				// Rotate left
-				fakeRotationDegrees *= -1; 
+				fakeRotationRight = false; 
 			}
 		} else {
 			// Point is up, should rotate down
 			if (ws.getDirection() == ShootingDirection.LEFT) {
 				// Rotate left
-				fakeRotationDegrees *= -1; 
+				fakeRotationRight = false; 
 			} else {
 				// Rotate right
 			}
 		}
 		
-		// Do the 'misleading' rotation :) - send this as 'forced' because we might
-		// have previously rotated the same way as well.
-		s.sendRotateDegrees(type, fakeRotationDegrees, true);
+		// Pick right command type
+		int kickAndRotateCommand = fakeRotationRight ? RobotCommand.KICK_THEN_ROTATE_RIGHT : RobotCommand.KICK_THEN_ROTATE_LEFT; 
+		
+		// Do the kick together with the 'misleading' rotation :)
+		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		s.send(type, kickAndRotateCommand);
 		
 		// No longer have the ball
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.attackerReadyForKick = false;
 		targetPoint = null;
 		
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		/*-----------------------------------------------*/
+		/* Kick done!                                    */
+		/*-----------------------------------------------*/
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
-			Thread.sleep(100);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
