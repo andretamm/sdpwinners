@@ -257,15 +257,14 @@ public class Server {
 		
 		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
 		angleArray[1] = (byte) ((angle >> 8) & 0xFF);
-
+		
+		// Command array
+		byte[] commands = {(byte) RobotCommand.MOVE_DIAGONALLY, angleArray[0], angleArray[1]};
+		
 		if (type == RobotType.DEFENDER) {
-			defenderRobot.sendToRobot(RobotCommand.MOVE_DIAGONALLY);
-			defenderRobot.sendToRobot(angleArray[0]);
-			defenderRobot.sendToRobot(angleArray[1]);
+			defenderRobot.sendBytesToRobot(commands);
 		} else if (type == RobotType.ATTACKER) {
-			attackerRobot.sendToRobot(RobotCommand.MOVE_DIAGONALLY);
-			attackerRobot.sendToRobot(angleArray[0]);
-			attackerRobot.sendToRobot(angleArray[1]);
+			attackerRobot.sendBytesToRobot(commands);
 		}
 	}
 	

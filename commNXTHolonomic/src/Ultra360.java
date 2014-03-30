@@ -444,8 +444,16 @@ public class Ultra360 {
 		// Normalise values and get them to range [40, 200]
 		double maxMovement = Math.max(Math.abs(horisontalMovement), Math.abs(verticalMovement));
 		
-		double maxSpeed = 160; // Actual MAXIMUM is maxSpeed + minSpeed :))
-		double minSpeed = 40; 
+		// Just some facts ---
+		// Our min trig value is ~0.05
+		// so if maxSpeed = 210, it could go down to 210 * 0.05 = 10.5
+		// if minSpeed = 30, then that will go to 40.5
+		// and actual maximum will be 240.
+		// Note that rotating speeds below 40 are DANGEROUS, we can kind of rotate with 40
+		// if we have mostly full batteries, 35 only works with out-of-the-package fresh
+		// batteries, so should drop total minimum below 40.
+		double maxSpeed = 200; // Actual MAXIMUM is maxSpeed + minSpeed :))
+		double minSpeed = 20; 
 		
 		// Find final speeds, these are zero by default!
 		byte horisontalSpeed = 0;
