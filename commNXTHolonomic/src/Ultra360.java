@@ -50,15 +50,17 @@ public class Ultra360 {
 		
 		// Default rotating speed
 		fastRotationSpeed = (byte) 50; //50 60 
-		slowRotationSpeed = (byte) 50; 
+		slowRotationSpeed = (byte) 45; 
 		
 		// Default moving speed
-		forwardSpeed = (byte) 90; //70
+		forwardSpeed = (byte) 80; //70
 		
 		// Init motors
 		rotator = Motor.C;
 		kicker = Motor.B;
 		grabber = Motor.A;
+		
+		rotator.resetTachoCount();
 	}
 	
 	public static int EAST = 0;
@@ -99,15 +101,15 @@ public class Ultra360 {
 		I2Csensor.sendData(0x08,speeds[7]);
 	}
 	
-	/**This function takes a number of degrees to rotate, as I have made it from scratch,
+	/** This function takes a number of degrees to rotate, as I have made it from scratch,
 	  * it uses time to know how long it must rotate, according to the speed of the wheels
 	  *
-	  *@param degrees Takes an integer from -360 to 360.
+	  * @param degrees Takes an integer from -360 to 360.
 	  */
 	public void rotateTo(int degrees){
 		
 		byte rotateSpeed = (byte) 200; //Changing this will fuck up the function by the way
-		long degToTime = (long) Math.rint(Math.abs(degrees)*3.5); // Based on the current speed of rotation
+		long degToTime = (long) Math.rint(Math.abs(degrees)*3.3); // Based on the current speed of rotation
 		
 		if(degrees > 0){
 			//EAST Wheel
@@ -401,6 +403,7 @@ public class Ultra360 {
 	//This is to reset the rotator angle and align it straight again.
 	public void aimReset() {
 		rotator.rotateTo(0, true);
+		rotator.resetTachoCount();
 	}
 	
 	

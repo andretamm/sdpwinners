@@ -83,6 +83,12 @@ public class NXT {
 						robot.slowKick();
 						break;
 					case 22:
+						robot.command = 3;
+						// IDEA - store the time the last command was received
+						// if that hasn't changed, then don't do the angle
+						// rotation. This shouldn't be a problem with the other
+						// commands because we want to keep on doing them continuously 
+						// any way.
 						robot.rotateTo(robot.rotateAngle);
 						break;
 					default:
