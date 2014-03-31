@@ -20,7 +20,7 @@ public class KillerManager extends behavior.Manager {
  		// Add behaviors in ascending order of priority
 		behaviorList.add(new KillerBlockDefender(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerSimpleGetInPositionForKick(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerGetInPositionForKick(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerFASTKickBallToGoal(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerGetPass(getWorldState(), getRobotType(), getServer()));
 		

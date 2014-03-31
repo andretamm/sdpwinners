@@ -15,12 +15,13 @@ public class NXT {
     	
     	// Wait for commands from the bluetoothconnection
     	while (true) {
+    		long commandTime = robot.commandTime;
     		int command = robot.command;
+    		int angle = robot.angle;
+    		
     		if (command != robot.previousCommand || 
-    			(command == 8 && robot.angle != robot.previousAngle) ||
-    			(command == 22))
-    		// ANDRE TODO - the case for 22 might need some extra check as well >.>
-    			{
+    			(command == 8 && robot.previousAngle != angle) ||
+    			(command == 22 && robot.previousCommandTime != commandTime)) {
     			// Only do smth if we got a new command
 	    		switch (command) {
 					case 0:
@@ -47,6 +48,7 @@ public class NXT {
 						break;
 					case 8:
 						robot.goDiagonally(robot.angle);
+						robot.previousAngle = angle;
 						break;
 					case 10:
 						robot.chill();
@@ -83,6 +85,11 @@ public class NXT {
 						robot.slowKick();
 						break;
 					case 22:
+						// Store the time of the last time we did the rotation,
+						// if the time of the command coming in hasn't changed, then
+						// we won't redo the rotation until we get a new command with
+						// a new timestamp
+						robot.previousCommandTime = commandTime;
 						robot.rotateTo(robot.rotateAngle);
 						break;
 					default:
@@ -90,7 +97,7 @@ public class NXT {
 				}
 	    		
 	    		robot.previousCommand = command;
-	    		robot.previousAngle   = robot.angle;
+	    		
     		}
     		
     		try {

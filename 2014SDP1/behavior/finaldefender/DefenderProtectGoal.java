@@ -36,6 +36,19 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			s.forceSend(type, RobotCommand.OPEN_GRABBER);
 			state().grabberState = 0;
 		}
+		
+		/*-------------------------------------*/
+		/* Defender calibration points         */
+		/*-------------------------------------*/
+		// We always try going towards one of these, that will stop us from 
+		// making unnecessarily jerky movements.
+		Point topPoint = new Point(ws.getOurGoalTop());
+		topPoint.y -= 30;
+		topPoint.x = StrategyHelper.getDefendLineX(ws) + 10;
+
+		Point bottomPoint = new Point(ws.getOurGoalBottom());
+		bottomPoint.y += 30;
+		bottomPoint.x = StrategyHelper.getDefendLineX(ws) + 10;
 
 		try {
 			/*-------------------------------------*/
@@ -115,16 +128,30 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/*-------------------------------------*/
 			/* Finally know where we need to be !  */
 			/*-------------------------------------*/
-			
-			// Quickly go there :))
-			if (goDiagonallyTo(target)) {
-				stop();
+			// Actually use calibration points when deciding where to go to
+			Point calibrationTarget;
+			Point robot = ws.getRobotPoint(robot());
+
+			if (target.y < robot.y) {
+				calibrationTarget = topPoint;
 			} else {
-				// Not there yet
-				return;
+				calibrationTarget = bottomPoint;
 			}
 
-			// TODO - We should use this time to rotate to 270 degrees if we're already there!!!!
+			/*-------------------------------------*/
+			/* Go to our target                    */
+			/*-------------------------------------*/
+
+			// Measure error based on our target, but actually go towards the calibrationpoint!
+			if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+				if (!goDiagonallyTo(calibrationTarget)) {
+					// not there yet
+					return;
+				}
+			}
+
+			// We're there!
+			stop();
 			
 		} catch (Exception e) {
 			System.err.println("We don't know where the robot is :((((");
@@ -132,6 +159,12 @@ public class DefenderProtectGoal extends GeneralBehavior {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * 
+	 * This is the default behavior for the defender
+	 * 
+	 * @see lejos.robotics.subsumption.Behavior#takeControl()
+	 */
 	@Override
 	public boolean takeControl() {
 		return true;

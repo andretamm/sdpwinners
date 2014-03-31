@@ -2,12 +2,13 @@ package behavior.finaldefender;
 
 import java.awt.Point;
 
+import communication.RobotCommand;
 import communication.Server;
 
 import behavior.GeneralBehavior;
 import behavior.Strategy;
+import behavior.StrategyHelper;
 import sdp.vision.WorldState;
-import constants.C;
 import constants.RobotType;
 import constants.ShootingDirection;
 
@@ -25,11 +26,15 @@ public class DefenderGetInPositionForPass extends GeneralBehavior {
 		
 		
 		// Stop this madness if we didn't actually grab the ball <.<
-//		if (!StrategyHelper.hasBall(robot(), ws)) {
-//			ws.setRobotGrabbedBall(robot(), false);
-//			s.send(type, RobotCommand.OPEN_GRABBER);
-//			return;
-//		}
+		// Use a slightly bigger error margin than usual :)
+		if (!StrategyHelper.hasBall(robot(), ws, 37, ANGLE_ERROR * 1.5)) {
+			ws.setRobotGrabbedBall(robot(), false);
+			ws.setDoingPass(false);
+			
+			s.send(type, RobotCommand.OPEN_GRABBER);
+			s.forceSend(type, RobotCommand.OPEN_GRABBER);
+			return;
+		}
 		
 		// Global flag to let the attacker know we're doing a pass.
 		// NB - the attacker is responsible for setting this to false when he realises
@@ -41,70 +46,34 @@ public class DefenderGetInPositionForPass extends GeneralBehavior {
 		/* Make robot go to the middle of the quadrant   */
 		/*-----------------------------------------------*/	
 		Point middlePoint = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
-		middlePoint.x += 10;
-//		if (!quickGoTo(middlePoint)) {
-//			// not there yet
-//			return;
-//		}
+		if (ws.getDirection() == ShootingDirection.LEFT) {
+			middlePoint.x += 20;
+		} else {
+			middlePoint.x -= 20;
+		}
 		
-		if (!goDiagonallyTo(middlePoint)) {
+		if (!quickGoTo(middlePoint)) {
 			// not there yet
 			return;
 		}
 		
 		// Don't need to move any more!
-		if (state().isMoving) {
-			state().isMoving = false;
-			stop();
-		}
+		stopMovement();
 		
 		// We're there!
+		Strategy.defenderReadyForPass = true;
 		
-		/*-------------------------------------------------*/
-		/* Rotate to face right in the middle of the pitch */
-		/*-------------------------------------------------*/
-		double targetAngle;
-		
-		if (ws.getDirection() == ShootingDirection.LEFT) {
-			targetAngle = C.A180;
-		} else {
-			targetAngle = 0;
-		}
-		
-		if (rotateTo(targetAngle)) {
-			Strategy.defenderReadyForPass = true;
-		}
 	}
 
 	/** 
 	 * Triggers if we have the ball
 	 * AND we're not in the middle of the quadrant
-	 * AND not facing the right direction
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()
 	 */
 	@Override
 	public boolean takeControl() {
-//		double orientation = ws.getRobotOrientation(type, ws.getColour());
-//		
-//		double targetAngle;
-//		
-//		if (ws.getDirection() == ShootingDirection.LEFT) {
-//			targetAngle = C.A180;
-//		} else {
-//			targetAngle = 0;
-//		}
-//		
-//		// Find the quickest angle to rotate towards our target
-//		double turnAngle = StrategyHelper.angleDiff(orientation, targetAngle);
-//		
-//		Point middlePoint = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
-//		
 		return ws.getRobotGrabbedBall(robot()) &&
 			   !Strategy.defenderReadyForPass;
-		
-//		return ws.getRobotGrabbedBall(robot()) &&
-//			   Math.abs(turnAngle) > ANGLE_ERROR &&
-//			   StrategyHelper.getDistance(ws.getRobotPoint(robot()), middlePoint) > DISTANCE_ERROR - 10;
 	}
 
 }
