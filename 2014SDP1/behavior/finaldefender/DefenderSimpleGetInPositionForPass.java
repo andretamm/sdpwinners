@@ -29,6 +29,7 @@ public class DefenderSimpleGetInPositionForPass extends GeneralBehavior {
 		// Use a slightly bigger error margin than usual :)
 		if (!StrategyHelper.hasBall(robot(), ws, 37, ANGLE_ERROR * 1.5)) {
 			ws.setRobotGrabbedBall(robot(), false);
+			ws.setDoingPass(false);
 			
 			s.send(type, RobotCommand.OPEN_GRABBER);
 			s.forceSend(type, RobotCommand.OPEN_GRABBER);
@@ -51,21 +52,13 @@ public class DefenderSimpleGetInPositionForPass extends GeneralBehavior {
 			middlePoint.x -= 20;
 		}
 		
-//		if (!quickGoTo(middlePoint)) {
-//			// not there yet
-//			return;
-//		}
-		
 		if (!quickGoTo(middlePoint)) {
 			// not there yet
 			return;
 		}
 		
 		// Don't need to move any more!
-		if (state().isMoving) {
-			state().isMoving = false;
-			stop();
-		}
+		stopMovement();
 		
 		// We're there!
 		Strategy.defenderReadyForPass = true;
@@ -75,32 +68,12 @@ public class DefenderSimpleGetInPositionForPass extends GeneralBehavior {
 	/** 
 	 * Triggers if we have the ball
 	 * AND we're not in the middle of the quadrant
-	 * AND not facing the right direction
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()
 	 */
 	@Override
 	public boolean takeControl() {
-//		double orientation = ws.getRobotOrientation(type, ws.getColour());
-//		
-//		double targetAngle;
-//		
-//		if (ws.getDirection() == ShootingDirection.LEFT) {
-//			targetAngle = C.A180;
-//		} else {
-//			targetAngle = 0;
-//		}
-//		
-//		// Find the quickest angle to rotate towards our target
-//		double turnAngle = StrategyHelper.angleDiff(orientation, targetAngle);
-//		
-//		Point middlePoint = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
-//		
 		return ws.getRobotGrabbedBall(robot()) &&
 			   !Strategy.defenderReadyForPass;
-		
-//		return ws.getRobotGrabbedBall(robot()) &&
-//			   Math.abs(turnAngle) > ANGLE_ERROR &&
-//			   StrategyHelper.getDistance(ws.getRobotPoint(robot()), middlePoint) > DISTANCE_ERROR - 10;
 	}
 
 }

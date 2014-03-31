@@ -57,12 +57,17 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 		/*-----------------------------------------------*/
 		double orientation = Orientation.getAngle(robot, target);
 		
+		if (!state().isRotating) {
+			rotateBy((int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)));
+		}
+		
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
-			rotateTo(orientation);
+			// Not there yet
 			return;
 		}
 		
-		stopRotating();
+		// We're facing the right way!
+		state().isRotating = false;
 		
 		/*-----------------------------------------------*/
 		/* Kick the baby                                 */
@@ -76,7 +81,7 @@ public class DefenderSimpleTryPassing extends GeneralBehavior {
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
-			Thread.sleep(50);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
