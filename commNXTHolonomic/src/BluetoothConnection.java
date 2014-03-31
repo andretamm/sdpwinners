@@ -43,18 +43,20 @@ public class BluetoothConnection extends Thread {
     			byte angle1 = (byte)receiveIntSignal();
 
     			int angle = ((int) (angle1 << 8) | (int) angle2 & 0xFF);
-    			System.out.println("RotateTo:\n" + angle);
+    			
     			// Convert from [0, 360] to [-180, 180]
     			if (angle > 180) {
     				angle -= 360;
     			}
-    			System.out.println(angle);
     			
+    			robot.commandTime = System.currentTimeMillis();
     			robot.rotateAngle = angle;	
 
     	    	robot.command = 22;
     	    } else if (i == 11) {
     	    	robot.openGrabber();
+    	    } else if (i == 10) {
+    	    	robot.grab();
     	    } else if (i == 16) {
     	    	// Aiming can be done independently from movement
     	    	robot.aimLeft();
@@ -66,8 +68,15 @@ public class BluetoothConnection extends Thread {
     	    	robot.aimReset();
     	    } else if (i == 6) {
     	    	// Kicking is independent as well
-    	    	robot.chill();
 				robot.fastKick();
+    	    } else if (i == 23) {
+    	    	// Kick then rotate LEFT
+    	    	robot.fastKick();
+    	    	robot.rotateTo(-45);
+    	    } else if (i == 24) {
+    	    	// Kick then rotate RIGHT
+    	    	robot.fastKick();
+    	    	robot.rotateTo(45);
     	    }
     	    else {
     			// Pass on command to robot
