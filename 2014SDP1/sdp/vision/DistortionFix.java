@@ -143,4 +143,18 @@ public class DistortionFix {
 
     	return result;
     }
+    
+    /**
+     * Applies distortion fix then barrel correction to a point.
+     * @param p The point to be corrected
+     * @return The undistorted, barrel corrected Point
+     */
+    public static Point correctedPoint(Point p) {
+    	return barrelCorrected(AndrePerspectiveFix(p));
+    }
+    
+    public static Point2D.Double correctedPoint(Point2D.Double p){
+    	Point correctPoint =  AndrePerspectiveFix(barrelCorrected(new Point((int)p.x, (int)p.y)));
+    	return (new Point2D.Double(correctPoint.x, correctPoint.y));
+    }
 }

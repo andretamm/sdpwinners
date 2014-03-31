@@ -89,14 +89,12 @@ public class ImageProcessor {
 //                try {
 //					Thread.sleep(10000000);
 //				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
 				
 				/* ----------------------------- */
 				/* THIS NEEDS TO BE PARALLELISED */
 				/* ----------------------------- */
-				// TODO MAKE PARALLEL
 				// Everything is accessed through pitch
 				PitchPoints pitch = new PitchPoints(worldState);
 				
@@ -107,10 +105,6 @@ public class ImageProcessor {
                     
                     //threshold to find ball and robot Ts
                     Thresholder.initialThresholds(image, pitch, ts, worldState);
-                    
-                	//locate the robot Ts and the ball
-                    // TODO
-                    // Divide into 4 quadrants
                     
                 	findRobotsAndBall(pitch);
                     
@@ -162,7 +156,7 @@ public class ImageProcessor {
             
             for (Robot r : Robot.listAll()) {
 //        		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type));
-            	Point position = DistortionFix.AndrePerspectiveFix(pp.getRobotPosition(r.colour, r.type));
+            	Point position = pp.getRobotPosition(r.colour, r.type);
                 ws.setRobotX(r, (int) position.getX());
                 ws.setRobotY(r, (int) position.getY());
                 ws.setRobotOrientation(r.type, r.colour, pp.getRobotOrientation(r.colour, r.type));
@@ -228,6 +222,7 @@ public class ImageProcessor {
         	}
         }
         
+        // TODO We don't use this at all. This was from 2013SDP Group 1's code
         /**
          * Adds to each robot all the points that are close enough to be part of that robots green plate
          * @param plate All points that are plate coloured
@@ -248,6 +243,8 @@ public class ImageProcessor {
             }
         }
         
+        
+        // TODO We don't use this at all. This was from 2013SDP Group 1's code
         /**
          * Returns the corners of a rectangular plate
          * @param plate The points making up the plate
@@ -292,7 +289,6 @@ public class ImageProcessor {
          * @param pitch
          */
         public void findBall(PitchPoints pitch) {
-        	int LINE = 50;
         	
         	/*
         	 * NB!!
@@ -301,13 +297,15 @@ public class ImageProcessor {
         	 */
         	
         	try {
-        		// Get the position of the ball
+        		// Get the position of the red points (which we think is the ball)
 				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
 				
 				// Filter out rest of points and find mean again
                 Position.ballFilterPoints(pitch.getPoints(Colours.RED), pitch.getBallPosition());
             	worldState.setBallVisible(true);
-				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
+            	
+            	// Set the position of the ball without the outliers
+				pitch.setBallPosition(DistortionFix.correctedPoint(Position.findMean(pitch.getPoints(Colours.RED))));
 
 			} catch (Exception e2) {
 				// Either filtered out points or no red points to be found, set default position
@@ -343,7 +341,8 @@ public class ImageProcessor {
         			}  
         			
         			try {
-        				// Set the robot position to be the middle of the coloured points
+        				
+        				// Set the robfaceot position to be the middle of the coloured points
 						pitch.setRobotPosition(rc, rt, Position.findMean(pitch.getColouredPoints(rc, rt, c)));
 						
 						// Do K-Means magic
@@ -361,8 +360,9 @@ public class ImageProcessor {
 								  			  pitch.getRobotPosition(rc, rt));
 						
 						// The robot position is the mean of the coloured points after filtering 
-						pitch.setRobotPosition(rc, rt, Position.findMean(pitch.getColouredPoints(rc, rt, c)));
-					} catch (Exception e) {
+						pitch.setRobotPosition(rc, rt, DistortionFix.correctedPoint(Position.findMean(pitch.getColouredPoints(rc, rt, c))));
+					
+        			} catch (Exception e) {
 						// We don't have any coloured points left for this robot, set it to its "default" position
 						// TODO set this to be its previous location instead together with copious error reporting
 //						System.err.println("No points found for the robot (" + rc + " " + rt + ")");
