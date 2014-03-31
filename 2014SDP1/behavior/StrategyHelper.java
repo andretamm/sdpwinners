@@ -31,7 +31,7 @@ public class StrategyHelper {
 	/**
 	 * The safe distance from the quadrant x value
 	 */
-	public static final int DISTANCE_FROM_QUADRANTX = 20;
+	public static final int DISTANCE_FROM_QUADRANTX = 30;
 	
 	/**
 	 * Normalises the vector to have length one.
@@ -424,28 +424,48 @@ public class StrategyHelper {
 	 * @return Closest point it can reach without going over the quadrant x value
 	 */
 	public static Point safePoint(WorldState ws, Robot r, Point object){
+		
 		int xObject = object.x;
-		int yObject = object.y;
+		
+		/* Assume the x-value is safe */
+		int safeX   = xObject;
+		
+		/* Get the quadrant we are currently located in. */
 		Quadrant q = ws.getRobotQuadrant(r);
 		
-		int quadrantXLow = ws.getQuadrantX(q, QuadrantX.LOW);
+		/* Get the x-values of the quadrant borders */
+		int quadrantXLow  = ws.getQuadrantX(q, QuadrantX.LOW);
 		int quadrantXHigh = ws.getQuadrantX(q, QuadrantX.HIGH);
 		
-		int distanceFromLow = Math.abs(xObject - quadrantXLow);
-		int distanceFromHigh = Math.abs(xObject - quadrantXHigh);
+		/* Closest safe x-axis points from the borders of the quadrant */
 		
-		if (distanceFromLow > DISTANCE_FROM_QUADRANTX && distanceFromHigh > DISTANCE_FROM_QUADRANTX){
-			return object;
-		}
+		int safeXFromLow  = quadrantXLow  + DISTANCE_FROM_QUADRANTX;
+		int safeXFromHigh = quadrantXHigh - DISTANCE_FROM_QUADRANTX;
 		
-		if(distanceFromLow < distanceFromHigh){
-			return new Point(quadrantXLow + DISTANCE_FROM_QUADRANTX, yObject);
+		/* Devide into quadrants, because in Q1 and Q4 we need to check only one border */
+		/* TODO Consider how the other border (the one close to the goal line) affects our defender */
+		
+		
+		if (q == Quadrant.Q1) {
+			if (xObject > safeXFromHigh){
+				safeX = safeXFromHigh;
+			}
+		} else if (q == Quadrant.Q4) {
+			if (xObject < safeXFromLow){
+				safeX = safeXFromLow;
+			}
 		} else {
-			return new Point(quadrantXHigh - DISTANCE_FROM_QUADRANTX, yObject);
+			if (xObject < safeXFromLow) {
+				safeX = safeXFromLow;
+			} else if (xObject > quadrantXHigh) {
+				safeX = quadrantXHigh;
+			}
 		}
+		
+		return new Point(safeX, object.y);
 		
 	}
-
+	
 	/**
 	 * If the opponent were to make a kick that would end up at the top of our goal
 	 * (from their current position with a wall kick at the bottom), 
