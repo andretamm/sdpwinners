@@ -415,11 +415,11 @@ public class Ultra360 {
 	 * movement direction for FORWARD.
 	 *                        
 	 *                      (4 and 5)                                  
-	 *                        NORTH                           
+	 *                        NORTH (This is the way the robot is facing)                           
 	 *                                                        
 	 *                         -->                       
-	 *                         |                               
-	 *                       __|__                            
+	 *                         |                              
+	 *                      <__|__>                           
 	 *                      |  |  |     ^                      
 	 * (6 and 7) WEST |--------x--------|  EAST (0 and 1)                 
 	 *                v     |__|__|                           
@@ -455,8 +455,8 @@ public class Ultra360 {
 		// Note that rotating speeds below 40 are DANGEROUS, we can kind of rotate with 40
 		// if we have mostly full batteries, 35 only works with out-of-the-package fresh
 		// batteries, so should drop total minimum below 40.
-		double maxSpeed = 200; // Actual MAXIMUM is maxSpeed + minSpeed :))
-		double minSpeed = 20; 
+		double maxSpeed = 210; // Actual MAXIMUM is maxSpeed + minSpeed :))
+		double minSpeed = 30; 
 		
 		// Find final speeds, these are zero by default!
 		byte horisontalSpeed = 0;
