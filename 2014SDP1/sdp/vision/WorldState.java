@@ -37,6 +37,44 @@ public class WorldState implements VisionInterface {
 	private int defenderGoDiagonallyToX = 0;
 	private int defenderGoDiagonallyToY = 0;
 	
+	// Defender goTo target and safe target (used for testing safe point)
+	private int defenderGoToX = 0;
+	private int defenderGoToY = 0;
+	private int defenderGoToSafeX = 0;
+	private int defenderGoToSafeY = 0;
+	
+	public int getDefenderGoToX() {
+		return defenderGoToX;
+	}
+
+	public void setDefenderGoToX(int defenderGoToX) {
+		this.defenderGoToX = defenderGoToX;
+	}
+
+	public int getDefenderGoToY() {
+		return defenderGoToY;
+	}
+
+	public void setDefenderGoToY(int defenderGoToY) {
+		this.defenderGoToY = defenderGoToY;
+	}
+
+	public int getDefenderGoToSafeX() {
+		return defenderGoToSafeX;
+	}
+
+	public void setDefenderGoToSafeX(int defenderGoToSafeX) {
+		this.defenderGoToSafeX = defenderGoToSafeX;
+	}
+
+	public int getDefenderGoToSafeY() {
+		return defenderGoToSafeY;
+	}
+
+	public void setDefenderGoToSafeY(int defenderGoToSafeY) {
+		this.defenderGoToSafeY = defenderGoToSafeY;
+	}
+
 	public int getDefenderGoDiagonallyToX() {
 		return defenderGoDiagonallyToX;
 	}
@@ -68,8 +106,8 @@ public class WorldState implements VisionInterface {
 	private Point outerPitchBottomRight1 = new Point(630, 396);
 
 	//these two are already barrelcorrected
-	private Point pitchTopLeft1 = new Point(60, 64);
-	private Point pitchBottomRight1 = new Point(570, 353);
+	private Point pitchTopLeft1 = new Point(70, 50);
+	private Point pitchBottomRight1 = new Point(570, 340);
 
 	private Point outerPitchTopLeft2 = new Point(5, 68);
 	private Point outerPitchBottomRight2 = new Point(634,400);

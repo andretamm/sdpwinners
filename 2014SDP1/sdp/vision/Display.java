@@ -208,6 +208,34 @@ public class Display {
 		graphics.drawRect(ws.getQ3LowX(), ws.getPitchTopLeft().y, ws.getQ3HighX()-ws.getQ3LowX(), (int) ws.getPitchHeight());
 		graphics.drawRect(ws.getQ4LowX(), ws.getPitchTopLeft().y, ws.getQ4HighX()-ws.getQ4LowX(), (int) ws.getPitchHeight());
 
+		/* Used for SAFE POINT TESTING PURPOSES */
+		Point ourAttacker = new Point(ws.getRobotX(ws.getOur(RobotType.ATTACKER)), ws.getRobotY(ws.getOur(RobotType.ATTACKER)));
+		Point ourDefender = new Point(ws.getRobotX(ws.getOur(RobotType.DEFENDER)), ws.getRobotY(ws.getOur(RobotType.DEFENDER)));
+		
+		graphics.setColor(Color.RED);
+		graphics.drawLine(ourDefender.x, ourDefender.y, ws.getDefenderGoToX(), ws.getDefenderGoToY());
+		
+		graphics.setColor(Color.GREEN);
+		graphics.drawLine(ourDefender.x, ourDefender.y, ws.getDefenderGoToSafeX(), ws.getDefenderGoToSafeY());
+		
+		Point safeAttackerPoint = StrategyHelper.safePoint(ws, ws.getOur(RobotType.ATTACKER), ourAttacker);
+		Point safeDefenderPoint = StrategyHelper.safePoint(ws, ws.getOur(RobotType.DEFENDER), ourDefender);
+		
+		if (safeAttackerPoint.equals(ourAttacker)) {
+			graphics.drawString("SAFE", ws.getRobotX(ws.getOur(RobotType.ATTACKER)), ws.getRobotY(ws.getOur(RobotType.ATTACKER)));
+		} else {
+			graphics.drawString("NOT SAFE", ws.getRobotX(ws.getOur(RobotType.ATTACKER)), ws.getRobotY(ws.getOur(RobotType.ATTACKER)));
+			graphics.drawLine(ourAttacker.x, ourAttacker.y, safeAttackerPoint.x, safeAttackerPoint.y);
+		}
+		
+				
+		if (safeDefenderPoint.equals(ourDefender)) {
+			graphics.drawString("SAFE", ws.getRobotX(ws.getOur(RobotType.DEFENDER)), ws.getRobotY(ws.getOur(RobotType.DEFENDER)));
+		} else {
+			graphics.drawString("NOT SAFE", ws.getRobotX(ws.getOur(RobotType.DEFENDER)), ws.getRobotY(ws.getOur(RobotType.DEFENDER)));
+			graphics.drawLine(ourDefender.x, ourDefender.y, safeDefenderPoint.x, safeDefenderPoint.y);
+		}
+
 		
 		graphics.setColor(Color.red);
 		
