@@ -23,7 +23,7 @@ public class DistortionFix {
 	private static int width = 640;
 	private static int height = 480;
 	private static final double barrelCorrectionX = -0.016;	
-	private static final double barrelCorrectionY = -0.115;
+	private static final double barrelCorrectionY = -0.06;
 
 
 	/**
