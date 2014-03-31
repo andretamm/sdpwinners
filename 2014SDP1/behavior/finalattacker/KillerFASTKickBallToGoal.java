@@ -56,7 +56,7 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 			}
 			
 			// Rotate towards target using Super Ultra Precise Fast Rotation (SUPFR)
-			rotateQuickTowards(targetPoint);
+			rotateQuickTowards(targetPoint, true);
 			
 			// Increment number of targets tried by one
 			state().attackerNumberOfTargetsTried++;
@@ -66,6 +66,7 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		double orientation = Orientation.getAngle(robot, targetPoint);
 		
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
+			rotateQuickTowards(targetPoint);
 			return;
 		}
 		

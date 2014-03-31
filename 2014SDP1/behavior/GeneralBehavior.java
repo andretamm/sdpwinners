@@ -36,7 +36,7 @@ public abstract class GeneralBehavior implements Behavior {
 	/**
 	 * Whether to print debug statements 
 	 */
-	private static boolean DEBUG = true;
+	private static boolean DEBUG = false;
 	
 	/**
 	 * Prints a debug statement only if the DEBUG flag is set
@@ -155,6 +155,28 @@ public abstract class GeneralBehavior implements Behavior {
 	 * NOTE - you can't stop this command after you've sent it, the robot will do the
 	 * full rotation before reading in new commands.
 	 * 
+	 * This version lets you specify whether this is a forced command (aka will
+	 * always get sent)
+	 * 
+	 * If the angle is very small, then the Server class will refuse to send it. 
+	 * Angle has to be in range [-180, 180], sending 0 would be a non-rotation.
+	 * 
+	 * The robot will automatically STOP after rotating this many degrees, so
+	 * no need to stop manually.
+	 * 
+	 * @param angle The angle (in DEGREES) the robot will rotate by
+	 * @param forced If this will ALWAYS be sent or not. Default is FALSE!!
+	 */
+	public void rotateBy(int angle, boolean forced) {
+		s.sendRotateDegrees(type, angle, forced);
+		state().isRotating = true;
+	}
+	
+	/**
+	 * Rotates the robot BY a specified angle. 
+	 * NOTE - you can't stop this command after you've sent it, the robot will do the
+	 * full rotation before reading in new commands.
+	 * 
 	 * If the angle is very small, then the Server class will refuse to send it. 
 	 * Angle has to be in range [-180, 180], sending 0 would be a non-rotation.
 	 * 
@@ -164,8 +186,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * @param angle The angle (in DEGREES) the robot will rotate by
 	 */
 	public void rotateBy(int angle) {
-		s.sendRotateDegrees(type, angle, false);
-		state().isRotating = true;
+		rotateBy(angle, false);
 	}
 	
 	/**
@@ -187,7 +208,31 @@ public abstract class GeneralBehavior implements Behavior {
 		// Angle we have to rotate by in DEGREES
 		int angle = (int) Math.toDegrees(StrategyHelper.angleDiff(currentOrientation, targetOrientation));
 		
-		rotateBy(angle);
+		rotateBy(angle, false);
+	}
+	
+	/**
+	 * Rotates the robot (quite quickly) to face a specific target. This
+	 * is the forced version, meaning you can force it to always be sent
+	 * 
+	 * PLEASE READ the javadoc for rotateBy before using this!!!
+	 * 
+	 * NOTE - you can't stop this command after you've sent it, the robot will do the
+	 * full rotation before reading in new commands. 
+	 * 
+	 * @param target
+	 * @param forced
+	 */
+	public void rotateQuickTowards(Point target, boolean forced) {
+		Point robot = ws.getRobotPoint(robot());
+		
+		double currentOrientation = ws.getRobotOrientation(robot());
+		double targetOrientation = Orientation.getAngle(robot, target);
+		
+		// Angle we have to rotate by in DEGREES
+		int angle = (int) Math.toDegrees(StrategyHelper.angleDiff(currentOrientation, targetOrientation));
+		
+		rotateBy(angle, forced);
 	}
 	
 	/**

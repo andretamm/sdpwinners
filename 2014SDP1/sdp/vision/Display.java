@@ -117,7 +117,7 @@ public class Display {
 		if (commandImage != null) {
 			g.drawImage(commandImage, pos.x - 20, pos.y - 20, 40, 40, null);
 		} else if (command != RobotCommand.NO_COMMAND) {
-			System.out.println("DISPLAY: Don't have an image for command : " + command);
+//			System.out.println("DISPLAY: Don't have an image for command : " + command);
 		}
 	}
 
@@ -328,7 +328,7 @@ public class Display {
 				AffineTransformOp opp = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 				graphics.drawImage(opp.filter(image, null), pos.x - 20, pos.y - 20, 50,50, null);
 			} else if (command != RobotCommand.NO_COMMAND) {
-				System.out.println("DISPLAY: Don't have an image for command : " + command);
+//				System.out.println("DISPLAY: Don't have an image for command : " + command);
 			}
 		}		
 		

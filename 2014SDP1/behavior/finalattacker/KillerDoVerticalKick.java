@@ -27,7 +27,7 @@ public class KillerDoVerticalKick extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
-		
+				
 		/*-----------------------------------------------*/
 		/* Figure out which way to move                  */
 		/*-----------------------------------------------*/
@@ -41,36 +41,45 @@ public class KillerDoVerticalKick extends GeneralBehavior {
 		/* WE HAVE MOTIOOOON                             */
 		/*-----------------------------------------------*/
 		goDiagonallyTo(targetPoint);
-		
+
 		
 		/*-----------------------------------------------*/
 		/* Wait until we're almost at the middle of the  */
 		/* quadrant                                      */
 		/*-----------------------------------------------*/
-		if (StrategyHelper.getDistance(robot, quadrantMiddle) > DISTANCE_ERROR + 15) {
+		if (StrategyHelper.getDistance(robot, quadrantMiddle) > DISTANCE_ERROR) {
 			return;
 		}
-		
+
 		/*-----------------------------------------------*/
 		/* Make a killer (heh heh) kick                  */
 		/*-----------------------------------------------*/
 		s.send(type, RobotCommand.FAST_KICK);
-		s.send(type, RobotCommand.AIM_RESET);
 		
-
 		/*-----------------------------------------------*/
 		/* Still keep on moving to confuse the opponent  */
 		/*-----------------------------------------------*/
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
+		s.send(type, RobotCommand.AIM_RESET);
+		
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-				
+
 		/*-----------------------------------------------*/
 		/* STAHP!!! - we're done here :)                 */
 		/*-----------------------------------------------*/
 		s.send(type, RobotCommand.STOP);
+		
+		ws.setRobotGrabbedBall(robot(), false);
+		Strategy.attackerReadyForKick = false;
 	}
 
 	/** 

@@ -49,7 +49,7 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 50; //50 60 
+		fastRotationSpeed = (byte) 60; //50 60 
 		slowRotationSpeed = (byte) 45; 
 		
 		// Default moving speed

@@ -44,9 +44,11 @@ public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
 		if (ws.getDirection() == ShootingDirection.LEFT) {
 			// Go to top
 			goalPoint = ws.getOppositionGoalTop();
+			goalPoint.y -= 20;
 		} else {
 			// Go to bottom
 			goalPoint = ws.getOppositionGoalBottom();
+			goalPoint.y += 20;
 		}
 		
 		Point target = new Point(middlePoint.x, goalPoint.y);
@@ -60,19 +62,29 @@ public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
 		stopMovement();
 		
 		/*---------------------------------------------------------*/
-		/* Rotate to face their goal                               */
-		/*---------------------------------------------------------*/
-		double shootingDirection = ws.getDirection() == ShootingDirection.LEFT ? C.LEFT : C.RIGHT;
-		
-		rotateBy((int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), shootingDirection)));
-		
-		/*---------------------------------------------------------*/
 		/* Aim the kicker right                                    */
 		/*---------------------------------------------------------*/
 		s.send(type, RobotCommand.AIM_RIGHT);
 		
+		/*---------------------------------------------------------*/
+		/* Rotate to face their goal                               */
+		/*---------------------------------------------------------*/
+		double shootingDirection = ws.getDirection() == ShootingDirection.LEFT ? C.LEFT : C.RIGHT;
+		int degreesToRotate = (int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), shootingDirection));
+		
+		System.out.println(String.format("Degrees: %d, current: %f, target: %f", degreesToRotate, ws.getRobotOrientation(robot()), shootingDirection));
+		
+		rotateBy(degreesToRotate);
+		
 		// We're there!
 		Strategy.attackerReadyForKick = true;
+		
+		// Wait until we rotate
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** 
