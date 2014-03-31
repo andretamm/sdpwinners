@@ -107,6 +107,13 @@ public class Ultra360 {
 	  * @param degrees Takes an integer from -360 to 360.
 	  */
 	public void rotateTo(int degrees){
+	
+		/* These are the values to use for fully charged Duracells
+		
+		byte rotateSpeed = (byte) 250;
+		long degToTime = (long) Math.rint(Math.abs(degrees)*2.55);
+	
+		*/
 		
 		byte rotateSpeed = (byte) 200; //Changing this will fuck up the function by the way
 		long degToTime = (long) Math.rint(Math.abs(degrees)*3.3); // Based on the current speed of rotation
