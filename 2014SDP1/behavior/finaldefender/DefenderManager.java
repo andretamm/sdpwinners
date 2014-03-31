@@ -18,17 +18,9 @@ public class DefenderManager extends behavior.Manager {
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 		// Add behaviors in ascending order of priority
-//		behaviorList[0] = new DefenderProtectGoal(getWorldState(), getRobotType(), getServer());
-//		behaviorList[1] = new DefenderMakePass(getWorldState(), getRobotType(), getServer());
-//		behaviorList[2] = new DefenderGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
-//
-		
-//		behaviorList[1] = new DefenderTryPassing(getWorldState(), getRobotType(), getServer());
-//		behaviorList[2] = new DefenderGetInPositionForPass(getWorldState(), getRobotType(), getServer());
-		
 		behaviorList[0] = new DefenderProtectGoal(getWorldState(), getRobotType(), getServer());
-		behaviorList[1] = new DefenderSimpleTryPassing(getWorldState(), getRobotType(), getServer());
-		behaviorList[2] = new DefenderSimpleGetInPositionForPass(getWorldState(), getRobotType(), getServer());
+		behaviorList[1] = new DefenderDoPass(getWorldState(), getRobotType(), getServer());
+		behaviorList[2] = new DefenderGetInPositionForPass(getWorldState(), getRobotType(), getServer());
 		behaviorList[3] = new DefenderGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
 		
 		return behaviorList;

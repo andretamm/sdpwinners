@@ -173,7 +173,7 @@ public class BluetoothCommunication {
 	}
 	
 	/**
-	 * Send an array of bytes to a robot
+	 * Send an array of bytes to a robot instead of sending one by one
 	 */
 	public void sendBytesToRobot(byte[] commands) {
 		try {

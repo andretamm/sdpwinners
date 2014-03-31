@@ -5,7 +5,9 @@ import gui.MainWindow;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -51,30 +53,32 @@ public class Display {
 			RobotCommand.SLOW_CCW,
 			RobotCommand.SLOW_CW,
 			RobotCommand.SLOW_KICK,
-			RobotCommand.MOVE_DIAGONALLY
+			RobotCommand.MOVE_DIAGONALLY,
+			RobotCommand.DISCONNECT
 		};
 		
 		// The names of the image files
 		String images[] = {
-			"arrowUp.png",
-			"arrowDown.png",
+			"forward.png",
+			"back.png",
 			"stop.png",
 			"cw.png",
 			"ccw.png",
 			"kick.png",
-			"cw.png",
-			"open.png",
-			"arrowLeft.png",
-			"arrowRight.png",
+			"closeGrabber.png",
+			"openGrabber.png",
+			"moveLeft.png",
+			"moveRight.png",
 			"kickLeft.png",
 			"kickRight.png",
 			"aimLeft.png",
 			"aimRight.png",
-			"resetAim.png",
+			"aimReset.png",
 			"ccw.png",
 			"cw.png",
 			"kick.png",
-			"arrowUp.png"
+			"moveDiagonally.png",
+			"disconnect.png"
 		};
 		
 		// Folder where all the images are stored
@@ -113,7 +117,7 @@ public class Display {
 		if (commandImage != null) {
 			g.drawImage(commandImage, pos.x - 20, pos.y - 20, 40, 40, null);
 		} else if (command != RobotCommand.NO_COMMAND) {
-			System.out.println("DISPLAY: Don't have an image for command : " + command);
+//			System.out.println("DISPLAY: Don't have an image for command : " + command);
 		}
 	}
 
@@ -192,11 +196,13 @@ public class Display {
          * 0 and 480 are the boundaries of the field for the y value.
          */
         
+        graphics.setColor(Color.red);
 		graphics.drawLine(0, (int) ws.getBallY(), 640, (int) ws.getBallY());
 		graphics.drawLine((int) ws.getBallX(), 0, (int) ws.getBallX(), 480);
 		
 		
 		/* Display markers for the quadrants */ 
+		graphics.setColor(Color.blue);
 		graphics.drawRect(ws.getQ1LowX(), ws.getPitchTopLeft().y, ws.getQ1HighX()-ws.getQ1LowX(), (int) ws.getPitchHeight());
 		graphics.drawRect(ws.getQ2LowX(), ws.getPitchTopLeft().y, ws.getQ2HighX()-ws.getQ2LowX(), (int) ws.getPitchHeight());
 		graphics.drawRect(ws.getQ3LowX(), ws.getPitchTopLeft().y, ws.getQ3HighX()-ws.getQ3LowX(), (int) ws.getPitchHeight());
@@ -343,11 +349,14 @@ public class Display {
 			BufferedImage image = commandImages.get(command);
 			
 			Point pos = ws.getRobotPoint(ws.getOur(type));
+			//Point or = ws.getRobot
 			
 			if (image != null) {
-				graphics.drawImage(image, pos.x - 20, pos.y - 20, 40, 40, null);
+				AffineTransform tx = AffineTransform.getRotateInstance(ws.getRobotOrientation(ws.getOur(type)) + Math.PI/2, image.getWidth()/2, image.getHeight()/2);
+				AffineTransformOp opp = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+				graphics.drawImage(opp.filter(image, null), pos.x - 20, pos.y - 20, 50,50, null);
 			} else if (command != RobotCommand.NO_COMMAND) {
-				System.out.println("DISPLAY: Don't have an image for command : " + command);
+//				System.out.println("DISPLAY: Don't have an image for command : " + command);
 			}
 		}		
 		

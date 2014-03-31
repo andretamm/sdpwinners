@@ -309,18 +309,22 @@ public class Server {
 		int direction = degrees >= 0 ? 1 : -1;
 		
 		if (previousCommand.get(type) != RobotCommand.ROTATE_ANGLE ||
-			currentTime - previousCommandTime.get(type) > 2000 ||
+			currentTime - previousCommandTime.get(type) > 1500 ||
 			previousRotationDirection.get(type) != direction ||
 			forced) {
 			
+			byte[] commands = {(byte) RobotCommand.ROTATE_ANGLE, degreeArray[0], degreeArray[1]};
+			
 			if (type == RobotType.DEFENDER) {
-				defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
-				defenderRobot.sendToRobot(degreeArray[0]);
-				defenderRobot.sendToRobot(degreeArray[1]);
+//				defenderRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+//				defenderRobot.sendToRobot(degreeArray[0]);
+//				defenderRobot.sendToRobot(degreeArray[1]);
+				defenderRobot.sendBytesToRobot(commands);
 			} else if (type == RobotType.ATTACKER) {
-				attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
-				attackerRobot.sendToRobot(degreeArray[0]);
-				attackerRobot.sendToRobot(degreeArray[1]);
+//				attackerRobot.sendToRobot(RobotCommand.ROTATE_ANGLE);
+//				attackerRobot.sendToRobot(degreeArray[0]);
+//				attackerRobot.sendToRobot(degreeArray[1]);
+				attackerRobot.sendBytesToRobot(commands);
 			}
 			
 			// Save command, sent time and direction

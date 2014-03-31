@@ -11,6 +11,9 @@ public class RobotController {
 	public volatile int angle = 0;
 
 	public volatile int rotateAngle = 0;
+	
+	public volatile long commandTime = 0;
+	public volatile long previousCommandTime = 0;
 
 	
 	public RobotController() {
@@ -25,10 +28,6 @@ public class RobotController {
 	}
 	
 	public void fastKick() {
-		// Wait for the ball in the grabber to stabilise
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {}
 		ULTRA.kick(100);
 	}
 	

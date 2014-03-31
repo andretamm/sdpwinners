@@ -71,7 +71,7 @@ public class KillerBlockDefender extends GeneralBehavior {
 			target = ws.getQuadrantMiddlePoint(q);
 		} else {
 			// Make sure point is in the bounds
-			target.y = Math.max(ws.getPitchTopLeft().y + 20, Math.min(ws.getPitchBottomLeft().y - 20, target.y));
+			target.y = Math.max(ws.getPitchTopLeft().y + 40, Math.min(ws.getPitchBottomLeft().y - 40, target.y));
 		}
 		
 		if (goDiagonallyTo(target)) {
