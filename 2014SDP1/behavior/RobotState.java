@@ -17,6 +17,9 @@ public class RobotState {
 	/** How many different targets has the attacker tried */
 	public int attackerNumberOfTargetsTried = 0;
 	
+	/** How many different targets the defender has tried */
+	public int defenderNumberOfTargetsTried = 0;
+	
 	/**
 	 * Different states for the grabber of this robot.
 	 * 0 - opened (or so we think <.<)

@@ -33,7 +33,8 @@ public class KillerDoVerticalKick extends GeneralBehavior {
 		/*-----------------------------------------------*/
 		Point targetPoint = ws.getDirection() == ShootingDirection.LEFT ? ws.getOppositionGoalBottom() : ws.getOppositionGoalTop();
 		Point quadrantMiddle = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
-		targetPoint.x = quadrantMiddle.x; 
+//		targetPoint.x = quadrantMiddle.x;
+		targetPoint.x = ws.getRobotPoint(robot()).x;
 		
 		Point robot = ws.getRobotPoint(robot());
 		
@@ -44,10 +45,9 @@ public class KillerDoVerticalKick extends GeneralBehavior {
 
 		
 		/*-----------------------------------------------*/
-		/* Wait until we're almost at the middle of the  */
-		/* quadrant                                      */
+		/* Wait until we're at the middle of the quadrant*/
 		/*-----------------------------------------------*/
-		if (StrategyHelper.getDistance(robot, quadrantMiddle) > DISTANCE_ERROR) {
+		if (robot.y < quadrantMiddle.y) {
 			return;
 		}
 

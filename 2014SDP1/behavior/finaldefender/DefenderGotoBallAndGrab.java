@@ -22,6 +22,9 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 		// Mark the grabber as being possibly closed
 		state().grabberState = 1;
 		
+		// Reset the target counter
+		state().defenderNumberOfTargetsTried = 0;
+		
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
