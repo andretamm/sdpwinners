@@ -4,7 +4,6 @@ import java.awt.Point;
 
 import communication.RobotCommand;
 import communication.Server;
-
 import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
@@ -60,17 +59,36 @@ public class DefenderDoPass extends GeneralBehavior {
 		/*-----------------------------------------------*/
 		double orientation = Orientation.getAngle(robot, target);
 		
-		if (!state().isRotating) {
-			rotateBy((int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)));
-		}
-		
+		// Wait until we're close enough
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
-			// Not there yet
+			rotateBy((int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)));
 			return;
 		}
 		
-		// We're facing the right way!
-		state().isRotating = false;
+		// Robot stops automagically after doing rotating
+		if (state().isRotating) {
+			state().isRotating = false;
+		}
+		
+		
+		/*-----------------------------------------------*/
+		/* Check if the kick is feasible                 */
+		/*-----------------------------------------------*/
+		// We're close!
+		// See how close the opponent is
+		double shotAngle = orientation;
+		double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
+
+		if (oppositionDistance < 100) {
+			if (state().defenderNumberOfTargetsTried < 4) {
+				// They're too close, try again
+				target = null;
+				return;
+			} else {
+				// Already tried too many times, just shoot
+			}
+		}
+		
 		
 		/*-----------------------------------------------*/
 		/* Kick the baby                                 */

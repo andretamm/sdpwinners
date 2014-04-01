@@ -4,7 +4,6 @@ import java.awt.Point;
 
 import communication.RobotCommand;
 import communication.Server;
-
 import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
@@ -27,7 +26,7 @@ public class DefenderGetInPositionForPass extends GeneralBehavior {
 		
 		// Stop this madness if we didn't actually grab the ball <.<
 		// Use a slightly bigger error margin than usual :)
-		if (!StrategyHelper.hasBall(robot(), ws, 37, ANGLE_ERROR * 1.5)) {
+		if (!StrategyHelper.hasBall(robot(), ws, 38, ANGLE_ERROR * 3)) {
 			ws.setRobotGrabbedBall(robot(), false);
 			ws.setDoingPass(false);
 			
@@ -63,6 +62,12 @@ public class DefenderGetInPositionForPass extends GeneralBehavior {
 		// We're there!
 		Strategy.defenderReadyForPass = true;
 		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/** 
