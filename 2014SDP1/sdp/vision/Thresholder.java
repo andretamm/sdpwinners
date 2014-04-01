@@ -15,6 +15,10 @@ public class Thresholder{
 	public static final int plateSize = 14;//35
 	public static final double threshValue = 196.0;
 	
+	private static final double redWeight = 1.5;
+	private static final double greenWeight = 1.5;
+	private static final double blueWeight = 1.9;
+	
 	/**
 	 * Thresholds every point in the image, for ball red, robot yellow, robot blue, plate green and spot grey. The results are stored in op.
 	 * @param image The image to be thresholded
@@ -42,7 +46,7 @@ public class Thresholder{
 					/* The RGB colours and hsv values for the current pixel. */
 					Color c = new Color(image.getRGB(column, row));
 					float hsbvals[] = new float[3];
-					Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
+					Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsbvals);
 					
 					rg=c.getRed()-c.getGreen();
 					rb=c.getRed()-c.getBlue();
@@ -56,9 +60,6 @@ public class Thresholder{
 						pp.getPoints(Colours.BLUE).add(new Point(column, row));
 					}
 	
-					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).isColour(c, hsbvals, rg, rb, gb)) {
-						pp.getPoints(Colours.GREEN).add(new Point(column, row));
-					}
 	
 					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.YELLOW).isColour(c, hsbvals, rg, rb, gb)) {
 						pp.getPoints(Colours.YELLOW).add(new Point(column, row));
@@ -66,6 +67,12 @@ public class Thresholder{
 					
 					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).isColour(c, hsbvals, rg, rb, gb)) {
 						pp.getPoints(Colours.RED).add(new Point(column, row));
+					}
+					
+					Color.RGBtoHSB((int) (c.getRed()*redWeight), (int) (c.getGreen()*greenWeight), (int) (c.getBlue()*blueWeight), hsbvals);
+					
+					if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).isColour(c, hsbvals, rg, rb, gb)) {
+						pp.getPoints(Colours.GREEN).add(new Point(column, row));
 					}
 				}
 			}
@@ -99,6 +106,7 @@ public class Thresholder{
 			int rb;
 			int gb;
 			
+			//TODO Comment out this line of code to avoid unhelpful debug coordinates
 //			System.out.println(q + " " + plateCentroid.x + " " + plateCentroid.y);
 			
 			for (int column= plateCentroid.x - plateSize; column < plateCentroid.x + plateSize; column++) {
@@ -201,20 +209,25 @@ public class Thresholder{
 				for(int row = worldState.getPitchTopLeft().y; row < worldState.getPitchBottomLeft().y; row++){
 					try {
 						Color c = new Color(image.getRGB(column, row));
+//						c = new Color((int) (c.getRed()*1.6),(int) (c.getGreen()*1.6), (int) (c.getBlue()*1.6));
 						float hsbvals[] = new float[3];
-						Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsbvals);
+						Color.RGBtoHSB(c.getRed(),c.getGreen(), c.getBlue(), hsbvals);
+						
 						
 						rg=c.getRed()-c.getGreen();
 						rb=c.getRed()-c.getBlue();
 						gb=c.getGreen()-c.getBlue();
 						
+						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).isColour(c, hsbvals, rg, rb, gb)) {
+							pp.getQuadrant(q).getPoints(Colours.RED).add(new Point(column, row));
+						}
+						
+						Color.RGBtoHSB((int)(c.getRed()*redWeight), (int) (c.getGreen()*greenWeight), (int) (c.getBlue()*blueWeight), hsbvals);
+						
 						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.GREEN).isColour(c, hsbvals, rg, rb, gb)) {
 							pp.getQuadrant(q).getPoints(Colours.GREEN).add(new Point(column, row));
 						}
 						
-						if (ts.getQuadrantThresholds(q).getObjectThresholds(Colours.RED).isColour(c, hsbvals, rg, rb, gb)) {
-							pp.getQuadrant(q).getPoints(Colours.RED).add(new Point(column, row));
-						}
 					} catch (Exception e) {
 						//point was outside the image?
 					}
