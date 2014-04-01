@@ -31,7 +31,7 @@ public class StrategyHelper {
 	/**
 	 * The safe distance from the quadrant x value
 	 */
-	public static final int DISTANCE_FROM_QUADRANTX = 30;
+	public static final int DISTANCE_FROM_QUADRANTX = 25;
 	
 	/**
 	 * Normalises the vector to have length one.
@@ -311,7 +311,7 @@ public class StrategyHelper {
 	 * @return True if the robot has the ball, False otherwise
 	 */
 	public static boolean hasBall(Robot r, WorldState ws){
-		return hasBall(r, ws, 32, GeneralBehavior.ANGLE_ERROR);
+		return hasBall(r, ws, 50, GeneralBehavior.ANGLE_ERROR);
 	}
 	
 	/**
