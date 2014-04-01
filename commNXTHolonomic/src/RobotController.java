@@ -36,7 +36,7 @@ public class RobotController {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {}
-		ULTRA.kick(35);
+		ULTRA.kick(100);
 	}
 	
 	public void forward() {

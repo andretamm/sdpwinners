@@ -1,5 +1,6 @@
 package communication;
 
+import constants.RobotType;
 import gui.MainWindow;
 import sdp.vision.RunVision;
 import sdp.vision.WorldState;
@@ -13,14 +14,36 @@ public class StartRobot {
 		// Start vision
 		WorldState worldstate = new WorldState();
 		RunVision.setupVision(worldstate);
-	    
-		
+
 		// Set up Bluetooth communications class
 		server = new Server(worldstate);
-//		server.connectToRobot(RobotType.DEFENDER);
+//		server.connectToRobot(RobotType.ATTACKER);
+//		
+//		server.sendRotateDegrees(RobotType.ATTACKER, 180, false);
+//		
+//		Thread.sleep(4000);
+//		
+//		server.sendRotateDegrees(RobotType.ATTACKER, -180, false);
 		
-//		server.sendDiagonalMovement(RobotType.DEFENDER, 45);
-//		Thread.sleep(3000);
+//		server.sendRotateDegrees(RobotType.ATTACKER, 90, false);
+//		
+//		
+//		
+//		Thread.sleep(2500);
+//		server.sendRotateDegrees(RobotType.ATTACKER, 90, true);
+//		
+//		Thread.sleep(2500);
+//		server.sendRotateDegrees(RobotType.ATTACKER, 90, true);
+//		
+//		Thread.sleep(2500);
+//		server.sendRotateDegrees(RobotType.ATTACKER, 90, true);
+//		
+		
+//		
+//		Thread.sleep(4000);
+//		
+//		server.disconnectFromRobot(RobotType.ATTACKER);
+//		
 //		server.close();
 		
 		//Strategy manager

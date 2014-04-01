@@ -5,6 +5,7 @@ import communication.RobotCommand;
 import communication.Server;
 
 import behavior.GeneralBehavior;
+import behavior.Strategy;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
@@ -27,7 +28,12 @@ public class DefenderGotoBallAndGrab extends GeneralBehavior {
 		
 		d("going to ball");
 		
-		if (goToBall()) {
+		// Global flag to let the attacker know we're doing a pass.
+		// NB - the attacker is responsible for setting this to false when he realises
+		// the pass isn't happening any more!
+		ws.setDoingPass(true);
+		
+		if (goToBallDefender()) {
 			// We're at the ball, so grab it
 			System.out.println("GRABBING");
 			s.send(type, RobotCommand.CLOSE_GRABBER);

@@ -91,6 +91,12 @@ public class NXT {
 						// a new timestamp
 						robot.previousCommandTime = commandTime;
 						robot.rotateTo(robot.rotateAngle);
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						break;
 					default:
 						robot.chill();

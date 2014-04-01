@@ -36,7 +36,7 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			s.forceSend(type, RobotCommand.OPEN_GRABBER);
 			state().grabberState = 0;
 		}
-		
+				
 		/*-------------------------------------*/
 		/* Defender calibration points         */
 		/*-------------------------------------*/

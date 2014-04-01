@@ -170,11 +170,11 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		ArrayList<Point> attackPoints = new ArrayList<Point>();
 		
 		Point possibleAttackPoint = ws.getOppositionGoalTop();
-		possibleAttackPoint.y += 10;
+		possibleAttackPoint.y += 30;
 		attackPoints.add(possibleAttackPoint);
 		
 		possibleAttackPoint = ws.getOppositionGoalBottom();
-		possibleAttackPoint.y -= 10;
+		possibleAttackPoint.y -= 30;
 		attackPoints.add(possibleAttackPoint);
 		
 		double bestDistance = 0;
