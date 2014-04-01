@@ -107,7 +107,7 @@ public class WorldState implements VisionInterface {
 
 	//these two are already barrelcorrected
 	private Point pitchTopLeft1 = new Point(70, 50);
-	private Point pitchBottomRight1 = new Point(570, 340);
+	private Point pitchBottomRight1 = new Point(583, 350);
 
 	private Point outerPitchTopLeft2 = new Point(5, 68);
 	private Point outerPitchBottomRight2 = new Point(634,400);
@@ -953,8 +953,8 @@ public class WorldState implements VisionInterface {
 	 * @return True for on the pitch, False for out of the pitch
 	 */
 	public boolean onPitch(Point p) {
-		if (p.y < getPitchBottomRight().y && p.y > getPitchTopLeft().y &&
-				p.x < getPitchTopRight().x && p.x > getPitchTopLeft().x) {
+		if (p.y < getPitchBottomRight().y + 10 && p.y > getPitchTopLeft().y - 10 &&
+				p.x < getPitchTopRight().x + 10 && p.x > getPitchTopLeft().x - 10) {
 			return true;
 		} else {
 			return false;

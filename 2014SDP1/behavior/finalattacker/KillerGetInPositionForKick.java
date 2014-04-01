@@ -26,7 +26,7 @@ public class KillerGetInPositionForKick extends GeneralBehavior {
 		
 		// Stop this madness if we didn't actually grab the ball <.<
 		// Use a slightly bigger error margin than usual :)
-		if (!StrategyHelper.hasBall(robot(), ws, 43, ANGLE_ERROR * 1.8)) {
+		if (!StrategyHelper.hasBall(robot(), ws, 50, ANGLE_ERROR * 3)) {
 			ws.setRobotGrabbedBall(robot(), false);
 
 			s.send(type, RobotCommand.OPEN_GRABBER);

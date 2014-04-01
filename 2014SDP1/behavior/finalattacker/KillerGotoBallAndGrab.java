@@ -32,6 +32,7 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 		
 		if (goToBall()) {
 			// We're at the ball, so grab it
+			s.send(type, RobotCommand.STOP);
 			System.out.println("GRABBING");
 			s.send(type, RobotCommand.CLOSE_GRABBER);
 			ws.setRobotGrabbedBall(robot(), true);

@@ -107,7 +107,7 @@ public class Orientation {
         worldState.setRobotOrientationVector(new Robot(rColour, rType), new Point2D.Double(plateCentre.x - greyCentre.x, plateCentre.y - greyCentre.y));
         
 //        greyCentre = DistortionFix.barrelCorrected()
-        
+//        plateCentre = DistortionFix.barrelCorrected(new Point(plateCentre.x, plateCentre.y));
         double orientation = getAngle(greyCentre, plateCentre);
         
         //Insert the new orientation in the orientation history:
