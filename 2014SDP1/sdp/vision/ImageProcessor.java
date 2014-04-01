@@ -139,8 +139,6 @@ public class ImageProcessor {
 //                updateWorldState(pitch, worldState);
 //                //calculates and stores new object velocities in worldstate, stores point and timestamp history as well
 //                updateWorldStateVelocities(worldState);
-                
-                
         }
         
         /**
@@ -155,8 +153,8 @@ public class ImageProcessor {
             ws.setBallY((int) ballP.getY());
             
             for (Robot r : Robot.listAll()) {
-//        		Point position = DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type));
-            	Point position = pp.getRobotPosition(r.colour, r.type);
+        		Point position = DistortionFix.AndrePerspectiveFix(DistortionFix.barrelCorrected(pp.getRobotPosition(r.colour, r.type)));
+
                 ws.setRobotX(r, (int) position.getX());
                 ws.setRobotY(r, (int) position.getY());
                 ws.setRobotOrientation(r.type, r.colour, pp.getRobotOrientation(r.colour, r.type));
@@ -304,8 +302,8 @@ public class ImageProcessor {
                 Position.ballFilterPoints(pitch.getPoints(Colours.RED), pitch.getBallPosition());
             	worldState.setBallVisible(true);
             	
-            	// Set the position of the ball without the outliers
-				pitch.setBallPosition(DistortionFix.correctedPoint(Position.findMean(pitch.getPoints(Colours.RED))));
+            	// Set the position of the ball 
+				pitch.setBallPosition(DistortionFix.barrelCorrected(Position.findMean(pitch.getPoints(Colours.RED))));
 
 			} catch (Exception e2) {
 				// Either filtered out points or no red points to be found, set default position
@@ -338,7 +336,7 @@ public class ImageProcessor {
         	            Position.filterOutCircle(pitch.getColouredPoints(rc, rt, c), 
         	            					     pitch.getBallPosition(), 
         	            					     WorldState.ballRadius);  
-        			}  
+        			}
         			
         			try {
         				
@@ -360,7 +358,7 @@ public class ImageProcessor {
 								  			  pitch.getRobotPosition(rc, rt));
 						
 						// The robot position is the mean of the coloured points after filtering 
-						pitch.setRobotPosition(rc, rt, DistortionFix.correctedPoint(Position.findMean(pitch.getColouredPoints(rc, rt, c))));
+						pitch.setRobotPosition(rc, rt, Position.findMean(pitch.getColouredPoints(rc, rt, c)));
 					
         			} catch (Exception e) {
 						// We don't have any coloured points left for this robot, set it to its "default" position
