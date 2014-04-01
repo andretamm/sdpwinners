@@ -105,7 +105,9 @@ public class Orientation {
         
         Point2D.Double plateCentre = new Point2D.Double(x0, y0);
         worldState.setRobotOrientationVector(new Robot(rColour, rType), new Point2D.Double(plateCentre.x - greyCentre.x, plateCentre.y - greyCentre.y));
-
+        
+//        greyCentre = DistortionFix.barrelCorrected()
+        
         double orientation = getAngle(greyCentre, plateCentre);
         
         //Insert the new orientation in the orientation history:
