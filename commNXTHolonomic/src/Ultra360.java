@@ -460,13 +460,13 @@ public class Ultra360 {
 		// Note that rotating speeds below 40 are DANGEROUS, we can kind of rotate with 40
 		// if we have mostly full batteries, 35 only works with out-of-the-package fresh
 		// batteries, so should drop total minimum below 40.
-		double maxSpeed = 210; // Actual MAXIMUM is maxSpeed + minSpeed :))
-		double minSpeed = 30; 
-		
+		double maxSpeed = 220; // Actual MAXIMUM is maxSpeed + minSpeed :))
+		double minSpeed = 20;
+
 		// Find final speeds, these are zero by default!
 		byte horisontalSpeed = 0;
 		byte verticalSpeed = 0;
-		
+
 		if (horisontalMovement != 0) {
 			horisontalSpeed = (byte) (Math.min(Math.abs((maxSpeed * horisontalMovement / maxMovement)), maxSpeed) + minSpeed);
 		}
