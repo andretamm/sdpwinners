@@ -113,10 +113,6 @@ public class Ultra360 {
 		byte rotateSpeed = (byte) 250;
 		long degToTime = (long) Math.rint(Math.abs(degrees)*3.0); //3.0 is the value that works on the vision
 	
-	
-		
-		byte rotateSpeed = (byte) 200; //Changing this will fuck up the function by the way
-		long degToTime = (long) Math.rint(Math.abs(degrees)*3.3); // Based on the current speed of rotation
 		
 		if(degrees > 0){
 			//EAST Wheel
