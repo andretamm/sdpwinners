@@ -64,7 +64,7 @@ public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
 		/*---------------------------------------------------------*/
 		/* Aim the kicker right                                    */
 		/*---------------------------------------------------------*/
-		s.send(type, RobotCommand.AIM_RIGHT);
+		s.send(type, RobotCommand.AIM_LEFT);
 		
 		/*---------------------------------------------------------*/
 		/* Rotate to face their goal                               */
