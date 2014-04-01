@@ -349,9 +349,9 @@ public class Ultra360 {
 	//****************************************************************//
 	
 	public void closeGrabber() {
-		grabber.setSpeed(800);
-        grabber.setAcceleration(10000);
-        grabber.rotateTo(80);
+		grabber.setSpeed(400);
+	        grabber.setAcceleration(6000);
+	        grabber.rotateTo(80);
 	}
 	
 	public void openGrabber() {
