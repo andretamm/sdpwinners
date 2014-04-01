@@ -351,12 +351,18 @@ public class Display {
 			Point pos = ws.getRobotPoint(ws.getOur(type));
 			//Point or = ws.getRobot
 			
-			if (image != null && ws.onPitch(pos)) {
-				AffineTransform tx = AffineTransform.getRotateInstance(ws.getRobotOrientation(ws.getOur(type)) + Math.PI/2, image.getWidth()/2, image.getHeight()/2);
-				AffineTransformOp opp = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-				graphics.drawImage(opp.filter(image, null), pos.x - 20, pos.y - 20, 50,50, null);
-			} else if (command != RobotCommand.NO_COMMAND) {
-//				System.out.println("DISPLAY: Don't have an image for command : " + command);
+			try {
+				if (image != null && ws.onPitch(pos) && image != null) {
+					AffineTransform tx = AffineTransform.getRotateInstance(ws.getRobotOrientation(ws.getOur(type)) + Math.PI/2, image.getWidth()/2, image.getHeight()/2);
+					AffineTransformOp opp = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+					graphics.drawImage(opp.filter(image, null), pos.x - 20, pos.y - 20, 50,50, null);
+				} else if (command != RobotCommand.NO_COMMAND) {
+	//				System.out.println("DISPLAY: Don't have an image for command : " + command);
+				}
+			} catch (Exception e) {
+				System.out.println("Command: " + command);
+				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}		
 		

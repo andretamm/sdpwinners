@@ -335,6 +335,8 @@ public class StrategyHelper {
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
+			System.out.println("Ball distance: " + distance + " angle error: " + difference);
+			
 			if (distance <= distanceError) {
 				return true;
 			}
