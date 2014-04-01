@@ -18,7 +18,7 @@ import communication.Server;
 
 import behavior.finalattacker.KillerManager;
 import behavior.finalattacker.KillerVerticalManager;
-import behavior.friendlydefender.DefenderManager;
+import behavior.finaldefender.DefenderManager;
 import constants.RobotType;
 import sdp.vision.Drawable;
 import sdp.vision.WorldState;

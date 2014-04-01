@@ -45,13 +45,15 @@ public class KillerGetInPositionForKick extends GeneralBehavior {
 		}
 		
 		// Don't need to move any more!
-		if (state().isMoving) {
-			state().isMoving = false;
-			stop();
-		}
+		stop();
 		
 		// We're there!
 		Strategy.attackerReadyForKick = true;
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	/** 
