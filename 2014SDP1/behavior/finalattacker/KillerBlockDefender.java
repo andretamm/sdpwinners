@@ -35,6 +35,7 @@ public class KillerBlockDefender extends GeneralBehavior {
 			state().grabberState = 0;
 		}
 		
+		
 		// Where we need to go to
 		Point target = null;
 		
@@ -71,12 +72,40 @@ public class KillerBlockDefender extends GeneralBehavior {
 			target = ws.getQuadrantMiddlePoint(q);
 		} else {
 			// Make sure point is in the bounds
-			target.y = Math.max(ws.getPitchTopLeft().y + 40, Math.min(ws.getPitchBottomLeft().y - 40, target.y));
+			target.y = Math.max(ws.getPitchTopLeft().y + 45, Math.min(ws.getPitchBottomLeft().y - 45, target.y));
 		}
 		
-		if (goDiagonallyTo(target)) {
-			stopMovement();
+		/*-------------------------------------*/
+		/* Attacker calibration points         */
+		/*-------------------------------------*/
+		// We always try going towards one of these, that will stop us from 
+		// making unnecessarily jerky movements.
+		Point topPoint = new Point(quadrantMiddleX, ws.getPitchTopLeft().y - 50);
+		Point bottomPoint = new Point(quadrantMiddleX, ws.getPitchBottomRight().y + 50);
+
+		// Pick calibration point to use
+		Point calibrationTarget;
+		Point robot = ws.getRobotPoint(robot());
+
+		if (target.y < robot.y) {
+			calibrationTarget = topPoint;
+		} else {
+			calibrationTarget = bottomPoint;
 		}
+		
+		/*-------------------------------------*/
+		/* Get going!                          */
+		/*-------------------------------------*/
+		// Measure error based on our target, but actually go towards the calibrationpoint!
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+			if (!goDiagonallyTo(calibrationTarget)) {
+				// not there yet
+				return;
+			}
+		}
+
+		// We're there!
+		stop();
 	}
 
 	/** 
