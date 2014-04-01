@@ -4,6 +4,7 @@ import gui.MainWindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -120,6 +121,34 @@ public class Display {
 //			System.out.println("DISPLAY: Don't have an image for command : " + command);
 		}
 	}
+	
+	
+    /**
+     * Method for drawing arrows on screen
+     * @param g1 Graphics instance to draw on
+     * @param x1 Start x
+     * @param y1 Start y
+     * @param x2 End x
+     * @param y2 End y
+     */
+    public static void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
+    	int ARR_SIZE = 4;
+    	
+        Graphics2D g = (Graphics2D) g1.create();
+        g.setColor(Color.GREEN);
+        
+        double dx = x2 - x1, dy = y2 - y1;
+        double angle = Math.atan2(dy, dx);
+        int len = (int) Math.sqrt(dx*dx + dy*dy);
+        AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
+        at.concatenate(AffineTransform.getRotateInstance(angle));
+        g.transform(at);
+
+        // Draw horizontal arrow starting in (0, 0)
+        g.drawLine(0, 0, len, 0);
+        g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
+                      new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
+    }
 
 	public static void thresholds(BufferedImage img, PitchPoints op, ThresholdsState ts) {
 		
@@ -284,7 +313,9 @@ public class Display {
 			int x2=(int) (robotPoint.x + 50*Math.cos(ws.getRobotOrientation(r)));
 			int y2=(int) (robotPoint.y + 50*Math.sin(ws.getRobotOrientation(r)));
 			
-			graphics.drawLine(robotPoint.x, robotPoint.y, x2, y2);
+//			graphics.drawLine(robotPoint.x, robotPoint.y, x2, y2);
+			drawArrow(graphics, robotPoint.x, robotPoint.y, x2, y2);
+			
 		}
 
 		graphics.drawOval((int) ws.getBallX() - WorldState.ballRadius, (int) ws.getBallY() - WorldState.ballRadius, 2*WorldState.ballRadius+1, 2*WorldState.ballRadius+1);
