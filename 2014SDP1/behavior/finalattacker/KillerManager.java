@@ -22,7 +22,8 @@ public class KillerManager extends behavior.Manager {
 		behaviorList.add(new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerGetInPositionForKick(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerFASTKickBallToGoal(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerGetPass(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerCatchPassComplicated(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerRotateForPass(getWorldState(), getRobotType(), getServer()));
 		
 		return behaviorList.toArray(new Behavior[0]);
 	}

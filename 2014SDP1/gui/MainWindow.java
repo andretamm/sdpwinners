@@ -251,7 +251,7 @@ public class MainWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Set Killer strategy for " + type);
-			strat.setStrategy(type, new KillerVerticalManager(worldstate, type, server));
+			strat.setStrategy(type, new KillerManager(worldstate, type, server));
 		}
 	}
 	

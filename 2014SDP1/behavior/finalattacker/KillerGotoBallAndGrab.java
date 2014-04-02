@@ -22,6 +22,13 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
+		System.out.println("GotoBallAndGrab");
+		
+		// If the ball is in our quadrant then the pass is over
+		ws.setDoingPass(false);
+		ws.setKickedPass(false);
+		state().attackerOrientationSetForPass = false;
+		
 		// This is the start of the offensive phase, initialise variable for future use
 		state().attackerNumberOfTargetsTried = 0;
 		
@@ -40,12 +47,16 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 	}
 
 	/** 
-	 * Triggers if we do NOT have the ball AND the ball is in our quadrant on the pitch
+	 * Triggers if we do NOT have the ball AND the ball is in our quadrant on the pitch AND
+	 * the ball isn't moving too fast
 	 * @see lejos.robotics.subsumption.Behavior#takeControl()
 	 */
 	@Override
 	public boolean takeControl() {
-		return !ws.getRobotGrabbedBall(robot()) && ws.onPitch(ws.getBallPoint()) && ws.getBallQuadrant() == ws.getRobotQuadrant(robot());
+		return !ws.getRobotGrabbedBall(robot()) && 
+				ws.onPitch(ws.getBallPoint()) && 
+				ws.getBallQuadrant() == ws.getRobotQuadrant(robot()) &&
+			   !ws.ballIsMoving(0.1);
 	}
 
 }
