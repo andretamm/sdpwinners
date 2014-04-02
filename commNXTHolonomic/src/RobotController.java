@@ -32,7 +32,7 @@ public class RobotController {
 		ULTRA.stop();
 		
 		// Go diagonally at an given angle
-		ULTRA.diagonalMaxSpeed = 100;
+		ULTRA.diagonalMaxSpeed = 150;
 		ULTRA.moveDiagonally(angle);
 	}
 	
