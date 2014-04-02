@@ -20,6 +20,9 @@ public class RobotState {
 	/** How many different targets the defender has tried */
 	public int defenderNumberOfTargetsTried = 0;
 	
+	/** If the attacker has rotated the right way to catch a pass */
+	public boolean attackerOrientationSetForPass = false;
+	
 	/**
 	 * Different states for the grabber of this robot.
 	 * 0 - opened (or so we think <.<)

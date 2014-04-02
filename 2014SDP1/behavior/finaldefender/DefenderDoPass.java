@@ -24,7 +24,10 @@ public class DefenderDoPass extends GeneralBehavior {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
 		}
-			
+		
+		// Let the attacker know we've now possibly made the pass kick!
+		ws.setKickedPass(true);
+		
 		/*-----------------------------------------------*/
 		/* Decide which way to shoot                     */
 		/*-----------------------------------------------*/
@@ -70,7 +73,6 @@ public class DefenderDoPass extends GeneralBehavior {
 			state().isRotating = false;
 		}
 		
-		
 		/*-----------------------------------------------*/
 		/* Check if the kick is feasible                 */
 		/*-----------------------------------------------*/
@@ -89,15 +91,11 @@ public class DefenderDoPass extends GeneralBehavior {
 			}
 		}
 		
-		
 		/*-----------------------------------------------*/
 		/* Kick the baby                                 */
 		/*-----------------------------------------------*/
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.SLOW_KICK);
-		
-		// Let the attacker know we've made the pass kick!
-		ws.setKickedPass(true);
 		
 		// No longer have the ball after kick
 		ws.setRobotGrabbedBall(robot(), false);

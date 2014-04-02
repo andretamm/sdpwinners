@@ -31,7 +31,7 @@ public class StrategyHelper {
 	/**
 	 * The safe distance from the quadrant x value
 	 */
-	public static final int DISTANCE_FROM_QUADRANTX = 25;
+	public static final int DISTANCE_FROM_QUADRANTX = 20;
 	
 	/**
 	 * Normalises the vector to have length one.
@@ -335,7 +335,7 @@ public class StrategyHelper {
 			//Verify distance between Robot & Ball
 			double distance = getDistance(ws.getRobotPoint(r), ws.getBallPoint());
 			
-			System.out.println("Ball distance: " + distance + " angle error: " + difference);
+//			System.out.println("Ball distance: " + distance + " angle error: " + difference);
 			
 			if (distance <= distanceError) {
 				return true;

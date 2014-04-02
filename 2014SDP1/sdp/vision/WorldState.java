@@ -114,7 +114,7 @@ public class WorldState implements VisionInterface {
 
 	//these two are already barrelcorrected
 	private Point pitch2TopLeft = new Point(60, 90);
-	private Point pitch2BottomRight = new Point(575,396);
+	private Point pitch2BottomRight = new Point(579,388);
 
 	//Quadrant low/high X values
 	private int q1LowX;
