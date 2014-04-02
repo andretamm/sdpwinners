@@ -24,6 +24,11 @@ public class KillerGotoBallAndGrab extends GeneralBehavior {
 		
 		d("going to ball");
 		
+		// Definitely not doing a pass :D
+		ws.setDoingPass(false);
+		ws.setKickedPass(false);
+		state().attackerOrientationSetForPass = false;
+		
 		// Mark the grabber as being potentially closed
 		state().grabberState = 1;
 		

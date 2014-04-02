@@ -24,7 +24,9 @@ public class FriendlyKillerManager extends behavior.Manager {
 		behaviorList[3] = new KillerSimpleKickBallToGoal(getWorldState(), getRobotType(), getServer());
 		behaviorList[1] = new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer());
 		behaviorList[0] = new KillerBlockDefender(getWorldState(), getRobotType(), getServer());
-		behaviorList[4] = new KillerGetPass(getWorldState(), getRobotType(), getServer());
+//		behaviorList[4] = new KillerGetPass(getWorldState(), getRobotType(), getServer());
+		behaviorList[4] = new KillerRotateForPass(getWorldState(), getRobotType(), getServer());
+		behaviorList[5] = new KillerCatchPassComplicated(getWorldState(), getRobotType(), getServer());
 		
 //		behaviorList[2] = new KillerGetInPositionForKick(getWorldState(), getRobotType(), getServer());
 //		behaviorList[3] = new KillerKickBallToGoal(getWorldState(), getRobotType(), getServer());

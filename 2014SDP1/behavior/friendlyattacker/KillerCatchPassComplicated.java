@@ -1,4 +1,4 @@
-package behavior.finalattacker;
+package behavior.friendlyattacker;
 
 
 import java.awt.Color;
@@ -165,7 +165,6 @@ public class KillerCatchPassComplicated extends GeneralBehavior {
 			
 			// Couldn't find a point, so use middle of the quadrant instead
 			if (defendLinePoint == null) {
-				System.err.println("ERROR - DEFENDLINEPOINT IS NULL");
 				defendLinePoint = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
 			}
 			
