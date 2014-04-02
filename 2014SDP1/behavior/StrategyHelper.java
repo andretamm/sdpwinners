@@ -31,8 +31,9 @@ public class StrategyHelper {
 	/**
 	 * The safe distance from the quadrant x value
 	 */
-	public static final int DISTANCE_FROM_QUADRANTX = 20;
 	
+	public static final int DISTANCE_FROM_QUADRANTX = 5;
+
 	/**
 	 * Normalises the vector to have length one.
 	 */
@@ -460,7 +461,7 @@ public class StrategyHelper {
 			if (xObject < safeXFromLow) {
 				safeX = safeXFromLow;
 			} else if (xObject > quadrantXHigh) {
-				safeX = quadrantXHigh;
+				safeX = safeXFromHigh;
 			}
 		}
 		

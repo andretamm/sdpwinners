@@ -311,6 +311,9 @@ public abstract class GeneralBehavior implements Behavior {
 		// Correct the angle
 		Point robot = ws.getRobotPoint(robot());
 		Point safeTarget = StrategyHelper.safePoint(ws, robot(), target);
+	
+		//Testing stayInQuadrantBehaviour
+		//Point safeTarget = target;
 		
 		double orientation = Orientation.getAngle(robot, safeTarget);
 		 

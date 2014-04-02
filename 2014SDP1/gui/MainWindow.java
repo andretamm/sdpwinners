@@ -143,7 +143,7 @@ public class MainWindow {
 		bStartStopAttacker.addActionListener(new StartStopAttackerButtonListener());
 		bStartStopAttacker.setActionCommand("start attacker");
 		
-		bStartStopDefender.addActionListener(new StartStopAttackerButtonListener());
+		bStartStopDefender.addActionListener(new StartStopDefenderButtonListener());
 		bStartStopDefender.setActionCommand("start defender");
 		
 		// Group buttons onto panels
