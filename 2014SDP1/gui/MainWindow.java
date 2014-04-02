@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+
 import communication.Server;
 import behavior.finalattacker.FinalKillerManager;
 import behavior.finalattacker.FinalKillerVerticalManager;
@@ -21,9 +22,14 @@ import behavior.finaldefender.FinalDefenderManager;
 import behavior.finaldefenderpenalty.DefenderPenaltyManager;
 import behavior.friendlyattacker.FriendlyKillerManager;
 import behavior.friendlydefender.FriendlyDefenderManager;
-import constants.RobotType;
 import sdp.vision.Drawable;
 import sdp.vision.WorldState;
+
+import communication.RobotCommand;
+import communication.Server;
+
+
+import constants.RobotType;
 
 /**
  * Control window to run a robot
@@ -122,8 +128,9 @@ public class MainWindow {
 		JButton bDefenderFinalDefender = new JButton("Defender");
 		JButton bDefenderPenalty = new JButton("PENALTY");
 		
-		JButton bStartStop = new JButton("Start");
-
+		JButton bStartStopAttacker = new JButton("Start");
+		JButton bStartStopDefender = new JButton("Start");
+		
 		// Add listeners
 		bAttackerKiller.addActionListener(new KillerButtonListener(RobotType.ATTACKER));
 		bAttackerFinalKiller.addActionListener(new FinalKillerButtonListener(RobotType.ATTACKER));
@@ -133,13 +140,20 @@ public class MainWindow {
 		bDefenderFinalDefender.addActionListener(new FinalDefenderButtonListener(RobotType.DEFENDER));
 		bDefenderPenalty.addActionListener(new PenaltyButtonListener(RobotType.DEFENDER));
 		
-		bStartStop.addActionListener(new StartStopButtonListener());
-		bStartStop.setActionCommand("start");
-
+		bStartStopAttacker.addActionListener(new StartStopAttackerButtonListener());
+		bStartStopAttacker.setActionCommand("start attacker");
+		
+		bStartStopDefender.addActionListener(new StartStopAttackerButtonListener());
+		bStartStopDefender.setActionCommand("start defender");
+		
 		// Group buttons onto panels
-		JPanel startstop = Helper.titledPanel("Start/Stop");
-		startstop.setLayout(new BoxLayout(startstop, BoxLayout.Y_AXIS));
-		startstop.add(bStartStop);
+		JPanel startstopAttacker = Helper.titledPanel("ATTACK");
+		startstopAttacker.setLayout(new BoxLayout(startstopAttacker, BoxLayout.Y_AXIS));
+		startstopAttacker.add(bStartStopAttacker);
+		
+		JPanel startstopDefender = Helper.titledPanel("DEFEND");
+		startstopDefender.setLayout(new BoxLayout(startstopDefender, BoxLayout.Y_AXIS));
+		startstopDefender.add(bStartStopDefender);
 		
 		JPanel attacker = Helper.titledPanel("Attacker");
 		attacker.setLayout(new BoxLayout(attacker, BoxLayout.Y_AXIS));
@@ -158,8 +172,9 @@ public class MainWindow {
 		// Create control button panel
 		JPanel buttons = new JPanel();
 		buttons.add(Box.createHorizontalGlue());
-		buttons.add(startstop);
+		buttons.add(startstopAttacker);
 		buttons.add(attacker);
+		buttons.add(startstopDefender);
 		buttons.add(defender);
 		buttons.add(Box.createHorizontalGlue());
 
@@ -230,21 +245,59 @@ public class MainWindow {
 	}
 	
 	/**
-	 * Listener for the Start/Stop button
+	 * Listener for the Start/Stop button for the attacker
 	 */
-	class StartStopButtonListener implements ActionListener{
+	class StartStopAttackerButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ("start" == e.getActionCommand()) {
-				System.out.println("Starting playing");
+			if ("start attacker" == e.getActionCommand()) {
+				System.out.println("Starting playing the attacker");
 				((JButton) e.getSource()).setText("Stop");
-				((JButton) e.getSource()).setActionCommand("stop");
-				strat.start();
-			} else if ("stop" == e.getActionCommand()) {
-				System.out.println("Stopping playing");
+				((JButton) e.getSource()).setActionCommand("stop attacker");
+				strat.startAttacker();
+			} else if ("stop attacker" == e.getActionCommand()) {
+				System.out.println("Stopping playing the attacker");
 				((JButton) e.getSource()).setText("Start");
-				((JButton) e.getSource()).setActionCommand("start");
-				strat.stop();
+				((JButton) e.getSource()).setActionCommand("start attacker");
+				strat.stopAttacker();
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				server.send(RobotType.ATTACKER, RobotCommand.STOP);
+			}
+		}
+	}
+	
+	/**
+	 * Listener for the Start/Stop button for the attacker
+	 */
+	class StartStopDefenderButtonListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if ("start defender" == e.getActionCommand()) {
+				System.out.println("Starting playing the defender");
+				((JButton) e.getSource()).setText("Stop");
+				((JButton) e.getSource()).setActionCommand("stop defender");
+				strat.startDefender();				
+			} else if ("stop defender" == e.getActionCommand()) {
+				System.out.println("Stopping playing the defender");
+				((JButton) e.getSource()).setText("Start");
+				((JButton) e.getSource()).setActionCommand("start defender");
+				strat.stopDefender();
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				server.send(RobotType.DEFENDER, RobotCommand.STOP);
 			}
 		}
 	}
