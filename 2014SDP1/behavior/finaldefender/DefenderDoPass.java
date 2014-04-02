@@ -96,6 +96,9 @@ public class DefenderDoPass extends GeneralBehavior {
 		System.out.println("KICK NOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		s.send(type, RobotCommand.SLOW_KICK);
 		
+		// Let the attacker know we've made the pass kick!
+		ws.setKickedPass(true);
+		
 		// No longer have the ball after kick
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.defenderReadyForPass = false;

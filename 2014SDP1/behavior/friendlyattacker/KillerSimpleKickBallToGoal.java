@@ -66,10 +66,17 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 			targetPoint = ws.getOppositionGoalCentre();
 		}
 		
-		// Turn kicker left
-		if (! state().isAimingLeft) {
-			s.send(type, RobotCommand.AIM_LEFT);
-			state().isAimingLeft = true;
+		// Turn kicker left or right
+		if (! state().isAimingLeft && ! state().isAimingRight) {
+			if (Math.random() > 0.5) {
+				// Aim right
+				s.send(type, RobotCommand.AIM_RIGHT);
+				state().isAimingRight = true;
+			} else {
+				// Aim left
+				s.send(type, RobotCommand.AIM_LEFT);
+				state().isAimingLeft = true;
+			}
 		}
 		
 		// Rotate towards target
@@ -98,10 +105,11 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 		// Reset the kicker
 		s.send(type, RobotCommand.AIM_RESET);
 		state().isAimingLeft = false;
+		state().isAimingRight = false;
 		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
-			Thread.sleep(300);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
