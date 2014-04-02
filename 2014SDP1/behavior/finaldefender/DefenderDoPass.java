@@ -61,23 +61,30 @@ public class DefenderDoPass extends GeneralBehavior {
 		/* Rotate that way                               */
 		/*-----------------------------------------------*/
 		double orientation = Orientation.getAngle(robot, target);
+//		
+//		// Wait until we're close enough
+//		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
+//			rotateBy((int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)));
+//			return;
+//		}
+//		
+//		// Robot stops automagically after doing rotating
+//		if (state().isRotating) {
+//			state().isRotating = false;
+//		}
 		
-		// Wait until we're close enough
-		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
-			rotateBy((int) Math.toDegrees(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)));
+		if(!rotateTo(orientation)) {
 			return;
 		}
 		
-		// Robot stops automagically after doing rotating
-		if (state().isRotating) {
-			state().isRotating = false;
-		}
+		stopRotating();
 		
 		/*-----------------------------------------------*/
 		/* Check if the kick is feasible                 */
 		/*-----------------------------------------------*/
 		// We're close!
 		// See how close the opponent is
+
 		double shotAngle = orientation;
 		double oppositionDistance = StrategyHelper.getOpponentDistanceFromPath(robot(), shotAngle, ws);
 

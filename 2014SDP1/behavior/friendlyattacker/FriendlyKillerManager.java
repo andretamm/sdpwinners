@@ -14,7 +14,7 @@ public class FriendlyKillerManager extends behavior.Manager {
 	
 	@Override
 	public Behavior[] getAllBehaviors() {
-		int numOfBehaviors = 5;
+		int numOfBehaviors = 6;
 		Behavior[] behaviorList = new Behavior[numOfBehaviors];
 
 //		// Add behaviors in ascending order of priority

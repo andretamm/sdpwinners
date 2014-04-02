@@ -67,22 +67,22 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 		}
 		
 		// Turn kicker left or right
-		if (! state().isAimingLeft && ! state().isAimingRight) {
-			if (Math.random() > 0.5) {
-				// Aim right
-				s.send(type, RobotCommand.AIM_RIGHT);
-				state().isAimingRight = true;
-			} else {
-				// Aim left
-				s.send(type, RobotCommand.AIM_LEFT);
-				state().isAimingLeft = true;
-			}
-		}
+//		if (! state().isAimingLeft && ! state().isAimingRight) {
+//			if (Math.random() > 0.5) {
+//				// Aim right
+//				s.send(type, RobotCommand.AIM_RIGHT);
+//				state().isAimingRight = true;
+//			} else {
+//				// Aim left
+//				s.send(type, RobotCommand.AIM_LEFT);
+//				state().isAimingLeft = true;
+//			}
+//		}
 		
 		// Rotate towards target
 		double orientation = Orientation.getAngle(robot, targetPoint);
 		
-		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR * 1.5) {
+		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR * 2) {
 			rotateTo(orientation);
 			state().isRotating = true;
 			return;
@@ -102,11 +102,11 @@ public class KillerSimpleKickBallToGoal extends GeneralBehavior {
 		Strategy.attackerReadyForKick = false;
 		targetPoint = null;
 		
-		// Reset the kicker
-		s.send(type, RobotCommand.AIM_RESET);
-		state().isAimingLeft = false;
-		state().isAimingRight = false;
-		
+//		// Reset the kicker
+//		s.send(type, RobotCommand.AIM_RESET);
+//		state().isAimingLeft = false;
+//		state().isAimingRight = false;
+//		
 		// Wait a wee bit so we don't retrigger grabbing the ball
 		try {
 			Thread.sleep(500);
