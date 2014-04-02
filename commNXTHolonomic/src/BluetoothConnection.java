@@ -25,14 +25,13 @@ public class BluetoothConnection extends Thread {
     			robot.command = 3;
     			establishConnection();
     	    	sendReadySignal();
-    		} else if (i == 8) {
+    		} else if (i == 8 || i == 25) {
     			byte h = (byte)receiveIntSignal();
     			byte k = (byte)receiveIntSignal();
     			
     			int angle = ((int) h & 0xFF | (int) (k << 8));
-    			System.out.println("Angle is " + angle);
     			robot.angle   = angle;	
-    	    	robot.command = 8;
+    	    	robot.command = i;
     	    	
     	    } else if (i == 22) {
     	    	/* Rotate by a specific angle */

@@ -19,9 +19,9 @@ public class NXT {
     		int command = robot.command;
     		int angle = robot.angle;
     		
-    		if (command != robot.previousCommand || 
-    			(command == 8 && robot.previousAngle != angle) ||
-    			(command == 22 && robot.previousCommandTime != commandTime)) {
+    		if (command != robot.previousCommand ||  
+    			((command == 8 || command == 25) && robot.previousAngle != angle) || // Diagonal movement
+    			(command == 22 && robot.previousCommandTime != commandTime)) { // SUPFR rotation
     			// Only do smth if we got a new command
 	    		switch (command) {
 					case 0:
@@ -97,6 +97,10 @@ public class NXT {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						break;
+					case 25:
+						robot.goDiagonallySlow(robot.angle);
+						robot.previousAngle = angle;
 						break;
 					default:
 						robot.chill();

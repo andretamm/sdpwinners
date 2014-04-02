@@ -204,7 +204,7 @@ public class Server {
 	
 	/**
 	 * Send a command to the robot to move diagonally. The method
-	 * choppes an angle and send it to the NXT.
+	 * chops an angle and send it to the NXT.
 	 * 
 	 * @param type Defender or attacker
 	 * @param angle to rotate to
@@ -260,6 +260,74 @@ public class Server {
 		
 		// Command array
 		byte[] commands = {(byte) RobotCommand.MOVE_DIAGONALLY, angleArray[0], angleArray[1]};
+		
+		if (type == RobotType.DEFENDER) {
+			defenderRobot.sendBytesToRobot(commands);
+		} else if (type == RobotType.ATTACKER) {
+			attackerRobot.sendBytesToRobot(commands);
+		}
+	}
+	
+	/**
+	 * Send a command to the robot to move diagonally. The method
+	 * chops an angle and send it to the NXT.
+	 * 
+	 * This sends the slow diagonal movement command instead of the fast one
+	 * 
+	 * @param type Defender or attacker
+	 * @param angle to rotate to
+	 */
+	public void sendSlowDiagonalMovement(RobotType type, int angleToGo) {
+		long currentTime = System.currentTimeMillis();
+		
+		if (previousCommand.get(type) == RobotCommand.MOVE_DIAGONALLY_SLOW) {
+			if (Math.abs(StrategyHelper.angleDiff(Math.toRadians(previousAngle.get(type)), Math.toRadians(angleToGo))) < C.A10 &&
+				currentTime - previousCommandTime.get(type) < 1500) {
+				// Angle no change enough, do nothing lol
+				return;
+			} else {
+				// Either angle has changed or there's been a while since
+				// we sent any commands so resend it just in case.
+			}
+		}
+		
+		previousCommand.put(type, RobotCommand.MOVE_DIAGONALLY_SLOW);
+		previousAngle.put(type, angleToGo);
+		previousCommandTime.put(type, currentTime);
+		
+		 // Create the angle that is send to the NXT
+		int angle = 0;
+		
+		// Get the robot's orientation from the Vision System.
+		int angleRobotIsFacing = (int)Math.toDegrees(ws.getRobotOrientation(type, ws.getColour()));
+		
+		// Get the orientation of the robot's zero
+		int robotZero = (angleRobotIsFacing + 90) % 360;
+		
+		// Get the difference between the robot zero and the angle we want to go to
+		double angleDiff = StrategyHelper.angleDiff(Math.toRadians(robotZero), Math.toRadians(angleToGo));
+		
+		if (angleDiff > 0) {
+			angle = 360 - (int)Math.toDegrees(angleDiff);	
+		} else if (angleDiff < 0) {
+			angle = (int)Math.toDegrees(angleDiff) ;
+		}
+		
+		System.out.println(angleToGo + " " + Math.abs(angle));
+		
+		angle = Math.abs(angle);
+		
+		// Represent the angle as two bytes
+		byte[] angleArray = new byte[2];
+		
+		// Mask all but the lower eight bits.
+		angleArray[0] = (byte) (angle & 0xFF);
+		
+		// >> 8 discards the lowest 8 bits by moving all bits 8 places to the right
+		angleArray[1] = (byte) ((angle >> 8) & 0xFF);
+		
+		// Command array
+		byte[] commands = {(byte) RobotCommand.MOVE_DIAGONALLY_SLOW, angleArray[0], angleArray[1]};
 		
 		if (type == RobotType.DEFENDER) {
 			defenderRobot.sendBytesToRobot(commands);

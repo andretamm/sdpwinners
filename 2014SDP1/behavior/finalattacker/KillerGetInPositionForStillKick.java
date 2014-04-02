@@ -12,9 +12,9 @@ import constants.C;
 import constants.RobotType;
 import constants.ShootingDirection;
 
-public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
+public class KillerGetInPositionForStillKick extends GeneralBehavior {
 
-	public KillerGetInPositionForVerticalKick(WorldState ws, RobotType type, Server s) {
+	public KillerGetInPositionForStillKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 
@@ -39,16 +39,25 @@ public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
 		/* Make robot go to either the top or bottom of their goal */
 		/*---------------------------------------------------------*/	
 		Point middlePoint = ws.getQuadrantMiddlePoint(ws.getRobotQuadrant(robot()));
-		Point goalPoint;
 		
 		if (ws.getDirection() == ShootingDirection.LEFT) {
+			// Make shot from slightly to the right of the centre for a wider angle
+			middlePoint.x += 40;
+		} else {
+			// Make shot from slightly to the left of the centre for a wider angle
+			middlePoint.x -= 40;
+		}
+		
+		Point goalPoint;
+		
+		if (ws.getDirection() == ShootingDirection.RIGHT) {
 			// Go to top
 			goalPoint = ws.getOppositionGoalTop();
-			goalPoint.y -= 20;
+			goalPoint.y -= 30;
 		} else {
 			// Go to bottom
 			goalPoint = ws.getOppositionGoalBottom();
-			goalPoint.y += 20;
+			goalPoint.y += 30;
 		}
 		
 		Point target = new Point(middlePoint.x, goalPoint.y);
@@ -60,11 +69,6 @@ public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
 		
 		// We're there
 		stopMovement();
-		
-		/*---------------------------------------------------------*/
-		/* Aim the kicker left                                     */
-		/*---------------------------------------------------------*/
-		s.send(type, RobotCommand.AIM_LEFT);
 		
 		/*---------------------------------------------------------*/
 		/* Rotate to face their goal                               */
@@ -79,7 +83,7 @@ public class KillerGetInPositionForVerticalKick extends GeneralBehavior {
 		// We're there!
 		Strategy.attackerReadyForKick = true;
 		
-		// Wait until we rotate
+		// Wait until we rotate (and give time for the opponent to match our orientation :DD)
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {

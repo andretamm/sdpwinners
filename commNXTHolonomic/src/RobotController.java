@@ -20,10 +20,19 @@ public class RobotController {
 		ULTRA = new Ultra360();
 	}
 	
-	public void goDiagonally(int angle){
+	public void goDiagonally(int angle) {
 		ULTRA.stop();
 		
 		// Go diagonally at an given angle
+		ULTRA.diagonalMaxSpeed = 220;
+		ULTRA.moveDiagonally(angle);
+	}
+	
+	public void goDiagonallySlow(int angle) {
+		ULTRA.stop();
+		
+		// Go diagonally at an given angle
+		ULTRA.diagonalMaxSpeed = 100;
 		ULTRA.moveDiagonally(angle);
 	}
 	
@@ -126,4 +135,5 @@ public class RobotController {
 	public void rotateTo(int rotateAngle) {
 		ULTRA.rotateTo(rotateAngle);
 	}
+
 }
