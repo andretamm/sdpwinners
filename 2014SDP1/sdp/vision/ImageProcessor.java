@@ -298,10 +298,14 @@ public class ImageProcessor {
         		// Get the position of the red points (which we think is the ball)
 				pitch.setBallPosition(Position.findMean(pitch.getPoints(Colours.RED)));
 				
-				if (pitch.getBallPosition().equals(new Point(50, 50))) {
+				if (pitch.getBallPosition().equals(new Point(50, 50)) ||
+					pitch.getPoints(Colours.RED) == null ||
+					pitch.getPoints(Colours.RED).size() < 10) {
 					// No ball points found
 					throw new Exception();
 				}
+				
+//				System.out.println(pitch.getPoints(Colours.RED).size());
 				
 				// Filter out rest of points and find mean again
                 Position.ballFilterPoints(pitch.getPoints(Colours.RED), pitch.getBallPosition());
@@ -310,7 +314,8 @@ public class ImageProcessor {
             	// Set the position of the ball 
 				pitch.setBallPosition(DistortionFix.barrelCorrected(Position.findMean(pitch.getPoints(Colours.RED))));
 			} catch (Exception e2) {
-				// Either filtered out points or no red points to be found, set to previous position
+				// Either filtered out points or no red points to be found or too 
+				// few red points found, set to previous position
 				if (worldState.getBallPoint() != null) {
 					pitch.setBallPosition(worldState.getBallPoint());
 				} else {
