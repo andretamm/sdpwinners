@@ -115,7 +115,7 @@ public abstract class GeneralBehavior implements Behavior {
 	 * Rotates the robot to the specified angle. Does nothing if already
 	 * facing the right direction
 	 * @param angle The angle (in rad) the robot will be facing by the end
-	 * @author Andre
+	 * @return True if facing the right direction, False if will rotate
 	 */
 	public boolean rotateTo(double angle) {
 		double orientation = ws.getRobotOrientation(type, ws.getColour());
