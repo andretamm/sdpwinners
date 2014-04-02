@@ -150,6 +150,9 @@ public class WorldState implements VisionInterface {
 	/** If the defender is making a pass to the attacker */
 	boolean doingPass;
 	
+	/** If the defender has kicked the ball in the pass */
+	boolean kickedPass;
+	
 	/** Where the attacker should go to catch the pass */
 	Point attackerPassPosition;
 	
@@ -339,6 +342,7 @@ public class WorldState implements VisionInterface {
 		
 		// Initialise strategy variables
 		this.doingPass = false;
+		this.kickedPass = false;
 		this.attackerPassPosition = null;
 	}
 
@@ -1013,6 +1017,14 @@ public class WorldState implements VisionInterface {
 
 	public void setDoingPass(boolean doingPass) {
 		this.doingPass = doingPass;
+	}
+	
+	public boolean getKickedPass() {
+		return kickedPass;
+	}
+
+	public void setKickedPass(boolean kickedPass) {
+		this.kickedPass = kickedPass;
 	}
 
 	public Point getAttackerPassPosition() {
