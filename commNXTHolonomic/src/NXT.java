@@ -13,7 +13,7 @@ public class NXT {
     	receiver.setPriority(Thread.MIN_PRIORITY);
     	receiver.start();
     	
-    	// Wait for commands from the bluetoothconnection
+    	// Wait for commands from the bluetooth connection
     	while (true) {
     		long commandTime = robot.commandTime;
     		int command = robot.command;
@@ -91,16 +91,16 @@ public class NXT {
 						// a new timestamp
 						robot.previousCommandTime = commandTime;
 						robot.rotateTo(robot.rotateAngle);
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 						break;
 					case 25:
 						robot.goDiagonallySlow(robot.angle);
 						robot.previousAngle = angle;
+						break;
+					case 26:
+						robot.fastForward();
+						break;
+					case 27:
+						robot.fastBackward();
 						break;
 					default:
 						robot.chill();

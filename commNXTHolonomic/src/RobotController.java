@@ -54,6 +54,14 @@ public class RobotController {
 		ULTRA.forward(ULTRA.forwardSpeed);
 	}
 	
+	public void fastForward() {
+		ULTRA.forward(ULTRA.forwardSpeedFast);
+	}
+	
+	public void fastBackward() {
+		ULTRA.backward(ULTRA.forwardSpeedFast);
+	}
+	
 	public void backward() {
 //		System.out.println("Going backward");
 		ULTRA.stop();

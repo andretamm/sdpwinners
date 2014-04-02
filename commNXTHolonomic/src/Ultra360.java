@@ -34,6 +34,9 @@ public class Ultra360 {
 	//Actual robot speed
 	public byte forwardSpeed;
 	
+	// Fast forward speed
+	public byte forwardSpeedFast = (byte) 240;
+	
 	//Rotation speed for the wheels
 	public byte fastRotationSpeed;
 	public byte slowRotationSpeed;
