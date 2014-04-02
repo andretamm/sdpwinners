@@ -6,9 +6,9 @@ import lejos.robotics.subsumption.Behavior;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
-public class DefenderManager extends behavior.Manager {
+public class FriendlyDefenderManager extends behavior.Manager {
 
-	public DefenderManager(WorldState ws, RobotType type, Server s) {
+	public FriendlyDefenderManager(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 	

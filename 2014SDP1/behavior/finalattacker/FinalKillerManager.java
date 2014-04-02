@@ -7,9 +7,9 @@ import lejos.robotics.subsumption.Behavior;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
-public class KillerVerticalManager extends behavior.Manager {
+public class FinalKillerManager extends behavior.Manager {
 
-	public KillerVerticalManager(WorldState ws, RobotType type, Server s) {
+	public FinalKillerManager(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 	
@@ -20,9 +20,10 @@ public class KillerVerticalManager extends behavior.Manager {
  		// Add behaviors in ascending order of priority
 		behaviorList.add(new KillerBlockDefender(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerGetInPositionForVerticalKick(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerDoVerticalKick(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerGetPass(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerGetInPositionForKick(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerFASTKickBallToGoal(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerCatchPassComplicated(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerRotateForPass(getWorldState(), getRobotType(), getServer()));
 		
 		return behaviorList.toArray(new Behavior[0]);
 	}

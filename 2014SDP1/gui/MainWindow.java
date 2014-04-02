@@ -15,10 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import communication.Server;
-
-import behavior.finalattacker.KillerManager;
-import behavior.finalattacker.KillerVerticalManager;
-import behavior.finaldefender.DefenderManager;
+import behavior.finalattacker.FinalKillerManager;
+import behavior.finalattacker.FinalKillerVerticalManager;
+import behavior.finaldefender.FinalDefenderManager;
+import behavior.finaldefenderpenalty.DefenderPenaltyManager;
+import behavior.friendlyattacker.FriendlyKillerManager;
+import behavior.friendlydefender.FriendlyDefenderManager;
 import constants.RobotType;
 import sdp.vision.Drawable;
 import sdp.vision.WorldState;
@@ -113,19 +115,23 @@ public class MainWindow {
 	private JPanel controlButtons(){
 		// Create buttons	
 		JButton bAttackerKiller = new JButton("Killer");
+		JButton bAttackerFinalKiller = new JButton("OldKiller");
 		JButton bAttackerDefender = new JButton("Defender");
 		
 		JButton bDefenderKiller = new JButton("Killer");
-		JButton bDefenderDefender = new JButton("Defender");
+		JButton bDefenderFinalDefender = new JButton("Defender");
+		JButton bDefenderPenalty = new JButton("PENALTY");
 		
 		JButton bStartStop = new JButton("Start");
 
 		// Add listeners
 		bAttackerKiller.addActionListener(new KillerButtonListener(RobotType.ATTACKER));
-		bAttackerDefender.addActionListener(new DefenderButtonListener(RobotType.ATTACKER));
+		bAttackerFinalKiller.addActionListener(new FinalKillerButtonListener(RobotType.ATTACKER));
+		bAttackerDefender.addActionListener(new FinalDefenderButtonListener(RobotType.ATTACKER));
 		
 		bDefenderKiller.addActionListener(new KillerButtonListener(RobotType.DEFENDER));
-		bDefenderDefender.addActionListener(new DefenderButtonListener(RobotType.DEFENDER));
+		bDefenderFinalDefender.addActionListener(new FinalDefenderButtonListener(RobotType.DEFENDER));
+		bDefenderPenalty.addActionListener(new PenaltyButtonListener(RobotType.DEFENDER));
 		
 		bStartStop.addActionListener(new StartStopButtonListener());
 		bStartStop.setActionCommand("start");
@@ -138,13 +144,15 @@ public class MainWindow {
 		JPanel attacker = Helper.titledPanel("Attacker");
 		attacker.setLayout(new BoxLayout(attacker, BoxLayout.Y_AXIS));
 		attacker.add(bAttackerKiller);
+		attacker.add(bAttackerFinalKiller);
 		attacker.add(bAttackerDefender);
 
 		
 		JPanel defender = Helper.titledPanel("Defender");
 		defender.setLayout(new BoxLayout(defender, BoxLayout.Y_AXIS));
 		defender.add(bDefenderKiller);
-		defender.add(bDefenderDefender);
+		defender.add(bDefenderFinalDefender);
+		defender.add(bDefenderPenalty);
 
 
 		// Create control button panel
@@ -251,21 +259,65 @@ public class MainWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Set Killer strategy for " + type);
-			strat.setStrategy(type, new KillerManager(worldstate, type, server));
+			strat.setStrategy(type, new FriendlyKillerManager(worldstate, type, server));
 		}
 	}
 	
-	class DefenderButtonListener implements ActionListener {
+	class FinalKillerButtonListener implements ActionListener {
 		RobotType type;
 		
-		DefenderButtonListener(RobotType type){
+		FinalKillerButtonListener(RobotType type){
+			this.type = type;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Set Killer strategy for " + type);
+			strat.setStrategy(type, new FinalKillerManager(worldstate, type, server));
+		}
+	}
+	
+	class FinalDefenderButtonListener implements ActionListener {
+		RobotType type;
+		
+		FinalDefenderButtonListener(RobotType type){
 			this.type = type;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Set Defender strategy for " + type);
-			strat.setStrategy(type, new DefenderManager(worldstate, type, server));
+			strat.setStrategy(type, new FinalDefenderManager(worldstate, type, server));
+			
+		}
+	}
+	
+	class FriendlyDefenderButtonListener implements ActionListener {
+		RobotType type;
+		
+		FriendlyDefenderButtonListener(RobotType type){
+			this.type = type;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Set Defender strategy for " + type);
+			strat.setStrategy(type, new FriendlyDefenderManager(worldstate, type, server));
+		}
+	}
+	
+	
+	class PenaltyButtonListener implements ActionListener {
+		RobotType type;
+		
+		PenaltyButtonListener(RobotType type){
+			this.type = type;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Set PENALTY strategy for " + type);
+			strat.setStrategy(type, new DefenderPenaltyManager(worldstate, type, server));
 		}
 	}
 
