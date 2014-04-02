@@ -311,7 +311,7 @@ public class StrategyHelper {
 	 * @return True if the robot has the ball, False otherwise
 	 */
 	public static boolean hasBall(Robot r, WorldState ws){
-		return hasBall(r, ws, 32, GeneralBehavior.ANGLE_ERROR);
+		return hasBall(r, ws, 50, GeneralBehavior.ANGLE_ERROR);
 	}
 	
 	/**
