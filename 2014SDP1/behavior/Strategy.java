@@ -94,4 +94,48 @@ public class Strategy {
 			attacker.stop();
 		}
 	}
+	
+	/**
+	 * Start the attacker strategy
+	 */
+	public void startAttacker() {
+		System.out.println("Start running ATTACKER strategy");
+		
+		if (attacker != null) {
+			attacker.start();
+		}
+	}
+	
+	/**
+	 * Stop the attacker strategy
+	 */
+	public void stopAttacker() {
+		System.out.println("Stop running ATTACKER strategy");
+		
+		if (attacker != null) {
+			attacker.stop();
+		}
+	}
+	
+	/**
+	 * Start the defender strategy
+	 */
+	public void startDefender() {
+		System.out.println("Start running DEFENDER strategy");
+		
+		if (defender != null) {
+			defender.start();
+		}
+	}
+	
+	/**
+	 * Stop the defender strategy
+	 */
+	public void stopDefender() {
+		System.out.println("Stop running DEFENDER strategy");
+		
+		if (defender != null) {
+			defender.stop();
+		}
+	}
 }
