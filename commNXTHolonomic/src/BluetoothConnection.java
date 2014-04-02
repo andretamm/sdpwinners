@@ -10,6 +10,7 @@ public class BluetoothConnection extends Thread {
 	
 	private static final byte ROBOT_READY = 0;
 	
+	private static NXTConnection connection;
     private static InputStream in;
     private static OutputStream out;
     
@@ -22,6 +23,15 @@ public class BluetoothConnection extends Thread {
     		   		
     		if (i == 7) {
     			// Signal to restart communication, tell robot to stop first
+    			try {
+					in.close();
+					out.close();
+	    			connection.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    			
     			robot.command = 3;
     			establishConnection();
     	    	sendReadySignal();
@@ -95,13 +105,14 @@ public class BluetoothConnection extends Thread {
      */
     public static void establishConnection() {
         System.out.println("Waiting for Bluetooth connection...");
-        NXTConnection connection = Bluetooth.waitForConnection();
+        connection = Bluetooth.waitForConnection();
         
-        if ( connection == null ){
+        while ( connection == null ){
         	System.out.println("Failed to establish connection");
         	establishConnection();
         	return;
         }
+        
         in = connection.openInputStream();
         out = connection.openOutputStream();
         System.out.println("Connection established!");
