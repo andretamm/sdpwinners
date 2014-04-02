@@ -381,9 +381,7 @@ public class Ultra360 {
 	//Rotates the rotator 25 degrees left and kicks the ball.
 	public void kickLeft() {
 		rotator.rotateTo(25); 
-		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		kick(100);
-		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		aimReset();
 		
 	}
@@ -391,9 +389,7 @@ public class Ultra360 {
 	//Rotates the rotator 25 degrees right and kicks the ball.
 	public void kickRight() {
 		rotator.rotateTo(-25); 
-		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		kick(100);
-		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 		aimReset();
 	}
 	
