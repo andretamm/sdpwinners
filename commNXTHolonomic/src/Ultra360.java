@@ -15,6 +15,8 @@ import lejos.nxt.SensorPort;
 
 public class Ultra360 {
 	
+	
+	
 	//Set up the I2C Board Connections and Ports. This is used for the wheels only.
 	private I2CPort I2Cport = SensorPort.S1; 
 	private I2CSensor I2Csensor = new I2CSensor(I2Cport, 0xB4, I2CPort.STANDARD_MODE, I2CSensor.TYPE_LOWSPEED_9V);
@@ -26,6 +28,8 @@ public class Ultra360 {
 	
 	// Used to tune the maximum speed for the diagonal movement
 	static double MAXIMUMSPEED = 70;
+	public double diagonalMaxSpeed = 220; // This is changed in RobotController to tune the speed
+										  // for a slow/fast diagonal movement
 	
 	//Actual robot speed
 	public byte forwardSpeed;
@@ -456,7 +460,7 @@ public class Ultra360 {
 		// Note that rotating speeds below 40 are DANGEROUS, we can kind of rotate with 40
 		// if we have mostly full batteries, 35 only works with out-of-the-package fresh
 		// batteries, so should drop total minimum below 40.
-		double maxSpeed = 220; // Actual MAXIMUM is maxSpeed + minSpeed :))
+		double maxSpeed = diagonalMaxSpeed; // Actual MAXIMUM is maxSpeed + minSpeed :))
 		double minSpeed = 20;
 
 		// Find final speeds, these are zero by default!
@@ -662,4 +666,6 @@ public class Ultra360 {
 
 		return direction;
 	}
+
+	
 }

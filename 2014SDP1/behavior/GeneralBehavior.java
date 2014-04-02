@@ -354,6 +354,25 @@ public abstract class GeneralBehavior implements Behavior {
 		return true;
 	}
 	
+	public boolean goDiagonallySlowlyTo(Point target) {
+		// Set the point for the vision system
+		ws.setDefenderGoDiagonallyToX(target.x);
+		ws.setDefenderGoDiagonallyToY(target.y);
+		
+		// Correct the angle
+		Point robot = ws.getRobotPoint(robot());
+		double orientation = Orientation.getAngle(robot, target);
+		
+		if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR - 5) {
+			state().isMoving = true;
+			s.sendSlowDiagonalMovement(type, (int) Math.toDegrees(orientation));
+			return false;
+		}
+		
+		// We're there!
+		return true;
+	}
+	
 	
 	/**
 	 * Move the robot left. Note that this is relative
