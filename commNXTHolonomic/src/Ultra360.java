@@ -57,10 +57,11 @@ public class Ultra360 {
 		
 		// Default rotating speed
 		fastRotationSpeed = (byte) 45; //50 60 
-		slowRotationSpeed = (byte) 45; 
+		slowRotationSpeed = (byte) 45; // 45 is okay for attacker, 49 for defender 
 		
 		// Default moving speed
-		forwardSpeed = (byte) 70; //70
+		forwardSpeed = (byte) 60; // 70 is too much for full batteries, 
+								  // but is optimal for slightly used ones
 		
 		// Init motors
 		rotator = Motor.C;
