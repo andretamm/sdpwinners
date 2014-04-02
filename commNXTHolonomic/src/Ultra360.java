@@ -62,6 +62,7 @@ public class Ultra360 {
 		// Default moving speed
 		forwardSpeed = (byte) 60; // 70 is too much for full batteries, 
 								  // but is optimal for slightly used ones
+								  // 60 is okay for full ones
 		
 		// Init motors
 		rotator = Motor.C;
