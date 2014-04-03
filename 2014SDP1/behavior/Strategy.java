@@ -26,6 +26,8 @@ public class Strategy {
 	volatile public static boolean defenderReadyForPass = false;
 	volatile public static boolean attackerReadyForKick = false;
 	
+	volatile public static boolean ballVisible = false;
+	
 	/**
 	 * This checks if we saw the oppositions attacker have the ball 
 	 * _at some point_ now. Used to check whether we might be trying

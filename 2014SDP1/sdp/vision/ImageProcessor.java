@@ -5,8 +5,9 @@ import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import common.Robot;
 
+import behavior.Strategy;
+import common.Robot;
 import constants.Colours;
 import constants.RobotColour;
 import constants.RobotType;
@@ -313,16 +314,21 @@ public class ImageProcessor {
             	
             	// Set the position of the ball 
 				pitch.setBallPosition(DistortionFix.barrelCorrected(Position.findMean(pitch.getPoints(Colours.RED))));
+				
+				Strategy.ballVisible = true;
 			} catch (Exception e2) {
 				// Either filtered out points or no red points to be found or too 
 				// few red points found, set to previous position
 				if (worldState.getBallPoint() != null) {
 					pitch.setBallPosition(worldState.getBallPoint());
+					
 				} else {
 					// No previous position, set to default point
 					pitch.setBallPosition(new Point(1, 1));
 					worldState.setBallVisible(false);
 				}
+				
+				Strategy.ballVisible = false;
 			}
         }
         

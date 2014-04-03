@@ -26,7 +26,7 @@ public class DefenderGetInPositionForPass extends GeneralBehavior {
 		
 		// Stop this madness if we didn't actually grab the ball <.<
 		// Use a slightly bigger error margin than usual :)
-		if (!StrategyHelper.hasBall(robot(), ws, 38, ANGLE_ERROR * 3)) {
+		if (!StrategyHelper.hasBall(robot(), ws, 38, ANGLE_ERROR * 3) && Strategy.ballVisible) {
 			ws.setRobotGrabbedBall(robot(), false);
 			ws.setDoingPass(false);
 			
