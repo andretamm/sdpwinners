@@ -1,4 +1,4 @@
-package behavior.finalattacker;
+package behavior.finalattacker.kickstrategies;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -80,6 +80,8 @@ public class KillerDoVerticalKick extends GeneralBehavior {
 		
 		ws.setRobotGrabbedBall(robot(), false);
 		Strategy.attackerReadyForKick = false;
+		
+		state().attackNumber++;
 	}
 
 	/** 

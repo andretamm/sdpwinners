@@ -1,4 +1,4 @@
-package behavior.finalattacker;
+package behavior.finalattacker.kickstrategies;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ import sdp.vision.WorldState;
 import constants.RobotType;
 import constants.ShootingDirection;
 
-public class KillerFASTKickBallToGoal extends GeneralBehavior {
+public class KillerDoFASTKick extends GeneralBehavior {
 	
 	public static Point targetPoint;
 
-	public KillerFASTKickBallToGoal(WorldState ws, RobotType type, Server s) {
+	public KillerDoFASTKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 		targetPoint = null;
 	}
@@ -145,6 +145,8 @@ public class KillerFASTKickBallToGoal extends GeneralBehavior {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		state().attackNumber++;
 	}
 
 	

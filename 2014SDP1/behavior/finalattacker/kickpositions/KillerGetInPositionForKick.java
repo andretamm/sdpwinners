@@ -1,4 +1,4 @@
-package behavior.finalattacker;
+package behavior.finalattacker.kickpositions;
 
 import java.awt.Point;
 
