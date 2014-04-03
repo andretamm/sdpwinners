@@ -43,11 +43,11 @@ public class DefenderProtectGoal extends GeneralBehavior {
 		// We always try going towards one of these, that will stop us from 
 		// making unnecessarily jerky movements.
 		Point topPoint = new Point(ws.getOurGoalTop());
-		topPoint.y -= 30;
+		topPoint.y -= 10;
 		topPoint.x = StrategyHelper.getDefendLineX(ws);
 
 		Point bottomPoint = new Point(ws.getOurGoalBottom());
-		bottomPoint.y += 30;
+		bottomPoint.y += 10;
 		bottomPoint.x = StrategyHelper.getDefendLineX(ws);
 
 		try {
@@ -58,15 +58,16 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/* Decide what to use as a vector modelling the ball movement */
 			Point2D.Double ballVector = null;
 			Point ballOrigin = null;
-			
+					
 			if (StrategyHelper.hasBall(ws.getOpposition(RobotType.ATTACKER), ws, 35, ANGLE_ERROR * 1.2)) {
 				// They have the ball, defo use their attacker's orientation
 				Strategy.opAttackerHadBall = true;
 				ballVector = ws.getRobotOrientationVector(ws.getOpposition(RobotType.ATTACKER));
 				ballOrigin = ws.getOppositionAttackerPosition();
 			} else if (Strategy.opAttackerHadBall &&
-					   ((ws.getBallVelocity().x > 3 && ws.getDirection() == ShootingDirection.LEFT) ||
-					    (ws.getBallVelocity().x < -3 && ws.getDirection() == ShootingDirection.RIGHT))) {
+					   ((ws.getBallVelocity().x > 0.02 && ws.getDirection() == ShootingDirection.LEFT) ||
+					    (ws.getBallVelocity().x < -0.02 && ws.getDirection() == ShootingDirection.RIGHT)) &&
+					   StrategyHelper.magnitude(ws.getBallVelocity()) > 0.05) {
 				// They just had the ball and now it's headed towards our goal, better try blocking the ball!
 				ballVector = ws.getBallVelocity();
 				ballOrigin = ws.getBallPoint();
@@ -143,7 +144,7 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/*-------------------------------------*/
 
 			// Measure error based on our target, but actually go towards the calibrationpoint!
-			if (Math.abs(robot.y - target.y) > DISTANCE_ERROR - 5) {
+			if (Math.abs(robot.y - target.y) > DISTANCE_ERROR - 6) {
 				if (!goDiagonallyTo(calibrationTarget)) {
 					// not there yet
 					return;

@@ -15,4 +15,5 @@ public class C {
 	public static final double RIGHT = 0;
 	public static final double A15 = Math.PI / 12.0;
 	public static final double A10 = Math.PI / 18.0;
+	public static final double A5 = Math.PI / 36.0;
 }

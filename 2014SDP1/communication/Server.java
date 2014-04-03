@@ -209,7 +209,7 @@ public class Server {
 		long currentTime = System.currentTimeMillis();
 		
 		if (previousCommand.get(type) == RobotCommand.MOVE_DIAGONALLY) {
-			if (Math.abs(StrategyHelper.angleDiff(Math.toRadians(previousAngle.get(type)), Math.toRadians(angleToGo))) < C.A10 &&
+			if (Math.abs(StrategyHelper.angleDiff(Math.toRadians(previousAngle.get(type)), Math.toRadians(angleToGo))) < C.A5 &&
 				currentTime - previousCommandTime.get(type) < 1500) {
 				// Angle no change enough, do nothing lol
 				return;

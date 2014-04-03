@@ -41,10 +41,10 @@ public class KillerDoWallKick extends GeneralBehavior {
 		Point target = new Point((int) (goalTarget.x + robot.x)/2, wallY);
 
 		// Rotate towards target using Super Ultra Precise Fast Rotation (SUPFR)
-		rotateQuickTowards(target, true);
+		rotateQuickTowards(target, false);
 			
 		// Wait until we're close enough
-		double orientation = Orientation.getAngle(robot, targetPoint);
+		double orientation = Orientation.getAngle(robot, target);
 		
 		if (Math.abs(StrategyHelper.angleDiff(ws.getRobotOrientation(robot()), orientation)) > ANGLE_ERROR) {
 			rotateQuickTowards(target);

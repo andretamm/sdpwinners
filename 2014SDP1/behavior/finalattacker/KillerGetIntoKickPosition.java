@@ -8,6 +8,7 @@ import behavior.StrategyHelper;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForFASTKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForStillAimKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForVerticalKick;
+import behavior.finalattacker.kickpositions.KillerGetInPositionForWallKick;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
@@ -16,6 +17,7 @@ public class KillerGetIntoKickPosition extends GeneralBehavior {
 	KillerGetInPositionForFASTKick fastKick;
 	KillerGetInPositionForStillAimKick stillKick;
 	KillerGetInPositionForVerticalKick verticalKick;
+	KillerGetInPositionForWallKick wallKick;
 	
 	public KillerGetIntoKickPosition(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
@@ -23,6 +25,7 @@ public class KillerGetIntoKickPosition extends GeneralBehavior {
 		fastKick = new KillerGetInPositionForFASTKick(ws, type, s);
 		stillKick = new KillerGetInPositionForStillAimKick(ws, type, s);
 		verticalKick = new KillerGetInPositionForVerticalKick(ws, type, s);
+		wallKick = new KillerGetInPositionForWallKick(ws, type, s);
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class KillerGetIntoKickPosition extends GeneralBehavior {
 		int attackMod = state().attackNumber % 4; 
 		
 		if (attackMod == 0) {
-			verticalKick.action();
+			wallKick.action();
 			return;
 		}
 		
