@@ -17,7 +17,6 @@ import javax.swing.JTabbedPane;
 
 import communication.Server;
 import behavior.finalattacker.FinalKillerManager;
-import behavior.finalattacker.FinalKillerVerticalManager;
 import behavior.finaldefender.FinalDefenderManager;
 import behavior.finaldefenderpenalty.DefenderPenaltyManager;
 import behavior.friendlyattacker.FriendlyKillerManager;
@@ -26,9 +25,6 @@ import sdp.vision.Drawable;
 import sdp.vision.WorldState;
 
 import communication.RobotCommand;
-import communication.Server;
-
-
 import constants.RobotType;
 
 /**

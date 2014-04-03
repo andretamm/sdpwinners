@@ -1,14 +1,10 @@
 package behavior.finalattacker.kickstrategies;
 
 import java.awt.Point;
-import java.util.ArrayList;
-
 import communication.RobotCommand;
 import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
-import behavior.StrategyHelper;
-import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 import constants.RobotType;
 import constants.ShootingDirection;

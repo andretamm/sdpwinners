@@ -1,19 +1,13 @@
 package behavior.finalattacker;
 
-import java.awt.Point;
-
-import communication.RobotCommand;
 import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
-import behavior.StrategyHelper;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForStillKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForVerticalKick;
 import sdp.vision.WorldState;
-import constants.C;
 import constants.RobotType;
-import constants.ShootingDirection;
 
 public class KillerGetIntoAttackPosition extends GeneralBehavior {
 

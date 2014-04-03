@@ -11,7 +11,6 @@ import behavior.StrategyHelper;
 import sdp.vision.WorldState;
 import constants.C;
 import constants.RobotType;
-import constants.ShootingDirection;
 
 /**
  * Tries to go to the position where the opponent would kick the ball
