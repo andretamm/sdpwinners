@@ -106,8 +106,8 @@ public class WorldState implements VisionInterface {
 	private Point outerPitchBottomRight1 = new Point(630, 396);
 
 	//these two are already barrelcorrected
-	private Point pitchTopLeft1 = new Point(70, 50);
-	private Point pitchBottomRight1 = new Point(583, 350);
+	private Point pitchTopLeft1 = new Point(75, 53);
+	private Point pitchBottomRight1 = new Point(588, 350);
 
 	private Point outerPitchTopLeft2 = new Point(5, 68);
 	private Point outerPitchBottomRight2 = new Point(634,400);
