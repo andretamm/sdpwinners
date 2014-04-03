@@ -1,8 +1,10 @@
 package behavior.finalattacker;
 
+import communication.RobotCommand;
 import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
+import behavior.StrategyHelper;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForFASTKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForStillKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForVerticalKick;
@@ -27,6 +29,16 @@ public class KillerGetIntoKickPosition extends GeneralBehavior {
 	public void action() {
 		if (ws == null) {
 			System.err.println("worldstate not intialised");
+		}
+		
+		// Stop this madness if we didn't actually grab the ball <.<
+		// Use a slightly bigger error margin than usual :)
+		if (!StrategyHelper.hasBall(robot(), ws, 60, ANGLE_ERROR * 3)) {
+			ws.setRobotGrabbedBall(robot(), false);
+
+			s.send(type, RobotCommand.OPEN_GRABBER);
+			s.forceSend(type, RobotCommand.OPEN_GRABBER);
+			return;
 		}
 		
 		int attackMod = state().attackNumber % 4; 

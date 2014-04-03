@@ -24,17 +24,6 @@ public class KillerGetInPositionForStillKick extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
-		
-		// Stop this madness if we didn't actually grab the ball <.<
-		// Use a slightly bigger error margin than usual :)
-		if (!StrategyHelper.hasBall(robot(), ws, 43, ANGLE_ERROR * 1.8)) {
-			ws.setRobotGrabbedBall(robot(), false);
-
-			s.send(type, RobotCommand.OPEN_GRABBER);
-			s.forceSend(type, RobotCommand.OPEN_GRABBER);
-			return;
-		}
-		
 		/*---------------------------------------------------------*/
 		/* Make robot go to either the top or bottom of their goal */
 		/*---------------------------------------------------------*/	

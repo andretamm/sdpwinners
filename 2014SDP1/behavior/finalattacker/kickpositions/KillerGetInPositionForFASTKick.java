@@ -23,17 +23,7 @@ public class KillerGetInPositionForFASTKick extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
-		
-		// Stop this madness if we didn't actually grab the ball <.<
-		// Use a slightly bigger error margin than usual :)
-		if (!StrategyHelper.hasBall(robot(), ws, 50, ANGLE_ERROR * 3)) {
-			ws.setRobotGrabbedBall(robot(), false);
 
-			s.send(type, RobotCommand.OPEN_GRABBER);
-			s.forceSend(type, RobotCommand.OPEN_GRABBER);
-			return;
-		}
-		
 		/*-----------------------------------------------*/
 		/* Make robot go to the middle of the quadrant   */
 		/*-----------------------------------------------*/	

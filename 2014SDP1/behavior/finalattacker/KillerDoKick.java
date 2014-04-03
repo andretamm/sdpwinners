@@ -1,8 +1,10 @@
 package behavior.finalattacker;
 
+import communication.RobotCommand;
 import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
+import behavior.StrategyHelper;
 import behavior.finalattacker.kickstrategies.KillerDoFASTKick;
 import behavior.finalattacker.kickstrategies.KillerDoStillKick;
 import behavior.finalattacker.kickstrategies.KillerDoVerticalKick;
