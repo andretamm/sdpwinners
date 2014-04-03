@@ -2,6 +2,8 @@ package behavior.finalattacker;
 
 import java.util.ArrayList;
 
+import behavior.finalattacker.kickpositions.KillerGetInPositionForKick;
+import behavior.finalattacker.kickstrategies.KillerDoFASTKick;
 import communication.Server;
 import lejos.robotics.subsumption.Behavior;
 import sdp.vision.WorldState;
