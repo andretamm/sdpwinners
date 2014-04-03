@@ -53,11 +53,11 @@ public class KillerGetInPositionForStillKick extends GeneralBehavior {
 		if (ws.getDirection() == ShootingDirection.RIGHT) {
 			// Go to top
 			goalPoint = ws.getOppositionGoalTop();
-			goalPoint.y -= 30;
+			goalPoint.y -= 50;
 		} else {
 			// Go to bottom
 			goalPoint = ws.getOppositionGoalBottom();
-			goalPoint.y += 30;
+			goalPoint.y += 50;
 		}
 		
 		Point target = new Point(middlePoint.x, goalPoint.y);
