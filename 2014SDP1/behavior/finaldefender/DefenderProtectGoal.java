@@ -44,11 +44,11 @@ public class DefenderProtectGoal extends GeneralBehavior {
 		// making unnecessarily jerky movements.
 		Point topPoint = new Point(ws.getOurGoalTop());
 		topPoint.y -= 30;
-		topPoint.x = StrategyHelper.getDefendLineX(ws) + 10;
+		topPoint.x = StrategyHelper.getDefendLineX(ws);
 
 		Point bottomPoint = new Point(ws.getOurGoalBottom());
 		bottomPoint.y += 30;
-		bottomPoint.x = StrategyHelper.getDefendLineX(ws) + 10;
+		bottomPoint.x = StrategyHelper.getDefendLineX(ws);
 
 		try {
 			/*-------------------------------------*/
