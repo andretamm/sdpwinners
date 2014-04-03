@@ -55,7 +55,12 @@ public class Display {
 			RobotCommand.SLOW_CW,
 			RobotCommand.SLOW_KICK,
 			RobotCommand.MOVE_DIAGONALLY,
-			RobotCommand.DISCONNECT
+			RobotCommand.DISCONNECT,
+			RobotCommand.KICK_THEN_ROTATE_LEFT,
+			RobotCommand.KICK_THEN_ROTATE_RIGHT,
+			RobotCommand.MOVE_DIAGONALLY_SLOW,
+			RobotCommand.FORWARD_FAST,
+			RobotCommand.BACKWARD_FAST
 		};
 		
 		// The names of the image files
@@ -65,7 +70,7 @@ public class Display {
 			"stop.png",
 			"cw.png",
 			"ccw.png",
-			"kick.png",
+			"fastKick.png",
 			"closeGrabber.png",
 			"openGrabber.png",
 			"moveLeft.png",
@@ -75,11 +80,16 @@ public class Display {
 			"aimLeft.png",
 			"aimRight.png",
 			"aimReset.png",
-			"ccw.png",
-			"cw.png",
-			"kick.png",
+			"slowCcw.png",
+			"slowCw.png",
+			"slowKick.png",
 			"moveDiagonally.png",
-			"disconnect.png"
+			"disconnect.png",
+			"kickRotateLeft.png",
+			"kickRotateRight.png",
+			"moveDiagonallySlow.png",
+			"forwardFast.png",
+			"backwardFast.png"
 		};
 		
 		// Folder where all the images are stored
