@@ -1,3 +1,4 @@
+package attacker;
 
 /**
  * Main class for starting the NXT brick code
