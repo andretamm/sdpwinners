@@ -23,6 +23,10 @@ public class RobotState {
 	/** If the attacker has rotated the right way to catch a pass */
 	public boolean attackerOrientationSetForPass = false;
 	
+	/** Keep track of the number of attacks we've made, pick the 
+	 *  attack strategy based on which attack nr this is */ 
+	public int attackNumber = 0;
+	
 	/**
 	 * Different states for the grabber of this robot.
 	 * 0 - opened (or so we think <.<)
