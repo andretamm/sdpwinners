@@ -117,7 +117,7 @@ public class Thresholder{
 						/* The RGB colours and hsv values for the current pixel. */
 						Color c = new Color(image.getRGB(column, row));
 						float hsbvals[] = new float[3];
-						Color.RGBtoHSB(c.getRed(), c.getBlue(), c.getGreen(), hsbvals);
+						Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), hsbvals);
 						rg=c.getRed()-c.getGreen();
 						rb=c.getRed()-c.getBlue();
 						gb=c.getGreen()-c.getBlue();
