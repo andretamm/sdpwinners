@@ -82,7 +82,7 @@ public class Display {
 			"aimReset.png",
 			"slowCcw.png",
 			"slowCw.png",
-			"slowKick.png",
+			"kick.png",
 			"moveDiagonally.png",
 			"disconnect.png",
 			"kickRotateLeft.png",
