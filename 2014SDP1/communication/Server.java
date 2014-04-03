@@ -1,14 +1,10 @@
 package communication;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.EnumMap;
 
 import behavior.StrategyHelper;
 import sdp.vision.Display;
-import sdp.vision.Vision;
 import sdp.vision.WorldState;
 import constants.C;
 import constants.RobotType;

@@ -1,14 +1,9 @@
 package behavior.friendlyattacker;
 
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
-
 import communication.RobotCommand;
 import communication.Server;
 import behavior.GeneralBehavior;
-import behavior.StrategyHelper;
-import sdp.vision.Orientation;
 import sdp.vision.WorldState;
 import constants.C;
 import constants.RobotType;

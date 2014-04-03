@@ -2,6 +2,8 @@ package behavior.finalattacker;
 
 import java.util.ArrayList;
 
+import behavior.finalattacker.kickpositions.KillerGetInPositionForFASTKick;
+import behavior.finalattacker.kickstrategies.KillerDoFASTKick;
 import communication.Server;
 import lejos.robotics.subsumption.Behavior;
 import sdp.vision.WorldState;
@@ -20,8 +22,8 @@ public class FinalKillerManager extends behavior.Manager {
  		// Add behaviors in ascending order of priority
 		behaviorList.add(new KillerBlockDefender(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerGotoBallAndGrab(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerGetInPositionForKick(getWorldState(), getRobotType(), getServer()));
-		behaviorList.add(new KillerFASTKickBallToGoal(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerGetIntoKickPosition(getWorldState(), getRobotType(), getServer()));
+		behaviorList.add(new KillerDoKick(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerCatchPassComplicated(getWorldState(), getRobotType(), getServer()));
 		behaviorList.add(new KillerRotateForPass(getWorldState(), getRobotType(), getServer()));
 		
