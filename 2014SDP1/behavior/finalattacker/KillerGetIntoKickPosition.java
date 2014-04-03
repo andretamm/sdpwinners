@@ -43,6 +43,11 @@ public class KillerGetIntoKickPosition extends GeneralBehavior {
 		
 		int attackMod = state().attackNumber % 4; 
 		
+		if (attackMod == 0) {
+			verticalKick.action();
+			return;
+		}
+		
 		if (attackMod == 0 || attackMod == 1) {
 			fastKick.action();
 		} else if (attackMod == 2) {

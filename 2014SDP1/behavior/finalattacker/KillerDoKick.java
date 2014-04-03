@@ -8,6 +8,7 @@ import behavior.StrategyHelper;
 import behavior.finalattacker.kickstrategies.KillerDoFASTKick;
 import behavior.finalattacker.kickstrategies.KillerDoStillAimKick;
 import behavior.finalattacker.kickstrategies.KillerDoVerticalKick;
+import behavior.finalattacker.kickstrategies.KillerDoWallKick;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
@@ -16,6 +17,7 @@ public class KillerDoKick extends GeneralBehavior {
 	KillerDoFASTKick fastKick;
 	KillerDoStillAimKick stillKick;
 	KillerDoVerticalKick verticalKick;
+	KillerDoWallKick wallKick;
 	
 	public KillerDoKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
@@ -23,6 +25,7 @@ public class KillerDoKick extends GeneralBehavior {
 		fastKick = new KillerDoFASTKick(ws, type, s);
 		stillKick = new KillerDoStillAimKick(ws, type, s);
 		verticalKick = new KillerDoVerticalKick(ws, type, s);
+		wallKick = new KillerDoWallKick(ws, type, s);
 	}
 
 	@Override
@@ -32,6 +35,11 @@ public class KillerDoKick extends GeneralBehavior {
 		}
 		
 		int attackMod = state().attackNumber % 4; 
+		
+		if (attackMod == 0) {
+			wallKick.action();
+			return;
+		}
 		
 		if (attackMod == 0 || attackMod == 1) {
 			fastKick.action();
