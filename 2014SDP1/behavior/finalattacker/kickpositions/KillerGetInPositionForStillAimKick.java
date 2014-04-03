@@ -12,9 +12,9 @@ import constants.C;
 import constants.RobotType;
 import constants.ShootingDirection;
 
-public class KillerGetInPositionForStillKick extends GeneralBehavior {
+public class KillerGetInPositionForStillAimKick extends GeneralBehavior {
 
-	public KillerGetInPositionForStillKick(WorldState ws, RobotType type, Server s) {
+	public KillerGetInPositionForStillAimKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 
@@ -42,11 +42,11 @@ public class KillerGetInPositionForStillKick extends GeneralBehavior {
 		if (ws.getDirection() == ShootingDirection.RIGHT) {
 			// Go to top
 			goalPoint = ws.getOppositionGoalTop();
-			goalPoint.y -= 50;
+			goalPoint.y += 20;
 		} else {
 			// Go to bottom
 			goalPoint = ws.getOppositionGoalBottom();
-			goalPoint.y += 50;
+			goalPoint.y -= 20;
 		}
 		
 		Point target = new Point(middlePoint.x, goalPoint.y);

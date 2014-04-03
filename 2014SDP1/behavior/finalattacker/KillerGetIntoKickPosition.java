@@ -6,7 +6,7 @@ import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForFASTKick;
-import behavior.finalattacker.kickpositions.KillerGetInPositionForStillKick;
+import behavior.finalattacker.kickpositions.KillerGetInPositionForStillAimKick;
 import behavior.finalattacker.kickpositions.KillerGetInPositionForVerticalKick;
 import sdp.vision.WorldState;
 import constants.RobotType;
@@ -14,14 +14,14 @@ import constants.RobotType;
 public class KillerGetIntoKickPosition extends GeneralBehavior {
 
 	KillerGetInPositionForFASTKick fastKick;
-	KillerGetInPositionForStillKick stillKick;
+	KillerGetInPositionForStillAimKick stillKick;
 	KillerGetInPositionForVerticalKick verticalKick;
 	
 	public KillerGetIntoKickPosition(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 		
 		fastKick = new KillerGetInPositionForFASTKick(ws, type, s);
-		stillKick = new KillerGetInPositionForStillKick(ws, type, s);
+		stillKick = new KillerGetInPositionForStillAimKick(ws, type, s);
 		verticalKick = new KillerGetInPositionForVerticalKick(ws, type, s);
 	}
 

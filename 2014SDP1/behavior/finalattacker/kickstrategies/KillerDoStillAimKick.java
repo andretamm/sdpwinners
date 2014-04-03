@@ -8,11 +8,11 @@ import behavior.Strategy;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
-public class KillerDoStillKick extends GeneralBehavior {
+public class KillerDoStillAimKick extends GeneralBehavior {
 	
 	public static Point targetPoint;
 
-	public KillerDoStillKick(WorldState ws, RobotType type, Server s) {
+	public KillerDoStillAimKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 		targetPoint = null;
 	}

@@ -6,7 +6,7 @@ import behavior.GeneralBehavior;
 import behavior.Strategy;
 import behavior.StrategyHelper;
 import behavior.finalattacker.kickstrategies.KillerDoFASTKick;
-import behavior.finalattacker.kickstrategies.KillerDoStillKick;
+import behavior.finalattacker.kickstrategies.KillerDoStillAimKick;
 import behavior.finalattacker.kickstrategies.KillerDoVerticalKick;
 import sdp.vision.WorldState;
 import constants.RobotType;
@@ -14,14 +14,14 @@ import constants.RobotType;
 public class KillerDoKick extends GeneralBehavior {
 
 	KillerDoFASTKick fastKick;
-	KillerDoStillKick stillKick;
+	KillerDoStillAimKick stillKick;
 	KillerDoVerticalKick verticalKick;
 	
 	public KillerDoKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 		
 		fastKick = new KillerDoFASTKick(ws, type, s);
-		stillKick = new KillerDoStillKick(ws, type, s);
+		stillKick = new KillerDoStillAimKick(ws, type, s);
 		verticalKick = new KillerDoVerticalKick(ws, type, s);
 	}
 
