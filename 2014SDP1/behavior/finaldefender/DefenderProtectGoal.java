@@ -143,7 +143,7 @@ public class DefenderProtectGoal extends GeneralBehavior {
 			/*-------------------------------------*/
 
 			// Measure error based on our target, but actually go towards the calibrationpoint!
-			if (StrategyHelper.getDistance(robot, target) > DISTANCE_ERROR) {
+			if (Math.abs(robot.y - target.y) > DISTANCE_ERROR - 5) {
 				if (!goDiagonallyTo(calibrationTarget)) {
 					// not there yet
 					return;
