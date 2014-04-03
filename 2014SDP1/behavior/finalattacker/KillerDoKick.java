@@ -34,21 +34,20 @@ public class KillerDoKick extends GeneralBehavior {
 			System.err.println("worldstate not intialised");
 		}
 		
-		int attackMod = state().attackNumber % 4; 
+		int attackMod = state().attackNumber % 3; 
 		
-		if (attackMod == 0) {
-			wallKick.action();
-			return;
-		}
+
+		
 		
 		if (attackMod == 0 || attackMod == 1) {
 			fastKick.action();
-		} else if (attackMod == 2) {
-			stillKick.action();
 		} else {
-			// attackMod == 3 and default case
-			verticalKick.action();
+			stillKick.action();
 		}
+//		else {
+//			// attackMod == 3 and default case
+//			verticalKick.action();
+//		}
 	}
 
 	/** 

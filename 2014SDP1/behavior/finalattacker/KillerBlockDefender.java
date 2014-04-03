@@ -114,7 +114,8 @@ public class KillerBlockDefender extends GeneralBehavior {
 	 */
 	@Override
 	public boolean takeControl() {
-		return (ws.getBallQuadrant() != ws.getRobotQuadrant(robot()));
+		return true;
+//		return (ws.getBallQuadrant() != ws.getRobotQuadrant(robot()));
 	}
 
 }
