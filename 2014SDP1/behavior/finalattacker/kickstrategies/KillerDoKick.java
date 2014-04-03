@@ -1,26 +1,23 @@
-package behavior.finalattacker;
+package behavior.finalattacker.kickstrategies;
 
 import communication.Server;
 import behavior.GeneralBehavior;
 import behavior.Strategy;
-import behavior.finalattacker.kickpositions.KillerGetInPositionForKick;
-import behavior.finalattacker.kickpositions.KillerGetInPositionForStillKick;
-import behavior.finalattacker.kickpositions.KillerGetInPositionForVerticalKick;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
-public class KillerGetIntoAttackPosition extends GeneralBehavior {
+public class KillerDoKick extends GeneralBehavior {
 
-	KillerGetInPositionForKick fastKick;
-	KillerGetInPositionForStillKick stillKick;
-	KillerGetInPositionForVerticalKick verticalKick;
+	KillerDoFASTKick fastKick;
+	KillerDoStillKick stillKick;
+	KillerDoVerticalKick verticalKick;
 	
-	public KillerGetIntoAttackPosition(WorldState ws, RobotType type, Server s) {
+	public KillerDoKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 		
-		fastKick = new KillerGetInPositionForKick(ws, type, s);
-		stillKick = new KillerGetInPositionForStillKick(ws, type, s);
-		verticalKick = new KillerGetInPositionForVerticalKick(ws, type, s);
+		fastKick = new KillerDoFASTKick(ws, type, s);
+		stillKick = new KillerDoStillKick(ws, type, s);
+		verticalKick = new KillerDoVerticalKick(ws, type, s);
 	}
 
 	@Override
@@ -49,6 +46,6 @@ public class KillerGetIntoAttackPosition extends GeneralBehavior {
 	@Override
 	public boolean takeControl() {
 		return ws.getRobotGrabbedBall(robot()) &&
-			   !Strategy.attackerReadyForKick;
+			   Strategy.attackerReadyForKick;
 	}
 }
