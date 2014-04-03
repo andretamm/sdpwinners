@@ -4,6 +4,7 @@ import lejos.nxt.I2CSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
+import lejos.util.Delay;
 
 /*              ** Forwards facing wheels **		*/
 //			0x01 (I2C - Port 1) - EAST Wheel		//
@@ -121,12 +122,14 @@ public class Ultra360 {
 		/* These are the values to use for fully charged Duracells*/
 		
 		byte rotateSpeed = (byte) 250;
-		long degToTime = (long) Math.rint(Math.abs(degrees)*3.0); //3.0 is the value that works on the vision
+//		long degToTime = (long) Math.rint(Math.abs(degrees) * 2.38); //3.0 is the value that works on the vision
 	
 //		byte rotateSpeed = (byte) 200; //Changing this will fuck up the function by the way
 //		long degToTime = (long) Math.rint(Math.abs(degrees)*3.3); // Based on the current speed of rotation
 		
 		if(degrees > 0){
+			long degToTime = (long) Math.rint(Math.abs(degrees) * 2.43); //3.0 is the value that works on the vision
+			
 			//EAST Wheel
 			I2Csensor.sendData(0x01,backward); 
 			I2Csensor.sendData(0x02,rotateSpeed); 
@@ -138,15 +141,21 @@ public class Ultra360 {
 			I2Csensor.sendData(0x04,rotateSpeed); 
 			//NORTH Wheel
 			I2Csensor.sendData(0x05,forward); 
-			I2Csensor.sendData(0x06,rotateSpeed); 
-			try {
-				Thread.sleep(degToTime);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			I2Csensor.sendData(0x06,rotateSpeed);
+			
+			Delay.msDelay(degToTime);
+			
+//			try {
+//				Thread.sleep(degToTime);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			
 			stop();
 		}
 		else if(degrees <= 0){
+			long degToTime = (long) Math.rint(Math.abs(degrees) * 2.53); //3.0 is the value that works on the vision
+			
 			//EAST Wheel
 			I2Csensor.sendData(0x01,forward); 
 			I2Csensor.sendData(0x02,rotateSpeed); 
@@ -158,12 +167,15 @@ public class Ultra360 {
 			I2Csensor.sendData(0x04,rotateSpeed); 
 			//NORTH Wheel
 			I2Csensor.sendData(0x05,backward); 
-			I2Csensor.sendData(0x06,rotateSpeed); 
-			try {
-				Thread.sleep(degToTime);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			I2Csensor.sendData(0x06,rotateSpeed);
+			
+			Delay.msDelay(degToTime);
+//			try {
+//				Thread.sleep(degToTime);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			
 			stop();
 		}
 	}
