@@ -11,9 +11,9 @@ import behavior.StrategyHelper;
 import sdp.vision.WorldState;
 import constants.RobotType;
 
-public class KillerGetInPositionForKick extends GeneralBehavior {
+public class KillerGetInPositionForFASTKick extends GeneralBehavior {
 
-	public KillerGetInPositionForKick(WorldState ws, RobotType type, Server s) {
+	public KillerGetInPositionForFASTKick(WorldState ws, RobotType type, Server s) {
 		super(ws, type, s);
 	}
 
