@@ -1,8 +1,6 @@
 import lejos.nxt.Button;
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
-import lejos.nxt.Motor;
-import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 
 /*            ** Forwards facing wheels **		    */
