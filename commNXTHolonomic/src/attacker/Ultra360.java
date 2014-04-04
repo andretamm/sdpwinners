@@ -128,7 +128,7 @@ public class Ultra360 {
 //		long degToTime = (long) Math.rint(Math.abs(degrees)*3.3); // Based on the current speed of rotation
 		
 		if(degrees > 0){
-			long degToTime = (long) Math.rint(Math.abs(degrees) * 2.1);
+			long degToTime = (long) Math.rint(Math.abs(degrees) * 2.15);
 			
 			//EAST Wheel
 			I2Csensor.sendData(0x01,backward); 
@@ -153,7 +153,7 @@ public class Ultra360 {
 			stop();
 		}
 		else if(degrees <= 0){
-			long degToTime = (long) Math.rint(Math.abs(degrees) * 2.18);
+			long degToTime = (long) Math.rint(Math.abs(degrees) * 2.23);
 			
 			//EAST Wheel
 			I2Csensor.sendData(0x01,forward); 
