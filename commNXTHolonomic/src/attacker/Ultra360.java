@@ -58,8 +58,8 @@ public class Ultra360 {
 		off = (byte)0;
 		
 		// Default rotating speed
-		fastRotationSpeed = (byte) 45; //50 60 
-		slowRotationSpeed = (byte) 45; // 45 is okay for attacker, 49 for defender 
+		fastRotationSpeed = (byte) 42; //50 60 
+		slowRotationSpeed = (byte) 42; // 45 is okay for attacker, 49 for defender 
 		
 		// Default moving speed
 		forwardSpeed = (byte) 60; // 70 is too much for full batteries, 
