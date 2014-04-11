@@ -18,3 +18,4 @@ Thanks
 Everybody involved with the organisation of the SDP course, especially Garry Ellard, Paul Ardin and Henry S. Thompson.
 
 Group 1 from 2013 (https://bitbucket.org/sdp_group1/sdp/) for the majority of our vision code and the basic framework for the communication system.
+
