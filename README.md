@@ -1,6 +1,6 @@
+![STABILITY logo](final_logo.jpg)
 Team STABILITY
 ==========
-
 Repository for team STABILITY (Group 1, 2014) for the System Design Project at the University of Edinburgh.
 
 Running the code
